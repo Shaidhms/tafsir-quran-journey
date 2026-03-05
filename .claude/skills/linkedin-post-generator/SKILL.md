@@ -53,7 +53,15 @@ Posts follow this rhythm:
 - Bullet points use the dot character, not dashes.
 - No em dashes. Never.
 - Emojis: 0-2 max per post. Only if they genuinely add something. Default to zero.
-- Always end with 2-3 relevant hashtags on the last line.
+- Always end with 2-3 hashtags on the last line.
+
+### Hashtags
+- Use exactly 2-3 hashtags. No more.
+- Hashtags must be relevant to the specific post content, not generic filler.
+- Choose hashtags that are active in the LinkedIn community (high engagement tags).
+- Prefer tags that LinkedIn professionals actually follow and search for.
+- Examples of strong tags: #GenerativeAI, #ProductStrategy, #TechLeadership, #PerformanceEngineering, #AIProducts, #StartupLife, #BuildInPublic
+- Avoid overly broad tags like #AI or #Tech alone. Be specific.
 
 ### What to Avoid
 - Corporate jargon or buzzword soup
