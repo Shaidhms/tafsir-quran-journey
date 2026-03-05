@@ -43,17 +43,23 @@ Posts follow this rhythm:
 ```
 
 ### Spacing (Critical. Match this exactly.)
-- **Hook:** First 1-2 lines only. Then 5-6 completely empty lines to push below LinkedIn's "see more" fold.
-- **Body:** Every 2-3 lines of text get a single blank line after them. Almost every thought gets its own breathing room. The post should feel airy and easy to scan.
-- **Max cluster:** Never put more than 3 lines together without a blank line break.
-- **Single ideas:** Prefer one idea per line. If two short sentences relate tightly, they can share a line. Otherwise, separate them.
-- **Bullet lists:** Each bullet on its own line. One blank line before the bullet group starts.
-- **Closing:** 2-3 short punchy lines, separated by blank lines between them.
-- This spacing is non-negotiable. It is what makes posts readable on mobile and matches Shaid's published style.
+
+Study this pattern. It is based on Shaid's actual published LinkedIn posts.
+
+1. **Hook:** First 1-2 lines. Then 5-6 completely empty lines to push below LinkedIn's "see more" fold.
+2. **Body rhythm:** One blank line between every cluster. Clusters are 1-3 lines max. Important statements get their own line (one line, then blank line, then next thought).
+3. **Standalone lines:** Key statements, transitions, and punchy insights stand ALONE on their own line with blank lines above and below. E.g., "That's not weakness." or "It slowed me down." These create rhythm and emphasis.
+4. **Tight pairs:** Two short related sentences can share one line. E.g., "Not 'can I build this?' / But 'should I build this?'" on consecutive lines without a blank between them.
+5. **Quotes/references:** Stand alone with blank lines above and below.
+6. **Bullet lists:** Use bullet dots (•). No blank lines between individual bullets. One blank line before and after the entire bullet group.
+7. **Closing:** Final 2-3 lines. The very last statement stands alone with a blank line before it for maximum punch.
+8. **Transitions:** Just one blank line when shifting thoughts. Never two blank lines in the body (only after the hook).
+
+This spacing is non-negotiable. It is what makes posts readable on mobile and matches Shaid's published style.
 
 ### Formatting
 - Short lines. One idea per line. Max 2-3 short sentences per cluster.
-- Bullet points use the dot character, not dashes.
+- Bullet points use the bullet dot character (•), not dashes or periods.
 - No em dashes. Never.
 - Emojis: 0-2 max per post. Only if they genuinely add something. Default to zero.
 - Always end with 2-3 hashtags on the last line.
