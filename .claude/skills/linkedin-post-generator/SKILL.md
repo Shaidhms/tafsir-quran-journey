@@ -46,16 +46,37 @@ Posts follow this rhythm:
 
 Study this pattern. It is based on Shaid's actual published LinkedIn posts.
 
-1. **Hook:** First 1-2 lines. Then 5-6 completely empty lines to push below LinkedIn's "see more" fold.
-2. **Body rhythm:** One blank line between every cluster. Clusters are 1-3 lines max. Important statements get their own line (one line, then blank line, then next thought).
-3. **Standalone lines:** Key statements, transitions, and punchy insights stand ALONE on their own line with blank lines above and below. E.g., "That's not weakness." or "It slowed me down." These create rhythm and emphasis.
-4. **Tight pairs:** Two short related sentences can share one line. E.g., "Not 'can I build this?' / But 'should I build this?'" on consecutive lines without a blank between them.
-5. **Quotes/references:** Stand alone with blank lines above and below.
-6. **Bullet lists:** Use bullet dots (•). No blank lines between individual bullets. One blank line before and after the entire bullet group.
-7. **Closing:** Final 2-3 lines. The very last statement stands alone with a blank line before it for maximum punch.
-8. **Transitions:** Just one blank line when shifting thoughts. Never two blank lines in the body (only after the hook).
+**DO NOT put a blank line after every single line. That is wrong.**
 
-This spacing is non-negotiable. It is what makes posts readable on mobile and matches Shaid's published style.
+The correct pattern:
+
+1. **Hook:** First 1-2 lines. Then 5-6 completely empty lines to push below LinkedIn's "see more" fold.
+2. **Body:** Lines flow in GROUPS of 2-4 lines together with NO blank lines within a group. One blank line ONLY between groups. Most content should be grouped, not isolated.
+3. **Grouping logic:** Lines that belong to the same thought or flow stay together. A new group starts when the thought shifts or a new angle begins.
+4. **Standalone lines:** ONLY use for truly high-impact one-liners that deserve emphasis. E.g., "It slowed me down." or "That hit." These are rare, not every other line.
+5. **Bullet lists:** Use bullet dots (•). No blank lines between individual bullets. One blank line before and after the entire bullet group.
+6. **Closing:** Final 2-3 lines can be grouped or the very last line can stand alone for punch.
+
+**Example of correct body spacing:**
+```
+They partnered with Google.
+Gemini is running under the hood.
+The biggest tech company on the planet looked at the AI race and decided:
+
+We're not building this ourselves.
+
+That's not weakness. That's strategy.
+
+I think about this a lot as someone who builds AI products.
+The instinct is always to build everything from scratch.
+Own the stack. Control the model. Do it yourself.
+
+But the smartest builders know when to build and when to integrate.
+```
+
+Notice: 2-4 lines grouped together, one blank line between groups, standalone lines are rare and intentional.
+
+This spacing is non-negotiable. It matches Shaid's published style.
 
 ### Formatting
 - Short lines. One idea per line. Max 2-3 short sentences per cluster.
