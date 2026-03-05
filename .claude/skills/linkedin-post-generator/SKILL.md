@@ -42,14 +42,18 @@ Posts follow this rhythm:
 [Closing: 1-2 punchy lines. Statement, not a question. End with conviction.]
 ```
 
+### Spacing (Critical)
+- **Hook:** The first 1-2 lines are the hook. After the hook, leave 5-6 empty lines. This creates the "see more" fold on LinkedIn and forces curiosity.
+- **Body:** Group lines in clusters of 3-4 lines, then a blank line between clusters. Never write long unbroken walls of text.
+- **Sections:** Leave 2 blank lines between major sections/shifts in thought.
+- This spacing is non-negotiable. It is what makes posts readable on mobile.
+
 ### Formatting
-- Short lines. One idea per line.
-- Deliberate line breaks for rhythm and readability.
-- Use blank lines generously between sections.
+- Short lines. One idea per line. Max 2-3 short sentences per cluster.
 - Bullet points use the dot character, not dashes.
 - No em dashes. Never.
 - Emojis: 0-2 max per post. Only if they genuinely add something. Default to zero.
-- No hashtags cluttering the post. If needed, max 3 at the very end.
+- Always end with 2-3 relevant hashtags on the last line.
 
 ### What to Avoid
 - Corporate jargon or buzzword soup
