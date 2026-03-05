@@ -268,7 +268,19 @@ That's where trust is built.
 
 ## Output
 
-Always present:
-1. The full post text (ready to copy-paste)
+**Always write the post to a .txt file** (not inline markdown, which eats blank lines).
+Save to: `templates/linkedin-draft-[short-topic].txt`
+
+Present:
+1. The file path to the draft
 2. A one-line image suggestion
 3. Ask: "Want me to adjust anything?"
+
+## After Approval
+
+Once Shaid approves the post:
+1. Rename the file to: `templates/linkedin_YYYY-MM-DD_[short-topic]_to-be-scheduled.txt`
+   - Use today's date
+   - Use underscores in the filename
+   - Append `_to-be-scheduled` to indicate it's ready but not yet published
+2. Confirm the rename and show the final filename
