@@ -67,3 +67,11 @@ That's not compromise.
 That's clarity.
 
 #GenerativeAI #ProductStrategy #TechLeadership
+
+---
+IMAGE PROMPT:
+Illustrative digital artwork in a modern tech aesthetic with a deep navy-to-dark-blue gradient background. The composition shows two worlds merging: on the left, a clean minimalist Apple ecosystem (devices, cloud icons) in white tones; on the right, a vibrant Google Gemini neural network with colorful AI patterns and data streams. In the center, a handshake formed from circuit lines connects both sides. Shaid's portrait photo is blended into the right-center of the illustration in an illustrative style, with the face retaining 100% photorealistic accuracy while the body and surroundings merge naturally into the artistic tech environment. Bold white sans-serif typography overlays the bottom of the image with the quote text. Color palette: deep navy, electric blue, white, subtle gold accents. 16:9 aspect ratio. Clean, professional, LinkedIn-ready.
+
+QUOTE FOR IMAGE:
+"Build where you're strong. Integrate where you're not."
+---

@@ -271,10 +271,33 @@ That's where trust is built.
 **Always write the post to a .txt file** (not inline markdown, which eats blank lines).
 Save to: `templates/linkedin-draft-[short-topic].txt`
 
-Present:
+The .txt file must include TWO sections:
+1. The full post text
+2. An image prompt section at the bottom (separated by a divider)
+
+### Image Prompt Rules
+Every post gets an AI image generation prompt appended at the bottom of the .txt file. The image prompt must follow these rules:
+
+- The image is an **illustration** of the post's core message
+- Pick the strongest quote or one-liner from the post and include it as **text overlay** on the image
+- Shaid's photo must be **blended into the illustration** in a natural, illustrative manner. The face must retain 100% photorealistic accuracy while the body and surroundings blend into the artistic/illustrative style of the image
+- The overall style should be illustrative, not a plain photo with text slapped on
+- Specify: aspect ratio (16:9 for LinkedIn), color palette that matches the post mood, typography style for the quote
+- Format the image prompt section like this in the .txt file:
+
+```
+---
+IMAGE PROMPT:
+[The full prompt for AI image generation]
+
+QUOTE FOR IMAGE:
+[The specific quote/line to display on the image]
+---
+```
+
+Present to Shaid:
 1. The file path to the draft
-2. A one-line image suggestion
-3. Ask: "Want me to adjust anything?"
+2. Ask: "Want me to adjust anything?"
 
 ## After Approval
 
