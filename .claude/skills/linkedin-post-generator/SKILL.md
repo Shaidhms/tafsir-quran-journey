@@ -1,8 +1,9 @@
 # LinkedIn Post Generator
 
-Generate LinkedIn posts in Shaid's authentic voice. Supports two modes:
+Generate LinkedIn posts in Shaid's authentic voice. Supports three modes:
 1. **Topic mode:** Give a topic and get a full post
 2. **Viral inspiration mode:** Share a viral post or YouTube video link and get Shaid's take on it
+3. **Trending discovery mode:** Search for the latest trending AI news/videos and suggest topics
 
 ## Trigger
 
@@ -10,6 +11,8 @@ User says something like:
 - "Write a LinkedIn post about [topic]"
 - "Turn this into a LinkedIn post: [paste viral post or URL]"
 - "LinkedIn post inspired by this video: [YouTube link]"
+- "Find me trending AI topics for a LinkedIn post"
+- "What's hot in AI today?"
 
 ## Voice & Style Rules
 
@@ -71,6 +74,27 @@ Posts follow this rhythm:
 4. Do NOT copy. Transform the idea with Shaid's authentic perspective.
 5. Suggest an image concept
 6. Present the draft for review
+
+### Trending Discovery Mode
+Use WebSearch to find the latest trending AI content. Follow these steps:
+
+1. Search for recent AI news and trending YouTube videos (last 1-2 days only)
+   - Search queries to use:
+     - "AI news today" or "AI breaking news this week"
+     - "trending AI video YouTube" or "most viewed AI video today"
+     - "artificial intelligence latest developments"
+   - Filter for recency: only content from the last 1-2 days
+   - For YouTube: prioritize videos with the highest views and likes
+
+2. Compile a shortlist of 3-5 trending topics. For each, present:
+   - **Topic:** One-line summary
+   - **Source:** Where it's trending (YouTube video title + view count, news outlet, etc.)
+   - **Shaid's angle:** How Shaid could speak to this from his experience (Gen AI, performance testing, building products, freelancing)
+   - **Post type:** Reflective/philosophical or technical/industry analysis
+
+3. Ask Shaid to pick one (or suggest a mashup of multiple)
+
+4. Once selected, draft the post using Topic Mode or Viral Inspiration Mode as appropriate
 
 ## Reference Posts
 
