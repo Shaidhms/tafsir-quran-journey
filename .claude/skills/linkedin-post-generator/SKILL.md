@@ -42,11 +42,14 @@ Posts follow this rhythm:
 [Closing: 1-2 punchy lines. Statement, not a question. End with conviction.]
 ```
 
-### Spacing (Critical)
-- **Hook:** The first 1-2 lines are the hook. After the hook, leave 5-6 empty lines. This creates the "see more" fold on LinkedIn and forces curiosity.
-- **Body:** Group lines in clusters of 3-4 lines, then a blank line between clusters. Never write long unbroken walls of text.
-- **Sections:** Leave 2 blank lines between major sections/shifts in thought.
-- This spacing is non-negotiable. It is what makes posts readable on mobile.
+### Spacing (Critical. Match this exactly.)
+- **Hook:** First 1-2 lines only. Then 5-6 completely empty lines to push below LinkedIn's "see more" fold.
+- **Body:** Every 2-3 lines of text get a single blank line after them. Almost every thought gets its own breathing room. The post should feel airy and easy to scan.
+- **Max cluster:** Never put more than 3 lines together without a blank line break.
+- **Single ideas:** Prefer one idea per line. If two short sentences relate tightly, they can share a line. Otherwise, separate them.
+- **Bullet lists:** Each bullet on its own line. One blank line before the bullet group starts.
+- **Closing:** 2-3 short punchy lines, separated by blank lines between them.
+- This spacing is non-negotiable. It is what makes posts readable on mobile and matches Shaid's published style.
 
 ### Formatting
 - Short lines. One idea per line. Max 2-3 short sentences per cluster.
