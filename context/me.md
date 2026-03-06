@@ -1,6 +1,7 @@
 # About Me
 
 - **Name:** Shaid
+- **Location:** Cosmo City, Pudupakkam, Chennai
 - **Timezone:** IST (India Standard Time)
 - **Role:** Freelance Developer, Content Creator, Gen AI Architect
 - **One-liner:** I build AI products, create content, and do freelance web development.

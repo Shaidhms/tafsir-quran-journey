@@ -39,8 +39,12 @@ Posts follow this rhythm:
 
 [Bullet list: 4-6 actionable or insightful points, prefixed with bullet dots]
 
-[Closing: 1-2 punchy lines. Statement, not a question. End with conviction.]
+[Closing: 1-2 punchy lines (under 60 characters each). Statement, not a question. End with conviction.]
 ```
+
+### Post Length
+- Target: 40-65 lines (including blank lines, excluding image prompt section)
+- Too short feels thin. Too long loses attention.
 
 ### Spacing (Critical. Match this exactly.)
 
@@ -76,6 +80,25 @@ But the smartest builders know when to build and when to integrate.
 
 Notice: 2-4 lines grouped together, one blank line between groups, standalone lines are rare and intentional.
 
+**Example of WRONG body spacing (do NOT do this):**
+```
+They partnered with Google.
+
+Gemini is running under the hood.
+
+The biggest tech company on the planet looked at the AI race and decided:
+
+We're not building this ourselves.
+
+That's not weakness.
+
+That's strategy.
+
+I think about this a lot.
+```
+
+This is wrong because every line is isolated with a blank line after it. It reads choppy and loses rhythm. Lines that flow together as one thought must be grouped.
+
 This spacing is non-negotiable. It matches Shaid's published style.
 
 ### Formatting
@@ -99,6 +122,7 @@ This spacing is non-negotiable. It matches Shaid's published style.
 - Asking the reader to "comment below" or "share if you agree"
 - Excessive exclamation marks
 - Generic motivational fluff without substance
+- Never use the word "carousel" in the post. When the post is about attached PDF/visual content, refer to it as "the attachment", "the PDF", or "the content attached to this post". Say things like "Check out the attachment for the full breakdown" or "I've attached a detailed breakdown" instead of "Swipe through the carousel".
 
 ## Process
 
@@ -152,11 +176,9 @@ Strategy decks. Roadmaps. Forecasts.
 But sometimes the real leverage is sitting quietly in today's work.
 
 I used to think advantage came from predicting what's next.
-
 Now I'm starting to believe it comes from mastering what's now.
 
 This shift became sharper for me when I revisited The Alchemist by Paulo Coelho.
-
 He writes:
 
  "If you pay attention to the present, you can improve upon it.
@@ -167,14 +189,11 @@ Simple. But strategic.
 This isn't about ignoring long-term thinking.
 It's about strengthening the foundation that long-term thinking stands on.
 
-Because:
-
 When you improve today's process, tomorrow's output improves.
 When you refine today's skill, next year's opportunity expands.
 When you fix small issues early, you avoid big crises later.
 
 Future advantage is rarely built in dramatic moves.
-
 It's built in daily upgrades.
 
 Here's what changes when you focus on the present:
@@ -186,17 +205,13 @@ Here's what changes when you focus on the present:
 . Culture becomes proactive, not reactive
 
 Brick by brick.
-
 Not prophecy. Practice.
 
 We don't control the future directly.
-
 But we control today's standards.
-
 And today, repeated enough, becomes strategy.
 
 Invest deeply in the present.
-
 The future won't need chasing.
 ```
 
@@ -269,7 +284,7 @@ That's where trust is built.
 ## Output
 
 **Always write the post to a .txt file** (not inline markdown, which eats blank lines).
-Save to: `templates/linkedin-draft-[short-topic].txt`
+Save to: `linkedin-post/YYYY-MM-DD/linkedin-draft-[short-topic].txt`
 
 The .txt file must include TWO sections:
 1. The full post text
@@ -302,8 +317,7 @@ Present to Shaid:
 ## After Approval
 
 Once Shaid approves the post:
-1. Rename the file to: `templates/linkedin_YYYY-MM-DD_[short-topic]_to-be-scheduled.txt`
+1. Rename the file to: `linkedin-post/YYYY-MM-DD/linkedin-[short-topic]_to-be-scheduled.txt`
    - Use today's date
-   - Use underscores in the filename
    - Append `_to-be-scheduled` to indicate it's ready but not yet published
 2. Confirm the rename and show the final filename

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Doodle PoC - Bismillah</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 8px;
+        }
+        .subtitle { color: #888; font-size: 0.9em; margin-bottom: 25px; }
+
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Pen cursor - hand with pencil */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            left: 0;
+            top: 0;
+        }
+        #penCursor svg {
+            width: 48px;
+            height: 48px;
+            display: block;
+        }
+
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px;
+            min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        /* Typewriter cursor blink */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: currentColor;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl {
+            margin-left: 0;
+            margin-right: 2px;
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+        }
+        .controls button {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            color: #c9a84c;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover {
+            background: #c9a84c;
+            color: #000;
+        }
+
+        .speed-control {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Animated Whiteboard Doodle</h1>
+    <p class="subtitle">Verse 1: Bismillah - watch it draw itself</p>
+
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Pencil body -->
+                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                    <!-- Pencil tip -->
+                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                    <!-- Pencil tip point -->
+                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                    <!-- Eraser -->
+                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                    <!-- Hand holding pencil -->
+                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                    <!-- Thumb -->
+                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                    <!-- Finger lines -->
+                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <!-- SVG will be injected here -->
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        // ===== SVG SCENE BUILDER =====
+        // We use Rough.js in SVG mode, collect all generated paths,
+        // then animate them with stroke-dashoffset
+
+        function buildScene() {
+            // Clean up previous scene SVG only
+            const oldSvg = document.getElementById('sceneSvg');
+            if (oldSvg) oldSvg.remove();
+
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+
+            const rc = rough.svg(svg);
+
+            // We'll collect drawing elements in sequence groups
+            // Each group draws simultaneously, groups play sequentially
+            const groups = [];
+
+            function addToGroup(groupIndex, node) {
+                if (!groups[groupIndex]) groups[groupIndex] = [];
+                groups[groupIndex].push(node);
+            }
+
+            function addRoughToGroup(groupIndex, roughNode) {
+                // Rough.js returns a <g> with child paths
+                const children = roughNode.querySelectorAll('path, line, circle, ellipse, rect, polygon');
+                children.forEach(child => addToGroup(groupIndex, child));
+                // Also add the <g> to SVG (hidden initially)
+                svg.appendChild(roughNode);
+            }
+
+            // --- DOT GRID (instant, background) ---
+            // Draw as a pattern - no animation needed
+            const defs = document.createElementNS(svgNS, 'defs');
+            const pattern = document.createElementNS(svgNS, 'pattern');
+            pattern.setAttribute('id', 'dotgrid');
+            pattern.setAttribute('width', '20');
+            pattern.setAttribute('height', '20');
+            pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+            const dot = document.createElementNS(svgNS, 'circle');
+            dot.setAttribute('cx', '10');
+            dot.setAttribute('cy', '10');
+            dot.setAttribute('r', '0.8');
+            dot.setAttribute('fill', '#e0d8c8');
+            pattern.appendChild(dot);
+            defs.appendChild(pattern);
+            svg.appendChild(defs);
+
+            const bg = document.createElementNS(svgNS, 'rect');
+            bg.setAttribute('width', '900');
+            bg.setAttribute('height', '506');
+            bg.setAttribute('fill', '#FFF9F0');
+            svg.appendChild(bg);
+
+            const grid = document.createElementNS(svgNS, 'rect');
+            grid.setAttribute('width', '900');
+            grid.setAttribute('height', '506');
+            grid.setAttribute('fill', 'url(#dotgrid)');
+            svg.appendChild(grid);
+
+            // --- GROUP 0: Door frame ---
+            addRoughToGroup(0, rc.rectangle(370, 100, 160, 280, {
+                stroke: '#5D4037', strokeWidth: 3.5, fill: '#D7CCC8', fillStyle: 'hachure',
+                roughness: 2, hachureGap: 7, hachureAngle: 90
+            }));
+
+            // Door arch
+            addRoughToGroup(0, rc.arc(450, 130, 160, 120, Math.PI, 0, false, {
+                stroke: '#5D4037', strokeWidth: 3.5, roughness: 2
+            }));
+
+            // --- GROUP 1: Door opening (light area) ---
+            addRoughToGroup(1, rc.rectangle(385, 115, 90, 265, {
+                stroke: '#8D6E63', strokeWidth: 2, fill: '#FFF9C4', fillStyle: 'solid', roughness: 1.5
+            }));
+
+            // --- GROUP 2: Light rays ---
+            for (let i = 0; i < 9; i++) {
+                const angle = -0.6 + (i / 8) * 1.2;
+                const startX = 435;
+                const startY = 230;
+                const len = 130 + (i % 3) * 30;
+                const endX = startX + len * Math.cos(angle);
+                const endY = startY + len * Math.sin(angle) * 0.5;
+                addRoughToGroup(2, rc.line(startX, startY, endX, endY, {
+                    stroke: '#FDD835', strokeWidth: 2, roughness: 2.5
+                }));
+            }
+
+            // --- GROUP 3: Sparkle stars ---
+            function roughStar(cx, cy, outerR, innerR, opts) {
+                const pts = [];
+                for (let i = 0; i < 10; i++) {
+                    const r = i % 2 === 0 ? outerR : innerR;
+                    const a = (Math.PI / 5) * i - Math.PI / 2;
+                    pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+                }
+                return rc.polygon(pts, opts);
+            }
+
+            addRoughToGroup(3, roughStar(250, 140, 16, 6, { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }));
+            addRoughToGroup(3, roughStar(650, 130, 14, 5, { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }));
+            addRoughToGroup(3, roughStar(290, 280, 11, 4, { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }));
+            addRoughToGroup(3, roughStar(680, 260, 12, 5, { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }));
+            addRoughToGroup(3, roughStar(200, 220, 9, 3, { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }));
+            addRoughToGroup(3, roughStar(720, 180, 10, 4, { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }));
+
+            // --- GROUP 4: Ground line ---
+            addRoughToGroup(4, rc.line(100, 385, 800, 385, {
+                stroke: '#BCAAA4', strokeWidth: 2, roughness: 3
+            }));
+
+            // --- GROUP 5: Flowers ---
+            function roughFlower(cx, cy, s, group) {
+                // stem
+                addRoughToGroup(group, rc.line(cx, cy, cx, cy + 28 * s, {
+                    stroke: '#4CAF50', strokeWidth: 2, roughness: 1.5
+                }));
+                // petals
+                const colors = ['#FFCDD2', '#F8BBD0', '#FFE0B2', '#FFF9C4', '#C8E6C9'];
+                for (let i = 0; i < 5; i++) {
+                    const a = (Math.PI * 2 / 5) * i - Math.PI / 2;
+                    const px = cx + 10 * s * Math.cos(a);
+                    const py = cy + 10 * s * Math.sin(a);
+                    addRoughToGroup(group, rc.circle(px, py, 12 * s, {
+                        stroke: '#E91E63', fill: colors[i], fillStyle: 'hachure', roughness: 1.5, hachureGap: 3
+                    }));
+                }
+                // center
+                addRoughToGroup(group, rc.circle(cx, cy, 8 * s, {
+                    stroke: '#FF9800', fill: '#FFE082', fillStyle: 'solid', roughness: 1
+                }));
+            }
+
+            roughFlower(160, 355, 0.9, 5);
+            roughFlower(750, 358, 0.8, 5);
+            roughFlower(220, 362, 0.6, 5);
+            roughFlower(680, 365, 0.7, 5);
+
+            // --- GROUP 6: "Bismillah" speech bubble ---
+            addRoughToGroup(6, rc.ellipse(450, 440, 240, 55, {
+                stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+            }));
+
+            // --- GROUP 7: Label text (will fade in via opacity) ---
+            // We'll handle text labels separately since they're not paths
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+
+        function getPathLength(el) {
+            if (el.getTotalLength) {
+                return el.getTotalLength();
+            }
+            // For elements without getTotalLength, estimate
+            return 300;
+        }
+
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(el => {
+                    if (el.getTotalLength) {
+                        const len = el.getTotalLength();
+                        el.style.strokeDasharray = len;
+                        el.style.strokeDashoffset = len;
+                        el.style.fillOpacity = '0';
+                    } else {
+                        el.style.opacity = '0';
+                    }
+                });
+            });
+        }
+
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = group.map(el => {
+                    if (el.getTotalLength) {
+                        const len = el.getTotalLength();
+                        el.style.strokeDasharray = len;
+                        el.style.strokeDashoffset = len;
+                        el.style.fillOpacity = '0';
+                        return { el, len, hasPath: true };
+                    } else {
+                        el.style.opacity = '0';
+                        return { el, hasPath: false };
+                    }
+                });
+
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+
+                    // Ease out cubic
+                    const eased = 1 - Math.pow(1 - t, 3);
+
+                    elements.forEach(({ el, len, hasPath }) => {
+                        if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            // Show fill after stroke is 60% done
+                            if (eased > 0.6) {
+                                const fillT = (eased - 0.6) / 0.4;
+                                el.style.fillOpacity = fillT;
+                            }
+                        } else {
+                            el.style.opacity = eased;
+                        }
+                    });
+
+                    // Move pen cursor to the last actively drawing element
+                    if (t < 1) {
+                        let penMoved = false;
+                        // Try elements in reverse to find one we can track
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) {
+                                        movePen(pt.x, pt.y);
+                                        penMoved = true;
+                                        break;
+                                    }
+                                } catch (e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath }) => {
+                            if (hasPath) {
+                                el.style.strokeDashoffset = '0';
+                                el.style.fillOpacity = '1';
+                            } else {
+                                el.style.opacity = '1';
+                            }
+                        });
+                        resolve();
+                    }
+                }
+
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            // Convert SVG coords to container coords
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            const scaleX = rect.width / 900;
+            const scaleY = rect.height / 506;
+            // Pencil tip is at ~(18,50) in 64x64 viewBox = 28% x, 78% y of the 48px div
+            // So offset: tipX = 48*0.28 = ~13px, tipY = 48*0.78 = ~37px
+            const tipOffsetX = 13;
+            const tipOffsetY = 37;
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * scaleX - tipOffsetX) + 'px';
+            penCursor.style.top = (svgY * scaleY - tipOffsetY) + 'px';
+        }
+
+        function hidePen() {
+            penCursor.style.opacity = '0';
+        }
+
+        // ===== TYPEWRITER ENGINE =====
+
+        let typewriterAbort = false;
+
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                const isRTL = opts.rtl || false;
+                element.textContent = '';
+
+                // Add cursor
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (isRTL ? ' rtl' : '');
+                element.appendChild(cursor);
+
+                let i = 0;
+                function typeNext() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        // Insert character before cursor
+                        const charNode = document.createTextNode(text[i]);
+                        element.insertBefore(charNode, cursor);
+                        i++;
+                        setTimeout(typeNext, charDelay / speed);
+                    } else {
+                        // Remove cursor after a brief pause
+                        setTimeout(() => {
+                            cursor.remove();
+                            resolve();
+                        }, 400 / speed);
+                    }
+                }
+                typeNext();
+            });
+        }
+
+        function resetBottomText() {
+            const badge = document.getElementById('verseBadge');
+            const arabic = document.getElementById('arabicText');
+            const translit = document.getElementById('translitText');
+            const kid = document.getElementById('kidText');
+            badge.style.opacity = '0';
+            arabic.textContent = '';
+            translit.textContent = '';
+            kid.textContent = '';
+        }
+
+        async function animateBottomText() {
+            const badge = document.getElementById('verseBadge');
+            const arabic = document.getElementById('arabicText');
+            const translit = document.getElementById('translitText');
+            const kid = document.getElementById('kidText');
+
+            // Badge pops in
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+
+            // Arabic types RTL
+            await typewrite(arabic, 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', {
+                charDelay: 55, rtl: true
+            });
+
+            await new Promise(r => setTimeout(r, 150 / speed));
+
+            // Transliteration types LTR
+            await typewrite(translit, 'Bismi-llahi r-rahmani r-rahim', {
+                charDelay: 35
+            });
+
+            await new Promise(r => setTimeout(r, 150 / speed));
+
+            // Kid explanation types LTR
+            await typewrite(kid, 'Every beautiful thing starts by remembering Allah. When you say "Bismillah", you open a door of light and blessings.', {
+                charDelay: 25
+            });
+        }
+
+        // Text labels drawn after shapes
+        function addTextLabels(svg) {
+            const svgNS = 'http://www.w3.org/2000/svg';
+
+            function addText(text, x, y, opts = {}) {
+                const el = document.createElementNS(svgNS, 'text');
+                el.setAttribute('x', x);
+                el.setAttribute('y', y);
+                el.setAttribute('text-anchor', opts.anchor || 'middle');
+                el.setAttribute('dominant-baseline', 'middle');
+                el.setAttribute('font-family', 'Caveat, cursive');
+                el.setAttribute('font-size', opts.size || '22');
+                el.setAttribute('font-weight', opts.weight || '600');
+                el.setAttribute('fill', opts.color || '#2c3e50');
+                el.textContent = text;
+                el.style.opacity = '0';
+                el.style.transition = `opacity ${0.5 / speed}s ease`;
+                svg.appendChild(el);
+                return el;
+            }
+
+            const title = addText('"In the name of Allah..."', 450, 55, { size: '30', color: '#8B6914', weight: '700' });
+            const bismillah = addText('Bismillah!', 450, 440, { size: '28', color: '#BF8C00', weight: '700' });
+
+            return [title, bismillah];
+        }
+
+        async function playAnimation() {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+
+            resetBottomText();
+
+            const { svg, groups } = buildScene();
+            hideAllPaths(groups);
+
+            // Timing per group (ms)
+            const timings = [
+                800,   // 0: door frame
+                500,   // 1: door opening
+                600,   // 2: light rays
+                500,   // 3: sparkle stars
+                300,   // 4: ground line
+                700,   // 5: flowers
+                400,   // 6: speech bubble
+            ];
+
+            const gap = 150;
+
+            // Start drawing
+            // After light rays (group 2), kick off the bottom text in parallel
+            let textStarted = false;
+            let textPromise = null;
+
+            for (let i = 0; i < groups.length; i++) {
+                await animateGroup(groups[i], timings[i] || 500);
+
+                // Start bottom text after light rays finish (group 2)
+                if (i === 2 && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText();
+                }
+
+                if (i < groups.length - 1) {
+                    await new Promise(r => setTimeout(r, gap / speed));
+                }
+            }
+
+            // Fade in SVG text labels
+            hidePen();
+            const labels = addTextLabels(svg);
+            await new Promise(r => setTimeout(r, 100));
+            labels.forEach(el => el.style.opacity = '1');
+
+            // Wait for bottom text to finish if still going
+            if (textPromise) await textPromise;
+        }
+
+        function replayAnimation() {
+            playAnimation();
+        }
+
+        // Auto-play on load
+        window.addEventListener('load', () => {
+            // Small delay so fonts load
+            setTimeout(playAnimation, 500);
+        });
+    </script>
+
+</body>
+</html>

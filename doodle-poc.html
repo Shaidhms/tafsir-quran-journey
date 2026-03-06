@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doodle Style PoC - Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5em;
+            color: #c9a84c;
+        }
+        .header p { color: #888; font-size: 0.95em; margin-top: 5px; }
+
+        .carousel-wrapper {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            border: 3px solid #333;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            background: #FFF9F0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-drawing canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+        }
+
+        .verse-num-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: #e67e22;
+            color: #fff;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .slide-arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.5em;
+            color: #2c3e50;
+            direction: rtl;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .slide-translit-text {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .slide-kid-text {
+            font-family: 'Caveat', cursive;
+            font-size: 1.25em;
+            color: #34495e;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* Nav */
+        .carousel-nav {
+            position: absolute;
+            top: 35%;
+            transform: translateY(-50%);
+            background: rgba(44, 62, 80, 0.8);
+            border: 2px solid #e67e22;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.3em;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .carousel-nav:hover { background: #e67e22; }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #555;
+        }
+        .carousel-dot.active {
+            background: #e67e22;
+            border-color: #e67e22;
+            transform: scale(1.2);
+        }
+
+        .style-note {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            color: #888;
+            font-size: 0.9em;
+            line-height: 1.7;
+        }
+        .style-note h3 { color: #c9a84c; margin-bottom: 10px; }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 20px; }
+            .slide-bottom .slide-kid-text { font-size: 1.1em; }
+            .carousel-nav { width: 36px; height: 36px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Doodle Style Proof of Concept</h1>
+        <p>Al-Fatiha carousel using Rough.js hand-drawn doodles</p>
+    </div>
+
+    <div class="carousel-wrapper">
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+
+                <!-- Slide 1: Bismillah -->
+                <div class="carousel-slide">
+                    <div class="slide-drawing">
+                        <canvas id="doodle1"></canvas>
+                    </div>
+                    <div class="slide-bottom">
+                        <div class="verse-num-badge">1</div>
+                        <div class="slide-arabic-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                        <div class="slide-translit-text">Bismi-llahi r-rahmani r-rahim</div>
+                        <div class="slide-kid-text">Every beautiful thing starts by remembering Allah. When you say "Bismillah", you open a door of light and blessings.</div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Alhamdulillah -->
+                <div class="carousel-slide">
+                    <div class="slide-drawing">
+                        <canvas id="doodle2"></canvas>
+                    </div>
+                    <div class="slide-bottom">
+                        <div class="verse-num-badge">2</div>
+                        <div class="slide-arabic-text">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
+                        <div class="slide-translit-text">Al-hamdu li-llahi rabbi l-'alamin</div>
+                        <div class="slide-kid-text">All thanks and praise belong to Allah - the One who made the stars, the mountains, the oceans, and everything you see.</div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Ar-Rahman Ar-Rahim -->
+                <div class="carousel-slide">
+                    <div class="slide-drawing">
+                        <canvas id="doodle3"></canvas>
+                    </div>
+                    <div class="slide-bottom">
+                        <div class="verse-num-badge">3</div>
+                        <div class="slide-arabic-text">الرَّحْمَٰنِ الرَّحِيمِ</div>
+                        <div class="slide-translit-text">Ar-rahmani r-rahim</div>
+                        <div class="slide-kid-text">Allah's mercy is everywhere - like rain that feeds gardens, like warmth from the sun. He cares for everything, always.</div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Maliki Yawm id-Din -->
+                <div class="carousel-slide">
+                    <div class="slide-drawing">
+                        <canvas id="doodle4"></canvas>
+                    </div>
+                    <div class="slide-bottom">
+                        <div class="verse-num-badge">4</div>
+                        <div class="slide-arabic-text">مَالِكِ يَوْمِ الدِّينِ</div>
+                        <div class="slide-translit-text">Maliki yawmi d-din</div>
+                        <div class="slide-kid-text">There will be a big day when Allah judges everyone fairly. Every good deed and every bad deed will be weighed on a scale.</div>
+                    </div>
+                </div>
+
+                <!-- Slide 5: Iyyaka Na'budu -->
+                <div class="carousel-slide">
+                    <div class="slide-drawing">
+                        <canvas id="doodle5"></canvas>
+                    </div>
+                    <div class="slide-bottom">
+                        <div class="verse-num-badge">5</div>
+                        <div class="slide-arabic-text">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ</div>
+                        <div class="slide-translit-text">Iyyaka na'budu wa-iyyaka nasta'in</div>
+                        <div class="slide-kid-text">Only You we worship, only You we ask for help. Like a compass always pointing one direction - our hearts point to Allah alone.</div>
+                    </div>
+                </div>
+
+                <!-- Slide 6: Guide us -->
+                <div class="carousel-slide">
+                    <div class="slide-drawing">
+                        <canvas id="doodle6"></canvas>
+                    </div>
+                    <div class="slide-bottom">
+                        <div class="verse-num-badge">6</div>
+                        <div class="slide-arabic-text">اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ</div>
+                        <div class="slide-translit-text">Ihdina s-sirata l-mustaqim</div>
+                        <div class="slide-kid-text">We ask Allah: "Show us the straight path!" - a clear, bright road through life, guided by His light.</div>
+                    </div>
+                </div>
+
+                <!-- Slide 7: Not those who went astray -->
+                <div class="carousel-slide">
+                    <div class="slide-drawing">
+                        <canvas id="doodle7"></canvas>
+                    </div>
+                    <div class="slide-bottom">
+                        <div class="verse-num-badge">7</div>
+                        <div class="slide-arabic-text">صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ</div>
+                        <div class="slide-translit-text">Sirata l-ladhina an'amta 'alayhim ghayri l-maghdubi 'alayhim wa-la d-dallin</div>
+                        <div class="slide-kid-text">The path of those You blessed - not those who earned anger, not those who got lost. Keep us on the right road, always.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="carousel-nav carousel-prev" onclick="moveSlide(-1)">&#8249;</button>
+            <button class="carousel-nav carousel-next" onclick="moveSlide(1)">&#8250;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots"></div>
+    </div>
+
+    <div class="style-note">
+        <h3>About this PoC</h3>
+        <p>This uses <strong>Rough.js</strong> to draw all illustrations with a hand-drawn, doodle aesthetic. Every line, shape, and element looks like it was sketched on a whiteboard or notebook.</p>
+        <p>Key features: wobbly lines, hachure fills, hand-drawn circles, notebook dot grid background, handwriting font labels. No external images needed - everything is drawn live in the browser via Canvas.</p>
+    </div>
+
+    <!-- Rough.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+
+    <script>
+        // ===== DOODLE PRIMITIVES =====
+
+        function setupCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const container = canvas.parentElement;
+            // High-res canvas
+            const dpr = window.devicePixelRatio || 1;
+            const w = 900;
+            const h = Math.round(w * 9 / 16);
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            const rc = rough.canvas(canvas);
+            return { rc, ctx, w, h };
+        }
+
+        function drawDotGrid(ctx, w, h) {
+            ctx.fillStyle = '#FFF9F0';
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#e0d8c8';
+            for (let x = 15; x < w; x += 20) {
+                for (let y = 15; y < h; y += 20) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        function drawLabel(ctx, text, x, y, opts = {}) {
+            ctx.save();
+            const size = opts.size || 18;
+            const color = opts.color || '#2c3e50';
+            const weight = opts.weight || '600';
+            ctx.font = `${weight} ${size}px Caveat, cursive`;
+            ctx.fillStyle = color;
+            ctx.textAlign = opts.align || 'center';
+            ctx.textBaseline = opts.baseline || 'middle';
+            // slight rotation for hand-written feel
+            const rot = (Math.random() - 0.5) * 0.03;
+            ctx.translate(x, y);
+            ctx.rotate(rot);
+            ctx.fillText(text, 0, 0);
+            ctx.restore();
+        }
+
+        function drawStar(rc, cx, cy, outerR, innerR, opts = {}) {
+            const points = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const angle = (Math.PI / 5) * i - Math.PI / 2;
+                points.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
+            }
+            rc.polygon(points, {
+                stroke: opts.stroke || '#c9a84c',
+                strokeWidth: opts.strokeWidth || 1.5,
+                fill: opts.fill || '#FFF3B0',
+                fillStyle: 'hachure',
+                roughness: 1.5,
+                hachureGap: 4,
+                ...opts
+            });
+        }
+
+        function drawHeart(rc, cx, cy, size, opts = {}) {
+            // Approximate heart as a path
+            const s = size;
+            const path = `M ${cx} ${cy + s * 0.3}
+                Q ${cx} ${cy - s * 0.1} ${cx - s * 0.5} ${cy - s * 0.3}
+                Q ${cx - s * 0.9} ${cy - s * 0.6} ${cx - s * 0.5} ${cy - s * 0.8}
+                Q ${cx - s * 0.1} ${cy - s * 1} ${cx} ${cy - s * 0.6}
+                Q ${cx + s * 0.1} ${cy - s * 1} ${cx + s * 0.5} ${cy - s * 0.8}
+                Q ${cx + s * 0.9} ${cy - s * 0.6} ${cx + s * 0.5} ${cy - s * 0.3}
+                Q ${cx} ${cy - s * 0.1} ${cx} ${cy + s * 0.3} Z`;
+            rc.path(path, {
+                stroke: opts.stroke || '#e74c3c',
+                strokeWidth: 2,
+                fill: opts.fill || '#ffcdd2',
+                fillStyle: 'hachure',
+                roughness: 1.5,
+                hachureGap: 4,
+                ...opts
+            });
+        }
+
+        function drawTree(rc, ctx, x, y, scale = 1) {
+            const s = scale;
+            // trunk
+            rc.rectangle(x - 5 * s, y - 30 * s, 10 * s, 30 * s, {
+                stroke: '#5D4037', fill: '#795548', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3
+            });
+            // foliage - overlapping circles
+            rc.circle(x, y - 45 * s, 35 * s, {
+                stroke: '#2E7D32', fill: '#A5D6A7', fillStyle: 'hachure', roughness: 2, hachureGap: 4
+            });
+            rc.circle(x - 12 * s, y - 38 * s, 28 * s, {
+                stroke: '#2E7D32', fill: '#81C784', fillStyle: 'hachure', roughness: 2, hachureGap: 4
+            });
+            rc.circle(x + 12 * s, y - 38 * s, 28 * s, {
+                stroke: '#2E7D32', fill: '#81C784', fillStyle: 'hachure', roughness: 2, hachureGap: 4
+            });
+        }
+
+        function drawMountain(rc, x, y, w, h, opts = {}) {
+            rc.polygon([
+                [x, y], [x + w / 2, y - h], [x + w, y]
+            ], {
+                stroke: opts.stroke || '#5D4037',
+                strokeWidth: 2,
+                fill: opts.fill || '#BCAAA4',
+                fillStyle: 'hachure',
+                roughness: 2,
+                hachureGap: 5,
+                hachureAngle: 60,
+                ...opts
+            });
+            // Snow cap
+            if (h > 60) {
+                rc.polygon([
+                    [x + w * 0.35, y - h * 0.6], [x + w / 2, y - h], [x + w * 0.65, y - h * 0.6]
+                ], {
+                    stroke: '#9E9E9E', fill: '#FAFAFA', fillStyle: 'solid', roughness: 1.5
+                });
+            }
+        }
+
+        function drawSun(rc, ctx, cx, cy, radius) {
+            // Rays
+            for (let i = 0; i < 12; i++) {
+                const angle = (Math.PI * 2 / 12) * i;
+                const x1 = cx + (radius + 5) * Math.cos(angle);
+                const y1 = cy + (radius + 5) * Math.sin(angle);
+                const x2 = cx + (radius + 18) * Math.cos(angle);
+                const y2 = cy + (radius + 18) * Math.sin(angle);
+                rc.line(x1, y1, x2, y2, { stroke: '#F9A825', strokeWidth: 2, roughness: 1.5 });
+            }
+            // Sun body
+            rc.circle(cx, cy, radius * 2, {
+                stroke: '#F57F17', fill: '#FFF176', fillStyle: 'hachure', roughness: 1.5, hachureGap: 4
+            });
+        }
+
+        function drawCloud(rc, cx, cy, scale = 1) {
+            const s = scale;
+            rc.circle(cx, cy, 30 * s, { stroke: '#90A4AE', fill: '#ECEFF1', fillStyle: 'solid', roughness: 2 });
+            rc.circle(cx - 18 * s, cy + 5 * s, 24 * s, { stroke: '#90A4AE', fill: '#ECEFF1', fillStyle: 'solid', roughness: 2 });
+            rc.circle(cx + 18 * s, cy + 5 * s, 24 * s, { stroke: '#90A4AE', fill: '#ECEFF1', fillStyle: 'solid', roughness: 2 });
+            rc.circle(cx + 10 * s, cy - 5 * s, 26 * s, { stroke: '#90A4AE', fill: '#ECEFF1', fillStyle: 'solid', roughness: 2 });
+        }
+
+        function drawRaindrop(rc, x, y, scale = 1) {
+            const s = scale;
+            rc.path(`M ${x} ${y - 8 * s} Q ${x - 5 * s} ${y + 2 * s} ${x} ${y + 8 * s} Q ${x + 5 * s} ${y + 2 * s} ${x} ${y - 8 * s}`, {
+                stroke: '#42A5F5', fill: '#BBDEFB', fillStyle: 'solid', roughness: 1
+            });
+        }
+
+        function drawFlower(rc, x, y, scale = 1) {
+            const s = scale;
+            // stem
+            rc.line(x, y, x, y + 25 * s, { stroke: '#4CAF50', strokeWidth: 2, roughness: 1.5 });
+            // petals
+            const colors = ['#FFCDD2', '#F8BBD0', '#FFE0B2', '#FFF9C4', '#C8E6C9'];
+            for (let i = 0; i < 5; i++) {
+                const angle = (Math.PI * 2 / 5) * i - Math.PI / 2;
+                const px = x + 10 * s * Math.cos(angle);
+                const py = y + 10 * s * Math.sin(angle);
+                rc.circle(px, py, 10 * s, {
+                    stroke: '#E91E63', fill: colors[i], fillStyle: 'hachure', roughness: 1.5, hachureGap: 3
+                });
+            }
+            // center
+            rc.circle(x, y, 7 * s, { stroke: '#FF9800', fill: '#FFE082', fillStyle: 'solid', roughness: 1 });
+        }
+
+        function drawArrow(rc, x1, y1, x2, y2, opts = {}) {
+            rc.line(x1, y1, x2, y2, {
+                stroke: opts.stroke || '#2c3e50', strokeWidth: 2, roughness: 1.5, ...opts
+            });
+            // arrowhead
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const headLen = 12;
+            rc.line(x2, y2, x2 - headLen * Math.cos(angle - 0.4), y2 - headLen * Math.sin(angle - 0.4), {
+                stroke: opts.stroke || '#2c3e50', strokeWidth: 2, roughness: 1
+            });
+            rc.line(x2, y2, x2 - headLen * Math.cos(angle + 0.4), y2 - headLen * Math.sin(angle + 0.4), {
+                stroke: opts.stroke || '#2c3e50', strokeWidth: 2, roughness: 1
+            });
+        }
+
+        // ===== SCENE COMPOSERS =====
+
+        // Slide 1: Bismillah - Door opening with light streaming out
+        function drawScene1() {
+            const { rc, ctx, w, h } = setupCanvas('doodle1');
+            drawDotGrid(ctx, w, h);
+
+            // Title label
+            drawLabel(ctx, '"In the name of Allah..."', w / 2, 35, { size: 26, color: '#8B6914' });
+
+            // Door frame
+            rc.rectangle(330, 70, 180, 260, {
+                stroke: '#5D4037', strokeWidth: 3, fill: '#D7CCC8', fillStyle: 'hachure',
+                roughness: 2, hachureGap: 6, hachureAngle: 90
+            });
+
+            // Door arch
+            rc.arc(420, 95, 180, 180, Math.PI, 0, false, {
+                stroke: '#5D4037', strokeWidth: 3, roughness: 2
+            });
+
+            // Door opening (slightly ajar)
+            rc.rectangle(348, 88, 90, 240, {
+                stroke: '#8D6E63', strokeWidth: 2, fill: '#FFF9C4', fillStyle: 'solid', roughness: 1.5
+            });
+
+            // Light rays from door
+            for (let i = 0; i < 7; i++) {
+                const angle = -0.5 + (i / 6) * 1.0;
+                const startX = 395;
+                const startY = 200;
+                const len = 120 + Math.random() * 60;
+                const endX = startX + len * Math.cos(angle);
+                const endY = startY + len * Math.sin(angle) * 0.6;
+                rc.line(startX, startY, endX, endY, {
+                    stroke: '#FDD835', strokeWidth: 1.5, roughness: 2
+                });
+            }
+
+            // Little sparkles
+            drawStar(rc, 240, 140, 12, 5, { stroke: '#FFD54F', fill: '#FFF9C4' });
+            drawStar(rc, 580, 120, 10, 4, { stroke: '#FFD54F', fill: '#FFF9C4' });
+            drawStar(rc, 280, 250, 8, 3, { stroke: '#FFD54F', fill: '#FFF9C4' });
+            drawStar(rc, 600, 230, 9, 4, { stroke: '#FFD54F', fill: '#FFF9C4' });
+
+            // "Bismillah" in hand-drawn bubble
+            rc.ellipse(580, 340, 200, 60, {
+                stroke: '#c9a84c', strokeWidth: 2, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+            });
+            drawLabel(ctx, 'Bismillah!', 580, 340, { size: 24, color: '#BF8C00' });
+
+            // Ground line
+            rc.line(100, 330, 700, 330, { stroke: '#BCAAA4', strokeWidth: 1.5, roughness: 3 });
+
+            // Small decorative elements
+            drawFlower(rc, 160, 305, 0.8);
+            drawFlower(rc, 680, 310, 0.7);
+        }
+
+        // Slide 2: Alhamdulillah - All creation: stars, mountains, ocean, trees
+        function drawScene2() {
+            const { rc, ctx, w, h } = setupCanvas('doodle2');
+            drawDotGrid(ctx, w, h);
+
+            drawLabel(ctx, '"All praise belongs to Allah, Lord of all worlds"', w / 2, 30, { size: 22, color: '#8B6914' });
+
+            // Sky elements
+            drawSun(rc, ctx, 120, 80, 28);
+            drawCloud(rc, 350, 65, 0.9);
+            drawCloud(rc, 580, 85, 0.7);
+
+            // Stars
+            drawStar(rc, 680, 50, 10, 4, { stroke: '#FFB300', fill: '#FFF9C4' });
+            drawStar(rc, 250, 55, 8, 3, { stroke: '#FFB300', fill: '#FFF9C4' });
+            drawStar(rc, 470, 45, 7, 3, { stroke: '#FFB300', fill: '#FFF9C4' });
+
+            // Mountains
+            drawMountain(rc, 50, 280, 200, 150, { fill: '#BCAAA4', stroke: '#6D4C41' });
+            drawMountain(rc, 180, 280, 250, 180, { fill: '#A1887F', stroke: '#5D4037' });
+            drawMountain(rc, 500, 280, 220, 130, { fill: '#D7CCC8', stroke: '#795548' });
+
+            // Trees
+            drawTree(rc, ctx, 430, 270, 1.2);
+            drawTree(rc, ctx, 470, 280, 0.9);
+            drawTree(rc, ctx, 660, 275, 1.0);
+
+            // Ocean waves at the bottom
+            const waveY = 310;
+            for (let i = 0; i < 8; i++) {
+                const wx = 50 + i * 90;
+                rc.arc(wx + 45, waveY, 90, 40, 0, Math.PI, false, {
+                    stroke: '#42A5F5', strokeWidth: 2, roughness: 2
+                });
+            }
+
+            // Ocean fill
+            rc.rectangle(0, 320, w, 80, {
+                stroke: 'none', fill: '#BBDEFB', fillStyle: 'hachure', roughness: 2, hachureGap: 5,
+                hachureAngle: 0
+            });
+
+            // "Alhamdulillah" label
+            rc.ellipse(w / 2, 370, 240, 50, {
+                stroke: '#2E7D32', strokeWidth: 2, roughness: 2, fill: '#E8F5E9', fillStyle: 'solid'
+            });
+            drawLabel(ctx, 'Alhamdulillah!', w / 2, 370, { size: 22, color: '#1B5E20' });
+        }
+
+        // Slide 3: Ar-Rahman Ar-Rahim - Rain, sun, garden (mercy imagery)
+        function drawScene3() {
+            const { rc, ctx, w, h } = setupCanvas('doodle3');
+            drawDotGrid(ctx, w, h);
+
+            drawLabel(ctx, '"The Most Merciful, The Most Compassionate"', w / 2, 30, { size: 22, color: '#8B6914' });
+
+            // Big warm sun
+            drawSun(rc, ctx, 160, 100, 40);
+
+            // Rain cloud on the other side
+            drawCloud(rc, 520, 80, 1.3);
+
+            // Rain drops
+            for (let i = 0; i < 8; i++) {
+                drawRaindrop(rc, 475 + i * 15, 120 + Math.random() * 40, 0.8);
+            }
+            for (let i = 0; i < 6; i++) {
+                drawRaindrop(rc, 490 + i * 15, 170 + Math.random() * 30, 0.6);
+            }
+
+            // Ground
+            rc.line(80, 310, 700, 310, { stroke: '#8D6E63', strokeWidth: 2, roughness: 3 });
+
+            // Garden - flowers growing from the ground
+            const flowerPositions = [140, 210, 280, 360, 430, 500, 580, 640];
+            flowerPositions.forEach((fx, i) => {
+                drawFlower(rc, fx, 285 - Math.random() * 10, 0.8 + Math.random() * 0.4);
+            });
+
+            // Little sprouts
+            for (let i = 0; i < 4; i++) {
+                const sx = 150 + i * 150;
+                rc.line(sx, 310, sx, 295, { stroke: '#4CAF50', strokeWidth: 1.5, roughness: 1.5 });
+                rc.arc(sx + 5, 293, 12, 8, Math.PI, 0, false, {
+                    stroke: '#4CAF50', strokeWidth: 1.5, roughness: 1.5
+                });
+            }
+
+            // Heart shapes floating (mercy)
+            drawHeart(rc, 300, 170, 20, { stroke: '#E91E63', fill: '#FCE4EC' });
+            drawHeart(rc, 400, 150, 15, { stroke: '#E91E63', fill: '#FCE4EC' });
+            drawHeart(rc, 250, 200, 12, { stroke: '#F06292', fill: '#FCE4EC' });
+
+            // Mercy label
+            rc.ellipse(w / 2, 360, 200, 50, {
+                stroke: '#E91E63', strokeWidth: 2, roughness: 2, fill: '#FCE4EC', fillStyle: 'solid'
+            });
+            drawLabel(ctx, 'Ar-Rahman Ar-Rahim', w / 2, 360, { size: 20, color: '#AD1457' });
+        }
+
+        // Slide 4: Maliki Yawm id-Din - Grand scale/balance
+        function drawScene4() {
+            const { rc, ctx, w, h } = setupCanvas('doodle4');
+            drawDotGrid(ctx, w, h);
+
+            drawLabel(ctx, '"Master of the Day of Judgment"', w / 2, 30, { size: 24, color: '#8B6914' });
+
+            // Balance/scale
+            // Central pillar
+            rc.rectangle(345, 120, 10, 180, {
+                stroke: '#5D4037', fill: '#8D6E63', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3
+            });
+
+            // Base
+            rc.rectangle(300, 290, 100, 15, {
+                stroke: '#5D4037', fill: '#A1887F', fillStyle: 'hachure', roughness: 1.5, hachureGap: 4
+            });
+
+            // Beam (slight tilt for dynamism)
+            rc.line(180, 145, 520, 135, { stroke: '#5D4037', strokeWidth: 3, roughness: 1.5 });
+
+            // Left pan (good deeds - lower/heavier)
+            rc.line(180, 145, 160, 200, { stroke: '#795548', strokeWidth: 2, roughness: 1.5 });
+            rc.line(180, 145, 200, 200, { stroke: '#795548', strokeWidth: 2, roughness: 1.5 });
+            rc.arc(180, 215, 80, 30, 0, Math.PI, false, {
+                stroke: '#795548', strokeWidth: 2, fill: '#C8E6C9', fillStyle: 'hachure', roughness: 2, hachureGap: 4
+            });
+            // Stars in good side
+            drawStar(rc, 170, 205, 8, 3, { stroke: '#4CAF50', fill: '#A5D6A7' });
+            drawStar(rc, 190, 200, 6, 2, { stroke: '#4CAF50', fill: '#A5D6A7' });
+
+            // Right pan (higher/lighter)
+            rc.line(520, 135, 500, 185, { stroke: '#795548', strokeWidth: 2, roughness: 1.5 });
+            rc.line(520, 135, 540, 185, { stroke: '#795548', strokeWidth: 2, roughness: 1.5 });
+            rc.arc(520, 200, 80, 30, 0, Math.PI, false, {
+                stroke: '#795548', strokeWidth: 2, fill: '#FFECB3', fillStyle: 'hachure', roughness: 2, hachureGap: 4
+            });
+
+            // Crown/jewel on top
+            drawStar(rc, 350, 105, 18, 7, { stroke: '#c9a84c', fill: '#FFF9C4', strokeWidth: 2 });
+
+            // Decorative text
+            drawLabel(ctx, 'Good deeds', 180, 250, { size: 16, color: '#2E7D32' });
+            drawLabel(ctx, 'Bad deeds', 520, 240, { size: 16, color: '#BF360C' });
+
+            // Dramatic ground
+            rc.line(80, 310, 620, 310, { stroke: '#BCAAA4', strokeWidth: 1.5, roughness: 3 });
+
+            // Label
+            rc.ellipse(350, 360, 260, 50, {
+                stroke: '#5D4037', strokeWidth: 2, roughness: 2, fill: '#EFEBE9', fillStyle: 'solid'
+            });
+            drawLabel(ctx, 'Yawm id-Din', 350, 360, { size: 22, color: '#3E2723' });
+        }
+
+        // Slide 5: Iyyaka Na'budu - Compass pointing one direction
+        function drawScene5() {
+            const { rc, ctx, w, h } = setupCanvas('doodle5');
+            drawDotGrid(ctx, w, h);
+
+            drawLabel(ctx, '"You alone we worship, You alone we ask for help"', w / 2, 30, { size: 22, color: '#8B6914' });
+
+            // Large compass circle
+            rc.circle(350, 200, 240, {
+                stroke: '#37474F', strokeWidth: 3, roughness: 2
+            });
+            rc.circle(350, 200, 220, {
+                stroke: '#546E7A', strokeWidth: 1.5, roughness: 1.5
+            });
+
+            // Compass directions
+            drawLabel(ctx, 'N', 350, 95, { size: 20, color: '#c9a84c', weight: '700' });
+            drawLabel(ctx, 'S', 350, 305, { size: 18, color: '#90A4AE' });
+            drawLabel(ctx, 'E', 460, 200, { size: 18, color: '#90A4AE' });
+            drawLabel(ctx, 'W', 240, 200, { size: 18, color: '#90A4AE' });
+
+            // Compass tick marks
+            for (let i = 0; i < 12; i++) {
+                const angle = (Math.PI * 2 / 12) * i;
+                const r1 = 105;
+                const r2 = 115;
+                rc.line(
+                    350 + r1 * Math.cos(angle), 200 + r1 * Math.sin(angle),
+                    350 + r2 * Math.cos(angle), 200 + r2 * Math.sin(angle),
+                    { stroke: '#78909C', strokeWidth: 1.5, roughness: 1 }
+                );
+            }
+
+            // Needle pointing UP (to Allah)
+            // Red half (pointing up)
+            rc.polygon([
+                [350, 110], [340, 200], [360, 200]
+            ], {
+                stroke: '#C62828', fill: '#EF5350', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3
+            });
+            // Grey half (pointing down)
+            rc.polygon([
+                [350, 290], [340, 200], [360, 200]
+            ], {
+                stroke: '#546E7A', fill: '#B0BEC5', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3
+            });
+
+            // Center pin
+            rc.circle(350, 200, 14, {
+                stroke: '#37474F', fill: '#455A64', fillStyle: 'solid', roughness: 1
+            });
+
+            // "ALLAH" label at top
+            rc.ellipse(350, 60, 100, 35, {
+                stroke: '#c9a84c', strokeWidth: 2, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+            });
+            drawLabel(ctx, 'ALLAH', 350, 60, { size: 20, color: '#BF8C00', weight: '700' });
+
+            // Side annotations
+            drawLabel(ctx, 'Our hearts point', 600, 170, { size: 16, color: '#78909C' });
+            drawLabel(ctx, 'only to Him', 600, 195, { size: 16, color: '#78909C' });
+
+            // Arrow from text to compass
+            drawArrow(rc, 555, 185, 475, 195, { stroke: '#90A4AE' });
+
+            // Bottom label
+            drawLabel(ctx, 'Iyyaka Na\'budu', 350, 375, { size: 22, color: '#1B5E20' });
+        }
+
+        // Slide 6: Ihdinas Siratal Mustaqim - Straight path with guiding light
+        function drawScene6() {
+            const { rc, ctx, w, h } = setupCanvas('doodle6');
+            drawDotGrid(ctx, w, h);
+
+            drawLabel(ctx, '"Guide us to the straight path"', w / 2, 30, { size: 24, color: '#8B6914' });
+
+            // Perspective road
+            rc.polygon([
+                [300, 340], [400, 340], [375, 80], [325, 80]
+            ], {
+                stroke: '#5D4037', strokeWidth: 2, fill: '#D7CCC8', fillStyle: 'hachure',
+                roughness: 2, hachureGap: 8, hachureAngle: 90
+            });
+
+            // Dashed center line
+            for (let i = 0; i < 8; i++) {
+                const t = i / 8;
+                const y1 = 340 - t * 260;
+                const y2 = y1 - 20;
+                const cx = 350;
+                const halfW = 5 * (1 - t * 0.6);
+                rc.line(cx - halfW, y1, cx - halfW * 0.8, y2, {
+                    stroke: '#FDD835', strokeWidth: 2, roughness: 1
+                });
+            }
+
+            // Guiding light/star at the end of the road
+            drawStar(rc, 350, 60, 25, 10, { stroke: '#FFA000', fill: '#FFE082', strokeWidth: 2 });
+
+            // Light rays from the star
+            for (let i = 0; i < 8; i++) {
+                const angle = (Math.PI * 2 / 8) * i;
+                rc.line(
+                    350 + 28 * Math.cos(angle), 60 + 28 * Math.sin(angle),
+                    350 + 45 * Math.cos(angle), 60 + 45 * Math.sin(angle),
+                    { stroke: '#FFD54F', strokeWidth: 1.5, roughness: 1.5 }
+                );
+            }
+
+            // Trees along the road
+            drawTree(rc, ctx, 230, 300, 0.8);
+            drawTree(rc, ctx, 480, 310, 0.7);
+            drawTree(rc, ctx, 260, 220, 0.6);
+            drawTree(rc, ctx, 440, 230, 0.5);
+            drawTree(rc, ctx, 285, 160, 0.4);
+            drawTree(rc, ctx, 415, 165, 0.35);
+
+            // Flowers along the sides
+            drawFlower(rc, 200, 320, 0.6);
+            drawFlower(rc, 510, 330, 0.5);
+
+            // Ground
+            rc.line(80, 345, 650, 345, { stroke: '#8D6E63', strokeWidth: 1.5, roughness: 3 });
+
+            drawLabel(ctx, 'Sirat al-Mustaqim', 350, 380, { size: 22, color: '#1B5E20' });
+        }
+
+        // Slide 7: Three paths - one lit, others dark
+        function drawScene7() {
+            const { rc, ctx, w, h } = setupCanvas('doodle7');
+            drawDotGrid(ctx, w, h);
+
+            drawLabel(ctx, '"The path of those You blessed"', w / 2, 30, { size: 22, color: '#8B6914' });
+
+            // Starting point (bottom center)
+            rc.circle(350, 340, 20, {
+                stroke: '#5D4037', fill: '#EFEBE9', fillStyle: 'solid', roughness: 1.5
+            });
+            drawLabel(ctx, 'You', 350, 340, { size: 14, color: '#5D4037' });
+
+            // === LEFT PATH (dark - those who earned anger) ===
+            rc.path('M 340 330 Q 250 260 150 180', {
+                stroke: '#B71C1C', strokeWidth: 3, roughness: 2
+            });
+            // X mark at end
+            rc.line(135, 165, 165, 195, { stroke: '#C62828', strokeWidth: 3, roughness: 2 });
+            rc.line(165, 165, 135, 195, { stroke: '#C62828', strokeWidth: 3, roughness: 2 });
+            drawLabel(ctx, 'anger', 150, 150, { size: 16, color: '#C62828' });
+
+            // Dark clouds over left path
+            drawCloud(rc, 160, 120, 0.6);
+
+            // === RIGHT PATH (dark - those who went astray) ===
+            rc.path('M 360 330 Q 450 260 550 180', {
+                stroke: '#4A148C', strokeWidth: 3, roughness: 2
+            });
+            // Question marks
+            drawLabel(ctx, '???', 550, 175, { size: 22, color: '#7B1FA2' });
+            drawLabel(ctx, 'lost', 550, 150, { size: 16, color: '#7B1FA2' });
+
+            // Dark clouds over right path
+            drawCloud(rc, 540, 120, 0.6);
+
+            // === MIDDLE PATH (bright - the blessed path) ===
+            rc.polygon([
+                [335, 325], [365, 325], [360, 80], [340, 80]
+            ], {
+                stroke: '#2E7D32', strokeWidth: 3, fill: '#C8E6C9', fillStyle: 'hachure',
+                roughness: 2, hachureGap: 6
+            });
+
+            // Light at the end
+            drawStar(rc, 350, 55, 22, 9, { stroke: '#FFA000', fill: '#FFE082', strokeWidth: 2 });
+
+            // Checkmark
+            rc.line(340, 85, 348, 100, { stroke: '#2E7D32', strokeWidth: 3, roughness: 1 });
+            rc.line(348, 100, 365, 75, { stroke: '#2E7D32', strokeWidth: 3, roughness: 1 });
+
+            drawLabel(ctx, 'blessed', 350, 115, { size: 18, color: '#1B5E20', weight: '700' });
+
+            // Small flowers along the blessed path
+            drawFlower(rc, 310, 250, 0.5);
+            drawFlower(rc, 390, 200, 0.5);
+
+            // Bottom label
+            drawLabel(ctx, 'Choose the straight path', 350, 385, { size: 20, color: '#1B5E20' });
+        }
+
+        // ===== DRAW ALL SCENES =====
+        window.addEventListener('load', () => {
+            drawScene1();
+            drawScene2();
+            drawScene3();
+            drawScene4();
+            drawScene5();
+            drawScene6();
+            drawScene7();
+            initCarousel();
+        });
+
+        // ===== CAROUSEL LOGIC =====
+        let currentSlide = 0;
+        const totalSlides = 7;
+
+        function initCarousel() {
+            const dotsContainer = document.getElementById('carouselDots');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function moveSlide(dir) {
+            currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            document.getElementById('carouselTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') moveSlide(-1);
+            if (e.key === 'ArrowRight') moveSlide(1);
+        });
+    </script>
+
+</body>
+</html>
