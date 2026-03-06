@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah An-Nas - Mankind | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; background: #0d0d0d;
+            border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100;
+        }
+        .nav-bar .logo { color: #c9a84c; font-weight: 700; font-size: 1.1em; }
+        .nav-bar .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-bar .nav-links a { color: #888; text-decoration: none; font-size: 0.9em; transition: color 0.3s; }
+        .nav-bar .nav-links a:hover { color: #c9a84c; }
+        .nav-bar .progress { color: #888; font-size: 0.9em; }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%);
+            padding: 80px 20px; text-align: center;
+            border-bottom: 2px solid #3a1a5c; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+        }
+        .hero h1 { font-family: 'Amiri', serif; font-size: 3em; color: #c9a84c; margin-bottom: 10px; }
+        .hero .arabic-title { font-family: 'Amiri', serif; font-size: 4em; color: #fff; direction: rtl; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.1em; color: #8ab4f8; font-weight: 300; }
+        .hero .badge {
+            display: inline-block; margin-top: 20px; padding: 8px 20px;
+            background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c;
+            border-radius: 30px; color: #c9a84c; font-size: 0.9em;
+        }
+
+        /* ===== VIEW TOGGLE ===== */
+        .view-toggle {
+            display: flex; justify-content: center; gap: 0;
+            background: #111; border-bottom: 1px solid #222; padding: 0;
+        }
+        .view-toggle button {
+            background: none; border: none; color: #888;
+            padding: 16px 30px; font-size: 1em; font-family: 'Inter', sans-serif;
+            cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s;
+        }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+
+        /* ===== CAROUSEL SECTION ===== */
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+
+        .carousel-wrapper {
+            max-width: 900px; margin: 40px auto; padding: 0 20px; position: relative;
+        }
+        .carousel-intro { text-align: center; margin-bottom: 30px; }
+        .carousel-intro h2 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 8px; }
+        .carousel-intro p { color: #888; font-size: 0.95em; }
+
+        .carousel-container {
+            position: relative; overflow: hidden;
+            border-radius: 20px; border: 3px solid #333;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .carousel-track { display: flex; transition: transform 0.5s ease; }
+
+        .carousel-slide {
+            min-width: 100%;
+            background: #FFF9F0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .slide-drawing svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+        }
+        .slide-bottom .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+        }
+        .slide-bottom .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; text-align: center; margin-bottom: 4px;
+        }
+        .slide-bottom .slide-translit-text {
+            text-align: center; color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+        }
+        .slide-bottom .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e;
+            line-height: 1.5; text-align: center;
+        }
+
+        /* Carousel Nav */
+        .carousel-nav {
+            position: absolute; top: 40%; transform: translateY(-50%);
+            background: rgba(44, 62, 80, 0.8); border: 2px solid #e67e22;
+            color: #fff; width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.3em; z-index: 10; transition: all 0.3s;
+        }
+        .carousel-nav:hover { background: #e67e22; }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+
+        .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .carousel-dot {
+            width: 12px; height: 12px; border-radius: 50%; background: #333;
+            cursor: pointer; transition: all 0.3s; border: 2px solid #555;
+        }
+        .carousel-dot.active { background: #e67e22; border-color: #e67e22; transform: scale(1.2); }
+
+        /* ===== DEEP DIVE ===== */
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section {
+            margin: 40px 0; padding: 35px; background: #111;
+            border-radius: 16px; border: 1px solid #222;
+        }
+        .section-title {
+            font-size: 1.5em; color: #c9a84c; margin-bottom: 20px;
+            font-weight: 600; display: flex; align-items: center; gap: 12px;
+        }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important {
+            background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c;
+            padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0;
+        }
+        .facts-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; margin-top: 15px;
+        }
+        .fact-card {
+            background: #1a1a1a; padding: 18px; border-radius: 12px;
+            text-align: center; border: 1px solid #2a2a2a;
+        }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card {
+            background: #1a1a1a; border-radius: 16px; padding: 30px;
+            margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s;
+        }
+        .verse-card:hover { border-color: #c9a84c; }
+        .verse-number {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; background: #c9a84c; color: #000;
+            border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px;
+        }
+        .verse-arabic {
+            font-family: 'Amiri', serif; font-size: 2.4em; color: #fff;
+            direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0;
+        }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation {
+            font-size: 1.1em; color: #ccc; margin-bottom: 20px;
+            padding-bottom: 20px; border-bottom: 1px solid #2a2a2a;
+        }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip {
+            background: #222; border: 1px solid #333; border-radius: 12px;
+            padding: 12px 16px; text-align: center; min-width: 90px; transition: background 0.3s;
+        }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation {
+            background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15);
+            border-radius: 12px; padding: 18px; margin-top: 15px;
+        }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .arabic-tip {
+            background: #1a1a1a; border-radius: 12px; padding: 25px;
+            margin: 15px 0; border: 1px solid #2a2a2a;
+        }
+        .arabic-tip h4 { color: #c9a84c; margin-bottom: 10px; }
+        .arabic-tip p { color: #bbb; font-size: 0.95em; }
+        .arabic-letter-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px; margin-top: 15px;
+        }
+        .letter-card {
+            background: #222; border-radius: 10px; padding: 15px;
+            text-align: center; border: 1px solid #333;
+        }
+        .letter-card .letter { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; }
+        .letter-card .name { font-size: 0.85em; color: #c9a84c; margin-top: 5px; }
+        .letter-card .sound { font-size: 0.8em; color: #888; }
+        .root-word-box {
+            display: flex; align-items: center; gap: 20px; background: #1a1a1a;
+            padding: 20px; border-radius: 12px; margin: 15px 0;
+            border: 1px solid #2a2a2a; flex-wrap: wrap;
+        }
+        .root-word-box .root { font-family: 'Amiri', serif; font-size: 2em; color: #c9a84c; direction: rtl; }
+        .root-word-box .arrow { color: #555; font-size: 1.5em; }
+        .root-word-box .derivatives { display: flex; gap: 12px; flex-wrap: wrap; }
+        .root-word-box .derivative { background: #222; padding: 8px 15px; border-radius: 8px; text-align: center; }
+        .root-word-box .derivative .ar { font-family: 'Amiri', serif; font-size: 1.3em; color: #fff; }
+        .root-word-box .derivative .en { font-size: 0.8em; color: #888; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note {
+            background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2);
+            border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999;
+        }
+        .source-note strong { color: #c9a84c; }
+        .prompts-toggle {
+            background: none; border: 1px solid #333; color: #888;
+            padding: 10px 20px; border-radius: 8px; cursor: pointer;
+            font-family: 'Inter', sans-serif; font-size: 0.9em;
+            margin: 30px auto; display: block; transition: all 0.3s;
+        }
+        .prompts-toggle:hover { border-color: #c9a84c; color: #c9a84c; }
+        .prompts-section { display: none; }
+        .prompts-section.visible { display: block; }
+        .prompt-card {
+            background: #1a1a1a; border-radius: 12px; padding: 20px;
+            margin: 15px 0; border: 1px solid #2a2a2a;
+        }
+        .prompt-card h4 { color: #c9a84c; margin-bottom: 10px; font-size: 0.95em; }
+        .prompt-card pre {
+            color: #aaa; font-size: 0.85em; line-height: 1.6;
+            white-space: pre-wrap; word-wrap: break-word; font-family: 'Inter', sans-serif;
+        }
+        footer {
+            text-align: center; padding: 40px 20px; color: #555;
+            font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px;
+        }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2em; }
+            .hero .arabic-title { font-size: 2.8em; }
+            .verse-arabic { font-size: 1.8em; }
+            .section { padding: 20px; }
+            .words-grid { gap: 8px; }
+            .word-chip { min-width: 75px; padding: 10px 12px; }
+            .slide-bottom { padding: 18px 20px; }
+            .slide-bottom .slide-kid-text { font-size: 1.1em; }
+            .slide-bottom .slide-arabic-text { font-size: 1.2em; }
+            .carousel-nav { width: 36px; height: 36px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shared SVG filter for hand-drawn effect -->
+    <svg style="position:absolute;width:0;height:0;">
+        <defs>
+            <filter id="sketchy">
+                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <filter id="sketchy-strong">
+                <feTurbulence type="turbulence" baseFrequency="0.025" numOctaves="4" result="noise" seed="5"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <nav class="nav-bar">
+        <a href="/" class="logo" style="text-decoration:none;">Tafsir - Quran Journey</a>
+        <div class="nav-links">
+            <a href="001-al-fatiha.html">Al-Fatiha</a>
+        </div>
+        <div class="progress">Surah 114 of 114</div>
+    </nav>
+
+    <header class="hero">
+        <div class="arabic-title">النَّاس</div>
+        <h1>An-Nas</h1>
+        <p class="subtitle">Mankind - The Final Shield Against Invisible Enemies</p>
+        <div class="badge">Makki Surah &middot; 6 Verses &middot; Revealed in Makkah</div>
+    </header>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <!-- ==================== CAROUSEL ==================== -->
+    <div class="carousel-section" id="carousel-view">
+        <div class="carousel-wrapper">
+            <div class="carousel-intro">
+                <h2>An-Nas: A Visual Journey</h2>
+                <p>Swipe through each verse. Understand it like a story told on a whiteboard.</p>
+            </div>
+
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+
+                    <!-- ===== SLIDE 1: Lord of Mankind - Shield/Fortress ===== -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <circle cx="10" cy="10" r="0.5" fill="#ddd"/>
+                                </pattern>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+
+                                <g filter="url(#sketchy)">
+                                    <!-- Shield shape -->
+                                    <path d="M350,50 L480,100 L480,220 Q480,320 350,360 Q220,320 220,220 L220,100 Z" fill="#FFF3B0" stroke="#8B6914" stroke-width="4" fill-opacity="0.6"/>
+                                    <!-- Inner shield glow -->
+                                    <path d="M350,80 L450,118 L450,215 Q450,295 350,330 Q250,295 250,215 L250,118 Z" fill="#FFE680" stroke="#c9a84c" stroke-width="2" fill-opacity="0.4"/>
+
+                                    <!-- Light rays from shield -->
+                                    <line x1="350" y1="50" x2="350" y2="10" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="350" y1="50" x2="280" y2="15" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="350" y1="50" x2="420" y2="15" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="220" y1="160" x2="160" y2="140" stroke="#FFD700" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                                    <line x1="480" y1="160" x2="540" y2="140" stroke="#FFD700" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+
+                                    <!-- Dark wisps being repelled (left) -->
+                                    <path d="M80,120 Q100,140 90,170 Q80,200 100,220" fill="none" stroke="#555" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+                                    <path d="M60,160 Q80,180 70,210" fill="none" stroke="#666" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+
+                                    <!-- Dark wisps being repelled (right) -->
+                                    <path d="M620,130 Q600,150 610,180 Q620,210 600,230" fill="none" stroke="#555" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+                                    <path d="M640,170 Q620,190 630,220" fill="none" stroke="#666" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+
+                                    <!-- Stars -->
+                                    <text x="150" y="70" font-family="Caveat" font-size="24" fill="#F39C12" opacity="0.7">*</text>
+                                    <text x="530" y="60" font-family="Caveat" font-size="28" fill="#F39C12" opacity="0.8">*</text>
+                                    <text x="100" y="280" font-family="Caveat" font-size="20" fill="#F39C12" opacity="0.5">*</text>
+                                    <text x="590" y="290" font-family="Caveat" font-size="22" fill="#F39C12" opacity="0.6">*</text>
+                                </g>
+
+                                <!-- Labels -->
+                                <text x="350" y="200" text-anchor="middle" font-family="Caveat" font-size="22" fill="#8B6914" font-weight="600">RABB</text>
+                                <text x="350" y="225" text-anchor="middle" font-family="Caveat" font-size="16" fill="#8B6914">(your Lord, your Shield)</text>
+                                <text x="350" y="385" text-anchor="middle" font-family="Caveat" font-size="24" fill="#e67e22" font-weight="600">Say: "I seek protection!" - Run to your Lord!</text>
+
+                                <!-- Annotations -->
+                                <path d="M130,200 L180,180" fill="none" stroke="#e74c3c" stroke-width="1.5"/>
+                                <text x="60" y="200" font-family="Caveat" font-size="14" fill="#e74c3c">darkness</text>
+                                <text x="55" y="215" font-family="Caveat" font-size="14" fill="#e74c3c">pushed away!</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">1</div>
+                            <div class="slide-arabic-text">قُلْ أَعُوذُ بِرَبِّ النَّاسِ</div>
+                            <div class="slide-translit-text">Qul a'udhu bi Rabbin-nas</div>
+                            <div class="slide-kid-text">When something scary or invisible tries to bother you, what do you do? You run to someone who protects you. Allah says: "Say it! Run to Me! I am the Lord of ALL people. I take care of everyone. I am your shield."</div>
+                        </div>
+                    </div>
+
+                    <!-- ===== SLIDE 2: King of Mankind - Crown & Throne ===== -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+
+                                <g filter="url(#sketchy)">
+                                    <!-- Crown -->
+                                    <path d="M240,160 L270,90 L310,140 L350,70 L390,140 L430,90 L460,160 Z" fill="#FFD700" stroke="#8B6914" stroke-width="3.5" stroke-linejoin="round"/>
+                                    <rect x="240" y="160" width="220" height="35" rx="3" fill="#FFD700" stroke="#8B6914" stroke-width="3"/>
+                                    <!-- Jewels on crown -->
+                                    <circle cx="310" cy="140" r="6" fill="#e74c3c" stroke="#8B6914" stroke-width="2"/>
+                                    <circle cx="350" cy="100" r="7" fill="#3498db" stroke="#8B6914" stroke-width="2"/>
+                                    <circle cx="390" cy="140" r="6" fill="#2ecc71" stroke="#8B6914" stroke-width="2"/>
+                                    <!-- Crown band jewels -->
+                                    <circle cx="290" cy="177" r="4" fill="#e74c3c" stroke="#8B6914" stroke-width="1.5"/>
+                                    <circle cx="330" cy="177" r="4" fill="#3498db" stroke="#8B6914" stroke-width="1.5"/>
+                                    <circle cx="370" cy="177" r="4" fill="#2ecc71" stroke="#8B6914" stroke-width="1.5"/>
+                                    <circle cx="410" cy="177" r="4" fill="#9b59b6" stroke="#8B6914" stroke-width="1.5"/>
+
+                                    <!-- Crossed out smaller crowns (earthly kings have no power) -->
+                                    <!-- Left small crown -->
+                                    <path d="M90,250 L105,220 L120,240 L135,210 L150,240 L165,220 L180,250 Z" fill="none" stroke="#aaa" stroke-width="2" opacity="0.5"/>
+                                    <line x1="80" y1="210" x2="190" y2="260" stroke="#e74c3c" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="190" y1="210" x2="80" y2="260" stroke="#e74c3c" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+
+                                    <!-- Right small crown -->
+                                    <path d="M520,250 L535,220 L550,240 L565,210 L580,240 L595,220 L610,250 Z" fill="none" stroke="#aaa" stroke-width="2" opacity="0.5"/>
+                                    <line x1="510" y1="210" x2="620" y2="260" stroke="#e74c3c" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="620" y1="210" x2="510" y2="260" stroke="#e74c3c" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+
+                                    <!-- Light rays from main crown -->
+                                    <line x1="350" y1="65" x2="350" y2="30" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="270" y1="85" x2="240" y2="55" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="430" y1="85" x2="460" y2="55" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                </g>
+
+                                <!-- Labels -->
+                                <text x="350" y="325" text-anchor="middle" font-family="Caveat" font-size="26" fill="#e67e22" font-weight="600">Only ONE real King. Everyone else? Temporary.</text>
+                                <text x="350" y="355" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">No president, no boss, no ruler above HIM.</text>
+
+                                <!-- Annotations -->
+                                <text x="100" y="285" font-family="Caveat" font-size="14" fill="#e74c3c">not real power</text>
+                                <text x="530" y="285" font-family="Caveat" font-size="14" fill="#e74c3c">not real power</text>
+                                <text x="350" y="145" text-anchor="middle" font-family="Caveat" font-size="15" fill="#8B4513">MALIK</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">2</div>
+                            <div class="slide-arabic-text">مَلِكِ النَّاسِ</div>
+                            <div class="slide-translit-text">Malikin-nas</div>
+                            <div class="slide-kid-text">He's not just your caretaker. He is the KING. The real King. Every president, every boss, every ruler you've ever heard of? Their power is borrowed and temporary. Allah is the King of all people. His authority is the only one that truly matters.</div>
+                        </div>
+                    </div>
+
+                    <!-- ===== SLIDE 3: God of Mankind - One Shining Light ===== -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+
+                                <g filter="url(#sketchy)">
+                                    <!-- Central glowing light/star -->
+                                    <circle cx="350" cy="160" r="60" fill="#FFF3B0" stroke="#FFD700" stroke-width="3" opacity="0.4"/>
+                                    <circle cx="350" cy="160" r="40" fill="#FFE680" stroke="#c9a84c" stroke-width="3" opacity="0.6"/>
+                                    <circle cx="350" cy="160" r="20" fill="#FFD700" stroke="#8B6914" stroke-width="2.5"/>
+
+                                    <!-- Radiating lines from the light -->
+                                    <line x1="350" y1="90" x2="350" y2="50" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="350" y1="230" x2="350" y2="270" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="280" y1="160" x2="240" y2="160" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="420" y1="160" x2="460" y2="160" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="300" y1="110" x2="270" y2="80" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="400" y1="110" x2="430" y2="80" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="300" y1="210" x2="270" y2="240" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="400" y1="210" x2="430" y2="240" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+
+                                    <!-- Compass arrows pointing to center from all directions -->
+                                    <!-- Arrow from top-left -->
+                                    <line x1="120" y1="60" x2="280" y2="120" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round"/>
+                                    <polygon points="280,120 265,108 270,125" fill="#e67e22"/>
+                                    <!-- Arrow from top-right -->
+                                    <line x1="580" y1="60" x2="420" y2="120" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round"/>
+                                    <polygon points="420,120 435,108 430,125" fill="#e67e22"/>
+                                    <!-- Arrow from bottom-left -->
+                                    <line x1="120" y1="290" x2="280" y2="210" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round"/>
+                                    <polygon points="280,210 265,215 272,198" fill="#e67e22"/>
+                                    <!-- Arrow from bottom-right -->
+                                    <line x1="580" y1="290" x2="420" y2="210" stroke="#e67e22" stroke-width="2.5" stroke-linecap="round"/>
+                                    <polygon points="420,210 435,215 428,198" fill="#e67e22"/>
+
+                                    <!-- Small dimmed circles (false gods crossed out) -->
+                                    <circle cx="100" cy="160" r="15" fill="none" stroke="#aaa" stroke-width="2" opacity="0.4"/>
+                                    <line x1="88" y1="148" x2="112" y2="172" stroke="#e74c3c" stroke-width="2" opacity="0.6"/>
+                                    <circle cx="600" cy="160" r="15" fill="none" stroke="#aaa" stroke-width="2" opacity="0.4"/>
+                                    <line x1="588" y1="148" x2="612" y2="172" stroke="#e74c3c" stroke-width="2" opacity="0.6"/>
+                                </g>
+
+                                <!-- Labels -->
+                                <text x="350" y="168" text-anchor="middle" font-family="Caveat" font-size="16" fill="#8B4513" font-weight="600">ILAH</text>
+                                <text x="350" y="340" text-anchor="middle" font-family="Caveat" font-size="26" fill="#e67e22" font-weight="600">Only ONE deserves your worship. ONE.</text>
+                                <text x="350" y="370" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Everything else you chase? It can't save you.</text>
+
+                                <!-- Annotations -->
+                                <text x="80" y="195" font-family="Caveat" font-size="12" fill="#e74c3c">not this</text>
+                                <text x="580" y="195" font-family="Caveat" font-size="12" fill="#e74c3c">not this</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">3</div>
+                            <div class="slide-arabic-text">إِلَـٰهِ النَّاسِ</div>
+                            <div class="slide-translit-text">Ilahin-nas</div>
+                            <div class="slide-kid-text">He's the only one who truly deserves to be worshipped. Not money, not fame, not your phone, not any person. Everything points to Him. When you need help against something you can't even see, why would you go to anything less than the true God?</div>
+                        </div>
+                    </div>
+
+                    <!-- ===== SLIDE 4: The Whisperer Who Retreats ===== -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+
+                                <g filter="url(#sketchy)">
+                                    <!-- Heart shape in center -->
+                                    <path d="M350,180 C350,140 300,100 270,130 C240,160 260,200 350,260 C440,200 460,160 430,130 C400,100 350,140 350,180 Z" fill="#FADBD8" stroke="#e74c3c" stroke-width="3"/>
+
+                                    <!-- Dark smoke/whisper approaching from left -->
+                                    <path d="M60,150 Q100,130 130,160 Q160,190 190,170 Q220,150 245,175" fill="none" stroke="#444" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+                                    <path d="M80,180 Q110,160 140,190 Q170,210 200,195 Q225,180 240,190" fill="none" stroke="#555" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+
+                                    <!-- "psst" text near whisper -->
+                                    <text x="120" y="130" font-family="Caveat" font-size="16" fill="#666" opacity="0.7" font-style="italic">psst...</text>
+                                    <text x="160" y="155" font-family="Caveat" font-size="14" fill="#666" opacity="0.5" font-style="italic">do it...</text>
+
+                                    <!-- Light burst from right pushing shadow back -->
+                                    <circle cx="530" cy="180" r="35" fill="#FFF3B0" stroke="#FFD700" stroke-width="2" opacity="0.5"/>
+                                    <circle cx="530" cy="180" r="18" fill="#FFD700" stroke="#8B6914" stroke-width="2"/>
+                                    <line x1="530" y1="140" x2="530" y2="120" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+                                    <line x1="565" y1="170" x2="585" y2="160" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+                                    <line x1="565" y1="195" x2="585" y2="205" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+
+                                    <!-- Shadow retreating from light (right side) -->
+                                    <path d="M470,170 Q450,160 440,180" fill="none" stroke="#555" stroke-width="3" stroke-linecap="round" opacity="0.3" stroke-dasharray="5,5"/>
+                                    <path d="M465,195 Q445,190 440,200" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" opacity="0.2" stroke-dasharray="4,4"/>
+
+                                    <!-- Arrow showing retreat -->
+                                    <path d="M480,250 Q500,240 520,250" fill="none" stroke="#2ecc71" stroke-width="2"/>
+                                    <polygon points="520,250 510,243 512,255" fill="#2ecc71"/>
+                                </g>
+
+                                <!-- Labels -->
+                                <text x="350" y="220" text-anchor="middle" font-family="Caveat" font-size="16" fill="#8B4513">your heart</text>
+                                <text x="350" y="340" text-anchor="middle" font-family="Caveat" font-size="24" fill="#e67e22" font-weight="600">He whispers... but runs away when you remember Allah!</text>
+                                <text x="350" y="368" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Al-Waswas Al-Khannas = the sneaky retreater</text>
+
+                                <!-- Annotations -->
+                                <text x="530" y="230" font-family="Caveat" font-size="14" fill="#27ae60">dhikr!</text>
+                                <text x="490" y="268" font-family="Caveat" font-size="12" fill="#27ae60">he flees!</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">4</div>
+                            <div class="slide-arabic-text">مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ</div>
+                            <div class="slide-translit-text">Min sharril-waswasil-khannas</div>
+                            <div class="slide-kid-text">Here's the enemy: the Whisperer. He sneaks up and whispers bad thoughts into your heart. But here's the cool part: he's a COWARD! The word "khannas" means he retreats and shrinks back. The moment you remember Allah, he RUNS AWAY.</div>
+                        </div>
+                    </div>
+
+                    <!-- ===== SLIDE 5: Whispers in the Chest ===== -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+
+                                <g filter="url(#sketchy)">
+                                    <!-- Large chest/ribcage outline (abstract) -->
+                                    <path d="M250,80 Q350,60 450,80 Q480,120 480,180 Q480,260 450,300 Q350,330 250,300 Q220,260 220,180 Q220,120 250,80 Z" fill="#FDE9D9" stroke="#c9a84c" stroke-width="3"/>
+
+                                    <!-- Heart inside -->
+                                    <path d="M350,170 C350,148 322,125 305,145 C288,165 302,190 350,225 C398,190 412,165 395,145 C378,125 350,148 350,170 Z" fill="#F1948A" stroke="#e74c3c" stroke-width="2.5"/>
+
+                                    <!-- Wispy dark thought lines entering from sides -->
+                                    <path d="M100,140 Q140,130 180,150 Q210,165 235,155" fill="none" stroke="#555" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M110,190 Q150,180 190,200 Q215,210 230,195" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+                                    <path d="M600,150 Q560,140 520,160 Q490,175 465,165" fill="none" stroke="#555" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M590,200 Q550,190 510,210 Q485,220 470,205" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+
+                                    <!-- Thought bubbles with bad thoughts -->
+                                    <ellipse cx="100" cy="100" rx="50" ry="25" fill="#eee" stroke="#bbb" stroke-width="2"/>
+                                    <ellipse cx="600" cy="100" rx="50" ry="25" fill="#eee" stroke="#bbb" stroke-width="2"/>
+
+                                    <!-- Glow around heart (protection when remembering) -->
+                                    <circle cx="350" cy="185" r="55" fill="none" stroke="#FFD700" stroke-width="2" stroke-dasharray="6,4" opacity="0.5"/>
+                                </g>
+
+                                <!-- Text in thought bubbles -->
+                                <text x="100" y="97" text-anchor="middle" font-family="Caveat" font-size="13" fill="#888">"skip prayer..."</text>
+                                <text x="100" y="112" text-anchor="middle" font-family="Caveat" font-size="13" fill="#888">"no one cares..."</text>
+                                <text x="600" y="97" text-anchor="middle" font-family="Caveat" font-size="13" fill="#888">"give up..."</text>
+                                <text x="600" y="112" text-anchor="middle" font-family="Caveat" font-size="13" fill="#888">"why bother..."</text>
+
+                                <!-- Labels -->
+                                <text x="350" y="195" text-anchor="middle" font-family="Caveat" font-size="15" fill="#8B4513">sadr (chest)</text>
+                                <text x="350" y="350" text-anchor="middle" font-family="Caveat" font-size="24" fill="#e67e22" font-weight="600">He targets your CHEST - where feelings and decisions live</text>
+                                <text x="350" y="378" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Not your mind. Your heart. Where doubt starts.</text>
+
+                                <!-- Annotations -->
+                                <path d="M270,250 L310,230" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+                                <text x="220" y="265" font-family="Caveat" font-size="13" fill="#c9a84c">golden shield =</text>
+                                <text x="225" y="280" font-family="Caveat" font-size="13" fill="#c9a84c">remembering Allah</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">5</div>
+                            <div class="slide-arabic-text">الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ</div>
+                            <div class="slide-translit-text">Alladhi yuwaswisu fi sudurin-nas</div>
+                            <div class="slide-kid-text">The whisperer targets your CHEST - not your brain, your chest! That's where your feelings live, where your decisions come from. He plants doubt, laziness, jealousy right there. "Skip the prayer..." "Give up..." "No one cares..." Those whispers? Not you. That's him.</div>
+                        </div>
+                    </div>
+
+                    <!-- ===== SLIDE 6: From Jinn AND Mankind ===== -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+
+                                <g filter="url(#sketchy)">
+                                    <!-- Left side: Jinn (abstract smoke/fire form) -->
+                                    <path d="M150,280 Q130,220 160,170 Q140,130 170,100 Q180,80 200,90 Q210,70 220,90 Q240,80 240,100 Q260,120 240,150 Q270,180 240,220 Q260,260 230,280" fill="#D6EAF8" stroke="#5DADE2" stroke-width="3" fill-opacity="0.4"/>
+                                    <!-- Inner flame/smoke pattern -->
+                                    <path d="M170,250 Q165,200 185,170 Q175,140 195,120" fill="none" stroke="#85C1E9" stroke-width="2" opacity="0.6"/>
+                                    <path d="M210,250 Q215,210 200,180 Q210,150 205,130" fill="none" stroke="#85C1E9" stroke-width="2" opacity="0.6"/>
+
+                                    <!-- Right side: Human whisperer (abstract silhouette, no face) -->
+                                    <ellipse cx="500" cy="130" rx="35" ry="40" fill="#E8DAEF" stroke="#8E44AD" stroke-width="3" opacity="0.6"/>
+                                    <!-- Body shape -->
+                                    <path d="M465,170 Q465,200 450,260 L470,260 Q480,220 500,220 Q520,220 530,260 L550,260 Q535,200 535,170" fill="#E8DAEF" stroke="#8E44AD" stroke-width="3" opacity="0.6"/>
+                                    <!-- Speech lines (whispering) -->
+                                    <path d="M535,120 Q555,115 565,125" fill="none" stroke="#8E44AD" stroke-width="2" opacity="0.5"/>
+                                    <path d="M535,135 Q555,130 570,140" fill="none" stroke="#8E44AD" stroke-width="2" opacity="0.5"/>
+                                    <path d="M535,150 Q555,148 560,155" fill="none" stroke="#8E44AD" stroke-width="2" opacity="0.4"/>
+
+                                    <!-- Shield in center (you, protected) -->
+                                    <path d="M350,120 L400,140 L400,210 Q400,260 350,280 Q300,260 300,210 L300,140 Z" fill="#FFF3B0" stroke="#c9a84c" stroke-width="3" fill-opacity="0.5"/>
+                                    <circle cx="350" cy="195" r="15" fill="#FFD700" stroke="#8B6914" stroke-width="2"/>
+
+                                    <!-- Dividing line -->
+                                    <text x="190" y="310" text-anchor="middle" font-family="Caveat" font-size="18" fill="#5DADE2" font-weight="600">Jinn</text>
+                                    <text x="500" y="310" text-anchor="middle" font-family="Caveat" font-size="18" fill="#8E44AD" font-weight="600">People</text>
+                                </g>
+
+                                <!-- Labels -->
+                                <text x="350" y="205" text-anchor="middle" font-family="Caveat" font-size="14" fill="#8B4513">YOU</text>
+                                <text x="350" y="350" text-anchor="middle" font-family="Caveat" font-size="24" fill="#e67e22" font-weight="600">Whisperers come from BOTH: jinn AND humans!</text>
+                                <text x="350" y="378" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Be aware. Both types exist. Allah protects from both.</text>
+
+                                <!-- Annotations -->
+                                <text x="100" y="90" font-family="Caveat" font-size="13" fill="#5DADE2">invisible</text>
+                                <text x="100" y="105" font-family="Caveat" font-size="13" fill="#5DADE2">but real</text>
+                                <text x="560" y="100" font-family="Caveat" font-size="13" fill="#8E44AD">looks friendly</text>
+                                <text x="560" y="115" font-family="Caveat" font-size="13" fill="#8E44AD">but whispers</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">6</div>
+                            <div class="slide-arabic-text">مِنَ الْجِنَّةِ وَالنَّاسِ</div>
+                            <div class="slide-translit-text">Minal-jinnati wan-nas</div>
+                            <div class="slide-kid-text">The big reveal: the whisperers are not just invisible jinn! Some whisperers are actual PEOPLE around you. That friend who says "just do it, no one will know." That voice online pushing you to something bad. Allah warns you about BOTH kinds and protects you from BOTH.</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="carousel-nav carousel-prev" onclick="moveSlide(-1)">&#8249;</button>
+                <button class="carousel-nav carousel-next" onclick="moveSlide(1)">&#8250;</button>
+            </div>
+
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </div>
+
+    <!-- ==================== DEEP DIVE ==================== -->
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+
+            <section class="section">
+                <div class="section-title">Quick Facts</div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">114</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">6</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">20</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Paired With</div><div class="value" style="font-size:0.9em">Surah Al-Falaq</div></div>
+                    <div class="fact-card"><div class="label">Recited For</div><div class="value" style="font-size:0.9em">Protection (Morning/Night)</div></div>
+                </div>
+            </section>
+
+            <section class="section story">
+                <div class="section-title">The Story Behind This Surah</div>
+                <p>Surah An-Nas is the <span class="highlight">very last surah of the Quran</span>. Think about that. Out of 114 surahs, Allah chose to close the entire Quran with a prayer asking for protection from one specific enemy: the whisperer.</p>
+                <p>This surah and Surah Al-Falaq (113) are called <span class="highlight">Al-Mu'awwidhatayn</span> - "The Two Surahs of Refuge." They were revealed together and are always paired together.</p>
+                <div class="important">
+                    <p>The Prophet Muhammad (peace be upon him) said: <strong>"Recite Surah Al-Ikhlas and Al-Mu'awwidhatayn (Al-Falaq and An-Nas) three times in the morning and three times in the evening; they will suffice you against everything."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sunan Abu Dawud 5082, Sunan At-Tirmidhi 3575</p>
+                </div>
+                <p>Why does the Quran end with protection from whispers rather than something grand? Because <span class="highlight">the most dangerous enemy is the one you can't see</span>. You can fight a visible enemy. But how do you fight a thought that sneaks into your heart and pretends to be your own voice?</p>
+                <p>Notice something powerful: in Surah Al-Falaq (113), Allah protects you from <span class="highlight">external evils</span> - darkness, magic, envy. In Surah An-Nas, He protects you from <span class="highlight">internal evils</span> - the whispers in your own chest. External AND internal. Allah has you covered.</p>
+                <div class="important">
+                    <p>The Prophet (peace be upon him) said: <strong>"Shaytan sits in the paths of the son of Adam. He sits waiting for him on the path of Islam... on the path of Hijrah... on the path of Jihad. He keeps discouraging him at every path."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sunan An-Nasa'i 3134</p>
+                </div>
+                <p>But the beauty is in the word <span class="highlight">"khannas"</span> - he who retreats. Shaytan is described as a coward. The moment you remember Allah, the moment you say "A'udhu billah," he shrinks back. He cannot stand firm against dhikr (remembrance of Allah). Your greatest weapon is already in your mouth and your heart.</p>
+                <div class="important">
+                    <p>Aishah (may Allah be pleased with her) narrated: <strong>"Every night when the Prophet (peace be upon him) went to bed, he would cup his hands together, blow into them, recite Surah Al-Ikhlas, Surah Al-Falaq, and Surah An-Nas, then wipe his hands over whatever he could reach of his body, starting with his head, face, and the front of his body."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih al-Bukhari 5017</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Hover over any word to highlight it. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">قُلْ أَعُوذُ بِرَبِّ النَّاسِ</div>
+                    <div class="verse-transliteration">Qul a'udhu bi Rabbin-nas</div>
+                    <div class="verse-translation">Say: "I seek refuge in the Lord of mankind."</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (read right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
+                            <div class="word-chip"><span class="ar">أَعُوذُ</span><span class="trans">a'udhu</span><span class="meaning">I seek refuge</span></div>
+                            <div class="word-chip"><span class="ar">بِرَبِّ</span><span class="trans">bi-Rabbi</span><span class="meaning">in the Lord (of)</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah commands the Prophet (and us) to actively say it out loud: "I seek refuge." The word <strong>"a'udhu"</strong> means to flee to someone for protection, like a child running to their parent when scared. And whom do you run to? <strong>Rabb</strong> - the Lord, the one who created you, nurtures you, and takes care of you at every stage. He is the Lord of ALL people, not just Muslims.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">مَلِكِ النَّاسِ</div>
+                    <div class="verse-transliteration">Malikin-nas</div>
+                    <div class="verse-translation">The King of mankind.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مَلِكِ</span><span class="trans">maliki</span><span class="meaning">King (of)</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>After establishing that He is your Rabb (Lord/Nurturer), Allah elevates to <strong>Malik</strong> - the King. A king has authority, sovereignty, and commands. Every ruler on earth derives their authority temporarily, but Allah's kingship is absolute and eternal. You're seeking refuge with the One who has ultimate authority over every created being. No enemy, visible or invisible, can overpower the King.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">إِلَـٰهِ النَّاسِ</div>
+                    <div class="verse-transliteration">Ilahin-nas</div>
+                    <div class="verse-translation">The God of mankind.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِلَـٰهِ</span><span class="trans">ilahi</span><span class="meaning">God (of)</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The third and highest attribute: <strong>Ilah</strong> - the one truly worthy of worship. Notice the beautiful progression: Rabb (He takes care of you) -> Malik (He has authority over everything) -> Ilah (He alone deserves your devotion). It's a logical build-up. WHY should you seek refuge in Him? Because He nurtures you, rules over everything, and is the only one worthy of turning to. Three reasons, three verses, building to the ultimate conclusion.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ</div>
+                    <div class="verse-transliteration">Min sharril-waswasil-khannas</div>
+                    <div class="verse-translation">From the evil of the retreating whisperer.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مِن</span><span class="trans">min</span><span class="meaning">From</span></div>
+                            <div class="word-chip"><span class="ar">شَرِّ</span><span class="trans">sharri</span><span class="meaning">evil (of)</span></div>
+                            <div class="word-chip"><span class="ar">الْوَسْوَاسِ</span><span class="trans">al-waswasi</span><span class="meaning">the whisperer</span></div>
+                            <div class="word-chip"><span class="ar">الْخَنَّاسِ</span><span class="trans">al-khannasi</span><span class="meaning">the retreater</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Now we learn WHO the enemy is. <strong>"Al-Waswas"</strong> comes from the repetitive form in Arabic, meaning constant, repetitive whispering. It's not a one-time thing. He whispers again and again. But the second word is the key: <strong>"Al-Khannas"</strong> - the one who retreats, shrinks back, hides. This is an intensive form meaning he does this REPEATEDLY. He whispers, you remember Allah, he retreats. He tries again, you remember Allah again, he shrinks back again. He is persistent but ultimately weak against your remembrance of Allah.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ</div>
+                    <div class="verse-transliteration">Alladhi yuwaswisu fi sudurin-nas</div>
+                    <div class="verse-translation">Who whispers in the breasts of mankind.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The one who</span></div>
+                            <div class="word-chip"><span class="ar">يُوَسْوِسُ</span><span class="trans">yuwaswisu</span><span class="meaning">whispers</span></div>
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">in</span></div>
+                            <div class="word-chip"><span class="ar">صُدُورِ</span><span class="trans">suduri</span><span class="meaning">breasts/chests (of)</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The Quran says <strong>"sudur"</strong> (chests/breasts), not "minds" or "heads." In Arabic, the <strong>sadr</strong> (chest) is where emotions, intentions, and innermost feelings reside. The whisperer doesn't target your intellect first - he targets your <strong>feelings</strong>. He makes you feel lazy before prayer. He makes you feel jealous of others. He makes you feel hopeless. The attack is emotional before it's logical. That's why sometimes you KNOW something is wrong but still feel pulled toward it. Recognize this pattern.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">مِنَ الْجِنَّةِ وَالنَّاسِ</div>
+                    <div class="verse-transliteration">Minal-jinnati wan-nas</div>
+                    <div class="verse-translation">From among the jinn and mankind.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مِنَ</span><span class="trans">mina</span><span class="meaning">From (among)</span></div>
+                            <div class="word-chip"><span class="ar">الْجِنَّةِ</span><span class="trans">al-jinnati</span><span class="meaning">the jinn</span></div>
+                            <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">and</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The final verse delivers the critical insight: whisperers are <strong>not just from the jinn (unseen world)</strong>. They also come from <strong>people</strong>. A human being can play the role of shaytan in your life. The friend who normalizes sin. The social media account that makes you feel worthless. The person who discourages you from good. Ibn Kathir notes that this verse means: the whispering comes from both categories - shayatin among the jinn AND shayatin among mankind. Be aware of both.</p>
+                        <p style="margin-top: 8px;">The word <strong>"al-jinna"</strong> comes from the root meaning "hidden/concealed" - the jinn are literally the hidden ones. And sometimes the most dangerous human whisperers are also the ones who hide their intentions behind friendly faces.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Learn Arabic Through An-Nas</div>
+                <p style="color: #888; margin-bottom: 25px;">An-Nas is brilliant for learning Arabic because it uses repetition and simple structures. The word "An-Nas" (people/mankind) appears 5 times in just 6 verses!</p>
+
+                <div class="arabic-tip">
+                    <h4>Key Vocabulary from An-Nas</h4>
+                    <p>These words appear frequently across the Quran. Master them here.</p>
+                    <div class="arabic-letter-grid">
+                        <div class="letter-card"><div class="letter">نَاس</div><div class="name">Nas</div><div class="sound">Mankind - appears 241 times</div></div>
+                        <div class="letter-card"><div class="letter">رَبّ</div><div class="name">Rabb</div><div class="sound">Lord - appears 970 times</div></div>
+                        <div class="letter-card"><div class="letter">مَلِك</div><div class="name">Malik</div><div class="sound">King - appears 49 times</div></div>
+                        <div class="letter-card"><div class="letter">إِلَـٰه</div><div class="name">Ilah</div><div class="sound">God - appears 147 times</div></div>
+                        <div class="letter-card"><div class="letter">شَرّ</div><div class="name">Sharr</div><div class="sound">Evil - appears 30 times</div></div>
+                        <div class="letter-card"><div class="letter">جِنّ</div><div class="name">Jinn</div><div class="sound">Jinn - appears 32 times</div></div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Arabic Pattern: Three Names of Allah in Progression</h4>
+                    <p>This surah teaches three of Allah's attributes in ascending order:</p>
+                    <div class="root-word-box">
+                        <div><div class="root">رَبّ</div><div style="color: #888; font-size: 0.9em; text-align: center;">Rabb (Lord/Nurturer)</div></div>
+                        <div class="arrow">&rarr;</div>
+                        <div><div class="root">مَلِك</div><div style="color: #888; font-size: 0.9em; text-align: center;">Malik (King/Sovereign)</div></div>
+                        <div class="arrow">&rarr;</div>
+                        <div><div class="root">إِلَـٰه</div><div style="color: #888; font-size: 0.9em; text-align: center;">Ilah (God/Worshipped)</div></div>
+                    </div>
+                    <p style="margin-top: 10px;">He cares for you (Rabb). He has authority (Malik). He alone deserves worship (Ilah). Each builds on the previous one.</p>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Root Word System: و س و س (W-S-W-S) = Whisper</h4>
+                    <p>This is a rare quadriliteral root (4 letters instead of the usual 3). The repetition of "was-was" mimics the sound and nature of whispering - repetitive, sneaky, persistent.</p>
+                    <div class="root-word-box">
+                        <div class="root">و س و س</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">وَسْوَسَة</div><div class="en">waswasa (whisper/suggestion)</div></div>
+                            <div class="derivative"><div class="ar">وَسْوَاس</div><div class="en">waswas (the whisperer)</div></div>
+                            <div class="derivative"><div class="ar">يُوَسْوِسُ</div><div class="en">yuwaswisu (he whispers)</div></div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; color: #aac8f0;">The Arabic form itself tells you what this enemy does - it's repetitive by nature. The doubled root (w-s repeated twice) mimics the persistent, nagging quality of these whispers.</p>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Root Word System: خ ن س (KH-N-S) = Retreat/Shrink Back</h4>
+                    <p>From the root kh-n-s comes the word "khannas" - an intensive form meaning one who retreats again and again.</p>
+                    <div class="root-word-box">
+                        <div class="root">خ ن س</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">خَنَسَ</div><div class="en">khanasa (to retreat/hide)</div></div>
+                            <div class="derivative"><div class="ar">خَنَّاس</div><div class="en">khannas (habitual retreater)</div></div>
+                            <div class="derivative"><div class="ar">خُنُوس</div><div class="en">khunoos (retreating)</div></div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; color: #aac8f0;">The "fa''al" (فَعَّال) form indicates someone who does this action constantly and excessively. The Shaytan is not just someone who retreated once - he is a habitual coward who shrinks back every single time you invoke Allah's name.</p>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Grammar Tip: The Repetition of "An-Nas"</h4>
+                    <p>The word "An-Nas" appears 5 times in 6 verses. In Arabic rhetoric, this is called <strong>takrar</strong> (repetition for emphasis). But each time it appears in a different grammatical role:</p>
+                    <div class="arabic-letter-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+                        <div class="letter-card"><div class="letter">رَبِّ النَّاسِ</div><div class="name">Rabbi-n-nas</div><div class="sound">"Lord OF mankind" (possession)</div></div>
+                        <div class="letter-card"><div class="letter">مَلِكِ النَّاسِ</div><div class="name">Maliki-n-nas</div><div class="sound">"King OF mankind" (authority)</div></div>
+                        <div class="letter-card"><div class="letter">إِلَـٰهِ النَّاسِ</div><div class="name">Ilahi-n-nas</div><div class="sound">"God OF mankind" (worship)</div></div>
+                        <div class="letter-card"><div class="letter">صُدُورِ النَّاسِ</div><div class="name">Suduri-n-nas</div><div class="sound">"Chests OF mankind" (location)</div></div>
+                    </div>
+                    <p style="margin-top: 15px;">Each "An-Nas" is in the genitive case (majroor), connected to a different noun. This is a beautiful example of how one word can serve different purposes while creating a rhythmic, memorable pattern.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Key Lessons from An-Nas</div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Your biggest enemy is invisible.</strong><p style="color: #999; font-size: 0.95em;">The Quran ends by warning against an enemy you can't see. The most dangerous battles are the ones fought inside your own chest. Take them seriously.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Shaytan is a coward.</strong><p style="color: #999; font-size: 0.95em;">He is described as "khannas" - one who retreats. He has no real power over you. The moment you remember Allah, he flees. Your weapon is dhikr (remembrance).</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Not all whispers come from jinn.</strong><p style="color: #999; font-size: 0.95em;">Human beings can be whisperers too. Be mindful of who influences your thoughts, decisions, and values. Choose your circle wisely.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The attack is emotional, not logical.</strong><p style="color: #999; font-size: 0.95em;">Whispers target your "sadr" (chest/feelings), not your mind. He makes you FEEL before you think. Recognize when a feeling doesn't come from you.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Three attributes = complete protection.</strong><p style="color: #999; font-size: 0.95em;">Rabb (nurtures you), Malik (has authority over everything), Ilah (worthy of worship). When you seek refuge in ALL three capacities, you're covered completely.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Make it a daily habit.</strong><p style="color: #999; font-size: 0.95em;">The Prophet (peace be upon him) recited this every morning, every night, and before sleep. Protection isn't a one-time thing. It's a daily practice.</p></div></li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Continue Learning</div>
+                <div class="arabic-tip">
+                    <h4>For Arabic Learning</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 8px 0; color: #ccc;"><strong style="color: #c9a84c;">Bayyinah TV - Arabic with Husna</strong> - Nouman Ali Khan's step-by-step Quranic Arabic course</li>
+                        <li style="padding: 8px 0; color: #ccc;"><strong style="color: #c9a84c;">Quran Word by Word (quran.com)</strong> - Click any word to see its root, meaning, and grammar</li>
+                        <li style="padding: 8px 0; color: #ccc;"><strong style="color: #c9a84c;">"Arabic Through the Quran" by Alan Jones</strong> - Academic but thorough grammar through Quranic verses</li>
+                        <li style="padding: 8px 0; color: #ccc;"><strong style="color: #c9a84c;">80% of Quranic Words Course</strong> - Learn the most frequent words first</li>
+                    </ul>
+                </div>
+                <div class="arabic-tip">
+                    <h4>For Tafsir (Explanation)</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 8px 0; color: #ccc;"><strong style="color: #c9a84c;">Tafsir Ibn Kathir</strong> - The most widely trusted classical tafsir</li>
+                        <li style="padding: 8px 0; color: #ccc;"><strong style="color: #c9a84c;">Tafsir As-Sa'di</strong> - Simplified, practical, and accessible</li>
+                        <li style="padding: 8px 0; color: #ccc;"><strong style="color: #c9a84c;">Nouman Ali Khan (Bayyinah)</strong> - Deep linguistic analysis made accessible on YouTube</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir, Tafsir As-Sa'di, and Tafsir Al-Qurtubi. Hadith references are from Sahih Al-Bukhari, Sahih Muslim, Sunan Abu Dawud, Sunan At-Tirmidhi, and Sunan An-Nasa'i. The Arabic word-by-word breakdown follows standard Quranic Arabic grammar. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+
+            <button class="prompts-toggle" onclick="togglePrompts()">Show AI Image Prompts for Each Verse</button>
+            <div class="prompts-section" id="promptsSection">
+                <div class="section" style="margin-top: 15px;">
+                    <div class="section-title">AI Image Prompts</div>
+                    <p style="color: #888; margin-bottom: 20px;">Use these prompts with Midjourney, DALL-E, or any AI image generator to create actual illustrations for each verse. All prompts respect Islamic guidelines: no depiction of faces, humans, prophets, or divine beings.</p>
+                    <div class="prompt-card"><h4>Verse 1: Lord of Mankind - The Shield</h4><pre>A glowing golden shield with Islamic geometric patterns floating in a cosmic space. Dark smoky wisps approach from both sides but are repelled by the shield's golden light. Stars and light rays emanate from the shield. No human figures. Abstract, warm gold and deep indigo palette. Style: hand-drawn sketch on cream notebook paper, Excalidraw/whiteboard style. Aspect ratio: 1:1.</pre></div>
+                    <div class="prompt-card"><h4>Verse 2: King of Mankind - The Only Crown</h4><pre>A large ornate golden crown with jewels at the center, radiating light. On either side, smaller grey crowns are crossed out with red X marks (symbolizing earthly rulers have no real power). Simple hand-drawn sketch style on cream paper. No human figures. Gold, grey, and red color palette. Style: educational whiteboard/Excalidraw. Aspect ratio: 1:1.</pre></div>
+                    <div class="prompt-card"><h4>Verse 3: God of Mankind - One Light</h4><pre>A brilliant central golden light source with concentric glowing circles. Multiple orange arrows from all corners of the image point toward this single light. Small dimmed circles on the edges are crossed out (false gods). Cream background. No human figures. Style: hand-drawn diagram on notebook paper. Aspect ratio: 1:1.</pre></div>
+                    <div class="prompt-card"><h4>Verse 4: The Retreating Whisperer</h4><pre>A soft pink heart shape in the center. Dark smoky tendrils approach from the left side, with small "psst" text. On the right, a golden light burst pushes the shadows away, with dashed retreat lines. The shadows are shrinking back. No human figures. Cream paper background. Style: hand-drawn sketch, Excalidraw style. Aspect ratio: 1:1.</pre></div>
+                    <div class="prompt-card"><h4>Verse 5: Whispers in the Chest</h4><pre>An abstract chest/torso outline (no face or head) with a glowing red heart inside. Dark wispy thought lines enter from both sides. Thought bubbles around the edges contain negative phrases. A golden dashed circle surrounds the heart as a protective barrier. Cream paper background. No human face or figure details. Style: whiteboard sketch. Aspect ratio: 1:1.</pre></div>
+                    <div class="prompt-card"><h4>Verse 6: From Jinn and Mankind</h4><pre>Split composition. Left side: an abstract blue-tinted smoke/flame form (representing jinn, invisible). Right side: an abstract purple silhouette without any facial features (representing human whisperer). In the center, a small golden shield with a light. Labels "Jinn" and "People" below each side. Cream paper background. No human faces. Style: hand-drawn educational diagram. Aspect ratio: 1:1.</pre></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Quran Journey - A personal learning project<br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="001-al-fatiha.html">&larr; Surah Al-Fatiha</a>
+    </footer>
+
+    <script>
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+            }
+        }
+
+        let currentSlide = 0;
+        const track = document.getElementById('carouselTrack');
+        const slides = track.children;
+        const totalSlides = slides.length;
+        const dotsContainer = document.getElementById('carouselDots');
+        let autoAdvance;
+
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+            resetAutoAdvance();
+        }
+
+        function moveSlide(direction) {
+            let next = currentSlide + direction;
+            if (next < 0) next = totalSlides - 1;
+            if (next >= totalSlides) next = 0;
+            goToSlide(next);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') moveSlide(-1);
+            if (e.key === 'ArrowRight') moveSlide(1);
+        });
+
+        function resetAutoAdvance() {
+            clearInterval(autoAdvance);
+            autoAdvance = setInterval(() => moveSlide(1), 10000);
+        }
+
+        const container = document.querySelector('.carousel-container');
+        container.addEventListener('mouseenter', () => clearInterval(autoAdvance));
+        container.addEventListener('mouseleave', resetAutoAdvance);
+
+        let touchStartX = 0;
+        container.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        container.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) moveSlide(diff > 0 ? 1 : -1);
+        }, { passive: true });
+
+        resetAutoAdvance();
+
+        function togglePrompts() {
+            const section = document.getElementById('promptsSection');
+            const btn = document.querySelector('.prompts-toggle');
+            section.classList.toggle('visible');
+            btn.textContent = section.classList.contains('visible') ? 'Hide AI Image Prompts' : 'Show AI Image Prompts for Each Verse';
+        }
+    </script>
+
+</body>
+</html>
