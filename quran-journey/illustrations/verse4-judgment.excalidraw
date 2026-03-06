@@ -1,0 +1,135 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "quran-journey",
+  "elements": [
+    {
+      "id": "title", "type": "text", "x": 150, "y": 20, "width": 380, "height": 45,
+      "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 4001, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Everything Will Be Weighed", "fontSize": 32, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 28, "containerId": null,
+      "originalText": "Everything Will Be Weighed", "lineHeight": 1.25
+    },
+    {
+      "id": "pivot", "type": "line", "x": 340, "y": 280, "width": 0, "height": -150,
+      "angle": 0, "strokeColor": "#846232", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 4, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["scale"], "frameId": null, "roundness": {"type": 2},
+      "seed": 4002, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [0, -150]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "base", "type": "line", "x": 280, "y": 280, "width": 120, "height": 0,
+      "angle": 0, "strokeColor": "#846232", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 5, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["scale"], "frameId": null, "roundness": {"type": 2},
+      "seed": 4003, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [120, 0]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "beam", "type": "line", "x": 170, "y": 130, "width": 340, "height": 0,
+      "angle": 0, "strokeColor": "#846232", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 4, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["scale"], "frameId": null, "roundness": {"type": 2},
+      "seed": 4004, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [340, 0]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "chain-l", "type": "line", "x": 190, "y": 130, "width": 0, "height": 50,
+      "angle": 0, "strokeColor": "#846232", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 80, "groupIds": ["scale"], "frameId": null, "roundness": {"type": 2},
+      "seed": 4005, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [0, 50]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "chain-r", "type": "line", "x": 490, "y": 130, "width": 0, "height": 50,
+      "angle": 0, "strokeColor": "#846232", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 80, "groupIds": ["scale"], "frameId": null, "roundness": {"type": 2},
+      "seed": 4006, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [0, 50]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "bowl-l", "type": "ellipse", "x": 140, "y": 180, "width": 100, "height": 40,
+      "angle": 0, "strokeColor": "#846232", "backgroundColor": "#F5DEB3",
+      "fillStyle": "hachure", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["scale"], "frameId": null, "roundness": {"type": 2},
+      "seed": 4007, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "bowl-r", "type": "ellipse", "x": 440, "y": 180, "width": 100, "height": 40,
+      "angle": 0, "strokeColor": "#846232", "backgroundColor": "#F5DEB3",
+      "fillStyle": "hachure", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["scale"], "frameId": null, "roundness": {"type": 2},
+      "seed": 4008, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "good-star", "type": "diamond", "x": 175, "y": 170, "width": 30, "height": 30,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "#82E0AA",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 4009, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "good-label", "type": "text", "x": 140, "y": 230, "width": 100, "height": 25,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 4010, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Good deeds", "fontSize": 18, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 16, "containerId": null,
+      "originalText": "Good deeds", "lineHeight": 1.25
+    },
+    {
+      "id": "bad-circle", "type": "ellipse", "x": 475, "y": 170, "width": 30, "height": 30,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "#F5B7B1",
+      "fillStyle": "cross-hatch", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": {"type": 2},
+      "seed": 4011, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "bad-label", "type": "text", "x": 445, "y": 230, "width": 100, "height": 25,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 4012, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Bad deeds", "fontSize": 18, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 16, "containerId": null,
+      "originalText": "Bad deeds", "lineHeight": 1.25
+    },
+    {
+      "id": "bottom-note", "type": "text", "x": 140, "y": 310, "width": 400, "height": 50,
+      "angle": 0, "strokeColor": "#2c3e50", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 4013, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "On that Day, ONLY Allah is in charge.\nNo king. No president. Only Him.", "fontSize": 18, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 16, "containerId": null,
+      "originalText": "On that Day, ONLY Allah is in charge.\nNo king. No president. Only Him.", "lineHeight": 1.25
+    }
+  ],
+  "appState": { "viewBackgroundColor": "#FFF9F0", "gridSize": null },
+  "files": {}
+}

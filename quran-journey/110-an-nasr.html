@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah An-Nasr - The Victory | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* ===== NAV ===== */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid #222;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .nav-brand {
+            font-family: 'Caveat', cursive;
+            font-size: 1.4em;
+            color: #c9a84c;
+            font-weight: 700;
+        }
+        .nav-surah {
+            color: #777;
+            font-size: 0.85em;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            text-align: center;
+            padding: 40px 20px 24px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .hero-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 3em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .hero-name {
+            font-family: 'Caveat', cursive;
+            font-size: 2.4em;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .hero-subtitle {
+            color: #aaa;
+            font-size: 1em;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .hero-meta {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        /* ===== TOGGLE ===== */
+        .toggle-wrap {
+            display: flex;
+            justify-content: center;
+            padding: 16px 0 24px;
+        }
+        .toggle-bar {
+            display: flex;
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 2px solid #333;
+            overflow: hidden;
+        }
+        .toggle-btn {
+            padding: 10px 28px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: #888;
+            transition: all 0.3s;
+        }
+        .toggle-btn.active {
+            background: #c9a84c;
+            color: #000;
+            font-weight: 600;
+        }
+
+        /* ===== CAROUSEL ===== */
+        .carousel-section {
+            max-width: 940px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .slide-frame {
+            width: 100%;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scene-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Pen cursor */
+        .pen-cursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            left: 0;
+            top: 0;
+        }
+        .pen-cursor svg {
+            width: 48px;
+            height: 48px;
+            display: block;
+        }
+
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .slide-label-text {
+            font-family: 'Caveat', cursive;
+            font-size: 1.1em;
+            color: #8B6914;
+            margin-bottom: 6px;
+            min-height: 1.4em;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px;
+            min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.2em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        /* Typewriter cursor */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: currentColor;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl {
+            margin-left: 0;
+            margin-right: 2px;
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Arrow nav overlays on canvas */
+        .carousel-nav {
+            position: absolute; top: 35%; transform: translateY(-50%);
+            background: rgba(44, 62, 80, 0.8); border: 2px solid #e67e22;
+            color: #fff; width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.3em; z-index: 10; transition: all 0.3s;
+        }
+        .carousel-nav:hover { background: #e67e22; }
+        .carousel-nav:disabled { opacity: 0.3; cursor: default; background: rgba(44, 62, 80, 0.4); }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+
+        /* Carousel controls */
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+            padding-bottom: 10px;
+        }
+        .carousel-btn {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            color: #c9a84c;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .carousel-btn:hover { background: #c9a84c; color: #000; }
+        .carousel-btn:disabled { opacity: 0.3; cursor: default; background: #1a1a1a; color: #c9a84c; }
+
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .carousel-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .carousel-dot.active { background: #c9a84c; }
+
+        .speed-control {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            color: #666;
+            font-size: 0.8em;
+            padding-bottom: 30px;
+        }
+        .speed-control input { width: 100px; }
+
+        /* ===== DEEP DIVE ===== */
+        .deep-dive-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+            display: none;
+        }
+        .deep-dive-section.visible { display: block; }
+
+        .dd-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+        .dd-card h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.6em;
+            color: #c9a84c;
+            margin-bottom: 14px;
+        }
+        .dd-card p, .dd-card li {
+            color: #ccc;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+        .dd-card ul, .dd-card ol {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+        .dd-card li { margin-bottom: 6px; }
+
+        .quick-facts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .fact-chip {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.85em;
+            color: #c9a84c;
+        }
+
+        .verse-breakdown {
+            margin-top: 12px;
+        }
+        .verse-row {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #222;
+        }
+        .verse-row:last-child { border-bottom: none; }
+        .verse-row .v-label {
+            color: #e67e22;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-bottom: 6px;
+        }
+        .verse-row .v-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 1.3em;
+            color: #fff;
+            direction: rtl;
+            text-align: right;
+            margin-bottom: 8px;
+        }
+        .word-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .word-chip {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.82em;
+            text-align: center;
+        }
+        .word-chip .w-ar {
+            font-family: 'Amiri', serif;
+            color: #c9a84c;
+            font-size: 1.2em;
+            display: block;
+        }
+        .word-chip .w-tr {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+        .word-chip .w-en {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        .root-table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+        }
+        .root-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #222;
+            color: #ccc;
+            font-size: 0.9em;
+        }
+        .root-table td:first-child {
+            font-family: 'Amiri', serif;
+            color: #c9a84c;
+            font-size: 1.1em;
+            direction: rtl;
+            width: 40%;
+        }
+
+        .lesson-list {
+            counter-reset: lesson;
+            list-style: none;
+            padding-left: 0;
+        }
+        .lesson-list li {
+            counter-increment: lesson;
+            padding-left: 32px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .lesson-list li::before {
+            content: counter(lesson);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            width: 22px; height: 22px;
+            background: #e67e22;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.75em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sources-text {
+            color: #666;
+            font-size: 0.82em;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #555;
+            font-size: 0.82em;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 20px;
+        }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .hero-arabic { font-size: 2.2em; }
+            .hero-name { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.05em; }
+            .toggle-btn { padding: 8px 18px; font-size: 0.82em; }
+            .dd-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav-brand">Tafsir - Quran Journey</div>
+        <div class="nav-surah">Surah 110 of 114</div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-arabic">النصر</div>
+        <div class="hero-name">An-Nasr</div>
+        <div class="hero-subtitle">The Victory - The Last Surah and a Hidden Farewell</div>
+        <div class="hero-meta">Madani Surah | 3 Verses | 19 Words</div>
+    </div>
+
+    <!-- TOGGLE -->
+    <div class="toggle-wrap">
+        <div class="toggle-bar">
+            <button class="toggle-btn active" id="toggleStory" onclick="showView('story')">Visual Story</button>
+            <button class="toggle-btn" id="toggleDeep" onclick="showView('deep')">Deep Dive</button>
+        </div>
+    </div>
+
+    <!-- VISUAL STORY CAROUSEL -->
+    <div class="carousel-section" id="storySection">
+        <div class="slide-frame">
+            <button class="carousel-nav carousel-prev" id="prevArrow" onclick="goSlide(currentSlide-1)">&#8249;</button>
+            <button class="carousel-nav carousel-next" id="nextArrow" onclick="goSlide(currentSlide+1)">&#8250;</button>
+            <div class="slide-drawing" id="slideDrawing">
+                <div class="pen-cursor" id="penCursor">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                        <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                        <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                        <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                        <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                        <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                        <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="slide-bottom">
+                <div class="verse-num-badge" id="verseBadge">1</div>
+                <div class="slide-label-text" id="labelText"></div>
+                <div class="slide-arabic-text" id="arabicText"></div>
+                <div class="slide-translit-text" id="translitText"></div>
+                <div class="slide-kid-text" id="kidText"></div>
+            </div>
+        </div>
+
+        <div class="carousel-controls">
+            <button class="carousel-btn" id="prevBtn" onclick="goSlide(currentSlide-1)">Prev</button>
+            <div class="carousel-dots" id="carouselDots"></div>
+            <button class="carousel-btn" id="nextBtn" onclick="goSlide(currentSlide+1)">Next</button>
+        </div>
+        <div class="speed-control">
+            <span>Speed:</span>
+            <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+            <span id="speedLabel">1x</span>
+        </div>
+    </div>
+
+    <!-- DEEP DIVE SECTION -->
+    <div class="deep-dive-section" id="deepSection">
+
+        <div class="dd-card">
+            <h3>Quick Facts</h3>
+            <div class="quick-facts">
+                <span class="fact-chip">Surah 110</span>
+                <span class="fact-chip">3 Verses</span>
+                <span class="fact-chip">19 Words</span>
+                <span class="fact-chip">Madinah</span>
+                <span class="fact-chip">Last Surah Revealed</span>
+                <span class="fact-chip">Theme: Victory & Farewell</span>
+            </div>
+        </div>
+
+        <div class="dd-card">
+            <h3>The Story Behind This Surah</h3>
+            <p>
+                Surah An-Nasr is the last complete surah revealed to the Prophet (peace be upon him). It came after the conquest of Makkah, in the 10th year of Hijrah.
+            </p>
+            <p style="margin-top:12px;">
+                When Umar ibn al-Khattab asked the scholars about its meaning, the young Ibn Abbas recognized what the senior companions missed: this surah was a farewell. Allah was telling the Prophet that his mission was complete. (Bukhari 4970)
+            </p>
+            <p style="margin-top:12px;">
+                Aishah (may Allah be pleased with her) reported that after this surah was revealed, the Prophet increased his saying of "Subhanaka Allahumma wa bihamdika, astaghfiruka wa atubu ilayk" in every ruku and sujud. (Bukhari 4967, Muslim 484)
+            </p>
+            <p style="margin-top:12px;">
+                The Prophet (peace be upon him) passed away approximately 80 days after this surah was revealed.
+            </p>
+        </div>
+
+        <div class="dd-card">
+            <h3>Verse-by-Verse Breakdown</h3>
+            <div class="verse-breakdown">
+
+                <div class="verse-row">
+                    <div class="v-label">Verse 1</div>
+                    <div class="v-arabic">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</div>
+                    <div class="word-grid">
+                        <div class="word-chip"><span class="w-ar">إِذَا</span><span class="w-tr">idha</span><span class="w-en">When</span></div>
+                        <div class="word-chip"><span class="w-ar">جَاءَ</span><span class="w-tr">ja'a</span><span class="w-en">comes</span></div>
+                        <div class="word-chip"><span class="w-ar">نَصْرُ</span><span class="w-tr">nasru</span><span class="w-en">victory of</span></div>
+                        <div class="word-chip"><span class="w-ar">اللَّهِ</span><span class="w-tr">Allahi</span><span class="w-en">Allah</span></div>
+                        <div class="word-chip"><span class="w-ar">وَالْفَتْحُ</span><span class="w-tr">wal-fathu</span><span class="w-en">and the conquest</span></div>
+                    </div>
+                </div>
+
+                <div class="verse-row">
+                    <div class="v-label">Verse 2</div>
+                    <div class="v-arabic">وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا</div>
+                    <div class="word-grid">
+                        <div class="word-chip"><span class="w-ar">وَرَأَيْتَ</span><span class="w-tr">wa-ra'ayta</span><span class="w-en">and you see</span></div>
+                        <div class="word-chip"><span class="w-ar">النَّاسَ</span><span class="w-tr">an-nasa</span><span class="w-en">the people</span></div>
+                        <div class="word-chip"><span class="w-ar">يَدْخُلُونَ</span><span class="w-tr">yadkhuluna</span><span class="w-en">entering</span></div>
+                        <div class="word-chip"><span class="w-ar">فِي</span><span class="w-tr">fi</span><span class="w-en">into</span></div>
+                        <div class="word-chip"><span class="w-ar">دِينِ</span><span class="w-tr">dini</span><span class="w-en">religion of</span></div>
+                        <div class="word-chip"><span class="w-ar">اللَّهِ</span><span class="w-tr">Allahi</span><span class="w-en">Allah</span></div>
+                        <div class="word-chip"><span class="w-ar">أَفْوَاجًا</span><span class="w-tr">afwaja</span><span class="w-en">in multitudes</span></div>
+                    </div>
+                </div>
+
+                <div class="verse-row">
+                    <div class="v-label">Verse 3</div>
+                    <div class="v-arabic">فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا</div>
+                    <div class="word-grid">
+                        <div class="word-chip"><span class="w-ar">فَسَبِّحْ</span><span class="w-tr">fa-sabbih</span><span class="w-en">Then glorify</span></div>
+                        <div class="word-chip"><span class="w-ar">بِحَمْدِ</span><span class="w-tr">bi-hamdi</span><span class="w-en">with praise of</span></div>
+                        <div class="word-chip"><span class="w-ar">رَبِّكَ</span><span class="w-tr">Rabbika</span><span class="w-en">your Lord</span></div>
+                        <div class="word-chip"><span class="w-ar">وَاسْتَغْفِرْهُ</span><span class="w-tr">wastaghfirhu</span><span class="w-en">and seek His forgiveness</span></div>
+                        <div class="word-chip"><span class="w-ar">إِنَّهُ</span><span class="w-tr">innahu</span><span class="w-en">Indeed He</span></div>
+                        <div class="word-chip"><span class="w-ar">كَانَ</span><span class="w-tr">kana</span><span class="w-en">is always</span></div>
+                        <div class="word-chip"><span class="w-ar">تَوَّابًا</span><span class="w-tr">tawwaba</span><span class="w-en">Accepting of repentance</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="dd-card">
+            <h3>Arabic Learning</h3>
+            <p style="margin-bottom:10px;"><strong style="color:#e67e22;">Root N-S-R (help/victory):</strong> nasr, nasir, ansar, mansoor</p>
+            <p style="margin-bottom:14px;"><strong style="color:#e67e22;">Verb Form X:</strong> istaghfir - from the root gh-f-r (to cover/forgive). Form X adds the meaning of "seeking" the action.</p>
+
+            <h4 style="color:#c9a84c; font-size:0.95em; margin-bottom:8px;">Key Vocabulary Frequency in Quran</h4>
+            <table class="root-table">
+                <tr><td>نَصْر (Nasr)</td><td>12 times</td></tr>
+                <tr><td>فَتْح (Fath)</td><td>8 times</td></tr>
+                <tr><td>دِين (Deen)</td><td>92 times</td></tr>
+                <tr><td>سَبَّحَ (Sabbaha)</td><td>92 times</td></tr>
+                <tr><td>اِسْتَغْفَرَ (Istaghfara)</td><td>45 times</td></tr>
+                <tr><td>تَوَّاب (Tawwab)</td><td>11 times</td></tr>
+            </table>
+        </div>
+
+        <div class="dd-card">
+            <h3>Key Lessons</h3>
+            <ol class="lesson-list">
+                <li>Victory belongs to Allah. Not your strategy, not your effort alone. When He decides, the doors open.</li>
+                <li>At your peak, stay humble. The moment of greatest triumph is the moment for the deepest gratitude and humility.</li>
+                <li>Every mission has an end. Even the Prophet's mission had a completion point. Finish strong, with worship.</li>
+                <li>Allah is always ready to forgive. Tawwab - He doesn't just forgive once. He is ALWAYS accepting repentance.</li>
+            </ol>
+        </div>
+
+        <div class="dd-card">
+            <h3>Sources</h3>
+            <p class="sources-text">
+                Tafsir Ibn Kathir | Tafsir As-Sa'di | Sahih al-Bukhari 4970 (Ibn Abbas on the farewell) | Sahih al-Bukhari 4967 (Aishah on increased istighfar) | Sahih Muslim 484
+            </p>
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="/">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+
+    <script>
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const storySection = document.getElementById('storySection');
+            const deepSection = document.getElementById('deepSection');
+            const toggleStory = document.getElementById('toggleStory');
+            const toggleDeep = document.getElementById('toggleDeep');
+
+            if (view === 'story') {
+                storySection.style.display = 'block';
+                deepSection.classList.remove('visible');
+                toggleStory.classList.add('active');
+                toggleDeep.classList.remove('active');
+            } else {
+                storySection.style.display = 'none';
+                deepSection.classList.add('visible');
+                toggleDeep.classList.add('active');
+                toggleStory.classList.remove('active');
+            }
+        }
+
+        // ===== GLOBALS =====
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentSlide = 0;
+        let typewriterAbort = false;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        // ===== SLIDE DATA =====
+        const slides = [
+            {
+                verse: 1,
+                label: 'The gates open. Victory has arrived.',
+                arabic: '\u0625\u0650\u0630\u064E\u0627 \u062C\u064E\u0627\u0621\u064E \u0646\u064E\u0635\u0652\u0631\u064F \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0648\u064E\u0627\u0644\u0652\u0641\u064E\u062A\u0652\u062D\u064F',
+                translit: "Idha ja'a nasrullahi wal-fath",
+                kidText: "After years of hardship, persecution, and patience, Allah's help finally arrives. The conquest of Makkah. The doors that were once closed are now wide open.",
+                build: buildSlide1
+            },
+            {
+                verse: 2,
+                label: 'Not one by one. In CROWDS. Afwaja!',
+                arabic: '\u0648\u064E\u0631\u064E\u0623\u064E\u064A\u0652\u062A\u064E \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u064E \u064A\u064E\u062F\u0652\u062E\u064F\u0644\u064F\u0648\u0646\u064E \u0641\u0650\u064A \u062F\u0650\u064A\u0646\u0650 \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0623\u064E\u0641\u0652\u0648\u064E\u0627\u062C\u064B\u0627',
+                translit: "Wa ra'aytan-nasa yadkhuluna fi dinil-lahi afwaja",
+                kidText: "People are entering Islam not one at a time, but in CROWDS, in waves. Entire tribes. The same people who once fought against the message are now running toward it.",
+                build: buildSlide2
+            },
+            {
+                verse: 3,
+                label: 'Glorify Allah. Seek forgiveness.',
+                arabic: '\u0641\u064E\u0633\u064E\u0628\u0651\u0650\u062D\u0652 \u0628\u0650\u062D\u064E\u0645\u0652\u062F\u0650 \u0631\u064E\u0628\u0651\u0650\u0643\u064E \u0648\u064E\u0627\u0633\u0652\u062A\u064E\u063A\u0652\u0641\u0650\u0631\u0652\u0647\u064F \u06DA \u0625\u0650\u0646\u0651\u064E\u0647\u064F \u0643\u064E\u0627\u0646\u064E \u062A\u064E\u0648\u0651\u064E\u0627\u0628\u064B\u0627',
+                translit: "Fasabbih bihamdi Rabbika wastaghfirhu, innahu kana tawwaba",
+                kidText: "Here's the shocking part. At the moment of greatest victory, Allah doesn't say \"celebrate.\" He says: glorify Me and ASK FOR FORGIVENESS. This was a hidden farewell.",
+                build: buildSlide3
+            }
+        ];
+
+        // ===== SHARED HELPERS =====
+
+        function addBackground(svg, svgNS) {
+            const defs = document.createElementNS(svgNS, 'defs');
+            const pattern = document.createElementNS(svgNS, 'pattern');
+            pattern.setAttribute('id', 'dotgrid');
+            pattern.setAttribute('width', '20');
+            pattern.setAttribute('height', '20');
+            pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+            const dot = document.createElementNS(svgNS, 'circle');
+            dot.setAttribute('cx', '10');
+            dot.setAttribute('cy', '10');
+            dot.setAttribute('r', '0.8');
+            dot.setAttribute('fill', '#e0d8c8');
+            pattern.appendChild(dot);
+            defs.appendChild(pattern);
+            svg.appendChild(defs);
+
+            const bg = document.createElementNS(svgNS, 'rect');
+            bg.setAttribute('width', '900');
+            bg.setAttribute('height', '506');
+            bg.setAttribute('fill', '#FFF9F0');
+            svg.appendChild(bg);
+
+            const grid = document.createElementNS(svgNS, 'rect');
+            grid.setAttribute('width', '900');
+            grid.setAttribute('height', '506');
+            grid.setAttribute('fill', 'url(#dotgrid)');
+            svg.appendChild(grid);
+        }
+
+        function createSvg() {
+            const old = container.querySelector('.scene-svg');
+            if (old) old.remove();
+
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('class', 'scene-svg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+
+            addBackground(svg, svgNS);
+
+            return { svg, svgNS, rc: rough.svg(svg) };
+        }
+
+        function roughStar(rc, cx, cy, outerR, innerR, opts) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+            }
+            return rc.polygon(pts, opts);
+        }
+
+        function addRoughToGroup(svg, rc, groups, gi, roughNode) {
+            if (!groups[gi]) groups[gi] = [];
+            const children = roughNode.querySelectorAll('path, line, circle, ellipse, rect, polygon');
+            children.forEach(child => groups[gi].push(child));
+            svg.appendChild(roughNode);
+        }
+
+        function addSvgText(svg, text, x, y, opts = {}) {
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const el = document.createElementNS(svgNS, 'text');
+            el.setAttribute('x', x);
+            el.setAttribute('y', y);
+            el.setAttribute('text-anchor', opts.anchor || 'middle');
+            el.setAttribute('dominant-baseline', 'middle');
+            el.setAttribute('font-family', opts.font || 'Caveat, cursive');
+            el.setAttribute('font-size', opts.size || '22');
+            el.setAttribute('font-weight', opts.weight || '600');
+            el.setAttribute('fill', opts.color || '#2c3e50');
+            if (opts.direction) el.setAttribute('direction', opts.direction);
+            el.textContent = text;
+            el.style.opacity = '0';
+            svg.appendChild(el);
+            return el;
+        }
+
+        // =========================================================================
+        // SLIDE 1: Victory Arrives (Gates Opening)
+        // =========================================================================
+        function buildSlide1() {
+            const { svg, svgNS, rc } = createSvg();
+            const groups = [];
+
+            // GROUP 0: Left gate door with detailed panels and iron studs
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(240, 100, 140, 300, {
+                stroke: '#8B6914', strokeWidth: 3.5, fill: '#D4A843', fillStyle: 'hachure',
+                roughness: 2, hachureGap: 8, hachureAngle: 90
+            }));
+            // Left gate panel details
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(255, 130, 110, 120, {
+                stroke: '#8B6914', strokeWidth: 2, roughness: 1.5, fill: '#C9963A', fillStyle: 'hachure', hachureGap: 10
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(255, 270, 110, 110, {
+                stroke: '#8B6914', strokeWidth: 2, roughness: 1.5, fill: '#C9963A', fillStyle: 'hachure', hachureGap: 10
+            }));
+            // Iron studs on left gate
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(270, 150, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(350, 150, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(270, 230, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(350, 230, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(270, 290, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(350, 290, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(270, 360, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(350, 360, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            // Door handle ring left
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(365, 250, 14, { stroke: '#5D4037', strokeWidth: 2.5, roughness: 1.5, fill: 'none' }));
+
+            // GROUP 1: Right gate door with detailed panels and iron studs
+            addRoughToGroup(svg, rc, groups, 1, rc.rectangle(520, 100, 140, 300, {
+                stroke: '#8B6914', strokeWidth: 3.5, fill: '#D4A843', fillStyle: 'hachure',
+                roughness: 2, hachureGap: 8, hachureAngle: 90
+            }));
+            addRoughToGroup(svg, rc, groups, 1, rc.rectangle(535, 130, 110, 120, {
+                stroke: '#8B6914', strokeWidth: 2, roughness: 1.5, fill: '#C9963A', fillStyle: 'hachure', hachureGap: 10
+            }));
+            addRoughToGroup(svg, rc, groups, 1, rc.rectangle(535, 270, 110, 110, {
+                stroke: '#8B6914', strokeWidth: 2, roughness: 1.5, fill: '#C9963A', fillStyle: 'hachure', hachureGap: 10
+            }));
+            // Iron studs on right gate
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(550, 150, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(630, 150, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(550, 230, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(630, 230, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(550, 290, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(630, 290, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(550, 360, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(630, 360, 8, { stroke: '#5D4037', strokeWidth: 1.5, fill: '#795548', fillStyle: 'solid', roughness: 1 }));
+            // Door handle ring right
+            addRoughToGroup(svg, rc, groups, 1, rc.circle(535, 250, 14, { stroke: '#5D4037', strokeWidth: 2.5, roughness: 1.5, fill: 'none' }));
+
+            // GROUP 2: Arch on top spanning both gates with stone detailing
+            addRoughToGroup(svg, rc, groups, 2, rc.arc(450, 120, 420, 200, Math.PI, 0, false, {
+                stroke: '#8B6914', strokeWidth: 4, roughness: 2
+            }));
+            // Keystone
+            addRoughToGroup(svg, rc, groups, 2, rc.rectangle(430, 15, 40, 30, {
+                stroke: '#8B6914', strokeWidth: 2, fill: '#D4A843', fillStyle: 'solid', roughness: 1.5
+            }));
+            // Arch stone voussoirs (wedge-shaped stones along the arch)
+            for (let i = 0; i < 7; i++) {
+                const angle = Math.PI + (i / 6) * Math.PI;
+                const cx = 450 + 190 * Math.cos(angle);
+                const cy = 120 - 90 * Math.sin(angle);
+                addRoughToGroup(svg, rc, groups, 2, rc.rectangle(cx - 12, cy - 8, 24, 16, {
+                    stroke: '#A67C00', strokeWidth: 1.5, roughness: 1.5, fill: '#C9963A', fillStyle: 'hachure', hachureGap: 6
+                }));
+            }
+            // Decorative inner arch line
+            addRoughToGroup(svg, rc, groups, 2, rc.arc(450, 120, 380, 170, Math.PI, 0, false, {
+                stroke: '#A67C00', strokeWidth: 2, roughness: 1.5
+            }));
+
+            // GROUP 3: Stone wall sections flanking the gates
+            // Left wall stones
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 3; col++) {
+                    const x = 140 + col * 35;
+                    const y = 120 + row * 55;
+                    const w = 30 + Math.random() * 8;
+                    const h = 45 + Math.random() * 8;
+                    addRoughToGroup(svg, rc, groups, 3, rc.rectangle(x, y, w, h, {
+                        stroke: '#8D6E63', strokeWidth: 1.5, roughness: 2, fill: '#D7CCC8', fillStyle: 'hachure', hachureGap: 8
+                    }));
+                }
+            }
+            // Right wall stones
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 3; col++) {
+                    const x = 670 + col * 35;
+                    const y = 120 + row * 55;
+                    const w = 30 + Math.random() * 8;
+                    const h = 45 + Math.random() * 8;
+                    addRoughToGroup(svg, rc, groups, 3, rc.rectangle(x, y, w, h, {
+                        stroke: '#8D6E63', strokeWidth: 1.5, roughness: 2, fill: '#D7CCC8', fillStyle: 'hachure', hachureGap: 8
+                    }));
+                }
+            }
+
+            // GROUP 4: Light pouring through the gap between gates
+            addRoughToGroup(svg, rc, groups, 4, rc.rectangle(380, 105, 140, 295, {
+                stroke: 'none', strokeWidth: 0, fill: '#FFF9C4', fillStyle: 'solid', roughness: 0.5
+            }));
+            addRoughToGroup(svg, rc, groups, 4, rc.rectangle(400, 130, 100, 250, {
+                stroke: 'none', strokeWidth: 0, fill: '#FFFDE7', fillStyle: 'solid', roughness: 0.5
+            }));
+            // Light spilling onto the ground (triangular spread)
+            addRoughToGroup(svg, rc, groups, 4, rc.polygon(
+                [[380, 400], [520, 400], [560, 450], [340, 450]],
+                { stroke: 'none', strokeWidth: 0, fill: '#FFF9C4', fillStyle: 'solid', roughness: 0.5 }
+            ));
+            addRoughToGroup(svg, rc, groups, 4, rc.polygon(
+                [[400, 400], [500, 400], [530, 435], [370, 435]],
+                { stroke: 'none', strokeWidth: 0, fill: '#FFFDE7', fillStyle: 'solid', roughness: 0.5 }
+            ));
+
+            // GROUP 5: Light rays emanating upward from the gate top
+            for (let i = 0; i < 13; i++) {
+                const angle = -1.2 + (i / 12) * 2.4;
+                const startX = 450;
+                const startY = 70;
+                const len = 80 + (i % 4) * 22;
+                const endX = startX + len * Math.sin(angle);
+                const endY = startY - len * Math.cos(angle) * 0.55;
+                addRoughToGroup(svg, rc, groups, 5, rc.line(startX, startY, endX, endY, {
+                    stroke: '#FDD835', strokeWidth: 2 + (i % 2) * 0.8, roughness: 2.5
+                }));
+            }
+            // Extra short rays between the main ones
+            for (let i = 0; i < 8; i++) {
+                const angle = -0.9 + (i / 7) * 1.8;
+                const startX = 450;
+                const startY = 55;
+                const len = 35 + (i % 3) * 12;
+                const endX = startX + len * Math.sin(angle);
+                const endY = startY - len * Math.cos(angle) * 0.5;
+                addRoughToGroup(svg, rc, groups, 5, rc.line(startX, startY, endX, endY, {
+                    stroke: '#FFE082', strokeWidth: 1.5, roughness: 2
+                }));
+            }
+
+            // GROUP 6: Green flag/banner at the very top + small banners on walls
+            addRoughToGroup(svg, rc, groups, 6, rc.line(450, 0, 450, 45, {
+                stroke: '#5D4037', strokeWidth: 3, roughness: 1.5
+            }));
+            addRoughToGroup(svg, rc, groups, 6, rc.polygon(
+                [[450, 2], [515, 12], [510, 25], [450, 30]],
+                { stroke: '#2E7D32', strokeWidth: 2, fill: '#4CAF50', fillStyle: 'hachure', roughness: 2, hachureGap: 4 }
+            ));
+            // Small banner on left wall
+            addRoughToGroup(svg, rc, groups, 6, rc.line(170, 95, 170, 140, {
+                stroke: '#5D4037', strokeWidth: 2, roughness: 1.5
+            }));
+            addRoughToGroup(svg, rc, groups, 6, rc.polygon(
+                [[170, 97], [200, 103], [197, 115], [170, 120]],
+                { stroke: '#2E7D32', strokeWidth: 1.5, fill: '#66BB6A', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }
+            ));
+            // Small banner on right wall
+            addRoughToGroup(svg, rc, groups, 6, rc.line(730, 95, 730, 140, {
+                stroke: '#5D4037', strokeWidth: 2, roughness: 1.5
+            }));
+            addRoughToGroup(svg, rc, groups, 6, rc.polygon(
+                [[730, 97], [760, 103], [757, 115], [730, 120]],
+                { stroke: '#2E7D32', strokeWidth: 1.5, fill: '#66BB6A', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 }
+            ));
+
+            // GROUP 7: Sparkle stars scattered around
+            const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 130, 70, 16, 6, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 770, 60, 14, 5, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 100, 220, 10, 4, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 800, 200, 12, 5, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 170, 340, 9, 3, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 730, 350, 11, 4, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 450, 460, 10, 4, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 80, 430, 8, 3, starOpts));
+            addRoughToGroup(svg, rc, groups, 7, roughStar(rc, 820, 440, 9, 3, starOpts));
+
+            // GROUP 8: Ground with texture, pebbles, and grass tufts
+            addRoughToGroup(svg, rc, groups, 8, rc.line(80, 400, 820, 400, {
+                stroke: '#BCAAA4', strokeWidth: 2, roughness: 3
+            }));
+            // Sandy ground texture
+            addRoughToGroup(svg, rc, groups, 8, rc.rectangle(80, 400, 740, 20, {
+                stroke: 'none', strokeWidth: 0, fill: '#EFEBE9', fillStyle: 'hachure', roughness: 2, hachureGap: 12, hachureAngle: 0
+            }));
+            // Pebbles scattered on ground
+            const pebbleOpts = { stroke: '#A1887F', strokeWidth: 1, roughness: 2, fill: '#D7CCC8', fillStyle: 'solid' };
+            addRoughToGroup(svg, rc, groups, 8, rc.ellipse(120, 408, 10, 6, pebbleOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.ellipse(200, 412, 8, 5, pebbleOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.ellipse(310, 406, 12, 6, pebbleOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.ellipse(590, 410, 9, 5, pebbleOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.ellipse(700, 407, 11, 6, pebbleOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.ellipse(790, 411, 7, 4, pebbleOpts));
+            // Grass tufts on far sides
+            const grassOpts = { stroke: '#7CB342', strokeWidth: 1.5, roughness: 2, fill: 'none' };
+            addRoughToGroup(svg, rc, groups, 8, rc.line(85, 400, 80, 380, grassOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.line(90, 400, 88, 383, grassOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.line(95, 400, 100, 382, grassOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.line(810, 400, 805, 382, grassOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.line(815, 400, 818, 380, grassOpts));
+            addRoughToGroup(svg, rc, groups, 8, rc.line(820, 400, 825, 383, grassOpts));
+
+            // GROUP 9: Clouds and birds in the sky
+            // Cloud left
+            addRoughToGroup(svg, rc, groups, 9, rc.ellipse(110, 40, 70, 28, { stroke: '#B0BEC5', strokeWidth: 1.5, roughness: 2, fill: '#ECEFF1', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.ellipse(140, 32, 50, 22, { stroke: '#B0BEC5', strokeWidth: 1.5, roughness: 2, fill: '#ECEFF1', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.ellipse(85, 38, 40, 20, { stroke: '#B0BEC5', strokeWidth: 1.5, roughness: 2, fill: '#ECEFF1', fillStyle: 'solid' }));
+            // Cloud right
+            addRoughToGroup(svg, rc, groups, 9, rc.ellipse(810, 50, 60, 24, { stroke: '#B0BEC5', strokeWidth: 1.5, roughness: 2, fill: '#ECEFF1', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.ellipse(835, 42, 45, 20, { stroke: '#B0BEC5', strokeWidth: 1.5, roughness: 2, fill: '#ECEFF1', fillStyle: 'solid' }));
+            // Birds (simple V shapes)
+            addRoughToGroup(svg, rc, groups, 9, rc.path('M 55 80 Q 65 70 75 80', { stroke: '#5D4037', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.path('M 40 95 Q 48 87 56 95', { stroke: '#5D4037', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.path('M 840 75 Q 850 65 860 75', { stroke: '#5D4037', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.path('M 855 90 Q 863 82 871 90', { stroke: '#5D4037', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.path('M 60 115 Q 67 108 74 115', { stroke: '#5D4037', strokeWidth: 1.2, roughness: 2, fill: 'none' }));
+
+            // GROUP 10: Distant mountain/hill silhouettes behind the gate
+            addRoughToGroup(svg, rc, groups, 10, rc.polygon(
+                [[80, 400], [130, 310], [190, 360], [240, 300], [240, 400]],
+                { stroke: '#BCAAA4', strokeWidth: 1.5, roughness: 2.5, fill: '#D7CCC8', fillStyle: 'hachure', hachureGap: 10, hachureAngle: 60 }
+            ));
+            addRoughToGroup(svg, rc, groups, 10, rc.polygon(
+                [[660, 400], [710, 320], [760, 350], [810, 290], [820, 400]],
+                { stroke: '#BCAAA4', strokeWidth: 1.5, roughness: 2.5, fill: '#D7CCC8', fillStyle: 'hachure', hachureGap: 10, hachureAngle: 60 }
+            ));
+            // Small desert bushes near base
+            addRoughToGroup(svg, rc, groups, 10, rc.ellipse(150, 395, 30, 14, { stroke: '#8D6E63', strokeWidth: 1, roughness: 2, fill: '#A1887F', fillStyle: 'hachure', hachureGap: 4 }));
+            addRoughToGroup(svg, rc, groups, 10, rc.ellipse(750, 393, 25, 12, { stroke: '#8D6E63', strokeWidth: 1, roughness: 2, fill: '#A1887F', fillStyle: 'hachure', hachureGap: 4 }));
+
+            const timings = [700, 700, 500, 600, 400, 600, 500, 500, 350, 400, 350];
+
+            const labels = [
+                addSvgText(svg, 'The gates open. Victory has arrived.', 450, 475, { size: '26', color: '#8B6914', weight: '700' })
+            ];
+
+            return { svg, groups, timings, labels };
+        }
+
+        // =========================================================================
+        // SLIDE 2: People Entering in Crowds
+        // =========================================================================
+        function buildSlide2() {
+            const { svg, svgNS, rc } = createSvg();
+            const groups = [];
+
+            // GROUP 0: Large door/gate at top center with arch and wall structure
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(355, 30, 190, 160, {
+                stroke: '#5D4037', strokeWidth: 3.5, fill: '#D7CCC8', fillStyle: 'hachure',
+                roughness: 2, hachureGap: 7, hachureAngle: 90
+            }));
+            // Arch
+            addRoughToGroup(svg, rc, groups, 0, rc.arc(450, 55, 190, 100, Math.PI, 0, false, {
+                stroke: '#5D4037', strokeWidth: 3.5, roughness: 2
+            }));
+            // Door opening light
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(380, 50, 80, 140, {
+                stroke: '#8D6E63', strokeWidth: 1.5, fill: '#FFF9C4', fillStyle: 'solid', roughness: 1
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(460, 50, 60, 140, {
+                stroke: '#8D6E63', strokeWidth: 1.5, fill: '#FFFDE7', fillStyle: 'solid', roughness: 1
+            }));
+            // Wall extensions left and right of gate
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(280, 30, 75, 160, {
+                stroke: '#5D4037', strokeWidth: 2, fill: '#BCAAA4', fillStyle: 'hachure', roughness: 2, hachureGap: 8, hachureAngle: 0
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(545, 30, 75, 160, {
+                stroke: '#5D4037', strokeWidth: 2, fill: '#BCAAA4', fillStyle: 'hachure', roughness: 2, hachureGap: 8, hachureAngle: 0
+            }));
+            // Crenellations (battlements) on wall tops
+            for (let i = 0; i < 3; i++) {
+                addRoughToGroup(svg, rc, groups, 0, rc.rectangle(283 + i * 24, 15, 18, 18, {
+                    stroke: '#5D4037', strokeWidth: 1.5, roughness: 1.5, fill: '#BCAAA4', fillStyle: 'solid'
+                }));
+                addRoughToGroup(svg, rc, groups, 0, rc.rectangle(548 + i * 24, 15, 18, 18, {
+                    stroke: '#5D4037', strokeWidth: 1.5, roughness: 1.5, fill: '#BCAAA4', fillStyle: 'solid'
+                }));
+            }
+
+            // GROUP 1: "Islam" label decorative ellipse with glow rings
+            addRoughToGroup(svg, rc, groups, 1, rc.ellipse(450, 100, 130, 58, {
+                stroke: '#FFE082', strokeWidth: 1.5, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 1, rc.ellipse(450, 100, 100, 45, {
+                stroke: '#c9a84c', strokeWidth: 2, roughness: 1.5, fill: '#FFF8E1', fillStyle: 'solid'
+            }));
+            // Small decorative crescent inside the ellipse
+            addRoughToGroup(svg, rc, groups, 1, rc.arc(472, 85, 18, 18, 0.3, Math.PI * 1.7, false, {
+                stroke: '#c9a84c', strokeWidth: 1.5, roughness: 1.5, fill: 'none'
+            }));
+
+            // GROUP 2: Wave 1 (closest to door) - 8 people with body lines
+            const w1c = ['#E57373', '#64B5F6', '#81C784', '#FFB74D', '#BA68C8', '#4DB6AC', '#FF8A65', '#7986CB'];
+            for (let i = 0; i < 8; i++) {
+                const x = 320 + i * 38;
+                const y = 225 + (i % 2) * 15;
+                // Head
+                addRoughToGroup(svg, rc, groups, 2, rc.circle(x, y, 22, {
+                    stroke: w1c[i], strokeWidth: 2, fill: w1c[i], fillStyle: 'solid', roughness: 1.5
+                }));
+                // Body line
+                addRoughToGroup(svg, rc, groups, 2, rc.line(x, y + 11, x, y + 30, {
+                    stroke: w1c[i], strokeWidth: 2, roughness: 1.5
+                }));
+                // Arms raised up (celebrating)
+                addRoughToGroup(svg, rc, groups, 2, rc.line(x - 8, y + 20, x - 14, y + 8, {
+                    stroke: w1c[i], strokeWidth: 1.5, roughness: 1.5
+                }));
+                addRoughToGroup(svg, rc, groups, 2, rc.line(x + 8, y + 20, x + 14, y + 8, {
+                    stroke: w1c[i], strokeWidth: 1.5, roughness: 1.5
+                }));
+            }
+
+            // GROUP 3: Wave 2 (middle) - 12 people with body lines
+            const w2c = ['#F06292', '#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#26A69A', '#FF7043', '#5C6BC0', '#EF5350', '#29B6F6', '#9CCC65', '#FFCA28'];
+            for (let i = 0; i < 12; i++) {
+                const x = 250 + i * 38;
+                const y = 300 + (i % 3) * 14;
+                addRoughToGroup(svg, rc, groups, 3, rc.circle(x, y, 20, {
+                    stroke: w2c[i], strokeWidth: 2, fill: w2c[i], fillStyle: 'solid', roughness: 1.5
+                }));
+                // Body line
+                addRoughToGroup(svg, rc, groups, 3, rc.line(x, y + 10, x, y + 26, {
+                    stroke: w2c[i], strokeWidth: 1.8, roughness: 1.5
+                }));
+                // Walking arms
+                addRoughToGroup(svg, rc, groups, 3, rc.line(x - 7, y + 16, x - 12, y + 24, {
+                    stroke: w2c[i], strokeWidth: 1.3, roughness: 1.5
+                }));
+                addRoughToGroup(svg, rc, groups, 3, rc.line(x + 7, y + 16, x + 12, y + 24, {
+                    stroke: w2c[i], strokeWidth: 1.3, roughness: 1.5
+                }));
+            }
+
+            // GROUP 4: Wave 3 (farthest) - 16 people, smaller
+            const w3c = ['#EF9A9A', '#90CAF9', '#A5D6A7', '#FFE082', '#CE93D8', '#80CBC4', '#FFAB91', '#9FA8DA',
+                         '#E57373', '#64B5F6', '#81C784', '#FFB74D', '#BA68C8', '#4DB6AC', '#FF8A65', '#7986CB'];
+            for (let i = 0; i < 16; i++) {
+                const x = 180 + i * 36;
+                const y = 380 + (i % 3) * 14;
+                addRoughToGroup(svg, rc, groups, 4, rc.circle(x, y, 18, {
+                    stroke: w3c[i], strokeWidth: 1.8, fill: w3c[i], fillStyle: 'solid', roughness: 1.5
+                }));
+                // Body line
+                addRoughToGroup(svg, rc, groups, 4, rc.line(x, y + 9, x, y + 22, {
+                    stroke: w3c[i], strokeWidth: 1.5, roughness: 1.5
+                }));
+            }
+
+            // GROUP 5: Extra crowd members on the far edges (more people streaming in)
+            const edgeColors = ['#EF9A9A', '#90CAF9', '#A5D6A7', '#FFE082', '#CE93D8', '#80CBC4'];
+            // Far left stream
+            for (let i = 0; i < 6; i++) {
+                const x = 90 + i * 22;
+                const y = 420 + (i % 2) * 10;
+                addRoughToGroup(svg, rc, groups, 5, rc.circle(x, y, 14, {
+                    stroke: edgeColors[i], strokeWidth: 1.5, fill: edgeColors[i], fillStyle: 'solid', roughness: 1.5
+                }));
+                addRoughToGroup(svg, rc, groups, 5, rc.line(x, y + 7, x, y + 16, {
+                    stroke: edgeColors[i], strokeWidth: 1.2, roughness: 1.5
+                }));
+            }
+            // Far right stream
+            for (let i = 0; i < 6; i++) {
+                const x = 720 + i * 22;
+                const y = 418 + (i % 2) * 10;
+                addRoughToGroup(svg, rc, groups, 5, rc.circle(x, y, 14, {
+                    stroke: edgeColors[5 - i], strokeWidth: 1.5, fill: edgeColors[5 - i], fillStyle: 'solid', roughness: 1.5
+                }));
+                addRoughToGroup(svg, rc, groups, 5, rc.line(x, y + 7, x, y + 16, {
+                    stroke: edgeColors[5 - i], strokeWidth: 1.2, roughness: 1.5
+                }));
+            }
+
+            // GROUP 6: Golden curved arrows guiding flow upward
+            // Left arrow
+            addRoughToGroup(svg, rc, groups, 6, rc.path('M 250 400 Q 200 300 300 240 Q 370 200 400 190', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 6, rc.polygon(
+                [[400, 190], [385, 205], [395, 210]],
+                { stroke: '#D4A843', strokeWidth: 2, fill: '#D4A843', fillStyle: 'solid', roughness: 1 }
+            ));
+            // Right arrow
+            addRoughToGroup(svg, rc, groups, 6, rc.path('M 650 400 Q 700 300 600 240 Q 530 200 500 190', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 6, rc.polygon(
+                [[500, 190], [515, 205], [505, 210]],
+                { stroke: '#D4A843', strokeWidth: 2, fill: '#D4A843', fillStyle: 'solid', roughness: 1 }
+            ));
+            // Center arrow
+            addRoughToGroup(svg, rc, groups, 6, rc.path('M 450 420 Q 450 340 450 200', {
+                stroke: '#D4A843', strokeWidth: 2.5, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 6, rc.polygon(
+                [[450, 195], [440, 210], [460, 210]],
+                { stroke: '#D4A843', strokeWidth: 2, fill: '#D4A843', fillStyle: 'solid', roughness: 1 }
+            ));
+
+            // GROUP 7: Dust clouds at the feet of the crowds (showing movement)
+            const dustOpts = { stroke: '#D7CCC8', strokeWidth: 1, roughness: 2.5, fill: '#EFEBE9', fillStyle: 'solid' };
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(300, 350, 40, 14, dustOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(420, 360, 35, 12, dustOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(550, 345, 38, 13, dustOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(200, 430, 30, 10, dustOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(680, 435, 32, 11, dustOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(450, 440, 45, 14, dustOpts));
+            // Footprint marks on the path
+            const fpOpts = { stroke: '#BCAAA4', strokeWidth: 1, roughness: 1.5, fill: 'none' };
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(350, 430, 8, 4, fpOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(355, 438, 8, 4, fpOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(500, 425, 8, 4, fpOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(505, 433, 8, 4, fpOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(450, 455, 8, 4, fpOpts));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(455, 463, 8, 4, fpOpts));
+
+            // GROUP 8: Sparkle stars and celebration elements
+            const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+            addRoughToGroup(svg, rc, groups, 8, roughStar(rc, 160, 60, 12, 5, starOpts));
+            addRoughToGroup(svg, rc, groups, 8, roughStar(rc, 740, 55, 14, 5, starOpts));
+            addRoughToGroup(svg, rc, groups, 8, roughStar(rc, 100, 150, 9, 3, starOpts));
+            addRoughToGroup(svg, rc, groups, 8, roughStar(rc, 800, 140, 10, 4, starOpts));
+            addRoughToGroup(svg, rc, groups, 8, roughStar(rc, 450, 160, 8, 3, starOpts));
+            // Small confetti-like rectangles in the air
+            addRoughToGroup(svg, rc, groups, 8, rc.rectangle(200, 180, 6, 10, { stroke: '#E57373', strokeWidth: 1, roughness: 2, fill: '#E57373', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.rectangle(680, 175, 8, 6, { stroke: '#64B5F6', strokeWidth: 1, roughness: 2, fill: '#64B5F6', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.rectangle(320, 170, 5, 9, { stroke: '#81C784', strokeWidth: 1, roughness: 2, fill: '#81C784', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.rectangle(580, 180, 7, 5, { stroke: '#FFB74D', strokeWidth: 1, roughness: 2, fill: '#FFB74D', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.rectangle(250, 155, 6, 8, { stroke: '#BA68C8', strokeWidth: 1, roughness: 2, fill: '#BA68C8', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.rectangle(640, 160, 5, 7, { stroke: '#4DB6AC', strokeWidth: 1, roughness: 2, fill: '#4DB6AC', fillStyle: 'solid' }));
+
+            // GROUP 9: Path lines converging toward the gate
+            addRoughToGroup(svg, rc, groups, 9, rc.line(80, 480, 380, 190, {
+                stroke: '#D7CCC8', strokeWidth: 1.5, roughness: 3, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 9, rc.line(820, 480, 520, 190, {
+                stroke: '#D7CCC8', strokeWidth: 1.5, roughness: 3, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 9, rc.line(120, 500, 400, 190, {
+                stroke: '#EFEBE9', strokeWidth: 1, roughness: 3, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 9, rc.line(780, 500, 500, 190, {
+                stroke: '#EFEBE9', strokeWidth: 1, roughness: 3, fill: 'none'
+            }));
+
+            const timings = [800, 400, 600, 700, 800, 500, 600, 400, 400, 300];
+
+            const labels = [
+                addSvgText(svg, 'Islam', 450, 100, { size: '22', color: '#5D4037', weight: '700' }),
+                addSvgText(svg, 'Not one by one. In CROWDS. Afwaja!', 450, 475, { size: '26', color: '#8B6914', weight: '700' })
+            ];
+
+            return { svg, groups, timings, labels };
+        }
+
+        // =========================================================================
+        // SLIDE 3: Praise and Seek Forgiveness (Sunset)
+        // =========================================================================
+        function buildSlide3() {
+            const { svg, svgNS, rc } = createSvg();
+            const groups = [];
+
+            // GROUP 0: Sunset at bottom - warm sky gradient and concentric sun circles
+            // Sky warm gradient layers
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(80, 310, 740, 60, {
+                stroke: 'none', strokeWidth: 0, fill: '#FFF3E0', fillStyle: 'solid', roughness: 0.5
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(80, 340, 740, 30, {
+                stroke: 'none', strokeWidth: 0, fill: '#FFE0B2', fillStyle: 'solid', roughness: 0.5
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.rectangle(100, 370, 700, 136, {
+                stroke: 'none', strokeWidth: 0, fill: '#FFE0B2', fillStyle: 'solid', roughness: 0.5
+            }));
+            // Sun with more concentric rings
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(450, 380, 170, {
+                stroke: '#FFE082', strokeWidth: 1.5, fill: '#FFF8E1', fillStyle: 'solid', roughness: 2
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(450, 380, 140, {
+                stroke: '#FF9800', strokeWidth: 2, fill: '#FFB74D', fillStyle: 'solid', roughness: 2
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(450, 380, 95, {
+                stroke: '#F57C00', strokeWidth: 2, fill: '#FFA726', fillStyle: 'solid', roughness: 2
+            }));
+            addRoughToGroup(svg, rc, groups, 0, rc.circle(450, 380, 55, {
+                stroke: '#E65100', strokeWidth: 2, fill: '#FF8F00', fillStyle: 'solid', roughness: 1.5
+            }));
+            // Sun rays radiating outward
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2;
+                const x1 = 450 + 90 * Math.cos(angle);
+                const y1 = 380 + 90 * Math.sin(angle);
+                const x2 = 450 + 120 * Math.cos(angle);
+                const y2 = 380 + 120 * Math.sin(angle);
+                if (y1 < 375) {
+                    addRoughToGroup(svg, rc, groups, 0, rc.line(x1, y1, x2, y2, {
+                        stroke: '#FFD54F', strokeWidth: 1.5, roughness: 2
+                    }));
+                }
+            }
+
+            // GROUP 1: Horizon line with landscape features
+            addRoughToGroup(svg, rc, groups, 1, rc.line(80, 370, 820, 370, {
+                stroke: '#E65100', strokeWidth: 2.5, roughness: 3
+            }));
+            // Gentle rolling hills on horizon
+            addRoughToGroup(svg, rc, groups, 1, rc.path('M 80 370 Q 140 350 200 370', {
+                stroke: '#E65100', strokeWidth: 1.5, roughness: 2.5, fill: '#FFCC80', fillStyle: 'solid'
+            }));
+            addRoughToGroup(svg, rc, groups, 1, rc.path('M 200 370 Q 260 355 320 370', {
+                stroke: '#E65100', strokeWidth: 1.5, roughness: 2.5, fill: '#FFE0B2', fillStyle: 'solid'
+            }));
+            addRoughToGroup(svg, rc, groups, 1, rc.path('M 580 370 Q 640 352 700 370', {
+                stroke: '#E65100', strokeWidth: 1.5, roughness: 2.5, fill: '#FFE0B2', fillStyle: 'solid'
+            }));
+            addRoughToGroup(svg, rc, groups, 1, rc.path('M 700 370 Q 760 355 820 370', {
+                stroke: '#E65100', strokeWidth: 1.5, roughness: 2.5, fill: '#FFCC80', fillStyle: 'solid'
+            }));
+            // Small silhouette trees/palms on horizon
+            addRoughToGroup(svg, rc, groups, 1, rc.line(155, 370, 155, 348, { stroke: '#BF360C', strokeWidth: 1.5, roughness: 1.5 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.ellipse(155, 345, 16, 10, { stroke: '#BF360C', strokeWidth: 1, roughness: 2, fill: '#BF360C', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 1, rc.line(750, 370, 750, 350, { stroke: '#BF360C', strokeWidth: 1.5, roughness: 1.5 }));
+            addRoughToGroup(svg, rc, groups, 1, rc.ellipse(750, 347, 14, 9, { stroke: '#BF360C', strokeWidth: 1, roughness: 2, fill: '#BF360C', fillStyle: 'solid' }));
+
+            // GROUP 2: Left hand raised in dua with wrist/sleeve detail
+            // Sleeve/wrist base
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 260 290 Q 270 280 300 285 Q 310 290 305 300 Q 290 295 260 290', {
+                stroke: '#A1887F', strokeWidth: 2, roughness: 2, fill: '#D7CCC8', fillStyle: 'hachure', hachureGap: 5
+            }));
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 280 280 Q 260 230 270 180 Q 275 160 285 155 Q 295 150 300 165 Q 305 180 310 200', {
+                stroke: '#D4A843', strokeWidth: 3.5, roughness: 2, fill: 'none'
+            }));
+            // Left hand fingers
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 270 180 Q 255 140 260 115', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 280 170 Q 275 130 280 100', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 290 165 Q 290 125 295 95', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 300 168 Q 305 135 310 110', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            // Left thumb
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 265 200 Q 245 190 235 170', {
+                stroke: '#D4A843', strokeWidth: 2.5, roughness: 2, fill: 'none'
+            }));
+            // Palm creases (subtle detail)
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 275 205 Q 285 195 295 200', {
+                stroke: '#C9963A', strokeWidth: 1, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 2, rc.path('M 270 215 Q 285 208 300 212', {
+                stroke: '#C9963A', strokeWidth: 1, roughness: 2, fill: 'none'
+            }));
+
+            // GROUP 3: Right hand raised in dua with wrist/sleeve detail
+            // Sleeve/wrist base
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 640 290 Q 630 280 600 285 Q 590 290 595 300 Q 610 295 640 290', {
+                stroke: '#A1887F', strokeWidth: 2, roughness: 2, fill: '#D7CCC8', fillStyle: 'hachure', hachureGap: 5
+            }));
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 620 280 Q 640 230 630 180 Q 625 160 615 155 Q 605 150 600 165 Q 595 180 590 200', {
+                stroke: '#D4A843', strokeWidth: 3.5, roughness: 2, fill: 'none'
+            }));
+            // Right hand fingers
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 630 180 Q 645 140 640 115', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 620 170 Q 625 130 620 100', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 610 165 Q 610 125 605 95', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 600 168 Q 595 135 590 110', {
+                stroke: '#D4A843', strokeWidth: 3, roughness: 2, fill: 'none'
+            }));
+            // Right thumb
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 635 200 Q 655 190 665 170', {
+                stroke: '#D4A843', strokeWidth: 2.5, roughness: 2, fill: 'none'
+            }));
+            // Palm creases
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 625 205 Q 615 195 605 200', {
+                stroke: '#C9963A', strokeWidth: 1, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 3, rc.path('M 630 215 Q 615 208 600 212', {
+                stroke: '#C9963A', strokeWidth: 1, roughness: 2, fill: 'none'
+            }));
+
+            // GROUP 4: Golden glowing ellipse between hands (dua light) with radiance
+            // Outer radiance ring
+            addRoughToGroup(svg, rc, groups, 4, rc.ellipse(450, 175, 210, 140, {
+                stroke: '#FFE082', strokeWidth: 1, roughness: 2.5, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 4, rc.ellipse(450, 175, 170, 110, {
+                stroke: '#FFD54F', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+            }));
+            addRoughToGroup(svg, rc, groups, 4, rc.ellipse(450, 175, 105, 65, {
+                stroke: '#FFC107', strokeWidth: 2, roughness: 1.5, fill: '#FFFDE7', fillStyle: 'solid'
+            }));
+            // Inner bright core
+            addRoughToGroup(svg, rc, groups, 4, rc.ellipse(450, 175, 50, 30, {
+                stroke: '#FFF9C4', strokeWidth: 1.5, roughness: 1, fill: '#FFFFFF', fillStyle: 'solid'
+            }));
+            // Light particles rising from the glow
+            for (let i = 0; i < 7; i++) {
+                const px = 400 + i * 16;
+                const py = 120 - (i % 3) * 15;
+                addRoughToGroup(svg, rc, groups, 4, rc.circle(px, py, 4, {
+                    stroke: '#FFD54F', strokeWidth: 1, roughness: 1, fill: '#FFF9C4', fillStyle: 'solid'
+                }));
+            }
+
+            // GROUP 5: Blue teardrop shapes below hands (forgiveness/tears) with ripple effects
+            function teardrop(cx, cy, s) {
+                return rc.path(
+                    'M ' + cx + ' ' + (cy - 12*s) + ' Q ' + (cx + 8*s) + ' ' + cy + ' ' + cx + ' ' + (cy + 12*s) + ' Q ' + (cx - 8*s) + ' ' + cy + ' ' + cx + ' ' + (cy - 12*s),
+                    { stroke: '#42A5F5', strokeWidth: 2, fill: '#90CAF9', fillStyle: 'solid', roughness: 1.5 }
+                );
+            }
+            addRoughToGroup(svg, rc, groups, 5, teardrop(340, 305, 1));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(390, 318, 0.9));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(450, 310, 1.1));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(510, 320, 0.85));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(560, 308, 1));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(300, 335, 0.7));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(600, 338, 0.75));
+            // Tiny teardrops (mist of humility)
+            addRoughToGroup(svg, rc, groups, 5, teardrop(370, 340, 0.4));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(430, 345, 0.45));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(490, 342, 0.4));
+            addRoughToGroup(svg, rc, groups, 5, teardrop(530, 348, 0.35));
+            // Small water ripple circles where tears land
+            addRoughToGroup(svg, rc, groups, 5, rc.ellipse(340, 355, 20, 6, { stroke: '#90CAF9', strokeWidth: 1, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 5, rc.ellipse(450, 358, 22, 7, { stroke: '#90CAF9', strokeWidth: 1, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 5, rc.ellipse(560, 352, 18, 5, { stroke: '#90CAF9', strokeWidth: 1, roughness: 2, fill: 'none' }));
+
+            // GROUP 6: Small sparkle stars near the dua glow
+            const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+            addRoughToGroup(svg, rc, groups, 6, roughStar(rc, 375, 110, 10, 4, starOpts));
+            addRoughToGroup(svg, rc, groups, 6, roughStar(rc, 525, 105, 12, 5, starOpts));
+            addRoughToGroup(svg, rc, groups, 6, roughStar(rc, 450, 70, 9, 3, starOpts));
+            addRoughToGroup(svg, rc, groups, 6, roughStar(rc, 330, 155, 7, 3, starOpts));
+            addRoughToGroup(svg, rc, groups, 6, roughStar(rc, 570, 150, 9, 4, starOpts));
+            addRoughToGroup(svg, rc, groups, 6, roughStar(rc, 200, 100, 8, 3, starOpts));
+            addRoughToGroup(svg, rc, groups, 6, roughStar(rc, 700, 95, 10, 4, starOpts));
+
+            // GROUP 7: Wispy clouds in the sunset sky
+            // Cloud cluster left
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(120, 290, 80, 22, { stroke: '#FFCC80', strokeWidth: 1, roughness: 2.5, fill: '#FFE0B2', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(150, 282, 60, 16, { stroke: '#FFCC80', strokeWidth: 1, roughness: 2.5, fill: '#FFE0B2', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(95, 286, 40, 14, { stroke: '#FFCC80', strokeWidth: 1, roughness: 2.5, fill: '#FFE0B2', fillStyle: 'solid' }));
+            // Cloud cluster right
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(790, 295, 70, 20, { stroke: '#FFCC80', strokeWidth: 1, roughness: 2.5, fill: '#FFE0B2', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 7, rc.ellipse(815, 288, 50, 15, { stroke: '#FFCC80', strokeWidth: 1, roughness: 2.5, fill: '#FFE0B2', fillStyle: 'solid' }));
+            // Small high wisps
+            addRoughToGroup(svg, rc, groups, 7, rc.line(170, 250, 230, 248, { stroke: '#FFCC80', strokeWidth: 1, roughness: 3, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 7, rc.line(680, 255, 740, 252, { stroke: '#FFCC80', strokeWidth: 1, roughness: 3, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 7, rc.line(400, 260, 500, 258, { stroke: '#FFCC80', strokeWidth: 0.8, roughness: 3, fill: 'none' }));
+
+            // GROUP 8: Birds flying in the sunset sky
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 140 220 Q 150 210 160 220', { stroke: '#BF360C', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 125 235 Q 133 227 141 235', { stroke: '#BF360C', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 155 240 Q 162 233 169 240', { stroke: '#BF360C', strokeWidth: 1.2, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 750, 225 Q 760 215 770 225', { stroke: '#BF360C', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 735 240 Q 743 232 751 240', { stroke: '#BF360C', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 765 238 Q 772 231 779 238', { stroke: '#BF360C', strokeWidth: 1.2, roughness: 2, fill: 'none' }));
+            // Distant tiny birds
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 400 230 Q 405 225 410 230', { stroke: '#BF360C', strokeWidth: 1, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 480 235 Q 485 230 490 235', { stroke: '#BF360C', strokeWidth: 1, roughness: 2, fill: 'none' }));
+            addRoughToGroup(svg, rc, groups, 8, rc.path('M 440 220 Q 445 215 450 220', { stroke: '#BF360C', strokeWidth: 0.8, roughness: 2, fill: 'none' }));
+
+            // GROUP 9: Floating "SubhanAllah" and "Astaghfirullah" calligraphic swirls (abstract)
+            // Decorative swirl left (representing tasbih/praise)
+            addRoughToGroup(svg, rc, groups, 9, rc.path('M 140 150 Q 160 130 180 150 Q 200 170 180 180 Q 160 190 155 170', {
+                stroke: '#c9a84c', strokeWidth: 2, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 9, rc.circle(167, 160, 8, { stroke: '#c9a84c', strokeWidth: 1.5, roughness: 1.5, fill: '#FFF8E1', fillStyle: 'solid' }));
+            // Decorative swirl right (representing istighfar/forgiveness)
+            addRoughToGroup(svg, rc, groups, 9, rc.path('M 760 150 Q 740 130 720 150 Q 700 170 720 180 Q 740 190 745 170', {
+                stroke: '#42A5F5', strokeWidth: 2, roughness: 2, fill: 'none'
+            }));
+            addRoughToGroup(svg, rc, groups, 9, rc.circle(733, 160, 8, { stroke: '#42A5F5', strokeWidth: 1.5, roughness: 1.5, fill: '#E3F2FD', fillStyle: 'solid' }));
+            // Small decorative dots trailing from swirls
+            addRoughToGroup(svg, rc, groups, 9, rc.circle(195, 165, 4, { stroke: '#c9a84c', strokeWidth: 1, roughness: 1, fill: '#FFD54F', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.circle(210, 155, 3, { stroke: '#c9a84c', strokeWidth: 1, roughness: 1, fill: '#FFD54F', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.circle(705, 165, 4, { stroke: '#42A5F5', strokeWidth: 1, roughness: 1, fill: '#90CAF9', fillStyle: 'solid' }));
+            addRoughToGroup(svg, rc, groups, 9, rc.circle(690, 155, 3, { stroke: '#42A5F5', strokeWidth: 1, roughness: 1, fill: '#90CAF9', fillStyle: 'solid' }));
+
+            const timings = [800, 350, 700, 700, 500, 500, 400, 350, 350, 400];
+
+            const labels = [
+                addSvgText(svg, 'Glorify Allah. Seek forgiveness.', 450, 50, { size: '26', color: '#8B6914', weight: '700' })
+            ];
+
+            return { svg, groups, timings, labels };
+        }
+
+        // ===== ANIMATION ENGINE =====
+
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(el => {
+                    if (el.getTotalLength) {
+                        try {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                        } catch(e) {
+                            el.style.opacity = '0';
+                        }
+                    } else {
+                        el.style.opacity = '0';
+                    }
+                });
+            });
+        }
+
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                if (typewriterAbort) { resolve(); return; }
+                const startTime = performance.now();
+                const elements = group.map(el => {
+                    if (el.getTotalLength) {
+                        try {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        } catch(e) {
+                            el.style.opacity = '0';
+                            return { el, hasPath: false };
+                        }
+                    } else {
+                        el.style.opacity = '0';
+                        return { el, hasPath: false };
+                    }
+                });
+
+                function tick(now) {
+                    if (typewriterAbort) {
+                        // Snap to completion
+                        elements.forEach(({ el, hasPath }) => {
+                            if (hasPath) {
+                                el.style.strokeDashoffset = '0';
+                                el.style.fillOpacity = '1';
+                            } else {
+                                el.style.opacity = '1';
+                            }
+                        });
+                        resolve();
+                        return;
+                    }
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+
+                    elements.forEach(({ el, len, hasPath }) => {
+                        if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.6) {
+                                el.style.fillOpacity = (eased - 0.6) / 0.4;
+                            }
+                        } else {
+                            el.style.opacity = eased;
+                        }
+                    });
+
+                    if (t < 1) {
+                        // Move pen cursor to track drawing
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) {
+                                        movePen(pt.x, pt.y);
+                                        break;
+                                    }
+                                } catch (e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath }) => {
+                            if (hasPath) {
+                                el.style.strokeDashoffset = '0';
+                                el.style.fillOpacity = '1';
+                            } else {
+                                el.style.opacity = '1';
+                            }
+                        });
+                        resolve();
+                    }
+                }
+
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = container.querySelector('.scene-svg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            const scaleX = rect.width / 900;
+            const scaleY = rect.height / 506;
+            const tipOffsetX = 13;
+            const tipOffsetY = 37;
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * scaleX - tipOffsetX) + 'px';
+            penCursor.style.top = (svgY * scaleY - tipOffsetY) + 'px';
+        }
+
+        function hidePen() {
+            penCursor.style.opacity = '0';
+        }
+
+        // ===== TYPEWRITER =====
+
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                const isRTL = opts.rtl || false;
+                element.textContent = '';
+
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (isRTL ? ' rtl' : '');
+                element.appendChild(cursor);
+
+                let i = 0;
+                function typeNext() {
+                    if (typewriterAbort) {
+                        element.textContent = text;
+                        resolve();
+                        return;
+                    }
+                    if (i < text.length) {
+                        const charNode = document.createTextNode(text[i]);
+                        element.insertBefore(charNode, cursor);
+                        i++;
+                        setTimeout(typeNext, charDelay / speed);
+                    } else {
+                        setTimeout(() => {
+                            cursor.remove();
+                            resolve();
+                        }, 400 / speed);
+                    }
+                }
+                typeNext();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            document.getElementById('labelText').textContent = '';
+            document.getElementById('arabicText').textContent = '';
+            document.getElementById('translitText').textContent = '';
+            document.getElementById('kidText').textContent = '';
+        }
+
+        async function animateBottomText(slideData) {
+            const badge = document.getElementById('verseBadge');
+            const labelEl = document.getElementById('labelText');
+            const arabic = document.getElementById('arabicText');
+            const translit = document.getElementById('translitText');
+            const kid = document.getElementById('kidText');
+
+            badge.textContent = slideData.verse;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+
+            await typewrite(labelEl, slideData.label, { charDelay: 30 });
+            if (typewriterAbort) return;
+            await new Promise(r => setTimeout(r, 100 / speed));
+
+            await typewrite(arabic, slideData.arabic, { charDelay: 50, rtl: true });
+            if (typewriterAbort) return;
+            await new Promise(r => setTimeout(r, 100 / speed));
+
+            await typewrite(translit, slideData.translit, { charDelay: 30 });
+            if (typewriterAbort) return;
+            await new Promise(r => setTimeout(r, 100 / speed));
+
+            await typewrite(kid, slideData.kidText, { charDelay: 22 });
+        }
+
+        // ===== PLAY SLIDE =====
+
+        async function playSlide(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 60));
+            typewriterAbort = false;
+            isAnimating = true;
+
+            resetBottomText();
+            updateDots(index);
+            updateButtons(index);
+
+            const slideData = slides[index];
+            const { svg, groups, timings, labels } = slideData.build();
+            hideAllPaths(groups);
+
+            const gap = 150;
+            let textStarted = false;
+            let textPromise = null;
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], timings[i] || 500);
+
+                // Start bottom text after ~40% of groups drawn
+                if (i >= Math.floor(groups.length * 0.4) && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(slideData);
+                }
+
+                if (i < groups.length - 1) {
+                    await new Promise(r => setTimeout(r, gap / speed));
+                }
+            }
+
+            hidePen();
+
+            // Fade in SVG labels
+            await new Promise(r => setTimeout(r, 100));
+            labels.forEach(el => {
+                el.style.transition = 'opacity ' + (0.5 / speed) + 's ease';
+                el.style.opacity = '1';
+            });
+
+            if (!textStarted) {
+                textPromise = animateBottomText(slideData);
+            }
+            if (textPromise) await textPromise;
+
+            isAnimating = false;
+        }
+
+        // ===== CAROUSEL NAV =====
+
+        function buildDots() {
+            const dotsEl = document.getElementById('carouselDots');
+            dotsEl.innerHTML = '';
+            slides.forEach((_, i) => {
+                const d = document.createElement('button');
+                d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                d.onclick = () => goSlide(i);
+                dotsEl.appendChild(d);
+            });
+        }
+
+        function updateDots(index) {
+            const dots = document.querySelectorAll('.carousel-dot');
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+
+        function updateButtons(index) {
+            document.getElementById('prevBtn').disabled = (index === 0);
+            document.getElementById('nextBtn').disabled = (index === slides.length - 1);
+            document.getElementById('prevArrow').disabled = (index === 0);
+            document.getElementById('nextArrow').disabled = (index === slides.length - 1);
+        }
+
+        function goSlide(index) {
+            if (index < 0 || index >= slides.length) return;
+            currentSlide = index;
+            playSlide(index);
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) goSlide(currentSlide - 1);
+            if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) goSlide(currentSlide + 1);
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        const drawingEl = document.getElementById('slideDrawing');
+        drawingEl.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        drawingEl.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0 && currentSlide < slides.length - 1) goSlide(currentSlide + 1);
+                else if (diff < 0 && currentSlide > 0) goSlide(currentSlide - 1);
+            }
+        }, { passive: true });
+
+        // ===== INIT =====
+        buildDots();
+        window.addEventListener('load', () => {
+            setTimeout(() => playSlide(0), 500);
+        });
+    </script>
+
+</body>
+</html>

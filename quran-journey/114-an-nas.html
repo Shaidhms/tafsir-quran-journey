@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah An-Nas - Mankind | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; background: #0d0d0d;
+            border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 200;
+        }
+        .nav-bar .logo { color: #c9a84c; font-weight: 700; font-size: 1.1em; text-decoration: none; }
+        .nav-bar .progress { color: #888; font-size: 0.9em; }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%);
+            padding: 80px 20px; text-align: center;
+            border-bottom: 2px solid #3a1a5c; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+        }
+        .hero h1 { font-family: 'Amiri', serif; font-size: 3em; color: #c9a84c; margin-bottom: 10px; }
+        .hero .arabic-title { font-family: 'Amiri', serif; font-size: 4em; color: #fff; direction: rtl; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.1em; color: #8ab4f8; font-weight: 300; }
+        .hero .badge {
+            display: inline-block; margin-top: 20px; padding: 8px 20px;
+            background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c;
+            border-radius: 30px; color: #c9a84c; font-size: 0.9em;
+        }
+
+        /* ===== VIEW TOGGLE ===== */
+        .view-toggle {
+            display: flex; justify-content: center; gap: 0;
+            background: #111; border-bottom: 1px solid #222; padding: 0;
+        }
+        .view-toggle button {
+            background: none; border: none; color: #888;
+            padding: 16px 30px; font-size: 1em; font-family: 'Inter', sans-serif;
+            cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s;
+        }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+
+        /* ===== CAROUSEL SECTION ===== */
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+
+        .carousel-wrapper {
+            max-width: 900px; margin: 40px auto; padding: 0 20px; position: relative;
+        }
+        .carousel-intro { text-align: center; margin-bottom: 30px; }
+        .carousel-intro h2 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 8px; }
+        .carousel-intro p { color: #888; font-size: 0.95em; }
+
+        .carousel-container {
+            position: relative; overflow: hidden;
+            border-radius: 20px; border: 3px solid #333;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .carousel-track { display: flex; transition: transform 0.5s ease; }
+
+        .carousel-slide {
+            min-width: 100%;
+            background: #FFF9F0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            overflow: hidden;
+            background: #FFF9F0;
+        }
+        .slide-drawing svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Pen cursor */
+        .pen-cursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            left: 0;
+            top: 0;
+        }
+        .pen-cursor svg {
+            width: 48px;
+            height: 48px;
+            display: block;
+        }
+
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+        }
+        .slide-bottom .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-bottom .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; text-align: center; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-bottom .slide-translit-text {
+            text-align: center; color: #7f8c8d; font-style: italic; font-size: 0.85em;
+            margin-bottom: 10px; min-height: 1.2em;
+        }
+        .slide-bottom .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e;
+            line-height: 1.5; text-align: center; min-height: 2em;
+        }
+
+        /* Typewriter cursor */
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Carousel Nav */
+        .carousel-nav {
+            position: absolute; top: 40%; transform: translateY(-50%);
+            background: rgba(44, 62, 80, 0.8); border: 2px solid #e67e22;
+            color: #fff; width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.3em; z-index: 10; transition: all 0.3s;
+        }
+        .carousel-nav:hover { background: #e67e22; }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+
+        .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .carousel-dot {
+            width: 12px; height: 12px; border-radius: 50%; background: #333;
+            cursor: pointer; transition: all 0.3s; border: 2px solid #555;
+        }
+        .carousel-dot.active { background: #e67e22; border-color: #e67e22; transform: scale(1.2); }
+
+        .speed-control {
+            display: flex; justify-content: center; align-items: center;
+            gap: 10px; margin-top: 15px; color: #666; font-size: 0.85em;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== DEEP DIVE ===== */
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section {
+            margin: 40px 0; padding: 35px; background: #111;
+            border-radius: 16px; border: 1px solid #222;
+        }
+        .section-title {
+            font-size: 1.5em; color: #c9a84c; margin-bottom: 20px;
+            font-weight: 600; display: flex; align-items: center; gap: 12px;
+        }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important {
+            background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c;
+            padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0;
+        }
+        .facts-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; margin-top: 15px;
+        }
+        .fact-card {
+            background: #1a1a1a; padding: 18px; border-radius: 12px;
+            text-align: center; border: 1px solid #2a2a2a;
+        }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card {
+            background: #1a1a1a; border-radius: 16px; padding: 30px;
+            margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s;
+        }
+        .verse-card:hover { border-color: #c9a84c; }
+        .verse-number {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; background: #c9a84c; color: #000;
+            border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px;
+        }
+        .verse-arabic {
+            font-family: 'Amiri', serif; font-size: 2.4em; color: #fff;
+            direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0;
+        }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation {
+            font-size: 1.1em; color: #ccc; margin-bottom: 20px;
+            padding-bottom: 20px; border-bottom: 1px solid #2a2a2a;
+        }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip {
+            background: #222; border: 1px solid #333; border-radius: 12px;
+            padding: 12px 16px; text-align: center; min-width: 90px; transition: background 0.3s;
+        }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation {
+            background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15);
+            border-radius: 12px; padding: 18px; margin-top: 15px;
+        }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .arabic-tip {
+            background: #1a1a1a; border-radius: 12px; padding: 25px;
+            margin: 15px 0; border: 1px solid #2a2a2a;
+        }
+        .arabic-tip h4 { color: #c9a84c; margin-bottom: 10px; }
+        .arabic-tip p { color: #bbb; font-size: 0.95em; }
+        .arabic-letter-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px; margin-top: 15px;
+        }
+        .letter-card {
+            background: #222; border-radius: 10px; padding: 15px;
+            text-align: center; border: 1px solid #333;
+        }
+        .letter-card .letter { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; }
+        .letter-card .name { font-size: 0.85em; color: #c9a84c; margin-top: 5px; }
+        .letter-card .sound { font-size: 0.8em; color: #888; }
+        .root-word-box {
+            display: flex; align-items: center; gap: 20px; background: #1a1a1a;
+            padding: 20px; border-radius: 12px; margin: 15px 0;
+            border: 1px solid #2a2a2a; flex-wrap: wrap;
+        }
+        .root-word-box .root { font-family: 'Amiri', serif; font-size: 2em; color: #c9a84c; direction: rtl; }
+        .root-word-box .arrow { color: #555; font-size: 1.5em; }
+        .root-word-box .derivatives { display: flex; gap: 12px; flex-wrap: wrap; }
+        .root-word-box .derivative { background: #222; padding: 8px 15px; border-radius: 8px; text-align: center; }
+        .root-word-box .derivative .ar { font-family: 'Amiri', serif; font-size: 1.3em; color: #fff; }
+        .root-word-box .derivative .en { font-size: 0.8em; color: #888; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note {
+            background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2);
+            border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999;
+        }
+        .source-note strong { color: #c9a84c; }
+        footer {
+            text-align: center; padding: 40px 20px; color: #555;
+            font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px;
+        }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2em; }
+            .hero .arabic-title { font-size: 2.8em; }
+            .verse-arabic { font-size: 1.8em; }
+            .section { padding: 20px; }
+            .words-grid { gap: 8px; }
+            .word-chip { min-width: 75px; padding: 10px 12px; }
+            .slide-bottom { padding: 18px 20px; }
+            .slide-bottom .slide-kid-text { font-size: 1.1em; }
+            .slide-bottom .slide-arabic-text { font-size: 1.2em; }
+            .carousel-nav { width: 36px; height: 36px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo">Tafsir - Quran Journey</a>
+        <div class="progress">Surah 114 of 114</div>
+    </nav>
+
+    <header class="hero">
+        <div class="arabic-title">النَّاس</div>
+        <h1>An-Nas</h1>
+        <p class="subtitle">Mankind - The Final Shield Against Invisible Enemies</p>
+        <div class="badge">Makki Surah &middot; 6 Verses &middot; Revealed in Makkah</div>
+    </header>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <!-- ==================== CAROUSEL ==================== -->
+    <div class="carousel-section" id="carousel-view">
+        <div class="carousel-wrapper">
+            <div class="carousel-intro">
+                <h2>An-Nas: A Visual Journey</h2>
+                <p>Swipe through each verse. Watch the whiteboard draw itself.</p>
+            </div>
+
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+
+                    <!-- SLIDE 1 -->
+                    <div class="carousel-slide" data-slide="0">
+                        <div class="slide-drawing" id="slideDrawing0">
+                            <div class="pen-cursor" id="penCursor0">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge0">1</div>
+                            <div class="slide-arabic-text" id="arabic0"></div>
+                            <div class="slide-translit-text" id="translit0"></div>
+                            <div class="slide-kid-text" id="kid0"></div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2 -->
+                    <div class="carousel-slide" data-slide="1">
+                        <div class="slide-drawing" id="slideDrawing1">
+                            <div class="pen-cursor" id="penCursor1">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge1">2</div>
+                            <div class="slide-arabic-text" id="arabic1"></div>
+                            <div class="slide-translit-text" id="translit1"></div>
+                            <div class="slide-kid-text" id="kid1"></div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3 -->
+                    <div class="carousel-slide" data-slide="2">
+                        <div class="slide-drawing" id="slideDrawing2">
+                            <div class="pen-cursor" id="penCursor2">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge2">3</div>
+                            <div class="slide-arabic-text" id="arabic2"></div>
+                            <div class="slide-translit-text" id="translit2"></div>
+                            <div class="slide-kid-text" id="kid2"></div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 4 -->
+                    <div class="carousel-slide" data-slide="3">
+                        <div class="slide-drawing" id="slideDrawing3">
+                            <div class="pen-cursor" id="penCursor3">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge3">4</div>
+                            <div class="slide-arabic-text" id="arabic3"></div>
+                            <div class="slide-translit-text" id="translit3"></div>
+                            <div class="slide-kid-text" id="kid3"></div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 5 -->
+                    <div class="carousel-slide" data-slide="4">
+                        <div class="slide-drawing" id="slideDrawing4">
+                            <div class="pen-cursor" id="penCursor4">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge4">5</div>
+                            <div class="slide-arabic-text" id="arabic4"></div>
+                            <div class="slide-translit-text" id="translit4"></div>
+                            <div class="slide-kid-text" id="kid4"></div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 6 -->
+                    <div class="carousel-slide" data-slide="5">
+                        <div class="slide-drawing" id="slideDrawing5">
+                            <div class="pen-cursor" id="penCursor5">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge5">6</div>
+                            <div class="slide-arabic-text" id="arabic5"></div>
+                            <div class="slide-translit-text" id="translit5"></div>
+                            <div class="slide-kid-text" id="kid5"></div>
+                        </div>
+                    </div>
+
+                </div><!-- carousel-track -->
+
+                <button class="carousel-nav carousel-prev" onclick="prevSlide()">&lsaquo;</button>
+                <button class="carousel-nav carousel-next" onclick="nextSlide()">&rsaquo;</button>
+            </div><!-- carousel-container -->
+
+            <div class="carousel-dots" id="carouselDots"></div>
+
+            <div class="speed-control">
+                <span>Speed:</span>
+                <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+                <span id="speedLabel">1x</span>
+            </div>
+
+        </div><!-- carousel-wrapper -->
+    </div><!-- carousel-section -->
+
+    <!-- ==================== DEEP DIVE ==================== -->
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+
+            <!-- Quick Facts -->
+            <div class="section">
+                <div class="section-title">Quick Facts</div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">114</div></div>
+                    <div class="fact-card"><div class="label">Verses</div><div class="value">6</div></div>
+                    <div class="fact-card"><div class="label">Words</div><div class="value">20</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Paired With</div><div class="value">Al-Falaq</div></div>
+                    <div class="fact-card"><div class="label">Recited For</div><div class="value">Protection</div></div>
+                </div>
+            </div>
+
+            <!-- Story -->
+            <div class="section story">
+                <div class="section-title">The Story Behind An-Nas</div>
+
+                <p>This is the <span class="highlight">last surah of the Quran</span>. The final words of guidance. And what does Allah choose to end with? Not a grand statement about His power. Not a warning about the Day of Judgment. He ends with something deeply personal: <span class="highlight">how to protect your heart from invisible enemies</span>.</p>
+
+                <p>Surah An-Nas and Surah Al-Falaq together are called <span class="highlight">Al-Mu'awwidhatayn</span>, the two surahs of seeking refuge. They were revealed together, and the Prophet (peace be upon him) treated them as a pair.</p>
+
+                <div class="important">
+                    <p><strong>Hadith:</strong> The Prophet (peace be upon him) said: <em>"Recite Surah Al-Ikhlas, Surah Al-Falaq and Surah An-Nas three times in the morning and evening. They will suffice you in all respects."</em> (Abu Dawud 5082, Tirmidhi 3575)</p>
+                </div>
+
+                <p>Think about this: the most dangerous enemy you face isn't one you can see. It's the one that <span class="highlight">whispers</span>. Shaytan doesn't come at you with swords. He comes with thoughts. Tiny, quiet nudges. "Skip this prayer." "Nobody's watching." "You deserve this." And the scary part? Sometimes you can't tell the difference between his voice and yours.</p>
+
+                <div class="important">
+                    <p><strong>Hadith:</strong> The Prophet (peace be upon him) said: <em>"Shaytan sits on the paths of the son of Adam. He sat for him on the path of Islam and said, 'Will you accept Islam and leave your religion?'..."</em> (Nasa'i 3134). He literally waits on every path you take toward good.</p>
+                </div>
+
+                <p>But here's the key word: <span class="highlight">Khannas</span>. It means the one who retreats, who shrinks back, who is a habitual coward. The moment you remember Allah, the moment you say "A'udhu billah," the whisper stops. He runs. Every single time. That's his nature.</p>
+
+                <div class="important">
+                    <p><strong>Hadith:</strong> Aisha (may Allah be pleased with her) reported that the Prophet (peace be upon him) would recite Al-Mu'awwidhatayn before sleeping, blow into his hands, and wipe them over his body. When he became ill, she would do it for him. (Bukhari 5017)</p>
+                </div>
+
+                <p>The surah also reveals something many people miss: the whisperers aren't just jinn. They're also <span class="highlight">people</span>. That friend who says "just try it, no one will know." That voice on social media pulling you toward something wrong. Allah warns about both kinds because both are real threats to your heart.</p>
+            </div>
+
+            <!-- Verse by Verse -->
+            <div class="section">
+                <div class="section-title">Verse-by-Verse Breakdown</div>
+
+                <!-- Verse 1 -->
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">قُلْ أَعُوذُ بِرَبِّ النَّاسِ</div>
+                    <div class="verse-transliteration">Qul a'udhu bi Rabbin-nas</div>
+                    <div class="verse-translation">Say: "I seek refuge in the Lord of mankind"</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
+                            <div class="word-chip"><span class="ar">أَعُوذُ</span><span class="trans">a'udhu</span><span class="meaning">I seek refuge</span></div>
+                            <div class="word-chip"><span class="ar">بِرَبِّ</span><span class="trans">bi-Rabbi</span><span class="meaning">in the Lord of</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">In Simple Words</div>
+                        <p>The surah opens with a command: SAY it. Don't just think it. Verbalize your need for protection. And the first attribute of Allah mentioned is Rabb - He who nurtures, sustains, and protects you from the moment you existed.</p>
+                    </div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">مَلِكِ النَّاسِ</div>
+                    <div class="verse-transliteration">Malikin-nas</div>
+                    <div class="verse-translation">The King of mankind</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مَلِكِ</span><span class="trans">maliki</span><span class="meaning">King of</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">In Simple Words</div>
+                        <p>The second attribute: Malik. He isn't just your caretaker. He is the sovereign authority over all of creation. Every ruler, every government, every boss reports to Him whether they know it or not.</p>
+                    </div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">إِلَـٰهِ النَّاسِ</div>
+                    <div class="verse-transliteration">Ilahin-nas</div>
+                    <div class="verse-translation">The God of mankind</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِلَـٰهِ</span><span class="trans">ilahi</span><span class="meaning">God of</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">In Simple Words</div>
+                        <p>The third and highest attribute: Ilah. The only one truly worthy of worship. The progression is deliberate: He nurtures you (Rabb), He has authority over you (Malik), and He alone deserves your devotion (Ilah). Complete protection from every angle.</p>
+                    </div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ</div>
+                    <div class="verse-transliteration">Min sharril-waswasil-khannas</div>
+                    <div class="verse-translation">From the evil of the retreating whisperer</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مِن</span><span class="trans">min</span><span class="meaning">From</span></div>
+                            <div class="word-chip"><span class="ar">شَرِّ</span><span class="trans">sharri</span><span class="meaning">evil of</span></div>
+                            <div class="word-chip"><span class="ar">الْوَسْوَاسِ</span><span class="trans">al-waswasi</span><span class="meaning">the whisperer</span></div>
+                            <div class="word-chip"><span class="ar">الْخَنَّاسِ</span><span class="trans">al-khannasi</span><span class="meaning">the retreater</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">In Simple Words</div>
+                        <p>Now the enemy is named. Al-Waswas: the whisperer. Al-Khannas: the one who habitually retreats. Two descriptions that tell you everything. He attacks through whispers (not force), and he's a coward who runs the moment you turn to Allah.</p>
+                    </div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ</div>
+                    <div class="verse-transliteration">Alladhi yuwaswisu fi sudurin-nas</div>
+                    <div class="verse-translation">Who whispers in the breasts of mankind</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The one who</span></div>
+                            <div class="word-chip"><span class="ar">يُوَسْوِسُ</span><span class="trans">yuwaswisu</span><span class="meaning">whispers</span></div>
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">in</span></div>
+                            <div class="word-chip"><span class="ar">صُدُورِ</span><span class="trans">suduri</span><span class="meaning">breasts of</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">In Simple Words</div>
+                        <p>Allah says "sudur" (chests), not heads. The attack isn't intellectual. It's emotional. The whisperer targets the place where your feelings, motivations, and decisions live. He plants doubt where it hurts most.</p>
+                    </div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">مِنَ الْجِنَّةِ وَالنَّاسِ</div>
+                    <div class="verse-transliteration">Minal-jinnati wan-nas</div>
+                    <div class="verse-translation">From among the jinn and mankind</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مِنَ</span><span class="trans">mina</span><span class="meaning">From</span></div>
+                            <div class="word-chip"><span class="ar">الْجِنَّةِ</span><span class="trans">al-jinnati</span><span class="meaning">the jinn</span></div>
+                            <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">and</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">In Simple Words</div>
+                        <p>The final reveal: whisperers come from BOTH worlds. Jinn you can't see, and people you can. That toxic friend, that misleading influencer, that person who normalizes what's wrong. Both are covered in this protection.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arabic Learning -->
+            <div class="section">
+                <div class="section-title">Arabic Learning</div>
+
+                <div class="arabic-tip">
+                    <h4>Key Vocabulary in the Quran</h4>
+                    <p>These words from Surah An-Nas appear frequently throughout the entire Quran:</p>
+                    <div class="arabic-letter-grid">
+                        <div class="letter-card"><div class="letter">نَاس</div><div class="name">Nas (Mankind)</div><div class="sound">241 times</div></div>
+                        <div class="letter-card"><div class="letter">رَبّ</div><div class="name">Rabb (Lord)</div><div class="sound">970 times</div></div>
+                        <div class="letter-card"><div class="letter">مَلِك</div><div class="name">Malik (King)</div><div class="sound">49 times</div></div>
+                        <div class="letter-card"><div class="letter">إِلَـٰه</div><div class="name">Ilah (God)</div><div class="sound">147 times</div></div>
+                        <div class="letter-card"><div class="letter">شَرّ</div><div class="name">Sharr (Evil)</div><div class="sound">30 times</div></div>
+                        <div class="letter-card"><div class="letter">جِنّ</div><div class="name">Jinn</div><div class="sound">32 times</div></div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>The Three Names Progression</h4>
+                    <p>The surah builds from Rabb (nurturer, closest relationship) to Malik (sovereign authority) to Ilah (the only one worthy of worship). Each name escalates the level of protection you're seeking. It's like going from your parent to a king to God Himself.</p>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Root: W-S-W-S (Quadriliteral)</h4>
+                    <p>The root of "waswas" is unusual. It's a quadriliteral root (four letters instead of the typical three). The repetition of the sound W-S mimics the actual sound of whispering. Arabic is built to make you feel the meaning.</p>
+                    <div class="root-word-box">
+                        <div class="root">و-س-و-س</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">وَسْوَسَ</div><div class="en">to whisper</div></div>
+                            <div class="derivative"><div class="ar">وَسْوَاس</div><div class="en">the whisperer</div></div>
+                            <div class="derivative"><div class="ar">يُوَسْوِسُ</div><div class="en">he whispers</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Root: KH-N-S (Habitual Retreater)</h4>
+                    <p>"Khannas" comes from the root KH-N-S. The "fa'al" pattern (intensive form) means this isn't a one-time retreat. He does it over and over. Whisper, retreat when you remember Allah, wait, whisper again. That's his cycle.</p>
+                    <div class="root-word-box">
+                        <div class="root">خ-ن-س</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">خَنَسَ</div><div class="en">to retreat</div></div>
+                            <div class="derivative"><div class="ar">خَنَّاس</div><div class="en">habitual retreater</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Takrar: Repetition of "An-Nas"</h4>
+                    <p>The word "an-nas" (mankind) appears 5 times in just 6 verses. This repetition (takrar) is a powerful rhetorical device. It emphasizes that this surah is about YOU. About people. Every single verse circles back to humanity because the protection is FOR you, the King is OF you, the God is OF you, and the enemy targets YOU.</p>
+                </div>
+            </div>
+
+            <!-- Key Lessons -->
+            <div class="section">
+                <div class="section-title">Key Lessons</div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">1.</span><div><strong style="color:#c9a84c">Your biggest enemy is invisible.</strong><br><span style="color:#aaa">You can't see him, but he's always there. Awareness is the first step to protection.</span></div></li>
+                    <li><span class="bullet">2.</span><div><strong style="color:#c9a84c">Shaytan is a coward.</strong><br><span style="color:#aaa">He whispers, but the moment you remember Allah, he runs. Every. Single. Time. "Khannas" means he habitually retreats.</span></div></li>
+                    <li><span class="bullet">3.</span><div><strong style="color:#c9a84c">Not all whispers come from jinn.</strong><br><span style="color:#aaa">People whisper too. Bad friends, toxic influences, misleading voices. Allah warns about both kinds.</span></div></li>
+                    <li><span class="bullet">4.</span><div><strong style="color:#c9a84c">The attack is emotional, not logical.</strong><br><span style="color:#aaa">He targets your chest (sudur), not your brain. He goes after your feelings, your motivation, your resolve.</span></div></li>
+                    <li><span class="bullet">5.</span><div><strong style="color:#c9a84c">Three attributes = complete protection.</strong><br><span style="color:#aaa">Rabb (He nurtures you), Malik (He has authority), Ilah (He alone deserves worship). Every angle is covered.</span></div></li>
+                    <li><span class="bullet">6.</span><div><strong style="color:#c9a84c">Make it a daily habit.</strong><br><span style="color:#aaa">The Prophet recited this every morning, every evening, and before sleep. It's not a one-time thing. It's a shield you put on daily.</span></div></li>
+                </ul>
+            </div>
+
+            <!-- Sources -->
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Tafsir Al-Qurtubi, Sahih al-Bukhari 5017, Sunan Abu Dawud 5082, Jami at-Tirmidhi 3575, Sunan an-Nasa'i 3134
+            </div>
+
+        </div><!-- container -->
+    </div><!-- deep-dive-section -->
+
+    <footer>
+        <p>Quran Journey &middot; Learning the Quran, one surah at a time</p>
+        <p><a href="index.html">Back to Index</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+
+    <script>
+    // ===== VIEW TOGGLE =====
+    function showView(view) {
+        const btns = document.querySelectorAll('.view-toggle button');
+        btns.forEach(b => b.classList.remove('active'));
+        if (view === 'carousel') {
+            btns[0].classList.add('active');
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+        } else {
+            btns[1].classList.add('active');
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+        }
+    }
+
+    // ===== CAROUSEL =====
+    const totalSlides = 6;
+    let currentSlide = 0;
+    let slideAnimations = {}; // track animation state per slide
+    let speed = 1;
+
+    const speedSlider = document.getElementById('speedSlider');
+    const speedLabel = document.getElementById('speedLabel');
+    speedSlider.addEventListener('input', () => {
+        speed = parseFloat(speedSlider.value);
+        speedLabel.textContent = speed + 'x';
+    });
+
+    // Build dots
+    const dotsEl = document.getElementById('carouselDots');
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsEl.appendChild(dot);
+    }
+
+    function updateDots() {
+        document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentSlide);
+        });
+    }
+
+    function goToSlide(idx) {
+        if (idx < 0 || idx >= totalSlides) return;
+        currentSlide = idx;
+        document.getElementById('carouselTrack').style.transform = `translateX(-${idx * 100}%)`;
+        updateDots();
+        triggerSlideAnimation(idx);
+    }
+
+    function nextSlide() { goToSlide(Math.min(currentSlide + 1, totalSlides - 1)); }
+    function prevSlide() { goToSlide(Math.max(currentSlide - 1, 0)); }
+
+    // Swipe support
+    let touchStartX = 0;
+    const track = document.getElementById('carouselTrack');
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
+    }, { passive: true });
+
+    // ===== SLIDE DATA =====
+    const slideData = [
+        {
+            verse: 1,
+            arabic: '\u0642\u064F\u0644\u0652 \u0623\u064E\u0639\u064F\u0648\u0630\u064F \u0628\u0650\u0631\u064E\u0628\u0651\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+            translit: "Qul a'udhu bi Rabbin-nas",
+            kid: 'When something scary or invisible tries to bother you, what do you do? You run to someone who protects you. Allah says: "Run to Me! I am the Lord of ALL people. I am your shield."'
+        },
+        {
+            verse: 2,
+            arabic: '\u0645\u064E\u0644\u0650\u0643\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+            translit: 'Malikin-nas',
+            kid: "He's not just your caretaker. He is the KING. Every president, every ruler? Their power is borrowed. Allah is the King of all people. His authority is the only one that truly matters."
+        },
+        {
+            verse: 3,
+            arabic: '\u0625\u0650\u0644\u064E\u0640\u0670\u0647\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+            translit: 'Ilahin-nas',
+            kid: "He's the only one truly worthy of worship. Not money, not fame, not any person. Everything points to Him. Why go to anything less than the true God?"
+        },
+        {
+            verse: 4,
+            arabic: '\u0645\u0650\u0646 \u0634\u064E\u0631\u0651\u0650 \u0627\u0644\u0652\u0648\u064E\u0633\u0652\u0648\u064E\u0627\u0633\u0650 \u0627\u0644\u0652\u062E\u064E\u0646\u0651\u064E\u0627\u0633\u0650',
+            translit: 'Min sharril-waswasil-khannas',
+            kid: 'Here\'s the enemy: the Whisperer. He sneaks up and whispers bad thoughts. But he\'s a COWARD! The moment you remember Allah, he RUNS AWAY. That\'s what "khannas" means.'
+        },
+        {
+            verse: 5,
+            arabic: '\u0627\u0644\u0651\u064E\u0630\u0650\u064A \u064A\u064F\u0648\u064E\u0633\u0652\u0648\u0650\u0633\u064F \u0641\u0650\u064A \u0635\u064F\u062F\u064F\u0648\u0631\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+            translit: 'Alladhi yuwaswisu fi sudurin-nas',
+            kid: 'The whisperer targets your CHEST - where your feelings and decisions live. He plants doubt, laziness, jealousy. "Skip the prayer..." "Give up..." Those whispers? Not you. That\'s him.'
+        },
+        {
+            verse: 6,
+            arabic: '\u0645\u0650\u0646\u064E \u0627\u0644\u0652\u062C\u0650\u0646\u0651\u064E\u0629\u0650 \u0648\u064E\u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+            translit: 'Minal-jinnati wan-nas',
+            kid: 'The big reveal: whisperers aren\'t just invisible jinn! Some are actual PEOPLE around you. That friend who says "just do it, no one will know." Allah warns about BOTH kinds.'
+        }
+    ];
+
+    // ===== ANIMATION ENGINE =====
+
+    function getPathLength(el) {
+        try { return el.getTotalLength(); } catch(e) { return 300; }
+    }
+
+    function hideAllPaths(groups) {
+        groups.forEach(group => {
+            group.forEach(el => {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                } else {
+                    el.style.opacity = '0';
+                }
+            });
+        });
+    }
+
+    function animateGroup(group, duration, penCursor, svg, viewBox) {
+        return new Promise(resolve => {
+            const startTime = performance.now();
+            const elements = group.map(el => {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return { el, len, hasPath: true };
+                } else {
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+            });
+
+            let rafId;
+            function tick(now) {
+                const elapsed = (now - startTime) * speed;
+                const t = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - t, 3);
+
+                elements.forEach(({ el, len, hasPath }) => {
+                    if (hasPath) {
+                        el.style.strokeDashoffset = len * (1 - eased);
+                        if (eased > 0.6) {
+                            el.style.fillOpacity = (eased - 0.6) / 0.4;
+                        }
+                    } else {
+                        el.style.opacity = eased;
+                    }
+                });
+
+                if (t < 1) {
+                    for (let j = elements.length - 1; j >= 0; j--) {
+                        if (elements[j].hasPath) {
+                            try {
+                                const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                if (pt && isFinite(pt.x) && isFinite(pt.y)) {
+                                    movePen(penCursor, svg, pt.x, pt.y, viewBox);
+                                    break;
+                                }
+                            } catch(e) {}
+                        }
+                    }
+                    rafId = requestAnimationFrame(tick);
+                } else {
+                    elements.forEach(({ el, hasPath }) => {
+                        if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                        else { el.style.opacity = '1'; }
+                    });
+                    resolve();
+                }
+            }
+            rafId = requestAnimationFrame(tick);
+        });
+    }
+
+    function movePen(penCursor, svg, svgX, svgY, viewBox) {
+        if (!svg || !penCursor) return;
+        const rect = svg.getBoundingClientRect();
+        const scaleX = rect.width / viewBox[0];
+        const scaleY = rect.height / viewBox[1];
+        penCursor.style.opacity = '1';
+        penCursor.style.left = (svgX * scaleX - 13) + 'px';
+        penCursor.style.top = (svgY * scaleY - 37) + 'px';
+    }
+
+    function hidePen(penCursor) {
+        if (penCursor) penCursor.style.opacity = '0';
+    }
+
+    // ===== TYPEWRITER =====
+    let typewriterAbortFlags = {};
+
+    function typewrite(element, text, opts = {}, slideIdx) {
+        return new Promise(resolve => {
+            const charDelay = opts.charDelay || 40;
+            const isRTL = opts.rtl || false;
+            element.textContent = '';
+            const cursor = document.createElement('span');
+            cursor.className = 'typewriter-cursor' + (isRTL ? ' rtl' : '');
+            element.appendChild(cursor);
+            let i = 0;
+            function typeNext() {
+                if (typewriterAbortFlags[slideIdx]) { cursor.remove(); resolve(); return; }
+                if (i < text.length) {
+                    const charNode = document.createTextNode(text[i]);
+                    element.insertBefore(charNode, cursor);
+                    i++;
+                    setTimeout(typeNext, charDelay / speed);
+                } else {
+                    setTimeout(() => { cursor.remove(); resolve(); }, 400 / speed);
+                }
+            }
+            typeNext();
+        });
+    }
+
+    // ===== SCENE BUILDERS =====
+    const VB_W = 900, VB_H = 506;
+
+    function createBaseSvg(container, id) {
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const old = document.getElementById(id);
+        if (old) old.remove();
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('id', id);
+        svg.setAttribute('viewBox', `0 0 ${VB_W} ${VB_H}`);
+        svg.setAttribute('xmlns', svgNS);
+        container.appendChild(svg);
+
+        // Dot grid background
+        const defs = document.createElementNS(svgNS, 'defs');
+        const pat = document.createElementNS(svgNS, 'pattern');
+        pat.setAttribute('id', 'dotgrid_' + id);
+        pat.setAttribute('width', '20'); pat.setAttribute('height', '20');
+        pat.setAttribute('patternUnits', 'userSpaceOnUse');
+        const dot = document.createElementNS(svgNS, 'circle');
+        dot.setAttribute('cx', '10'); dot.setAttribute('cy', '10');
+        dot.setAttribute('r', '0.8'); dot.setAttribute('fill', '#e0d8c8');
+        pat.appendChild(dot); defs.appendChild(pat); svg.appendChild(defs);
+
+        const bg = document.createElementNS(svgNS, 'rect');
+        bg.setAttribute('width', VB_W); bg.setAttribute('height', VB_H);
+        bg.setAttribute('fill', '#FFF9F0'); svg.appendChild(bg);
+
+        const grid = document.createElementNS(svgNS, 'rect');
+        grid.setAttribute('width', VB_W); grid.setAttribute('height', VB_H);
+        grid.setAttribute('fill', `url(#dotgrid_${id})`); svg.appendChild(grid);
+
+        return { svg, svgNS, groups: [] };
+    }
+
+    function addToGroup(groups, idx, node) {
+        if (!groups[idx]) groups[idx] = [];
+        groups[idx].push(node);
+    }
+
+    function addRoughToGroup(groups, idx, svg, roughNode) {
+        const children = roughNode.querySelectorAll('path, line, circle, ellipse, rect, polygon');
+        children.forEach(child => addToGroup(groups, idx, child));
+        svg.appendChild(roughNode);
+    }
+
+    function addSvgText(svg, text, x, y, opts = {}) {
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const el = document.createElementNS(svgNS, 'text');
+        el.setAttribute('x', x); el.setAttribute('y', y);
+        el.setAttribute('text-anchor', opts.anchor || 'middle');
+        el.setAttribute('dominant-baseline', 'middle');
+        el.setAttribute('font-family', opts.font || 'Caveat, cursive');
+        el.setAttribute('font-size', opts.size || '22');
+        el.setAttribute('font-weight', opts.weight || '600');
+        el.setAttribute('fill', opts.color || '#2c3e50');
+        if (opts.opacity) el.setAttribute('opacity', opts.opacity);
+        if (opts.style) el.setAttribute('font-style', opts.style);
+        el.textContent = text;
+        el.style.opacity = '0';
+        svg.appendChild(el);
+        return el;
+    }
+
+    function roughStar(rc, cx, cy, outerR, innerR, opts) {
+        const pts = [];
+        for (let i = 0; i < 10; i++) {
+            const r = i % 2 === 0 ? outerR : innerR;
+            const a = (Math.PI / 5) * i - Math.PI / 2;
+            pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+        }
+        return rc.polygon(pts, opts);
+    }
+
+    // ===== BUILD SLIDE 1: Lord of Mankind (Shield) =====
+    function buildSlide0(container) {
+        const { svg, svgNS, groups } = createBaseSvg(container, 'scene0');
+        const rc = rough.svg(svg);
+
+        // G0: Shield outer with ornate border
+        addRoughToGroup(groups, 0, svg, rc.path('M450,60 L580,110 L580,260 Q580,380 450,400 Q320,380 320,260 L320,110 Z', {
+            stroke: '#8B6914', strokeWidth: 3.5, fill: '#FFF3B0', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 8, hachureAngle: 60, fillWeight: 1.5
+        }));
+        // Shield rim highlight
+        addRoughToGroup(groups, 0, svg, rc.path('M450,65 L575,113 L575,258 Q575,373 450,393 Q325,373 325,258 L325,113 Z', {
+            stroke: '#DAA520', strokeWidth: 1.5, fill: 'none', roughness: 1.5
+        }));
+
+        // G1: Shield inner glow with cross-hatch pattern
+        addRoughToGroup(groups, 1, svg, rc.path('M450,95 L555,135 L555,255 Q555,355 450,375 Q345,355 345,255 L345,135 Z', {
+            stroke: '#c9a84c', strokeWidth: 2.5, fill: '#FFE680', fillStyle: 'solid',
+            roughness: 1.5
+        }));
+        // Inner shield decorative diamond
+        addRoughToGroup(groups, 1, svg, rc.polygon([[450,140],[500,220],[450,300],[400,220]], {
+            stroke: '#DAA520', strokeWidth: 1.5, fill: '#FFF3B0', fillStyle: 'hachure',
+            roughness: 1, hachureGap: 5, hachureAngle: 45
+        }));
+        // Central shield emblem circle
+        addRoughToGroup(groups, 1, svg, rc.circle(450, 220, 45, {
+            stroke: '#8B6914', strokeWidth: 2, fill: '#FFD700', fillStyle: 'solid', roughness: 1
+        }));
+        // Inner emblem dot
+        addRoughToGroup(groups, 1, svg, rc.circle(450, 220, 18, {
+            stroke: '#BF8C00', strokeWidth: 1.5, fill: '#FFF8E1', fillStyle: 'solid', roughness: 0.8
+        }));
+
+        // G2: Light rays from shield (more rays, varied lengths)
+        const rays = [
+            [450, 55, 450, 10], [390, 70, 330, 20], [510, 70, 570, 20],
+            [315, 180, 245, 150], [585, 180, 655, 150],
+            [315, 300, 250, 340], [585, 300, 650, 340],
+            [340, 130, 280, 90], [560, 130, 620, 90],
+            [330, 340, 280, 380], [570, 340, 620, 380]
+        ];
+        rays.forEach(([x1,y1,x2,y2]) => {
+            addRoughToGroup(groups, 2, svg, rc.line(x1,y1,x2,y2, {
+                stroke: '#FFD700', strokeWidth: 2.5, roughness: 2
+            }));
+        });
+        // Secondary faint glow rays
+        const glowRays = [
+            [450, 50, 450, 0], [370, 75, 310, 10], [530, 75, 590, 10]
+        ];
+        glowRays.forEach(([x1,y1,x2,y2]) => {
+            addRoughToGroup(groups, 2, svg, rc.line(x1,y1,x2,y2, {
+                stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2.5
+            }));
+        });
+
+        // G3: Dark wisps repelled (left) - more tendrils
+        addRoughToGroup(groups, 3, svg, rc.path('M80,140 Q120,120 140,160 Q160,200 140,240', {
+            stroke: '#555', strokeWidth: 3, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M60,190 Q90,170 100,210 Q110,250 90,270', {
+            stroke: '#666', strokeWidth: 2.5, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M50,160 Q75,145 85,175 Q95,210 75,230', {
+            stroke: '#777', strokeWidth: 2, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M95,250 Q120,235 130,265 Q135,290 110,305', {
+            stroke: '#888', strokeWidth: 1.8, roughness: 3, fill: 'none'
+        }));
+        // Dark wisps repelled (right) - more tendrils
+        addRoughToGroup(groups, 3, svg, rc.path('M820,150 Q780,130 760,170 Q740,210 760,250', {
+            stroke: '#555', strokeWidth: 3, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M840,200 Q810,180 800,220 Q790,260 810,280', {
+            stroke: '#666', strokeWidth: 2.5, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M850,160 Q825,145 815,175 Q805,210 825,230', {
+            stroke: '#777', strokeWidth: 2, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M805,250 Q780,235 770,265 Q765,290 790,305', {
+            stroke: '#888', strokeWidth: 1.8, roughness: 3, fill: 'none'
+        }));
+
+        // G4: Stars scattered
+        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 160, 80, 14, 5, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 740, 70, 12, 4, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 120, 350, 10, 4, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 780, 360, 11, 4, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 200, 200, 9, 3, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 700, 210, 10, 4, starOpts));
+
+        // G5: Protective aura rings around shield
+        addRoughToGroup(groups, 5, svg, rc.ellipse(450, 230, 340, 400, {
+            stroke: '#FFE082', strokeWidth: 1.5, fill: 'none', roughness: 2.5,
+            strokeLineDash: [8, 6]
+        }));
+        addRoughToGroup(groups, 5, svg, rc.ellipse(450, 230, 380, 440, {
+            stroke: '#FFF3B0', strokeWidth: 1, fill: 'none', roughness: 3,
+            strokeLineDash: [5, 8]
+        }));
+
+        // G6: Cloud wisps in corners (atmosphere)
+        addRoughToGroup(groups, 6, svg, rc.ellipse(80, 50, 130, 40, {
+            stroke: '#ddd', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
+        }));
+        addRoughToGroup(groups, 6, svg, rc.ellipse(130, 45, 80, 30, {
+            stroke: '#ddd', strokeWidth: 1, fill: '#f5f0e0', fillStyle: 'solid', roughness: 2.5
+        }));
+        addRoughToGroup(groups, 6, svg, rc.ellipse(820, 55, 120, 35, {
+            stroke: '#ddd', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
+        }));
+        addRoughToGroup(groups, 6, svg, rc.ellipse(780, 50, 70, 28, {
+            stroke: '#ddd', strokeWidth: 1, fill: '#f5f0e0', fillStyle: 'solid', roughness: 2.5
+        }));
+        // Tiny sparkle dots near shield
+        addRoughToGroup(groups, 6, svg, rc.circle(280, 100, 5, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 6, svg, rc.circle(620, 100, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 6, svg, rc.circle(270, 350, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 6, svg, rc.circle(630, 350, 5, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+
+        // G7: Label bubble
+        addRoughToGroup(groups, 7, svg, rc.ellipse(450, 460, 320, 55, {
+            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+        }));
+
+        // Text labels (fade in with last group)
+        const labels = [];
+        labels.push(addSvgText(svg, 'RABB (your Lord, your Shield)', 450, 240, { size: '26', color: '#8B6914', weight: '700' }));
+        labels.push(addSvgText(svg, 'Say: "I seek protection!"', 450, 460, { size: '24', color: '#BF8C00', weight: '700' }));
+
+        return { svg, groups, labels };
+    }
+
+    // ===== BUILD SLIDE 2: King of Mankind (Crown) =====
+    function buildSlide1(container) {
+        const { svg, svgNS, groups } = createBaseSvg(container, 'scene1');
+        const rc = rough.svg(svg);
+
+        // G0: Main crown with layered depth
+        addRoughToGroup(groups, 0, svg, rc.path('M310,190 L340,100 L390,160 L450,70 L510,160 L560,100 L590,190 Z', {
+            stroke: '#8B6914', strokeWidth: 3.5, fill: '#FFD700', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 6, hachureAngle: 45
+        }));
+        // Crown inner highlight
+        addRoughToGroup(groups, 0, svg, rc.path('M330,185 L355,115 L395,165 L450,85 L505,165 L545,115 L570,185 Z', {
+            stroke: '#DAA520', strokeWidth: 1.5, fill: 'none', roughness: 1.5
+        }));
+        addRoughToGroup(groups, 0, svg, rc.rectangle(310, 190, 280, 40, {
+            stroke: '#8B6914', strokeWidth: 3, fill: '#FFD700', fillStyle: 'solid', roughness: 1.5
+        }));
+        // Crown band decorative line
+        addRoughToGroup(groups, 0, svg, rc.line(315, 200, 585, 200, {
+            stroke: '#BF8C00', strokeWidth: 1.5, roughness: 1
+        }));
+        addRoughToGroup(groups, 0, svg, rc.line(315, 220, 585, 220, {
+            stroke: '#BF8C00', strokeWidth: 1.5, roughness: 1
+        }));
+
+        // G1: Jewels on crown - more ornate with halos
+        addRoughToGroup(groups, 1, svg, rc.circle(390, 155, 20, { stroke: '#FFECB3', fill: 'none', roughness: 1.5 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(390, 155, 16, { stroke: '#8B6914', fill: '#e74c3c', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(450, 105, 22, { stroke: '#FFECB3', fill: 'none', roughness: 1.5 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(450, 105, 18, { stroke: '#8B6914', fill: '#3498db', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(510, 155, 20, { stroke: '#FFECB3', fill: 'none', roughness: 1.5 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(510, 155, 16, { stroke: '#8B6914', fill: '#2ecc71', fillStyle: 'solid', roughness: 1 }));
+        // Band jewels with diamond shapes between them
+        addRoughToGroup(groups, 1, svg, rc.circle(370, 210, 10, { stroke: '#8B6914', fill: '#e74c3c', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 1, svg, rc.polygon([[395,205],[400,210],[395,215],[390,210]], { stroke: '#DAA520', fill: '#FFE680', fillStyle: 'solid', roughness: 0.8 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(420, 210, 10, { stroke: '#8B6914', fill: '#3498db', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 1, svg, rc.polygon([[445,205],[450,210],[445,215],[440,210]], { stroke: '#DAA520', fill: '#FFE680', fillStyle: 'solid', roughness: 0.8 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(470, 210, 10, { stroke: '#8B6914', fill: '#2ecc71', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 1, svg, rc.polygon([[495,205],[500,210],[495,215],[490,210]], { stroke: '#DAA520', fill: '#FFE680', fillStyle: 'solid', roughness: 0.8 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(520, 210, 10, { stroke: '#8B6914', fill: '#9b59b6', fillStyle: 'solid', roughness: 1 }));
+
+        // G2: Light rays - more abundant
+        addRoughToGroup(groups, 2, svg, rc.line(450, 65, 450, 15, { stroke: '#FFD700', strokeWidth: 3, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(340, 95, 295, 50, { stroke: '#FFD700', strokeWidth: 2.5, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(560, 95, 605, 50, { stroke: '#FFD700', strokeWidth: 2.5, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(370, 80, 340, 35, { stroke: '#FFECB3', strokeWidth: 2, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(530, 80, 560, 35, { stroke: '#FFECB3', strokeWidth: 2, roughness: 2 }));
+        // Sparkle at tip
+        addRoughToGroup(groups, 2, svg, roughStar(rc, 450, 10, 10, 4, { stroke: '#FFD700', fill: '#FFF9C4', fillStyle: 'solid', roughness: 1 }));
+
+        // G3: Velvet cushion under crown
+        addRoughToGroup(groups, 3, svg, rc.ellipse(450, 245, 320, 40, {
+            stroke: '#8e44ad', strokeWidth: 2, fill: '#D7BDE2', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 5, hachureAngle: 0
+        }));
+        // Tassel details on cushion
+        addRoughToGroup(groups, 3, svg, rc.path('M290,245 Q280,260 285,280', { stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 3, svg, rc.path('M610,245 Q620,260 615,280', { stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 3, svg, rc.circle(285, 285, 8, { stroke: '#8e44ad', fill: '#9b59b6', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(615, 285, 8, { stroke: '#8e44ad', fill: '#9b59b6', fillStyle: 'solid', roughness: 1 }));
+
+        // G4: Left small crown (crossed out)
+        addRoughToGroup(groups, 4, svg, rc.path('M110,340 L130,300 L150,325 L170,290 L190,325 L210,300 L230,340 Z', {
+            stroke: '#aaa', strokeWidth: 2, fill: '#e0e0e0', fillStyle: 'hachure', roughness: 2, hachureGap: 6
+        }));
+        addRoughToGroup(groups, 4, svg, rc.line(100, 285, 240, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+        addRoughToGroup(groups, 4, svg, rc.line(240, 285, 100, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+
+        // G5: Right small crown (crossed out)
+        addRoughToGroup(groups, 5, svg, rc.path('M670,340 L690,300 L710,325 L730,290 L750,325 L770,300 L790,340 Z', {
+            stroke: '#aaa', strokeWidth: 2, fill: '#e0e0e0', fillStyle: 'hachure', roughness: 2, hachureGap: 6
+        }));
+        addRoughToGroup(groups, 5, svg, rc.line(660, 285, 800, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+        addRoughToGroup(groups, 5, svg, rc.line(800, 285, 660, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+
+        // G6: Stars and geometric patterns in background
+        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 6, svg, roughStar(rc, 100, 80, 12, 4, starOpts));
+        addRoughToGroup(groups, 6, svg, roughStar(rc, 800, 80, 12, 4, starOpts));
+        addRoughToGroup(groups, 6, svg, roughStar(rc, 50, 200, 10, 3, starOpts));
+        addRoughToGroup(groups, 6, svg, roughStar(rc, 850, 200, 10, 3, starOpts));
+        // Decorative arches flanking the crown
+        addRoughToGroup(groups, 6, svg, rc.path('M260,100 Q250,60 280,50 Q310,60 300,100', {
+            stroke: '#DAA520', strokeWidth: 1.5, roughness: 2, fill: 'none'
+        }));
+        addRoughToGroup(groups, 6, svg, rc.path('M600,100 Q590,60 620,50 Q650,60 640,100', {
+            stroke: '#DAA520', strokeWidth: 1.5, roughness: 2, fill: 'none'
+        }));
+
+        // G7: Label bubble
+        addRoughToGroup(groups, 7, svg, rc.ellipse(450, 430, 400, 55, {
+            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+        }));
+
+        const labels = [];
+        labels.push(addSvgText(svg, 'MALIK - Only ONE real King', 450, 165, { size: '22', color: '#8B4513', weight: '700' }));
+        labels.push(addSvgText(svg, 'Only ONE real King. Everyone else? Temporary.', 450, 430, { size: '22', color: '#BF8C00', weight: '700' }));
+
+        return { svg, groups, labels };
+    }
+
+    // ===== BUILD SLIDE 3: God of Mankind (One Light) =====
+    function buildSlide2(container) {
+        const { svg, svgNS, groups } = createBaseSvg(container, 'scene2');
+        const rc = rough.svg(svg);
+
+        // G0: Concentric glowing circles with outermost aura
+        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 180, { stroke: '#FFECB3', strokeWidth: 1.5, fill: '#FFFDE7', fillStyle: 'solid', roughness: 2.5 }));
+        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 140, { stroke: '#FFD700', strokeWidth: 2, fill: '#FFF3B0', fillStyle: 'solid', roughness: 2 }));
+        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 95, { stroke: '#c9a84c', strokeWidth: 2.5, fill: '#FFE680', fillStyle: 'solid', roughness: 1.5 }));
+        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 50, { stroke: '#8B6914', strokeWidth: 3, fill: '#FFD700', fillStyle: 'solid', roughness: 1 }));
+        // Innermost bright dot
+        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 18, { stroke: '#FFF', strokeWidth: 2, fill: '#FFF8E1', fillStyle: 'solid', roughness: 0.5 }));
+
+        // G1: 12 radiating lines (more directions)
+        const angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+        angles.forEach(deg => {
+            const rad = deg * Math.PI / 180;
+            const x1 = 450 + 80 * Math.cos(rad);
+            const y1 = 200 + 80 * Math.sin(rad);
+            const x2 = 450 + 150 * Math.cos(rad);
+            const y2 = 200 + 150 * Math.sin(rad);
+            addRoughToGroup(groups, 1, svg, rc.line(x1, y1, x2, y2, {
+                stroke: '#FFD700', strokeWidth: 2.5, roughness: 2
+            }));
+        });
+        // Secondary faint outer rays
+        [0, 90, 180, 270].forEach(deg => {
+            const rad = deg * Math.PI / 180;
+            const x1 = 450 + 150 * Math.cos(rad);
+            const y1 = 200 + 150 * Math.sin(rad);
+            const x2 = 450 + 200 * Math.cos(rad);
+            const y2 = 200 + 200 * Math.sin(rad);
+            addRoughToGroup(groups, 1, svg, rc.line(x1, y1, x2, y2, {
+                stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2.5
+            }));
+        });
+
+        // G2: Compass arrows from corners pointing to center
+        const arrows = [
+            [100, 50, 340, 130], [800, 50, 560, 130],
+            [100, 380, 340, 275], [800, 380, 560, 275]
+        ];
+        arrows.forEach(([x1,y1,x2,y2]) => {
+            addRoughToGroup(groups, 2, svg, rc.line(x1, y1, x2, y2, {
+                stroke: '#e67e22', strokeWidth: 2.5, roughness: 1.5
+            }));
+        });
+        // Arrowhead triangles at endpoints
+        addRoughToGroup(groups, 2, svg, rc.polygon([[340,130],[330,120],[350,120]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 2, svg, rc.polygon([[560,130],[550,120],[570,120]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 2, svg, rc.polygon([[340,275],[330,285],[350,285]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 2, svg, rc.polygon([[560,275],[550,285],[570,285]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
+
+        // G3: Dimmed circles with red X (false gods) - more detailed
+        // Left false idol
+        addRoughToGroup(groups, 3, svg, rc.circle(130, 200, 40, { stroke: '#bbb', strokeWidth: 1.5, fill: '#e8e8e8', fillStyle: 'solid', roughness: 2 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(130, 200, 25, { stroke: '#ccc', strokeWidth: 1, fill: '#ddd', fillStyle: 'solid', roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.line(108, 178, 152, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.line(152, 178, 108, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+        // Right false idol
+        addRoughToGroup(groups, 3, svg, rc.circle(770, 200, 40, { stroke: '#bbb', strokeWidth: 1.5, fill: '#e8e8e8', fillStyle: 'solid', roughness: 2 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(770, 200, 25, { stroke: '#ccc', strokeWidth: 1, fill: '#ddd', fillStyle: 'solid', roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.line(748, 178, 792, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.line(792, 178, 748, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
+
+        // G4: Stars scattered around the light
+        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 250, 60, 12, 4, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 650, 55, 11, 4, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 180, 340, 10, 3, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 720, 340, 10, 3, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 300, 370, 9, 3, starOpts));
+        addRoughToGroup(groups, 4, svg, roughStar(rc, 600, 370, 9, 3, starOpts));
+        // Geometric pattern ring between inner and outer circles
+        addRoughToGroup(groups, 4, svg, rc.circle(450, 200, 120, {
+            stroke: '#DAA520', strokeWidth: 1, fill: 'none', roughness: 1.5,
+            strokeLineDash: [4, 6]
+        }));
+
+        // G5: Clouds and atmospheric wisps
+        addRoughToGroup(groups, 5, svg, rc.ellipse(80, 50, 120, 35, {
+            stroke: '#e0d8c8', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
+        }));
+        addRoughToGroup(groups, 5, svg, rc.ellipse(125, 48, 70, 25, {
+            stroke: '#e0d8c8', strokeWidth: 1, fill: '#f8f3e5', fillStyle: 'solid', roughness: 2.5
+        }));
+        addRoughToGroup(groups, 5, svg, rc.ellipse(830, 50, 110, 35, {
+            stroke: '#e0d8c8', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
+        }));
+        addRoughToGroup(groups, 5, svg, rc.ellipse(790, 48, 60, 22, {
+            stroke: '#e0d8c8', strokeWidth: 1, fill: '#f8f3e5', fillStyle: 'solid', roughness: 2.5
+        }));
+        // Tiny sparkle dots around the light
+        addRoughToGroup(groups, 5, svg, rc.circle(350, 95, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(555, 100, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(370, 310, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(530, 315, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+
+        // G6: Label bubble
+        addRoughToGroup(groups, 6, svg, rc.ellipse(450, 440, 400, 55, {
+            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+        }));
+
+        const labels = [];
+        labels.push(addSvgText(svg, 'ILAH - Only ONE deserves worship', 450, 205, { size: '20', color: '#8B4513', weight: '700' }));
+        labels.push(addSvgText(svg, 'Everything points to Him. Only ONE.', 450, 440, { size: '22', color: '#BF8C00', weight: '700' }));
+
+        return { svg, groups, labels };
+    }
+
+    // ===== BUILD SLIDE 4: The Whisperer Who Retreats =====
+    function buildSlide3(container) {
+        const { svg, svgNS, groups } = createBaseSvg(container, 'scene3');
+        const rc = rough.svg(svg);
+
+        // G0: Heart in center with inner detail
+        addRoughToGroup(groups, 0, svg, rc.path(
+            'M450,210 C450,170 400,120 365,155 C330,190 355,230 450,290 C545,230 570,190 535,155 C500,120 450,170 450,210 Z',
+            { stroke: '#E91E63', strokeWidth: 3, fill: '#FADBD8', fillStyle: 'solid', roughness: 2 }
+        ));
+        // Inner heart glow
+        addRoughToGroup(groups, 0, svg, rc.path(
+            'M450,220 C450,195 420,160 400,180 C380,200 395,220 450,260 C505,220 520,200 500,180 C480,160 450,195 450,220 Z',
+            { stroke: '#F48FB1', strokeWidth: 1.5, fill: '#FCE4EC', fillStyle: 'solid', roughness: 1.5 }
+        ));
+        // Heartbeat line through heart
+        addRoughToGroup(groups, 0, svg, rc.path('M400,215 L425,215 L435,195 L445,235 L455,195 L465,235 L475,215 L500,215', {
+            stroke: '#e74c3c', strokeWidth: 2, roughness: 1.5, fill: 'none'
+        }));
+
+        // G1: Dark smoke/whisper lines from left - more tendrils
+        addRoughToGroup(groups, 1, svg, rc.path('M40,150 Q90,120 140,160 Q190,200 240,175 Q285,155 320,180', {
+            stroke: '#333', strokeWidth: 4.5, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 1, svg, rc.path('M60,200 Q110,175 160,210 Q200,240 245,215 Q285,195 325,215', {
+            stroke: '#444', strokeWidth: 3.5, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 1, svg, rc.path('M80,250 Q130,230 170,255 Q210,275 250,250 Q280,235 315,248', {
+            stroke: '#555', strokeWidth: 2.5, roughness: 3, fill: 'none'
+        }));
+        // Dark smoky blobs at the source
+        addRoughToGroup(groups, 1, svg, rc.ellipse(45, 180, 50, 70, {
+            stroke: '#333', strokeWidth: 2, fill: '#444', fillStyle: 'hachure', roughness: 3, hachureGap: 4, hachureAngle: 30
+        }));
+        addRoughToGroup(groups, 1, svg, rc.ellipse(30, 210, 35, 50, {
+            stroke: '#444', strokeWidth: 1.5, fill: '#555', fillStyle: 'hachure', roughness: 3, hachureGap: 5
+        }));
+
+        // G2: "psst" and "do it" text labels with whisper bubbles
+        addRoughToGroup(groups, 2, svg, rc.ellipse(140, 130, 90, 35, {
+            stroke: '#999', strokeWidth: 1, fill: '#f0ece0', fillStyle: 'solid', roughness: 2
+        }));
+        const psst = addSvgText(svg, 'psst...', 140, 130, { size: '18', color: '#666', weight: '400', style: 'italic' });
+        addToGroup(groups, 2, psst);
+        addRoughToGroup(groups, 2, svg, rc.ellipse(210, 160, 80, 30, {
+            stroke: '#999', strokeWidth: 1, fill: '#f0ece0', fillStyle: 'solid', roughness: 2
+        }));
+        const doit = addSvgText(svg, 'do it...', 210, 160, { size: '16', color: '#666', weight: '400', style: 'italic' });
+        addToGroup(groups, 2, doit);
+        addRoughToGroup(groups, 2, svg, rc.ellipse(160, 280, 100, 30, {
+            stroke: '#999', strokeWidth: 1, fill: '#f0ece0', fillStyle: 'solid', roughness: 2
+        }));
+        const nobody = addSvgText(svg, 'no one sees...', 160, 280, { size: '14', color: '#777', weight: '400', style: 'italic' });
+        addToGroup(groups, 2, nobody);
+
+        // G3: Golden light burst on right - larger, more radiant
+        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 90, { stroke: '#FFECB3', strokeWidth: 1.5, fill: '#FFFDE7', fillStyle: 'solid', roughness: 2 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 65, { stroke: '#FFD700', strokeWidth: 2, fill: '#FFF3B0', fillStyle: 'solid', roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 35, { stroke: '#8B6914', strokeWidth: 2.5, fill: '#FFD700', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 15, { stroke: '#FFF', strokeWidth: 1.5, fill: '#FFF8E1', fillStyle: 'solid', roughness: 0.5 }));
+        // Rays from light - more directions
+        const lightRays = [
+            [700,160,700,125], [700,260,700,295],
+            [740,195,770,180], [740,230,770,245],
+            [660,195,630,180], [660,230,630,245],
+            [730,180,755,160], [730,245,755,265],
+            [670,180,645,160], [670,245,645,265]
+        ];
+        lightRays.forEach(([x1,y1,x2,y2]) => {
+            addRoughToGroup(groups, 3, svg, rc.line(x1, y1, x2, y2, {
+                stroke: '#FFD700', strokeWidth: 2, roughness: 2
+            }));
+        });
+
+        // G4: Shadow retreating with more detail
+        addRoughToGroup(groups, 4, svg, rc.path('M620,195 Q600,180 585,200', {
+            stroke: '#555', strokeWidth: 2.5, roughness: 2, fill: 'none',
+            strokeLineDash: [6, 6]
+        }));
+        addRoughToGroup(groups, 4, svg, rc.path('M615,225 Q595,215 585,235', {
+            stroke: '#666', strokeWidth: 2, roughness: 2, fill: 'none',
+            strokeLineDash: [5, 5]
+        }));
+        addRoughToGroup(groups, 4, svg, rc.path('M610,210 Q590,205 580,215', {
+            stroke: '#777', strokeWidth: 1.5, roughness: 2, fill: 'none',
+            strokeLineDash: [4, 4]
+        }));
+        // Retreat arrow with green glow
+        addRoughToGroup(groups, 4, svg, rc.line(620, 310, 680, 310, { stroke: '#2ecc71', strokeWidth: 2.5, roughness: 1.5 }));
+        addRoughToGroup(groups, 4, svg, rc.polygon([[680,305],[695,310],[680,315]], { stroke: '#2ecc71', fill: '#2ecc71', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 4, svg, rc.line(620, 330, 680, 330, { stroke: '#27ae60', strokeWidth: 1.5, roughness: 1.5 }));
+        addRoughToGroup(groups, 4, svg, rc.polygon([[680,326],[690,330],[680,334]], { stroke: '#27ae60', fill: '#27ae60', fillStyle: 'solid', roughness: 1 }));
+
+        // G5: Stars and atmospheric dust
+        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 750, 80, 11, 4, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 820, 150, 9, 3, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 800, 300, 10, 4, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 450, 60, 8, 3, starOpts));
+        // Small sparkle circles
+        addRoughToGroup(groups, 5, svg, rc.circle(500, 100, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(400, 80, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(550, 350, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+
+        // G6: Broken chain links (shaytan flees)
+        addRoughToGroup(groups, 6, svg, rc.ellipse(560, 330, 25, 15, { stroke: '#888', strokeWidth: 2, fill: 'none', roughness: 2 }));
+        addRoughToGroup(groups, 6, svg, rc.ellipse(540, 345, 25, 15, { stroke: '#888', strokeWidth: 2, fill: 'none', roughness: 2 }));
+        addRoughToGroup(groups, 6, svg, rc.ellipse(520, 355, 25, 15, { stroke: '#999', strokeWidth: 1.5, fill: 'none', roughness: 2 }));
+        // Crack/break mark between chains
+        addRoughToGroup(groups, 6, svg, rc.line(550, 335, 545, 345, { stroke: '#e74c3c', strokeWidth: 2, roughness: 1.5 }));
+
+        // G7: Label bubble
+        addRoughToGroup(groups, 7, svg, rc.ellipse(450, 440, 500, 55, {
+            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+        }));
+
+        const labels = [];
+        labels.push(addSvgText(svg, 'your heart', 450, 255, { size: '18', color: '#8B4513' }));
+        labels.push(addSvgText(svg, 'dhikr!', 700, 310, { size: '18', color: '#27ae60', weight: '700' }));
+        labels.push(addSvgText(svg, 'he RUNS!', 700, 340, { size: '16', color: '#27ae60' }));
+        labels.push(addSvgText(svg, 'He whispers... but RUNS when you remember Allah!', 450, 440, { size: '20', color: '#BF8C00', weight: '700' }));
+
+        return { svg, groups, labels };
+    }
+
+    // ===== BUILD SLIDE 5: Whispers in the Chest =====
+    function buildSlide4(container) {
+        const { svg, svgNS, groups } = createBaseSvg(container, 'scene4');
+        const rc = rough.svg(svg);
+
+        // G0: Large chest/ribcage outline (abstract oval) with layered depth
+        addRoughToGroup(groups, 0, svg, rc.ellipse(450, 220, 300, 320, {
+            stroke: '#d4b896', strokeWidth: 1.5, fill: '#FFF3E0', fillStyle: 'solid', roughness: 3
+        }));
+        addRoughToGroup(groups, 0, svg, rc.ellipse(450, 220, 280, 300, {
+            stroke: '#c9a84c', strokeWidth: 3, fill: '#FDE9D9', fillStyle: 'solid', roughness: 2.5
+        }));
+        // Ribcage abstract lines (curved ribs)
+        addRoughToGroup(groups, 0, svg, rc.path('M370,130 Q430,120 490,130', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 0, svg, rc.path('M355,160 Q430,148 505,160', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 0, svg, rc.path('M345,310 Q430,325 515,310', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 0, svg, rc.path('M355,340 Q430,352 505,340', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+
+        // G1: Heart inside with detail
+        addRoughToGroup(groups, 1, svg, rc.path(
+            'M450,195 C450,170 420,145 400,165 C380,185 395,210 450,245 C505,210 520,185 500,165 C480,145 450,170 450,195 Z',
+            { stroke: '#e74c3c', strokeWidth: 2.5, fill: '#F1948A', fillStyle: 'solid', roughness: 1.5 }
+        ));
+        // Inner heart highlight
+        addRoughToGroup(groups, 1, svg, rc.path(
+            'M450,205 C450,190 430,170 418,182 C406,194 415,210 450,232 C485,210 494,194 482,182 C470,170 450,190 450,205 Z',
+            { stroke: '#F48FB1', strokeWidth: 1.5, fill: '#FCE4EC', fillStyle: 'solid', roughness: 1 }
+        ));
+        // Heartbeat pulse line
+        addRoughToGroup(groups, 1, svg, rc.path('M410,210 L425,210 L435,192 L445,228 L455,192 L465,228 L475,210 L490,210', {
+            stroke: '#c0392b', strokeWidth: 1.8, roughness: 1, fill: 'none'
+        }));
+
+        // G2: Dark wispy thought lines entering from sides - more elaborate
+        addRoughToGroup(groups, 2, svg, rc.path('M80,145 Q130,130 180,155 Q225,175 270,160 Q300,150 320,165', {
+            stroke: '#444', strokeWidth: 3, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 2, svg, rc.path('M100,195 Q150,180 200,205 Q235,220 270,205 Q300,190 320,200', {
+            stroke: '#555', strokeWidth: 2.5, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 2, svg, rc.path('M120,245 Q160,230 200,250 Q235,265 270,248 Q295,235 315,242', {
+            stroke: '#666', strokeWidth: 2, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 2, svg, rc.path('M820,155 Q770,140 720,165 Q680,180 640,168 Q610,158 590,170', {
+            stroke: '#444', strokeWidth: 3, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 2, svg, rc.path('M800,205 Q750,190 700,215 Q665,230 630,215 Q600,200 585,210', {
+            stroke: '#555', strokeWidth: 2.5, roughness: 3, fill: 'none'
+        }));
+        addRoughToGroup(groups, 2, svg, rc.path('M790,255 Q740,240 695,260 Q660,272 630,258 Q605,245 590,252', {
+            stroke: '#666', strokeWidth: 2, roughness: 3, fill: 'none'
+        }));
+        // Dark smoke sources on edges
+        addRoughToGroup(groups, 2, svg, rc.ellipse(65, 190, 50, 80, {
+            stroke: '#444', strokeWidth: 1.5, fill: '#555', fillStyle: 'hachure', roughness: 3, hachureGap: 5
+        }));
+        addRoughToGroup(groups, 2, svg, rc.ellipse(835, 195, 50, 80, {
+            stroke: '#444', strokeWidth: 1.5, fill: '#555', fillStyle: 'hachure', roughness: 3, hachureGap: 5
+        }));
+
+        // G3: Thought bubbles with connecting dots
+        addRoughToGroup(groups, 3, svg, rc.ellipse(100, 90, 140, 55, {
+            stroke: '#bbb', strokeWidth: 2, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
+        }));
+        addRoughToGroup(groups, 3, svg, rc.circle(145, 125, 10, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(160, 140, 6, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.ellipse(800, 90, 140, 55, {
+            stroke: '#bbb', strokeWidth: 2, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
+        }));
+        addRoughToGroup(groups, 3, svg, rc.circle(755, 125, 10, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
+        addRoughToGroup(groups, 3, svg, rc.circle(740, 140, 6, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
+
+        // Additional bottom thought bubbles
+        addRoughToGroup(groups, 3, svg, rc.ellipse(130, 360, 120, 45, {
+            stroke: '#bbb', strokeWidth: 1.5, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
+        }));
+        addRoughToGroup(groups, 3, svg, rc.ellipse(770, 360, 120, 45, {
+            stroke: '#bbb', strokeWidth: 1.5, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
+        }));
+
+        // G3 text labels in bubbles
+        const t1 = addSvgText(svg, '"skip prayer..."', 100, 82, { size: '14', color: '#888', weight: '400' });
+        const t2 = addSvgText(svg, '"give up..."', 100, 100, { size: '14', color: '#888', weight: '400' });
+        const t3 = addSvgText(svg, '"no one cares..."', 800, 82, { size: '14', color: '#888', weight: '400' });
+        const t4 = addSvgText(svg, '"why bother..."', 800, 100, { size: '14', color: '#888', weight: '400' });
+        const t5 = addSvgText(svg, '"you\'re alone..."', 130, 360, { size: '13', color: '#888', weight: '400' });
+        const t6 = addSvgText(svg, '"just this once..."', 770, 360, { size: '13', color: '#888', weight: '400' });
+        addToGroup(groups, 3, t1); addToGroup(groups, 3, t2);
+        addToGroup(groups, 3, t3); addToGroup(groups, 3, t4);
+        addToGroup(groups, 3, t5); addToGroup(groups, 3, t6);
+
+        // G4: Golden dashed circle shield around heart
+        addRoughToGroup(groups, 4, svg, rc.circle(450, 215, 120, {
+            stroke: '#FFD700', strokeWidth: 2.5, fill: 'none', roughness: 2,
+            strokeLineDash: [8, 5]
+        }));
+        // Outer protective ring
+        addRoughToGroup(groups, 4, svg, rc.circle(450, 215, 140, {
+            stroke: '#FFECB3', strokeWidth: 1.5, fill: 'none', roughness: 2.5,
+            strokeLineDash: [5, 8]
+        }));
+
+        // G5: Light sparkles representing dhikr protection
+        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 380, 130, 10, 4, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 520, 130, 10, 4, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 360, 300, 9, 3, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 540, 300, 9, 3, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 330, 215, 8, 3, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 570, 215, 8, 3, starOpts));
+        // Tiny sparkle dots
+        addRoughToGroup(groups, 5, svg, rc.circle(400, 115, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(500, 115, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(350, 250, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(550, 250, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+
+        // G6: Label bubble
+        addRoughToGroup(groups, 6, svg, rc.ellipse(450, 450, 460, 55, {
+            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+        }));
+
+        const labels = [];
+        labels.push(addSvgText(svg, 'sadr (chest)', 450, 220, { size: '16', color: '#8B4513' }));
+        labels.push(addSvgText(svg, 'He targets your CHEST, where feelings live', 450, 450, { size: '20', color: '#BF8C00', weight: '700' }));
+
+        return { svg, groups, labels };
+    }
+
+    // ===== BUILD SLIDE 6: From Jinn AND Mankind =====
+    function buildSlide5(container) {
+        const { svg, svgNS, groups } = createBaseSvg(container, 'scene5');
+        const rc = rough.svg(svg);
+
+        // G0: Left - Abstract blue smoke/fire form = Jinn (more layered)
+        addRoughToGroup(groups, 0, svg, rc.path(
+            'M140,120 Q170,80 190,130 Q210,170 180,220 Q150,280 190,310 Q170,350 130,320 Q90,280 110,220 Q80,170 120,130 Z',
+            { stroke: '#3498db', strokeWidth: 3, fill: '#AED6F1', fillStyle: 'hachure', roughness: 2.5, hachureGap: 6, hachureAngle: 30 }
+        ));
+        // Inner flame wisps
+        addRoughToGroup(groups, 0, svg, rc.path(
+            'M155,145 Q175,115 185,155 Q195,195 170,235 Q150,265 165,285',
+            { stroke: '#2980b9', strokeWidth: 2, roughness: 3, fill: 'none' }
+        ));
+        addRoughToGroup(groups, 0, svg, rc.path(
+            'M130,160 Q145,140 150,170 Q155,200 140,230 Q130,255 140,275',
+            { stroke: '#5DADE2', strokeWidth: 1.5, roughness: 3, fill: 'none' }
+        ));
+        // Blue sparks/embers floating off
+        addRoughToGroup(groups, 0, svg, rc.circle(110, 100, 6, { stroke: '#5DADE2', fill: '#AED6F1', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 0, svg, rc.circle(180, 85, 5, { stroke: '#5DADE2', fill: '#AED6F1', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 0, svg, rc.circle(95, 140, 4, { stroke: '#85C1E9', fill: '#D6EAF8', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 0, svg, rc.circle(200, 110, 4, { stroke: '#85C1E9', fill: '#D6EAF8', fillStyle: 'solid', roughness: 1 }));
+
+        // G1: Right - Purple abstract silhouette (NO face) with speech lines
+        addRoughToGroup(groups, 1, svg, rc.path(
+            'M720,100 Q760,90 780,130 Q800,180 790,230 Q780,290 750,330 Q720,350 700,330 Q670,290 680,230 Q660,180 680,130 Q700,90 720,100 Z',
+            { stroke: '#8e44ad', strokeWidth: 3, fill: '#D7BDE2', fillStyle: 'hachure', roughness: 2.5, hachureGap: 6, hachureAngle: -30 }
+        ));
+        // Inner silhouette shadow layers
+        addRoughToGroup(groups, 1, svg, rc.path(
+            'M730,130 Q755,120 765,150 Q775,195 768,230 Q760,270 740,300 Q725,315 715,300 Q695,270 705,230 Q690,195 705,155 Q715,125 730,130 Z',
+            { stroke: '#7D3C98', strokeWidth: 1.5, fill: '#E8DAEF', fillStyle: 'solid', roughness: 2 }
+        ));
+        // Speech/whisper lines from silhouette - more elaborate
+        addRoughToGroup(groups, 1, svg, rc.path('M665,175 Q640,165 620,170', { stroke: '#8e44ad', strokeWidth: 2.5, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 1, svg, rc.path('M665,205 Q635,198 610,205', { stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 1, svg, rc.path('M665,235 Q640,232 625,240', { stroke: '#9b59b6', strokeWidth: 2, roughness: 2, fill: 'none' }));
+        addRoughToGroup(groups, 1, svg, rc.path('M665,260 Q645,258 630,265', { stroke: '#9b59b6', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
+        // Purple sparks
+        addRoughToGroup(groups, 1, svg, rc.circle(790, 95, 5, { stroke: '#9b59b6', fill: '#D7BDE2', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(810, 150, 4, { stroke: '#9b59b6', fill: '#D7BDE2', fillStyle: 'solid', roughness: 1 }));
+        addRoughToGroup(groups, 1, svg, rc.circle(670, 90, 4, { stroke: '#BB8FCE', fill: '#E8DAEF', fillStyle: 'solid', roughness: 1 }));
+
+        // G2: Center - Golden shield with glow = YOU (enhanced)
+        // Outer aura
+        addRoughToGroup(groups, 2, svg, rc.path('M450,105 L535,140 L535,270 Q535,355 450,375 Q365,355 365,270 L365,140 Z', {
+            stroke: '#FFECB3', strokeWidth: 1.5, fill: '#FFFDE7', fillStyle: 'solid', roughness: 2.5
+        }));
+        addRoughToGroup(groups, 2, svg, rc.path('M450,120 L520,150 L520,260 Q520,340 450,360 Q380,340 380,260 L380,150 Z', {
+            stroke: '#8B6914', strokeWidth: 3.5, fill: '#FFE680', fillStyle: 'solid', roughness: 2
+        }));
+        // Shield emblem
+        addRoughToGroup(groups, 2, svg, rc.circle(450, 230, 60, {
+            stroke: '#FFD700', strokeWidth: 2, fill: '#FFF3B0', fillStyle: 'solid', roughness: 1.5
+        }));
+        addRoughToGroup(groups, 2, svg, rc.circle(450, 230, 30, {
+            stroke: '#BF8C00', strokeWidth: 1.5, fill: '#FFD700', fillStyle: 'solid', roughness: 1
+        }));
+        // Shield decorative inner lines
+        addRoughToGroup(groups, 2, svg, rc.polygon([[450,160],[485,210],[450,260],[415,210]], {
+            stroke: '#DAA520', strokeWidth: 1.5, fill: 'none', roughness: 1.5
+        }));
+        // Light emanating from shield - more rays
+        addRoughToGroup(groups, 2, svg, rc.line(450, 115, 450, 75, { stroke: '#FFD700', strokeWidth: 2.5, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(375, 145, 340, 115, { stroke: '#FFD700', strokeWidth: 2, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(525, 145, 560, 115, { stroke: '#FFD700', strokeWidth: 2, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(375, 300, 340, 330, { stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2 }));
+        addRoughToGroup(groups, 2, svg, rc.line(525, 300, 560, 330, { stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2 }));
+
+        // G3: Whisper deflection lines (whispers bouncing off shield)
+        addRoughToGroup(groups, 3, svg, rc.path('M230,180 Q280,175 330,190', {
+            stroke: '#3498db', strokeWidth: 2, roughness: 2, fill: 'none',
+            strokeLineDash: [5, 5]
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M250,230 Q290,225 340,235', {
+            stroke: '#3498db', strokeWidth: 1.5, roughness: 2, fill: 'none',
+            strokeLineDash: [4, 5]
+        }));
+        // Deflected lines bouncing away
+        addRoughToGroup(groups, 3, svg, rc.path('M370,170 Q350,150 330,130', {
+            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
+            strokeLineDash: [4, 4]
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M370,280 Q350,300 330,315', {
+            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
+            strokeLineDash: [4, 4]
+        }));
+        // Right side deflection
+        addRoughToGroup(groups, 3, svg, rc.path('M610,190 Q575,188 540,195', {
+            stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none',
+            strokeLineDash: [5, 5]
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M600,240 Q570,238 545,242', {
+            stroke: '#8e44ad', strokeWidth: 1.5, roughness: 2, fill: 'none',
+            strokeLineDash: [4, 5]
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M530,170 Q550,150 570,130', {
+            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
+            strokeLineDash: [4, 4]
+        }));
+        addRoughToGroup(groups, 3, svg, rc.path('M530,280 Q550,300 570,315', {
+            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
+            strokeLineDash: [4, 4]
+        }));
+
+        // G4: Labels for Jinn and People
+        const jinnLabel = addSvgText(svg, 'JINN', 155, 360, { size: '22', color: '#2980b9', weight: '700' });
+        const jinnSub = addSvgText(svg, '(invisible but real)', 155, 385, { size: '16', color: '#3498db' });
+        addToGroup(groups, 4, jinnLabel);
+        addToGroup(groups, 4, jinnSub);
+
+        const pplLabel = addSvgText(svg, 'PEOPLE', 740, 360, { size: '22', color: '#8e44ad', weight: '700' });
+        const pplSub = addSvgText(svg, '(looks friendly but whispers)', 740, 385, { size: '14', color: '#9b59b6' });
+        addToGroup(groups, 4, pplLabel);
+        addToGroup(groups, 4, pplSub);
+
+        const youLabel = addSvgText(svg, 'YOU', 450, 235, { size: '24', color: '#8B6914', weight: '700' });
+        addToGroup(groups, 4, youLabel);
+
+        // G5: Stars and atmospheric details
+        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 450, 55, 12, 4, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 310, 60, 9, 3, starOpts));
+        addRoughToGroup(groups, 5, svg, roughStar(rc, 590, 60, 9, 3, starOpts));
+        // Ground/floor line
+        addRoughToGroup(groups, 5, svg, rc.line(50, 410, 850, 410, {
+            stroke: '#d4b896', strokeWidth: 1.5, roughness: 3
+        }));
+        addRoughToGroup(groups, 5, svg, rc.line(100, 415, 800, 415, {
+            stroke: '#e0d0b8', strokeWidth: 1, roughness: 2.5
+        }));
+        // Sparkle dots
+        addRoughToGroup(groups, 5, svg, rc.circle(350, 90, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(550, 85, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(420, 400, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+        addRoughToGroup(groups, 5, svg, rc.circle(480, 395, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
+
+        // G6: Label bubble
+        addRoughToGroup(groups, 6, svg, rc.ellipse(450, 450, 460, 55, {
+            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+        }));
+
+        const labels = [];
+        labels.push(addSvgText(svg, 'Whisperers from BOTH: jinn AND humans!', 450, 450, { size: '22', color: '#BF8C00', weight: '700' }));
+
+        return { svg, groups, labels };
+    }
+
+    const buildFunctions = [buildSlide0, buildSlide1, buildSlide2, buildSlide3, buildSlide4, buildSlide5];
+
+    // ===== PLAY SLIDE ANIMATION =====
+    async function playSlideAnimation(idx) {
+        const container = document.getElementById('slideDrawing' + idx);
+        const penCursor = document.getElementById('penCursor' + idx);
+        const data = slideData[idx];
+
+        // Abort any previous typewriter for this slide
+        typewriterAbortFlags[idx] = true;
+        await new Promise(r => setTimeout(r, 50));
+        typewriterAbortFlags[idx] = false;
+
+        // Reset bottom text
+        const badge = document.getElementById('badge' + idx);
+        const arabic = document.getElementById('arabic' + idx);
+        const translit = document.getElementById('translit' + idx);
+        const kid = document.getElementById('kid' + idx);
+        badge.style.opacity = '0';
+        arabic.textContent = '';
+        translit.textContent = '';
+        kid.textContent = '';
+
+        // Build scene
+        const { svg, groups, labels } = buildFunctions[idx](container);
+        hideAllPaths(groups);
+
+        // Timing per group
+        const timings = [800, 600, 500, 500, 400, 400, 350, 350];
+        const gap = 150;
+
+        let textStarted = false;
+        let textPromise = null;
+
+        for (let i = 0; i < groups.length; i++) {
+            if (!groups[i] || groups[i].length === 0) continue;
+            await animateGroup(groups[i], timings[i] || 500, penCursor, svg, [VB_W, VB_H]);
+
+            // Start bottom text after group 2
+            if (i === 2 && !textStarted) {
+                textStarted = true;
+                textPromise = (async () => {
+                    badge.style.opacity = '1';
+                    await new Promise(r => setTimeout(r, 200 / speed));
+                    await typewrite(arabic, data.arabic, { charDelay: 55, rtl: true }, idx);
+                    await new Promise(r => setTimeout(r, 150 / speed));
+                    await typewrite(translit, data.translit, { charDelay: 35 }, idx);
+                    await new Promise(r => setTimeout(r, 150 / speed));
+                    await typewrite(kid, data.kid, { charDelay: 20 }, idx);
+                })();
+            }
+
+            if (i < groups.length - 1) {
+                await new Promise(r => setTimeout(r, gap / speed));
+            }
+        }
+
+        // Fade in labels
+        hidePen(penCursor);
+        await new Promise(r => setTimeout(r, 100));
+        labels.forEach(el => {
+            el.style.transition = `opacity ${0.5/speed}s ease`;
+            el.style.opacity = '1';
+        });
+
+        if (textPromise) await textPromise;
+
+        slideAnimations[idx] = 'done';
+    }
+
+    function triggerSlideAnimation(idx) {
+        // Always replay when navigating
+        slideAnimations[idx] = 'playing';
+        playSlideAnimation(idx);
+    }
+
+    // Auto-play first slide on load
+    window.addEventListener('load', () => {
+        setTimeout(() => triggerSlideAnimation(0), 500);
+    });
+
+    </script>
+</body>
+</html>

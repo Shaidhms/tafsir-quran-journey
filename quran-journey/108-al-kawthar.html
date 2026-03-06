@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Kawthar - Abundance | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+
+        /* ===== NAV BAR ===== */
+        .nav-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 24px; background: #0d0d0d; border-bottom: 1px solid #1a1a1a;
+            position: sticky; top: 0; z-index: 200;
+        }
+        .nav-bar .logo { color: #c9a84c; font-weight: 700; font-size: 1.1em; text-decoration: none; }
+        .nav-bar .progress { color: #888; font-size: 0.9em; }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #1a2a0a 0%, #2a4a1b 50%, #1a2a0a 100%);
+            padding: 70px 20px 60px; text-align: center;
+            border-bottom: 2px solid #3a5c1a; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 70%);
+        }
+        .hero .arabic-title {
+            font-family: 'Amiri', serif; font-size: 4em; color: #fff;
+            direction: rtl; margin-bottom: 10px; position: relative;
+        }
+        .hero h1 {
+            font-family: 'Caveat', cursive; font-size: 2.8em; color: #c9a84c;
+            margin-bottom: 8px; position: relative;
+        }
+        .hero .subtitle {
+            font-size: 1.05em; color: #8ab4f8; font-weight: 300;
+            max-width: 500px; margin: 0 auto 18px; position: relative;
+        }
+        .hero .badge {
+            display: inline-block; padding: 8px 22px;
+            background: rgba(201,168,76,0.15); border: 1px solid #c9a84c;
+            border-radius: 30px; color: #c9a84c; font-size: 0.85em; position: relative;
+        }
+
+        /* ===== VIEW TOGGLE ===== */
+        .view-toggle {
+            display: flex; justify-content: center; background: #111;
+            border-bottom: 1px solid #222;
+        }
+        .view-toggle button {
+            background: none; border: none; color: #888;
+            padding: 16px 30px; font-size: 1em; font-family: 'Inter', sans-serif;
+            cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s;
+        }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+
+        /* ===== SECTIONS VISIBILITY ===== */
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+
+        /* ===== CAROUSEL ===== */
+        .carousel-wrapper {
+            max-width: 900px; margin: 40px auto; padding: 0 20px; position: relative;
+        }
+        .carousel-intro { text-align: center; margin-bottom: 25px; }
+        .carousel-intro h2 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 6px; }
+        .carousel-intro p { color: #888; font-size: 0.95em; }
+
+        .carousel-container {
+            position: relative; overflow: hidden; border-radius: 20px;
+            border: 3px solid #333; box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .carousel-track { display: flex; transition: transform 0.5s ease; }
+        .carousel-slide {
+            min-width: 100%; display: flex; flex-direction: column;
+        }
+
+        /* ===== SLIDE DRAWING AREA ===== */
+        .slide-drawing {
+            width: 100%; aspect-ratio: 16 / 9; background: #FFF9F0;
+            position: relative; overflow: hidden;
+        }
+        .slide-drawing .sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PEN CURSOR ===== */
+        .penCursor {
+            position: absolute; pointer-events: none; opacity: 0; z-index: 100;
+            width: 48px; height: 48px; left: 0; top: 0;
+        }
+        .penCursor svg { width: 48px; height: 48px; display: block; }
+
+        /* ===== SLIDE BOTTOM PANEL ===== */
+        .slide-bottom {
+            background: #FFF3E0; padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0; text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em;
+            margin-bottom: 10px; min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e;
+            line-height: 1.5; min-height: 2em;
+        }
+
+        /* ===== TYPEWRITER CURSOR ===== */
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+        /* ===== CAROUSEL NAVIGATION ===== */
+        .carousel-nav {
+            position: absolute; top: 35%; transform: translateY(-50%);
+            background: rgba(44,62,80,0.8); border: 2px solid #e67e22; color: #fff;
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.3em; z-index: 10; transition: all 0.3s;
+        }
+        .carousel-nav:hover { background: #e67e22; }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+
+        .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .carousel-dot {
+            width: 12px; height: 12px; border-radius: 50%; background: #333;
+            cursor: pointer; transition: all 0.3s; border: 2px solid #555;
+        }
+        .carousel-dot.active { background: #e67e22; border-color: #e67e22; transform: scale(1.2); }
+
+        /* ===== CONTROLS ===== */
+        .slide-controls {
+            display: flex; justify-content: center; align-items: center; gap: 14px;
+            margin-top: 18px; flex-wrap: wrap;
+        }
+        .slide-controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px; font-family: 'Inter', sans-serif;
+            font-size: 0.95em; cursor: pointer; transition: all 0.3s;
+        }
+        .slide-controls button:hover { background: #c9a84c; color: #000; }
+        .speed-control {
+            color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .speed-control input { width: 100px; }
+
+        /* ===== DEEP DIVE ===== */
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section {
+            margin: 35px 0; padding: 35px; background: #111;
+            border-radius: 16px; border: 1px solid #222;
+        }
+        .section h2 {
+            font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c;
+            margin-bottom: 18px; border-bottom: 1px solid #222; padding-bottom: 12px;
+        }
+        .section h3 {
+            font-size: 1.15em; color: #e67e22; margin: 22px 0 10px;
+        }
+        .section p, .section li {
+            color: #ccc; line-height: 1.9; margin-bottom: 10px;
+        }
+        .section ul, .section ol { padding-left: 20px; }
+        .section blockquote {
+            border-left: 3px solid #c9a84c; padding: 12px 20px; margin: 16px 0;
+            background: rgba(201,168,76,0.06); border-radius: 0 8px 8px 0;
+            font-style: italic; color: #bbb;
+        }
+
+        .quick-facts-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 14px; margin-top: 16px;
+        }
+        .fact-card {
+            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+            padding: 16px; text-align: center;
+        }
+        .fact-card .label { color: #888; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.5px; }
+        .fact-card .value { color: #c9a84c; font-size: 1.3em; font-weight: 700; margin-top: 4px; }
+
+        .verse-breakdown {
+            margin: 16px 0; padding: 20px; background: #1a1a1a;
+            border-radius: 12px; border: 1px solid #2a2a2a;
+        }
+        .verse-breakdown .verse-ar {
+            font-family: 'Amiri', serif; font-size: 1.6em; color: #fff;
+            direction: rtl; text-align: center; margin-bottom: 10px;
+        }
+        .word-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+            margin-top: 10px;
+        }
+        .word-card {
+            background: #222; border: 1px solid #333; border-radius: 10px;
+            padding: 10px 16px; text-align: center; min-width: 90px;
+        }
+        .word-card .ar { font-family: 'Amiri', serif; font-size: 1.3em; color: #c9a84c; direction: rtl; }
+        .word-card .translit { font-size: 0.75em; color: #8ab4f8; font-style: italic; }
+        .word-card .meaning { font-size: 0.8em; color: #aaa; margin-top: 2px; }
+
+        .root-box {
+            display: inline-block; background: #1a1a1a; border: 1px solid #333;
+            border-radius: 10px; padding: 8px 16px; margin: 4px;
+        }
+        .root-box .ar { font-family: 'Amiri', serif; color: #c9a84c; font-size: 1.1em; }
+        .root-box .en { color: #aaa; font-size: 0.85em; }
+
+        .lessons-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;
+        }
+        .lesson-card {
+            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px;
+            padding: 20px; text-align: center;
+        }
+        .lesson-card .num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #e67e22; color: #fff; font-weight: 700; margin-bottom: 10px;
+        }
+        .lesson-card p { color: #bbb; font-size: 0.95em; line-height: 1.6; margin: 0; }
+
+        .sources { color: #666; font-size: 0.85em; margin-top: 30px; text-align: center; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center; padding: 40px 20px; border-top: 1px solid #1a1a1a;
+            color: #555; font-size: 0.85em;
+        }
+        .footer a { color: #c9a84c; text-decoration: none; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .hero .arabic-title { font-size: 2.8em; }
+            .hero h1 { font-size: 2em; }
+            .slide-bottom { padding: 18px 14px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .section { padding: 22px 16px; }
+            .carousel-nav { width: 36px; height: 36px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV BAR -->
+    <nav class="nav-bar">
+        <a class="logo" href="#">Tafsir - Quran Journey</a>
+        <span class="progress">Surah 108 of 114</span>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="arabic-title">&rlm;&#1575;&#1604;&#1603;&#1608;&#1579;&#1585;</div>
+        <h1>Al-Kawthar</h1>
+        <p class="subtitle">Abundance - The Shortest Surah with the Biggest Promise</p>
+        <span class="badge">Makki Surah &middot; 3 Verses &middot; 10 Words</span>
+    </section>
+
+    <!-- VIEW TOGGLE -->
+    <div class="view-toggle">
+        <button class="active" onclick="showView('visual')">Visual Story</button>
+        <button onclick="showView('deep')">Deep Dive</button>
+    </div>
+
+    <!-- ===== CAROUSEL SECTION ===== -->
+    <div class="carousel-section" id="carouselSection">
+        <div class="carousel-wrapper">
+            <div class="carousel-intro">
+                <h2>The Story of Al-Kawthar</h2>
+                <p>Watch the doodles draw themselves - 3 verses, 3 scenes</p>
+            </div>
+
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+
+                    <!-- SLIDE 1 -->
+                    <div class="carousel-slide" id="slide0">
+                        <div class="slide-drawing" id="drawing0">
+                            <div class="penCursor" id="pen0">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge0">1</div>
+                            <div class="slide-arabic-text" id="arabic0"></div>
+                            <div class="slide-translit-text" id="translit0"></div>
+                            <div class="slide-kid-text" id="kid0"></div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2 -->
+                    <div class="carousel-slide" id="slide1">
+                        <div class="slide-drawing" id="drawing1">
+                            <div class="penCursor" id="pen1">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge1">2</div>
+                            <div class="slide-arabic-text" id="arabic1"></div>
+                            <div class="slide-translit-text" id="translit1"></div>
+                            <div class="slide-kid-text" id="kid1"></div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3 -->
+                    <div class="carousel-slide" id="slide2">
+                        <div class="slide-drawing" id="drawing2">
+                            <div class="penCursor" id="pen2">
+                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
+                                    <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
+                                    <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
+                                    <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
+                                    <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
+                                    <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
+                                    <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge" id="badge2">3</div>
+                            <div class="slide-arabic-text" id="arabic2"></div>
+                            <div class="slide-translit-text" id="translit2"></div>
+                            <div class="slide-kid-text" id="kid2"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="carousel-nav carousel-prev" onclick="prevSlide()">&lsaquo;</button>
+                <button class="carousel-nav carousel-next" onclick="nextSlide()">&rsaquo;</button>
+            </div>
+
+            <div class="carousel-dots" id="carouselDots">
+                <div class="carousel-dot active" onclick="goToSlide(0)"></div>
+                <div class="carousel-dot" onclick="goToSlide(1)"></div>
+                <div class="carousel-dot" onclick="goToSlide(2)"></div>
+            </div>
+
+            <div class="slide-controls">
+                <button onclick="replayCurrentSlide()">Replay</button>
+                <div class="speed-control">
+                    <span>Speed:</span>
+                    <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+                    <span id="speedLabel">1x</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DEEP DIVE SECTION ===== -->
+    <div class="deep-dive-section" id="deepDiveSection">
+        <div class="container">
+
+            <!-- Quick Facts -->
+            <div class="section">
+                <h2>Quick Facts</h2>
+                <div class="quick-facts-grid">
+                    <div class="fact-card"><div class="label">Surah</div><div class="value">108</div></div>
+                    <div class="fact-card"><div class="label">Verses</div><div class="value">3</div></div>
+                    <div class="fact-card"><div class="label">Words</div><div class="value">10</div></div>
+                    <div class="fact-card"><div class="label">Revealed</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Distinction</div><div class="value">Shortest</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value">Abundance</div></div>
+                </div>
+            </div>
+
+            <!-- Story Behind -->
+            <div class="section">
+                <h2>The Story Behind This Surah</h2>
+                <p>When the Prophet Muhammad (peace be upon him) lost his son, his enemies rejoiced. A man named Al-'As ibn Wa'il (and in other narrations, Abu Lahab's son) mocked him publicly, calling him <em>abtar</em> -- meaning "cut off," someone whose legacy would die because he had no surviving sons to carry his name.</p>
+
+                <p>This was devastating in 7th-century Arabia, where a man's legacy was tied to his male offspring. The Prophet was grieving, and his enemies were using his pain against him.</p>
+
+                <p>Then Allah revealed these three verses -- just 10 words -- that flipped everything on its head.</p>
+
+                <h3>The River of Al-Kawthar</h3>
+                <blockquote>
+                    Anas ibn Malik reported: The Messenger of Allah (peace be upon him) said, "I was shown Al-Kawthar, and it is a river in Paradise. Its banks are domes of hollow pearls, and its mud is musk." He struck it with his hand and said, "Do you know what this is? This is Al-Kawthar which your Lord has given you."
+                    <br><br>-- Sahih Muslim 400, Tirmidhi 3361
+                </blockquote>
+
+                <p>The Prophet was taken on a journey (Isra and Mi'raj) where he saw this river with his own eyes. Its water was whiter than milk, sweeter than honey, and its cups were as numerous as the stars.</p>
+
+                <h3>The Ultimate Response</h3>
+                <p>Allah did not just console His Prophet. He made a prophecy: "YOUR hater is the one who is cut off." Today, 2 billion people follow Prophet Muhammad. His enemies? History has forgotten their names. The very word they used to mock him -- <em>abtar</em> -- became their own description.</p>
+            </div>
+
+            <!-- Verse-by-Verse Breakdown -->
+            <div class="section">
+                <h2>Verse-by-Verse Breakdown</h2>
+
+                <!-- Verse 1 -->
+                <div class="verse-breakdown">
+                    <div class="verse-ar">&#1573;&#1616;&#1606;&#1617;&#1614;&#1575; &#1571;&#1614;&#1593;&#1618;&#1591;&#1614;&#1610;&#1618;&#1606;&#1614;&#1575;&#1603;&#1614; &#1575;&#1604;&#1618;&#1603;&#1614;&#1608;&#1618;&#1579;&#1614;&#1585;&#1614;</div>
+                    <h3>Verse 1: "Indeed, We have given you Al-Kawthar"</h3>
+                    <div class="word-grid">
+                        <div class="word-card">
+                            <div class="ar">&#1573;&#1616;&#1606;&#1617;&#1614;&#1575;</div>
+                            <div class="translit">inna</div>
+                            <div class="meaning">Indeed We</div>
+                        </div>
+                        <div class="word-card">
+                            <div class="ar">&#1571;&#1614;&#1593;&#1618;&#1591;&#1614;&#1610;&#1618;&#1606;&#1614;&#1575;&#1603;&#1614;</div>
+                            <div class="translit">a'taynaka</div>
+                            <div class="meaning">have given you</div>
+                        </div>
+                        <div class="word-card">
+                            <div class="ar">&#1575;&#1604;&#1618;&#1603;&#1614;&#1608;&#1618;&#1579;&#1614;&#1585;&#1614;</div>
+                            <div class="translit">al-kawthar</div>
+                            <div class="meaning">the abundance</div>
+                        </div>
+                    </div>
+                    <p style="margin-top:14px; font-size:0.9em; color:#aaa;">Notice "a'taynaka" packs three meanings into one word: "We" + "gave" + "you." The royal "We" (Allah referring to Himself) personally giving a gift to "you" (the Prophet). Al-Kawthar comes from the root K-TH-R meaning "abundance beyond measure."</p>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-breakdown">
+                    <div class="verse-ar">&#1601;&#1614;&#1589;&#1614;&#1604;&#1617;&#1616; &#1604;&#1616;&#1585;&#1614;&#1576;&#1617;&#1616;&#1603;&#1614; &#1608;&#1614;&#1575;&#1606;&#1618;&#1581;&#1614;&#1585;&#1618;</div>
+                    <h3>Verse 2: "So pray to your Lord and sacrifice"</h3>
+                    <div class="word-grid">
+                        <div class="word-card">
+                            <div class="ar">&#1601;&#1614;&#1589;&#1614;&#1604;&#1617;&#1616;</div>
+                            <div class="translit">fa-salli</div>
+                            <div class="meaning">So pray</div>
+                        </div>
+                        <div class="word-card">
+                            <div class="ar">&#1604;&#1616;&#1585;&#1614;&#1576;&#1617;&#1616;&#1603;&#1614;</div>
+                            <div class="translit">li-Rabbika</div>
+                            <div class="meaning">to your Lord</div>
+                        </div>
+                        <div class="word-card">
+                            <div class="ar">&#1608;&#1614;&#1575;&#1606;&#1618;&#1581;&#1614;&#1585;&#1618;</div>
+                            <div class="translit">wanhar</div>
+                            <div class="meaning">and sacrifice</div>
+                        </div>
+                    </div>
+                    <p style="margin-top:14px; font-size:0.9em; color:#aaa;">The "fa" (so) connects directly to verse 1: BECAUSE you've been given so much, the response is prayer and sacrifice. "Rabbika" (YOUR Lord) makes it personal. The proper response to abundance is gratitude through worship and generosity toward others.</p>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-breakdown">
+                    <div class="verse-ar">&#1573;&#1616;&#1606;&#1617;&#1614; &#1588;&#1614;&#1575;&#1606;&#1616;&#1574;&#1614;&#1603;&#1614; &#1607;&#1615;&#1608;&#1614; &#1575;&#1604;&#1618;&#1571;&#1614;&#1576;&#1618;&#1578;&#1614;&#1585;&#1615;</div>
+                    <h3>Verse 3: "Indeed, your hater -- he is the one cut off"</h3>
+                    <div class="word-grid">
+                        <div class="word-card">
+                            <div class="ar">&#1573;&#1616;&#1606;&#1617;&#1614;</div>
+                            <div class="translit">inna</div>
+                            <div class="meaning">Indeed</div>
+                        </div>
+                        <div class="word-card">
+                            <div class="ar">&#1588;&#1614;&#1575;&#1606;&#1616;&#1574;&#1614;&#1603;&#1614;</div>
+                            <div class="translit">shani'aka</div>
+                            <div class="meaning">your hater</div>
+                        </div>
+                        <div class="word-card">
+                            <div class="ar">&#1607;&#1615;&#1608;&#1614;</div>
+                            <div class="translit">huwa</div>
+                            <div class="meaning">he is</div>
+                        </div>
+                        <div class="word-card">
+                            <div class="ar">&#1575;&#1604;&#1618;&#1571;&#1614;&#1576;&#1618;&#1578;&#1614;&#1585;&#1615;</div>
+                            <div class="translit">al-abtar</div>
+                            <div class="meaning">the one cut off</div>
+                        </div>
+                    </div>
+                    <p style="margin-top:14px; font-size:0.9em; color:#aaa;">"Shani'aka" means someone who hates you intensely, out of spite. "Huwa" (he) adds emphasis -- it's HIM, not you. "Al-Abtar" -- the exact insult hurled at the Prophet -- is turned back at the enemy. The one without legacy, without continuity, without anyone to remember him.</p>
+                </div>
+            </div>
+
+            <!-- Arabic Learning -->
+            <div class="section">
+                <h2>Arabic Learning Corner</h2>
+
+                <h3>Root: K-TH-R (&#1603; &#1579; &#1585;) -- Abundance</h3>
+                <p>This root appears throughout the Quran in different forms, all carrying the meaning of "much, many, abundance":</p>
+                <div style="display:flex; flex-wrap:wrap; gap:8px; margin:14px 0;">
+                    <div class="root-box"><span class="ar">&#1603;&#1579;&#1610;&#1585;</span><br><span class="en">katheer - much/many</span></div>
+                    <div class="root-box"><span class="ar">&#1603;&#1608;&#1579;&#1585;</span><br><span class="en">kawthar - overflowing good</span></div>
+                    <div class="root-box"><span class="ar">&#1571;&#1603;&#1579;&#1585;</span><br><span class="en">akthar - most/more</span></div>
+                    <div class="root-box"><span class="ar">&#1578;&#1603;&#1575;&#1579;&#1585;</span><br><span class="en">takathur - rivalry in piling up</span></div>
+                </div>
+
+                <h3>Pronoun Power: A'taynaka</h3>
+                <p>Arabic packs incredible meaning into single words. The word <strong>a'taynaka</strong> (&#1571;&#1614;&#1593;&#1618;&#1591;&#1614;&#1610;&#1618;&#1606;&#1614;&#1575;&#1603;&#1614;) contains:</p>
+                <ul>
+                    <li><strong>a'ta</strong> -- the root verb "to give"</li>
+                    <li><strong>na</strong> -- "We" (the speaker, Allah)</li>
+                    <li><strong>ka</strong> -- "you" (the one receiving)</li>
+                </ul>
+                <p>Three concepts, one word: "We gave you." This is the beauty and efficiency of Quranic Arabic.</p>
+            </div>
+
+            <!-- Key Lessons -->
+            <div class="section">
+                <h2>Key Lessons</h2>
+                <div class="lessons-grid">
+                    <div class="lesson-card">
+                        <div class="num">1</div>
+                        <p>Allah's gifts are beyond counting. Al-Kawthar isn't just a river -- it's every good thing given to the Prophet and, by extension, to those who follow him.</p>
+                    </div>
+                    <div class="lesson-card">
+                        <div class="num">2</div>
+                        <p>Gratitude has two expressions: worship (prayer) and generosity (sacrifice). When you receive, you give back -- to Allah in prayer, to people in charity.</p>
+                    </div>
+                    <div class="lesson-card">
+                        <div class="num">3</div>
+                        <p>Your haters will be forgotten. The people who mocked the Prophet are nameless footnotes. His legacy? 2 billion followers and counting.</p>
+                    </div>
+                    <div class="lesson-card">
+                        <div class="num">4</div>
+                        <p>10 words can change everything. The shortest surah in the Quran carries one of the most powerful messages: abundance is real, and the enemy's plan always fails.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sources -->
+            <div class="section">
+                <h2>Sources</h2>
+                <p>Tafsir Ibn Kathir, Tafsir As-Sa'di, Tafsir Al-Qurtubi, Sahih Muslim 400, Jami' at-Tirmidhi 3361</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p><a href="#">Quran Journey</a> -- Learning the Quran, one surah at a time.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+
+    <script>
+    // ===== VIEW TOGGLE =====
+    function showView(view) {
+        const btns = document.querySelectorAll('.view-toggle button');
+        btns.forEach(b => b.classList.remove('active'));
+        if (view === 'visual') {
+            btns[0].classList.add('active');
+            document.getElementById('carouselSection').classList.remove('hidden');
+            document.getElementById('deepDiveSection').classList.remove('visible');
+        } else {
+            btns[1].classList.add('active');
+            document.getElementById('carouselSection').classList.add('hidden');
+            document.getElementById('deepDiveSection').classList.add('visible');
+        }
+    }
+
+    // ===== CAROUSEL =====
+    let currentSlide = 0;
+    const totalSlides = 3;
+    const slideBuilt = [false, false, false];
+    const slideAnimIds = [null, null, null];
+    let speed = 1;
+
+    const speedSlider = document.getElementById('speedSlider');
+    const speedLabel = document.getElementById('speedLabel');
+    speedSlider.addEventListener('input', () => {
+        speed = parseFloat(speedSlider.value);
+        speedLabel.textContent = speed + 'x';
+    });
+
+    function goToSlide(idx) {
+        currentSlide = idx;
+        document.getElementById('carouselTrack').style.transform = `translateX(-${idx * 100}%)`;
+        document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === idx);
+        });
+        if (!slideBuilt[idx]) {
+            slideBuilt[idx] = true;
+            setTimeout(() => playSlide(idx), 400);
+        }
+    }
+    function nextSlide() { goToSlide((currentSlide + 1) % totalSlides); }
+    function prevSlide() { goToSlide((currentSlide - 1 + totalSlides) % totalSlides); }
+    function replayCurrentSlide() {
+        slideBuilt[currentSlide] = false;
+        resetSlideText(currentSlide);
+        const oldSvg = document.querySelector(`#drawing${currentSlide} .sceneSvg`);
+        if (oldSvg) oldSvg.remove();
+        slideBuilt[currentSlide] = true;
+        playSlide(currentSlide);
+    }
+
+    // ===== SLIDE DATA =====
+    const slideData = [
+        {
+            arabic: '\u0625\u0650\u0646\u0651\u064E\u0627 \u0623\u064E\u0639\u0652\u0637\u064E\u064A\u0652\u0646\u064E\u0627\u0643\u064E \u0627\u0644\u0652\u0643\u064E\u0648\u0652\u062B\u064E\u0631\u064E',
+            translit: "Inna a'tayna kal-kawthar",
+            kid: 'Allah says "WE gave YOU" -- the King of the universe is personally giving the Prophet a gift. Not just any gift. Al-Kawthar means SO MUCH good that it overflows!'
+        },
+        {
+            arabic: '\u0641\u064E\u0635\u064E\u0644\u0651\u0650 \u0644\u0650\u0631\u064E\u0628\u0651\u0650\u0643\u064E \u0648\u064E\u0627\u0646\u0652\u062D\u064E\u0631\u0652',
+            translit: 'Fasalli li Rabbika wanhar',
+            kid: 'So what do you do when Allah gives you SO much? Two things: PRAY (connect with Him) and SACRIFICE (share with others). The response to abundance is gratitude!'
+        },
+        {
+            arabic: '\u0625\u0650\u0646\u0651\u064E \u0634\u064E\u0627\u0646\u0650\u0626\u064E\u0643\u064E \u0647\u0650\u0648\u064E \u0627\u0644\u0652\u0623\u064E\u0628\u0652\u062A\u064E\u0631\u0650',
+            translit: "Inna shani'aka huwal-abtar",
+            kid: 'People mocked the Prophet, saying his legacy would die. Allah\'s response? "YOUR hater is the one who is cut off!" Today 2 billion people follow him. His enemies? No one remembers their names.'
+        }
+    ];
+
+    // ===== ANIMATION ENGINE (from PoC) =====
+
+    function getPathLength(el) {
+        if (el.getTotalLength) return el.getTotalLength();
+        return 300;
+    }
+
+    function hideAllPaths(groups) {
+        groups.forEach(group => {
+            group.forEach(el => {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                } else {
+                    el.style.opacity = '0';
+                }
+            });
+        });
+    }
+
+    function animateGroup(group, duration, penCursor, svgEl, slideIdx) {
+        return new Promise(resolve => {
+            const startTime = performance.now();
+            const elements = group.map(el => {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return { el, len, hasPath: true };
+                } else {
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+            });
+
+            function tick(now) {
+                const elapsed = (now - startTime) * speed;
+                const t = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - t, 3);
+
+                elements.forEach(({ el, len, hasPath }) => {
+                    if (hasPath) {
+                        el.style.strokeDashoffset = len * (1 - eased);
+                        if (eased > 0.6) {
+                            el.style.fillOpacity = (eased - 0.6) / 0.4;
+                        }
+                    } else {
+                        el.style.opacity = eased;
+                    }
+                });
+
+                if (t < 1) {
+                    for (let j = elements.length - 1; j >= 0; j--) {
+                        if (elements[j].hasPath) {
+                            try {
+                                const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                if (pt && isFinite(pt.x) && isFinite(pt.y)) {
+                                    movePen(penCursor, svgEl, pt.x, pt.y);
+                                    break;
+                                }
+                            } catch (e) {}
+                        }
+                    }
+                    slideAnimIds[slideIdx] = requestAnimationFrame(tick);
+                } else {
+                    elements.forEach(({ el, hasPath }) => {
+                        if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                        else { el.style.opacity = '1'; }
+                    });
+                    resolve();
+                }
+            }
+            slideAnimIds[slideIdx] = requestAnimationFrame(tick);
+        });
+    }
+
+    function movePen(penCursor, svgEl, svgX, svgY) {
+        if (!svgEl) return;
+        const rect = svgEl.getBoundingClientRect();
+        const scaleX = rect.width / 900;
+        const scaleY = rect.height / 506;
+        penCursor.style.opacity = '1';
+        penCursor.style.left = (svgX * scaleX - 13) + 'px';
+        penCursor.style.top = (svgY * scaleY - 37) + 'px';
+    }
+
+    function hidePen(penCursor) { penCursor.style.opacity = '0'; }
+
+    // ===== TYPEWRITER =====
+    let typewriterAborts = [false, false, false];
+
+    function typewrite(element, text, opts, slideIdx) {
+        return new Promise(resolve => {
+            const charDelay = opts.charDelay || 40;
+            const isRTL = opts.rtl || false;
+            element.textContent = '';
+            const cursor = document.createElement('span');
+            cursor.className = 'typewriter-cursor' + (isRTL ? ' rtl' : '');
+            element.appendChild(cursor);
+            let i = 0;
+            function typeNext() {
+                if (typewriterAborts[slideIdx]) { resolve(); return; }
+                if (i < text.length) {
+                    element.insertBefore(document.createTextNode(text[i]), cursor);
+                    i++;
+                    setTimeout(typeNext, charDelay / speed);
+                } else {
+                    setTimeout(() => { cursor.remove(); resolve(); }, 400 / speed);
+                }
+            }
+            typeNext();
+        });
+    }
+
+    function resetSlideText(idx) {
+        const badge = document.getElementById('badge' + idx);
+        const arabic = document.getElementById('arabic' + idx);
+        const translit = document.getElementById('translit' + idx);
+        const kid = document.getElementById('kid' + idx);
+        badge.style.opacity = '0';
+        arabic.textContent = '';
+        translit.textContent = '';
+        kid.textContent = '';
+    }
+
+    async function animateBottomText(idx) {
+        const data = slideData[idx];
+        const badge = document.getElementById('badge' + idx);
+        const arabic = document.getElementById('arabic' + idx);
+        const translit = document.getElementById('translit' + idx);
+        const kid = document.getElementById('kid' + idx);
+
+        badge.style.opacity = '1';
+        await new Promise(r => setTimeout(r, 200 / speed));
+        await typewrite(arabic, data.arabic, { charDelay: 55, rtl: true }, idx);
+        await new Promise(r => setTimeout(r, 150 / speed));
+        await typewrite(translit, data.translit, { charDelay: 35 }, idx);
+        await new Promise(r => setTimeout(r, 150 / speed));
+        await typewrite(kid, data.kid, { charDelay: 22 }, idx);
+    }
+
+    // ===== SCENE BUILDERS =====
+
+    function createSvgBase(container) {
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.classList.add('sceneSvg');
+        svg.setAttribute('viewBox', '0 0 900 506');
+        svg.setAttribute('xmlns', svgNS);
+        container.appendChild(svg);
+
+        const rc = rough.svg(svg);
+
+        // Dot grid background
+        const defs = document.createElementNS(svgNS, 'defs');
+        const pattern = document.createElementNS(svgNS, 'pattern');
+        pattern.setAttribute('id', 'dotgrid-' + Math.random().toString(36).substr(2, 5));
+        pattern.setAttribute('width', '20');
+        pattern.setAttribute('height', '20');
+        pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+        const dot = document.createElementNS(svgNS, 'circle');
+        dot.setAttribute('cx', '10'); dot.setAttribute('cy', '10');
+        dot.setAttribute('r', '0.8'); dot.setAttribute('fill', '#e0d8c8');
+        pattern.appendChild(dot);
+        defs.appendChild(pattern);
+        svg.appendChild(defs);
+
+        const bg = document.createElementNS(svgNS, 'rect');
+        bg.setAttribute('width', '900'); bg.setAttribute('height', '506');
+        bg.setAttribute('fill', '#FFF9F0');
+        svg.appendChild(bg);
+
+        const grid = document.createElementNS(svgNS, 'rect');
+        grid.setAttribute('width', '900'); grid.setAttribute('height', '506');
+        grid.setAttribute('fill', `url(#${pattern.getAttribute('id')})`);
+        svg.appendChild(grid);
+
+        return { svg, rc, svgNS };
+    }
+
+    function addRoughToGroup(groups, groupIndex, roughNode, svg) {
+        if (!groups[groupIndex]) groups[groupIndex] = [];
+        const children = roughNode.querySelectorAll('path, line, circle, ellipse, rect, polygon');
+        children.forEach(child => groups[groupIndex].push(child));
+        svg.appendChild(roughNode);
+    }
+
+    function addTextLabel(svg, text, x, y, opts) {
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const el = document.createElementNS(svgNS, 'text');
+        el.setAttribute('x', x); el.setAttribute('y', y);
+        el.setAttribute('text-anchor', opts.anchor || 'middle');
+        el.setAttribute('dominant-baseline', 'middle');
+        el.setAttribute('font-family', opts.fontFamily || 'Caveat, cursive');
+        el.setAttribute('font-size', opts.size || '22');
+        el.setAttribute('font-weight', opts.weight || '600');
+        el.setAttribute('fill', opts.color || '#2c3e50');
+        if (opts.rtl) el.setAttribute('direction', 'rtl');
+        el.textContent = text;
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.5s ease';
+        svg.appendChild(el);
+        return el;
+    }
+
+    function roughStar(rc, cx, cy, outerR, innerR, opts) {
+        const pts = [];
+        for (let i = 0; i < 10; i++) {
+            const r = i % 2 === 0 ? outerR : innerR;
+            const a = (Math.PI / 5) * i - Math.PI / 2;
+            pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+        }
+        return rc.polygon(pts, opts);
+    }
+
+    // ===== SLIDE 1: Overflowing River =====
+    function buildSlide0(container) {
+        const { svg, rc, svgNS } = createSvgBase(container);
+        const groups = [];
+
+        // GROUP 0: Layered mountains in background
+        addRoughToGroup(groups, 0, rc.polygon([[0,180],[100,100],[200,140],[320,60],[440,120],[520,80],[620,130],[720,70],[820,110],[900,150],[900,220],[0,220]], {
+            stroke: '#90A4AE', strokeWidth: 2, fill: '#CFD8DC', fillStyle: 'hachure', roughness: 2.5, hachureGap: 6, hachureAngle: 70
+        }), svg);
+        addRoughToGroup(groups, 0, rc.polygon([[0,200],[150,140],[280,170],[400,110],[500,155],[650,100],[780,150],[900,120],[900,240],[0,240]], {
+            stroke: '#78909C', strokeWidth: 2, fill: '#B0BEC5', fillStyle: 'hachure', roughness: 2, hachureGap: 5, hachureAngle: 55
+        }), svg);
+        // Snow caps on peaks
+        addRoughToGroup(groups, 0, rc.polygon([[305,60],[320,60],[335,75],[305,75]], {
+            stroke: 'none', fill: '#ECEFF1', fillStyle: 'solid', roughness: 1
+        }), svg);
+        addRoughToGroup(groups, 0, rc.polygon([[505,80],[520,80],[535,95],[505,95]], {
+            stroke: 'none', fill: '#ECEFF1', fillStyle: 'solid', roughness: 1
+        }), svg);
+        addRoughToGroup(groups, 0, rc.polygon([[705,70],[720,70],[735,85],[705,85]], {
+            stroke: 'none', fill: '#ECEFF1', fillStyle: 'solid', roughness: 1
+        }), svg);
+
+        // GROUP 1: Clouds and birds in the sky
+        // Fluffy clouds
+        addRoughToGroup(groups, 1, rc.ellipse(120, 55, 100, 40, { stroke: '#B0BEC5', fill: '#ECEFF1', fillStyle: 'solid', roughness: 2, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 1, rc.ellipse(155, 48, 60, 30, { stroke: '#B0BEC5', fill: '#F5F5F5', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 1, rc.ellipse(90, 50, 55, 28, { stroke: '#B0BEC5', fill: '#F5F5F5', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 1, rc.ellipse(750, 40, 110, 38, { stroke: '#B0BEC5', fill: '#ECEFF1', fillStyle: 'solid', roughness: 2, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 1, rc.ellipse(780, 34, 55, 25, { stroke: '#B0BEC5', fill: '#F5F5F5', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 1, rc.ellipse(720, 36, 50, 22, { stroke: '#B0BEC5', fill: '#F5F5F5', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        // Birds (simple V shapes)
+        addRoughToGroup(groups, 1, rc.path('M 300,30 C 305,22 310,30 310,30 C 310,30 315,22 320,30', { stroke: '#546E7A', strokeWidth: 1.5, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 1, rc.path('M 340,45 C 344,39 348,45 348,45 C 348,45 352,39 356,45', { stroke: '#546E7A', strokeWidth: 1.2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 1, rc.path('M 280,50 C 283,44 286,50 286,50 C 286,50 289,44 292,50', { stroke: '#546E7A', strokeWidth: 1, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 1, rc.path('M 600,25 C 604,18 608,25 608,25 C 608,25 612,18 616,25', { stroke: '#546E7A', strokeWidth: 1.3, roughness: 1.5 }), svg);
+
+        // GROUP 2: Winding river (wavy blue path)
+        const riverPath = 'M -20,280 C 100,250 180,320 280,270 C 380,220 420,300 520,260 C 620,220 700,290 800,250 C 850,235 900,260 920,250';
+        addRoughToGroup(groups, 2, rc.path(riverPath, {
+            stroke: '#1565C0', strokeWidth: 4, roughness: 2.5, fill: '#64B5F6',
+            fillStyle: 'hachure', hachureGap: 5, hachureAngle: 10
+        }), svg);
+        const riverFill = 'M -20,280 C 100,250 180,320 280,270 C 380,220 420,300 520,260 C 620,220 700,290 800,250 C 850,235 900,260 920,250 L 920,310 C 800,340 700,280 620,310 C 520,350 420,280 280,330 C 180,370 100,310 -20,340 Z';
+        addRoughToGroup(groups, 2, rc.path(riverFill, {
+            stroke: 'none', strokeWidth: 0, fill: '#BBDEFB', fillStyle: 'solid', roughness: 1
+        }), svg);
+        const riverBottom = 'M -20,340 C 100,310 180,370 280,330 C 380,290 420,360 520,310 C 620,270 700,340 800,310 C 850,295 900,320 920,310';
+        addRoughToGroup(groups, 2, rc.path(riverBottom, {
+            stroke: '#1565C0', strokeWidth: 3, roughness: 2.5
+        }), svg);
+        // Water ripple lines inside river
+        addRoughToGroup(groups, 2, rc.path('M 100,290 C 130,285 160,295 190,290', { stroke: '#90CAF9', strokeWidth: 1.2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.path('M 300,280 C 330,275 360,285 390,278', { stroke: '#90CAF9', strokeWidth: 1.2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.path('M 520,270 C 550,265 580,275 610,268', { stroke: '#90CAF9', strokeWidth: 1.2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.path('M 700,265 C 730,260 760,270 790,262', { stroke: '#90CAF9', strokeWidth: 1, roughness: 2 }), svg);
+        // Small stones along riverbank
+        addRoughToGroup(groups, 2, rc.ellipse(60, 260, 14, 8, { stroke: '#8D6E63', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 2, rc.ellipse(440, 235, 10, 7, { stroke: '#8D6E63', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 2, rc.ellipse(850, 245, 12, 7, { stroke: '#8D6E63', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 2, rc.ellipse(160, 350, 11, 6, { stroke: '#8D6E63', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 2, rc.ellipse(560, 330, 13, 7, { stroke: '#8D6E63', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+
+        // GROUP 3: Golden sparkles on river surface
+        const sparkleOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 3, roughStar(rc, 200, 290, 10, 4, sparkleOpts), svg);
+        addRoughToGroup(groups, 3, roughStar(rc, 350, 275, 8, 3, sparkleOpts), svg);
+        addRoughToGroup(groups, 3, roughStar(rc, 500, 268, 10, 4, sparkleOpts), svg);
+        addRoughToGroup(groups, 3, roughStar(rc, 650, 272, 9, 3, sparkleOpts), svg);
+        addRoughToGroup(groups, 3, roughStar(rc, 780, 265, 7, 3, sparkleOpts), svg);
+        addRoughToGroup(groups, 3, roughStar(rc, 130, 300, 7, 3, sparkleOpts), svg);
+        addRoughToGroup(groups, 3, roughStar(rc, 430, 285, 8, 3, sparkleOpts), svg);
+        // Light ray beams from sky hitting the river
+        addRoughToGroup(groups, 3, rc.line(200, 100, 180, 275, { stroke: '#FFF9C4', strokeWidth: 1, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.line(220, 100, 210, 280, { stroke: '#FFF9C4', strokeWidth: 0.8, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.line(500, 90, 490, 260, { stroke: '#FFF9C4', strokeWidth: 1, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.line(520, 90, 510, 265, { stroke: '#FFF9C4', strokeWidth: 0.8, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.line(750, 85, 760, 255, { stroke: '#FFF9C4', strokeWidth: 0.8, roughness: 1.5 }), svg);
+
+        // GROUP 4: Flowers and grass on riverbanks
+        function roughFlower(cx, cy, s, group) {
+            addRoughToGroup(groups, group, rc.line(cx, cy, cx, cy + 28 * s, {
+                stroke: '#4CAF50', strokeWidth: 2, roughness: 1.5
+            }), svg);
+            const colors = ['#FFCDD2', '#F8BBD0', '#FFE0B2', '#FFF9C4', '#C8E6C9'];
+            for (let i = 0; i < 5; i++) {
+                const a = (Math.PI * 2 / 5) * i - Math.PI / 2;
+                const px = cx + 10 * s * Math.cos(a);
+                const py = cy + 10 * s * Math.sin(a);
+                addRoughToGroup(groups, group, rc.circle(px, py, 12 * s, {
+                    stroke: '#E91E63', fill: colors[i], fillStyle: 'hachure', roughness: 1.5, hachureGap: 3
+                }), svg);
+            }
+            addRoughToGroup(groups, group, rc.circle(cx, cy, 8 * s, {
+                stroke: '#FF9800', fill: '#FFE082', fillStyle: 'solid', roughness: 1
+            }), svg);
+        }
+        // Grass tufts on top bank
+        const grassOpts = { stroke: '#4CAF50', strokeWidth: 1.5, roughness: 2 };
+        addRoughToGroup(groups, 4, rc.line(50, 250, 45, 225, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(55, 250, 58, 222, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(60, 250, 68, 228, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(200, 245, 195, 218, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(205, 245, 208, 215, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(210, 245, 218, 220, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(400, 230, 395, 205, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(405, 230, 410, 203, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(550, 240, 545, 215, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(555, 240, 560, 212, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(750, 235, 745, 210, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(755, 235, 760, 208, grassOpts), svg);
+        // Grass tufts on bottom bank
+        addRoughToGroup(groups, 4, rc.line(100, 360, 95, 380, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(105, 360, 108, 382, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(350, 355, 345, 378, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(355, 355, 360, 380, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(620, 350, 615, 375, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(625, 350, 630, 376, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(830, 340, 825, 365, grassOpts), svg);
+        addRoughToGroup(groups, 4, rc.line(835, 340, 840, 366, grassOpts), svg);
+        // Top bank flowers
+        roughFlower(120, 215, 0.9, 4);
+        roughFlower(320, 200, 0.7, 4);
+        roughFlower(600, 185, 0.8, 4);
+        roughFlower(800, 210, 0.7, 4);
+        // Bottom bank flowers
+        roughFlower(180, 370, 0.8, 4);
+        roughFlower(450, 345, 0.7, 4);
+        roughFlower(700, 340, 0.9, 4);
+        // Butterflies near flowers
+        addRoughToGroup(groups, 4, rc.path('M 140,195 C 135,185 125,185 130,195 M 140,195 C 145,185 155,185 150,195', { stroke: '#E91E63', strokeWidth: 1.5, roughness: 1 }), svg);
+        addRoughToGroup(groups, 4, rc.path('M 620,170 C 615,160 605,160 610,170 M 620,170 C 625,160 635,160 630,170', { stroke: '#FF9800', strokeWidth: 1.5, roughness: 1 }), svg);
+
+        // GROUP 5: Overflowing water drops and palm trees
+        const dropPositions = [[220,380],[350,370],[480,360],[600,365],[740,355]];
+        dropPositions.forEach(([dx, dy]) => {
+            addRoughToGroup(groups, 5, rc.ellipse(dx, dy + 18, 12, 20, {
+                stroke: '#42A5F5', fill: '#BBDEFB', fillStyle: 'solid', roughness: 1.5, strokeWidth: 2
+            }), svg);
+        });
+        // Splash lines
+        addRoughToGroup(groups, 5, rc.line(250, 400, 245, 415, { stroke: '#42A5F5', strokeWidth: 1.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.line(480, 390, 475, 408, { stroke: '#42A5F5', strokeWidth: 1.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.line(700, 385, 695, 400, { stroke: '#42A5F5', strokeWidth: 1.5, roughness: 2 }), svg);
+        // Small palm tree on left bank
+        addRoughToGroup(groups, 5, rc.line(30, 250, 30, 170, { stroke: '#5D4037', strokeWidth: 3, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 30,170 C 15,150 -5,155 -10,160', { stroke: '#2E7D32', strokeWidth: 2.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 30,170 C 45,148 65,152 72,158', { stroke: '#2E7D32', strokeWidth: 2.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 30,170 C 28,145 20,135 15,132', { stroke: '#388E3C', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 30,170 C 32,145 40,135 45,132', { stroke: '#388E3C', strokeWidth: 2, roughness: 2 }), svg);
+        // Small palm tree on right bank
+        addRoughToGroup(groups, 5, rc.line(870, 240, 870, 155, { stroke: '#5D4037', strokeWidth: 3, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 870,155 C 855,135 835,140 828,145', { stroke: '#2E7D32', strokeWidth: 2.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 870,155 C 885,133 905,138 910,142', { stroke: '#2E7D32', strokeWidth: 2.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 870,155 C 868,130 860,120 855,118', { stroke: '#388E3C', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 870,155 C 872,130 880,120 885,118', { stroke: '#388E3C', strokeWidth: 2, roughness: 2 }), svg);
+
+        // GROUP 6: Stars above and mist
+        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
+        addRoughToGroup(groups, 6, roughStar(rc, 150, 80, 18, 7, starOpts), svg);
+        addRoughToGroup(groups, 6, roughStar(rc, 400, 60, 15, 6, starOpts), svg);
+        addRoughToGroup(groups, 6, roughStar(rc, 650, 75, 16, 6, starOpts), svg);
+        addRoughToGroup(groups, 6, roughStar(rc, 280, 110, 10, 4, starOpts), svg);
+        addRoughToGroup(groups, 6, roughStar(rc, 750, 100, 12, 5, starOpts), svg);
+        addRoughToGroup(groups, 6, roughStar(rc, 500, 95, 11, 4, starOpts), svg);
+        // Mist / haze near water surface
+        addRoughToGroup(groups, 6, rc.ellipse(200, 295, 80, 15, { stroke: 'none', fill: '#E3F2FD', fillStyle: 'solid', roughness: 2 }), svg);
+        addRoughToGroup(groups, 6, rc.ellipse(450, 280, 90, 14, { stroke: 'none', fill: '#E3F2FD', fillStyle: 'solid', roughness: 2 }), svg);
+        addRoughToGroup(groups, 6, rc.ellipse(700, 270, 70, 12, { stroke: 'none', fill: '#E3F2FD', fillStyle: 'solid', roughness: 2 }), svg);
+
+        // GROUP 7: Ground below river with texture
+        // Earthy ground fill
+        addRoughToGroup(groups, 7, rc.polygon([[0,400],[900,400],[900,506],[0,506]], {
+            stroke: 'none', fill: '#E8D5B7', fillStyle: 'hachure', roughness: 2, hachureGap: 8, hachureAngle: 30
+        }), svg);
+        // Small pebbles on ground
+        addRoughToGroup(groups, 7, rc.ellipse(100, 420, 8, 5, { stroke: '#A1887F', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(250, 430, 6, 4, { stroke: '#A1887F', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(500, 415, 9, 5, { stroke: '#A1887F', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(680, 425, 7, 4, { stroke: '#A1887F', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(820, 418, 8, 5, { stroke: '#A1887F', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        // Small grass tufts on ground
+        addRoughToGroup(groups, 7, rc.line(150, 410, 145, 395, { stroke: '#8BC34A', strokeWidth: 1.2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 7, rc.line(155, 410, 158, 393, { stroke: '#8BC34A', strokeWidth: 1.2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 7, rc.line(400, 408, 395, 392, { stroke: '#8BC34A', strokeWidth: 1.2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 7, rc.line(405, 408, 410, 390, { stroke: '#8BC34A', strokeWidth: 1.2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 7, rc.line(750, 405, 745, 388, { stroke: '#8BC34A', strokeWidth: 1.2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 7, rc.line(755, 405, 760, 390, { stroke: '#8BC34A', strokeWidth: 1.2, roughness: 1.5 }), svg);
+
+        // GROUP 8: Label bubble
+        addRoughToGroup(groups, 8, rc.ellipse(450, 470, 300, 55, {
+            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
+        }), svg);
+
+        // Labels
+        const labels = [
+            addTextLabel(svg, 'Al-Kawthar (abundance!)', 450, 470, { size: '28', color: '#BF8C00', weight: '700' }),
+        ];
+
+        return { svg, groups, labels };
+    }
+
+    // ===== SLIDE 2: Prayer & Gratitude =====
+    function buildSlide1(container) {
+        const { svg, rc, svgNS } = createSvgBase(container);
+        const groups = [];
+
+        // GROUP 0: Mosque silhouette / arched window backdrop
+        // Large background arch (mosque window feel)
+        addRoughToGroup(groups, 0, rc.arc(265, 420, 320, 500, Math.PI, 0, false, {
+            stroke: '#E8F5E9', strokeWidth: 2, roughness: 2, fill: '#F1F8E9', fillStyle: 'solid'
+        }), svg);
+        // Inner decorative arch
+        addRoughToGroup(groups, 0, rc.arc(265, 420, 260, 430, Math.PI, 0, false, {
+            stroke: '#C8E6C9', strokeWidth: 1.5, roughness: 1.5
+        }), svg);
+        // Horizontal decorative line across the arch
+        addRoughToGroup(groups, 0, rc.line(120, 200, 410, 200, { stroke: '#C8E6C9', strokeWidth: 1, roughness: 2 }), svg);
+        // Small geometric patterns inside arch (Islamic geometric feel)
+        addRoughToGroup(groups, 0, rc.circle(215, 175, 12, { stroke: '#A5D6A7', strokeWidth: 1, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 0, rc.circle(265, 170, 12, { stroke: '#A5D6A7', strokeWidth: 1, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 0, rc.circle(315, 175, 12, { stroke: '#A5D6A7', strokeWidth: 1, roughness: 1.5 }), svg);
+
+        // GROUP 1: Green prayer mat shape
+        addRoughToGroup(groups, 1, rc.rectangle(140, 240, 250, 200, {
+            stroke: '#2E7D32', strokeWidth: 3, fill: '#A5D6A7', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 8, hachureAngle: 45
+        }), svg);
+        // Mihrab arch at top of mat
+        addRoughToGroup(groups, 1, rc.arc(265, 260, 140, 100, Math.PI, 0, false, {
+            stroke: '#1B5E20', strokeWidth: 3, roughness: 2
+        }), svg);
+        // Inner arch detail
+        addRoughToGroup(groups, 1, rc.arc(265, 270, 90, 65, Math.PI, 0, false, {
+            stroke: '#388E3C', strokeWidth: 2, roughness: 1.5
+        }), svg);
+        // Mat fringe at bottom
+        for (let fx = 145; fx <= 385; fx += 12) {
+            addRoughToGroup(groups, 1, rc.line(fx, 440, fx, 450, { stroke: '#2E7D32', strokeWidth: 1.5, roughness: 1.5 }), svg);
+        }
+        // Mat border pattern (inner rectangle)
+        addRoughToGroup(groups, 1, rc.rectangle(155, 255, 220, 170, {
+            stroke: '#388E3C', strokeWidth: 1.5, roughness: 2
+        }), svg);
+        // Diamond pattern in center of mat
+        addRoughToGroup(groups, 1, rc.polygon([[265,300],[295,340],[265,380],[235,340]], {
+            stroke: '#1B5E20', strokeWidth: 1.5, roughness: 1.5
+        }), svg);
+
+        // GROUP 2: Upward arrow from mat to golden glow (prayer ascending)
+        addRoughToGroup(groups, 2, rc.line(265, 200, 265, 80, {
+            stroke: '#F9A825', strokeWidth: 3.5, roughness: 2
+        }), svg);
+        // Arrow head
+        addRoughToGroup(groups, 2, rc.line(265, 80, 245, 105, { stroke: '#F9A825', strokeWidth: 3, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 2, rc.line(265, 80, 285, 105, { stroke: '#F9A825', strokeWidth: 3, roughness: 1.5 }), svg);
+        // Golden glow circle at top
+        addRoughToGroup(groups, 2, rc.circle(265, 55, 60, {
+            stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 2, hachureGap: 4, strokeWidth: 2
+        }), svg);
+        // Inner glow
+        addRoughToGroup(groups, 2, rc.circle(265, 55, 30, {
+            stroke: '#FFE082', fill: '#FFF8E1', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1.5
+        }), svg);
+        // Glow rays (12 rays for richer effect)
+        for (let i = 0; i < 12; i++) {
+            const a = (Math.PI * 2 / 12) * i;
+            const x1 = 265 + 35 * Math.cos(a);
+            const y1 = 55 + 35 * Math.sin(a);
+            const x2 = 265 + 55 * Math.cos(a);
+            const y2 = 55 + 55 * Math.sin(a);
+            addRoughToGroup(groups, 2, rc.line(x1, y1, x2, y2, {
+                stroke: '#FFD54F', strokeWidth: i % 2 === 0 ? 2 : 1.2, roughness: 2
+            }), svg);
+        }
+        // Floating sparkles around the glow
+        const tinySparkle = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'solid', roughness: 1 };
+        addRoughToGroup(groups, 2, rc.circle(225, 30, 5, tinySparkle), svg);
+        addRoughToGroup(groups, 2, rc.circle(310, 25, 4, tinySparkle), svg);
+        addRoughToGroup(groups, 2, rc.circle(240, 80, 3, tinySparkle), svg);
+        addRoughToGroup(groups, 2, rc.circle(295, 85, 4, tinySparkle), svg);
+        addRoughToGroup(groups, 2, rc.circle(320, 50, 3, tinySparkle), svg);
+
+        // GROUP 3: Candles on either side of the mat
+        // Left candle
+        addRoughToGroup(groups, 3, rc.rectangle(90, 350, 16, 70, {
+            stroke: '#FFF9C4', strokeWidth: 2, fill: '#FFF8E1', fillStyle: 'solid', roughness: 1.5
+        }), svg);
+        addRoughToGroup(groups, 3, rc.ellipse(98, 345, 18, 16, {
+            stroke: '#FF9800', fill: '#FFE082', fillStyle: 'solid', roughness: 1.5
+        }), svg);
+        addRoughToGroup(groups, 3, rc.ellipse(98, 340, 10, 12, {
+            stroke: '#F44336', fill: '#FFAB40', fillStyle: 'solid', roughness: 1
+        }), svg);
+        // Candle glow
+        addRoughToGroup(groups, 3, rc.circle(98, 345, 40, {
+            stroke: 'none', fill: '#FFF9C4', fillStyle: 'solid', roughness: 2
+        }), svg);
+        // Right candle
+        addRoughToGroup(groups, 3, rc.rectangle(420, 350, 16, 70, {
+            stroke: '#FFF9C4', strokeWidth: 2, fill: '#FFF8E1', fillStyle: 'solid', roughness: 1.5
+        }), svg);
+        addRoughToGroup(groups, 3, rc.ellipse(428, 345, 18, 16, {
+            stroke: '#FF9800', fill: '#FFE082', fillStyle: 'solid', roughness: 1.5
+        }), svg);
+        addRoughToGroup(groups, 3, rc.ellipse(428, 340, 10, 12, {
+            stroke: '#F44336', fill: '#FFAB40', fillStyle: 'solid', roughness: 1
+        }), svg);
+        addRoughToGroup(groups, 3, rc.circle(428, 345, 40, {
+            stroke: 'none', fill: '#FFF9C4', fillStyle: 'solid', roughness: 2
+        }), svg);
+
+        // GROUP 4: Gift box on the right (sacrifice / giving)
+        // Box body
+        addRoughToGroup(groups, 4, rc.rectangle(570, 220, 180, 160, {
+            stroke: '#C62828', strokeWidth: 3, fill: '#EF9A9A', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 7, hachureAngle: 60
+        }), svg);
+        // Lid
+        addRoughToGroup(groups, 4, rc.rectangle(555, 200, 210, 30, {
+            stroke: '#C62828', strokeWidth: 3, fill: '#E57373', fillStyle: 'solid', roughness: 2
+        }), svg);
+        // Ribbon vertical
+        addRoughToGroup(groups, 4, rc.line(660, 200, 660, 380, {
+            stroke: '#F9A825', strokeWidth: 4, roughness: 1.5
+        }), svg);
+        // Ribbon horizontal
+        addRoughToGroup(groups, 4, rc.line(570, 300, 750, 300, {
+            stroke: '#F9A825', strokeWidth: 4, roughness: 1.5
+        }), svg);
+        // Bow loops
+        addRoughToGroup(groups, 4, rc.arc(660, 195, 50, 40, Math.PI, 0, false, {
+            stroke: '#F9A825', strokeWidth: 3, roughness: 2
+        }), svg);
+        addRoughToGroup(groups, 4, rc.arc(640, 195, 35, 30, 0, Math.PI, false, {
+            stroke: '#F9A825', strokeWidth: 3, roughness: 2
+        }), svg);
+        addRoughToGroup(groups, 4, rc.arc(680, 195, 35, 30, 0, Math.PI, false, {
+            stroke: '#F9A825', strokeWidth: 3, roughness: 2
+        }), svg);
+        // Ribbon tails hanging down
+        addRoughToGroup(groups, 4, rc.path('M 645,195 C 638,175 630,180 625,170', { stroke: '#F9A825', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 4, rc.path('M 675,195 C 682,175 690,180 695,170', { stroke: '#F9A825', strokeWidth: 2, roughness: 2 }), svg);
+
+        // GROUP 5: Heart above gift and small hearts floating
+        const heartPath = 'M 660,140 C 660,120 640,105 625,105 C 605,105 595,125 595,125 C 595,125 595,155 660,185 C 725,155 725,125 725,125 C 725,125 715,105 695,105 C 680,105 660,120 660,140 Z';
+        addRoughToGroup(groups, 5, rc.path(heartPath, {
+            stroke: '#C62828', strokeWidth: 2.5, fill: '#EF5350', fillStyle: 'solid', roughness: 2
+        }), svg);
+        // Small floating hearts
+        const smallHeartOpts = { stroke: '#E57373', strokeWidth: 1.5, roughness: 1.5 };
+        addRoughToGroup(groups, 5, rc.path('M 580,100 C 580,93 573,88 568,88 C 560,88 556,96 556,96 C 556,96 556,104 580,115 C 604,104 604,96 604,96 C 604,96 600,88 592,88 C 587,88 580,93 580,100 Z', smallHeartOpts), svg);
+        addRoughToGroup(groups, 5, rc.path('M 740,80 C 740,74 734,70 730,70 C 723,70 720,76 720,76 C 720,76 720,82 740,90 C 760,82 760,76 760,76 C 760,76 757,70 750,70 C 746,70 740,74 740,80 Z', smallHeartOpts), svg);
+        addRoughToGroup(groups, 5, rc.path('M 700,55 C 700,50 695,47 692,47 C 687,47 685,51 685,51 C 685,51 685,56 700,62 C 715,56 715,51 715,51 C 715,51 712,47 708,47 C 705,47 700,50 700,55 Z', smallHeartOpts), svg);
+        // Open hands / giving gesture near the box
+        addRoughToGroup(groups, 5, rc.path('M 530,300 C 520,280 510,290 515,310 C 520,320 530,315 530,300', { stroke: '#8D6E63', strokeWidth: 1.5, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 5, rc.path('M 535,295 C 528,275 540,272 542,290', { stroke: '#8D6E63', strokeWidth: 1.5, roughness: 1.5 }), svg);
+
+        // GROUP 6: Ground line with decorative elements
+        addRoughToGroup(groups, 6, rc.line(80, 440, 820, 440, {
+            stroke: '#BCAAA4', strokeWidth: 2, roughness: 3
+        }), svg);
+        // Stone pattern along ground
+        addRoughToGroup(groups, 6, rc.ellipse(130, 442, 20, 8, { stroke: '#A1887F', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 6, rc.ellipse(280, 443, 16, 7, { stroke: '#A1887F', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 6, rc.ellipse(450, 442, 18, 8, { stroke: '#A1887F', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 6, rc.ellipse(600, 443, 15, 7, { stroke: '#A1887F', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 6, rc.ellipse(780, 442, 20, 8, { stroke: '#A1887F', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1 }), svg);
+        // Connecting arrow between prayer side and gift side
+        addRoughToGroup(groups, 6, rc.path('M 420,320 C 460,310 500,310 540,320', { stroke: '#BF8C00', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 6, rc.line(535,318, 540,320, { stroke: '#BF8C00', strokeWidth: 2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 6, rc.line(535,325, 540,320, { stroke: '#BF8C00', strokeWidth: 2, roughness: 1.5 }), svg);
+
+        // GROUP 7: Label bubbles
+        addRoughToGroup(groups, 7, rc.ellipse(265, 475, 250, 45, {
+            stroke: '#2E7D32', strokeWidth: 2, roughness: 2, fill: '#E8F5E9', fillStyle: 'solid'
+        }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(660, 475, 260, 45, {
+            stroke: '#C62828', strokeWidth: 2, roughness: 2, fill: '#FFEBEE', fillStyle: 'solid'
+        }), svg);
+
+        const labels = [
+            addTextLabel(svg, 'pray to YOUR Lord', 265, 475, { size: '22', color: '#1B5E20', weight: '700' }),
+            addTextLabel(svg, 'and sacrifice (give back!)', 660, 475, { size: '22', color: '#B71C1C', weight: '700' }),
+        ];
+
+        return { svg, groups, labels };
+    }
+
+    // ===== SLIDE 3: Enemy Cut Off (Legacy) =====
+    function buildSlide2(container) {
+        const { svg, rc, svgNS } = createSvgBase(container);
+        const groups = [];
+
+        // GROUP 0: Sky gradient and sun
+        // Warm sun on the left (life side)
+        addRoughToGroup(groups, 0, rc.circle(120, 60, 70, {
+            stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'solid', roughness: 2, strokeWidth: 2
+        }), svg);
+        addRoughToGroup(groups, 0, rc.circle(120, 60, 50, {
+            stroke: '#FFE082', fill: '#FFF8E1', fillStyle: 'solid', roughness: 1.5, strokeWidth: 1.5
+        }), svg);
+        // Sun rays
+        for (let i = 0; i < 10; i++) {
+            const a = (Math.PI * 2 / 10) * i;
+            const x1 = 120 + 40 * Math.cos(a);
+            const y1 = 60 + 40 * Math.sin(a);
+            const x2 = 120 + 60 * Math.cos(a);
+            const y2 = 60 + 60 * Math.sin(a);
+            addRoughToGroup(groups, 0, rc.line(x1, y1, x2, y2, {
+                stroke: '#FFD54F', strokeWidth: i % 2 === 0 ? 2 : 1.2, roughness: 2
+            }), svg);
+        }
+        // Dark cloud over the right side (death/forgotten side)
+        addRoughToGroup(groups, 0, rc.ellipse(670, 60, 140, 50, { stroke: '#78909C', fill: '#90A4AE', fillStyle: 'hachure', roughness: 2.5, hachureGap: 4, strokeWidth: 2 }), svg);
+        addRoughToGroup(groups, 0, rc.ellipse(710, 50, 80, 35, { stroke: '#78909C', fill: '#B0BEC5', fillStyle: 'solid', roughness: 2, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 0, rc.ellipse(640, 55, 70, 30, { stroke: '#78909C', fill: '#B0BEC5', fillStyle: 'solid', roughness: 2, strokeWidth: 1.5 }), svg);
+
+        // GROUP 1: Ground line with terrain
+        addRoughToGroup(groups, 1, rc.line(50, 400, 850, 400, {
+            stroke: '#8D6E63', strokeWidth: 2.5, roughness: 3
+        }), svg);
+        // Rich green grass on the left side
+        addRoughToGroup(groups, 1, rc.polygon([[50,400],[450,400],[450,420],[50,420]], {
+            stroke: 'none', fill: '#C8E6C9', fillStyle: 'hachure', roughness: 2, hachureGap: 4, hachureAngle: 90
+        }), svg);
+        // Barren dry ground on the right side
+        addRoughToGroup(groups, 1, rc.polygon([[450,400],[850,400],[850,420],[450,420]], {
+            stroke: 'none', fill: '#D7CCC8', fillStyle: 'hachure', roughness: 2, hachureGap: 6, hachureAngle: 45
+        }), svg);
+        // Dividing line down the middle
+        addRoughToGroup(groups, 1, rc.line(450, 30, 450, 420, {
+            stroke: '#BDBDBD', strokeWidth: 1.5, roughness: 3
+        }), svg);
+        // Grass tufts on left side
+        const gOpts = { stroke: '#4CAF50', strokeWidth: 1.5, roughness: 2 };
+        addRoughToGroup(groups, 1, rc.line(70, 400, 65, 378, gOpts), svg);
+        addRoughToGroup(groups, 1, rc.line(75, 400, 80, 375, gOpts), svg);
+        addRoughToGroup(groups, 1, rc.line(80, 400, 88, 380, gOpts), svg);
+        addRoughToGroup(groups, 1, rc.line(300, 400, 295, 380, gOpts), svg);
+        addRoughToGroup(groups, 1, rc.line(305, 400, 310, 377, gOpts), svg);
+        addRoughToGroup(groups, 1, rc.line(310, 400, 318, 382, gOpts), svg);
+        addRoughToGroup(groups, 1, rc.line(380, 400, 375, 383, gOpts), svg);
+        addRoughToGroup(groups, 1, rc.line(385, 400, 390, 380, gOpts), svg);
+        // Dry cracks on right side
+        addRoughToGroup(groups, 1, rc.line(520, 405, 540, 412, { stroke: '#A1887F', strokeWidth: 1, roughness: 2 }), svg);
+        addRoughToGroup(groups, 1, rc.line(540, 412, 535, 418, { stroke: '#A1887F', strokeWidth: 1, roughness: 2 }), svg);
+        addRoughToGroup(groups, 1, rc.line(620, 403, 635, 415, { stroke: '#A1887F', strokeWidth: 1, roughness: 2 }), svg);
+        addRoughToGroup(groups, 1, rc.line(750, 404, 760, 410, { stroke: '#A1887F', strokeWidth: 1, roughness: 2 }), svg);
+        addRoughToGroup(groups, 1, rc.line(760, 410, 755, 418, { stroke: '#A1887F', strokeWidth: 1, roughness: 2 }), svg);
+
+        // GROUP 2: Large lush green tree (LEFT - Prophet's legacy)
+        // Trunk with bark texture
+        addRoughToGroup(groups, 2, rc.rectangle(180, 260, 50, 140, {
+            stroke: '#5D4037', strokeWidth: 3, fill: '#8D6E63', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 5, hachureAngle: 90
+        }), svg);
+        // Bark detail lines
+        addRoughToGroup(groups, 2, rc.line(190, 280, 192, 320, { stroke: '#4E342E', strokeWidth: 1, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.line(210, 290, 212, 340, { stroke: '#4E342E', strokeWidth: 1, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.line(200, 310, 198, 380, { stroke: '#4E342E', strokeWidth: 1, roughness: 2 }), svg);
+        // Root lines (more elaborate)
+        addRoughToGroup(groups, 2, rc.line(180, 400, 140, 425, { stroke: '#5D4037', strokeWidth: 2.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.line(230, 400, 270, 425, { stroke: '#5D4037', strokeWidth: 2.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.line(185, 395, 155, 415, { stroke: '#5D4037', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 2, rc.line(225, 395, 255, 415, { stroke: '#5D4037', strokeWidth: 2, roughness: 2 }), svg);
+
+        // GROUP 3: Tree crown - large and lush with fruits and birds
+        // Main canopy blob
+        addRoughToGroup(groups, 3, rc.ellipse(205, 200, 240, 190, {
+            stroke: '#2E7D32', strokeWidth: 3, fill: '#66BB6A', fillStyle: 'hachure',
+            roughness: 2.5, hachureGap: 6, hachureAngle: 45
+        }), svg);
+        // Additional foliage blobs
+        addRoughToGroup(groups, 3, rc.ellipse(130, 170, 110, 100, {
+            stroke: '#388E3C', strokeWidth: 2, fill: '#81C784', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 5
+        }), svg);
+        addRoughToGroup(groups, 3, rc.ellipse(280, 170, 110, 100, {
+            stroke: '#388E3C', strokeWidth: 2, fill: '#81C784', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 5
+        }), svg);
+        addRoughToGroup(groups, 3, rc.ellipse(205, 125, 140, 90, {
+            stroke: '#1B5E20', strokeWidth: 2, fill: '#4CAF50', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 5
+        }), svg);
+        // Extra top foliage
+        addRoughToGroup(groups, 3, rc.ellipse(170, 110, 70, 55, {
+            stroke: '#2E7D32', strokeWidth: 1.5, fill: '#A5D6A7', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 4
+        }), svg);
+        addRoughToGroup(groups, 3, rc.ellipse(240, 108, 70, 55, {
+            stroke: '#2E7D32', strokeWidth: 1.5, fill: '#A5D6A7', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 4
+        }), svg);
+        // Fruits on tree
+        addRoughToGroup(groups, 3, rc.circle(140, 200, 12, { stroke: '#E65100', fill: '#FF9800', fillStyle: 'solid', roughness: 1, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.circle(260, 185, 10, { stroke: '#C62828', fill: '#EF5350', fillStyle: 'solid', roughness: 1, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.circle(180, 150, 11, { stroke: '#E65100', fill: '#FF9800', fillStyle: 'solid', roughness: 1, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.circle(230, 165, 10, { stroke: '#C62828', fill: '#EF5350', fillStyle: 'solid', roughness: 1, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.circle(120, 160, 9, { stroke: '#E65100', fill: '#FFCC80', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        // Birds sitting on tree
+        addRoughToGroup(groups, 3, rc.path('M 150,110 C 155,102 160,110 160,110 C 160,110 165,102 170,110', { stroke: '#1B5E20', strokeWidth: 1.5, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.path('M 245,100 C 249,93 253,100 253,100 C 253,100 257,93 261,100', { stroke: '#1B5E20', strokeWidth: 1.5, roughness: 1.5 }), svg);
+        // Flowers at base of tree
+        addRoughToGroup(groups, 3, rc.circle(130, 390, 8, { stroke: '#E91E63', fill: '#F8BBD0', fillStyle: 'solid', roughness: 1, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.circle(130, 390, 4, { stroke: '#FF9800', fill: '#FFE082', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 3, rc.line(130, 394, 130, 400, { stroke: '#4CAF50', strokeWidth: 1.5, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.circle(280, 385, 7, { stroke: '#E91E63', fill: '#FFCDD2', fillStyle: 'solid', roughness: 1, strokeWidth: 1.5 }), svg);
+        addRoughToGroup(groups, 3, rc.circle(280, 385, 3, { stroke: '#FF9800', fill: '#FFE082', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 3, rc.line(280, 389, 280, 400, { stroke: '#4CAF50', strokeWidth: 1.5, roughness: 1.5 }), svg);
+
+        // GROUP 4: Arrow above tree and butterflies
+        addRoughToGroup(groups, 4, rc.line(205, 75, 205, 30, {
+            stroke: '#4CAF50', strokeWidth: 3.5, roughness: 2
+        }), svg);
+        addRoughToGroup(groups, 4, rc.line(205, 30, 185, 50, { stroke: '#4CAF50', strokeWidth: 3, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 4, rc.line(205, 30, 225, 50, { stroke: '#4CAF50', strokeWidth: 3, roughness: 1.5 }), svg);
+        // Butterflies flying around the tree
+        addRoughToGroup(groups, 4, rc.path('M 90,140 C 85,130 75,130 80,140 M 90,140 C 95,130 105,130 100,140', { stroke: '#FF9800', strokeWidth: 1.5, roughness: 1 }), svg);
+        addRoughToGroup(groups, 4, rc.path('M 320,130 C 315,120 305,120 310,130 M 320,130 C 325,120 335,120 330,130', { stroke: '#E91E63', strokeWidth: 1.5, roughness: 1 }), svg);
+        addRoughToGroup(groups, 4, rc.path('M 340,200 C 335,190 325,190 330,200 M 340,200 C 345,190 355,190 350,200', { stroke: '#7B1FA2', strokeWidth: 1.5, roughness: 1 }), svg);
+        // Falling leaves from tree (drifting)
+        addRoughToGroup(groups, 4, rc.ellipse(100, 300, 10, 6, { stroke: '#4CAF50', fill: '#A5D6A7', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 4, rc.ellipse(330, 280, 9, 5, { stroke: '#66BB6A', fill: '#C8E6C9', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 4, rc.ellipse(350, 330, 8, 5, { stroke: '#4CAF50', fill: '#A5D6A7', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+
+        // GROUP 5: Dead stump (RIGHT - enemy's legacy)
+        // Short stump
+        addRoughToGroup(groups, 5, rc.rectangle(650, 340, 40, 60, {
+            stroke: '#5D4037', strokeWidth: 3, fill: '#A1887F', fillStyle: 'hachure',
+            roughness: 2, hachureGap: 5, hachureAngle: 90
+        }), svg);
+        // Dead bare branches
+        addRoughToGroup(groups, 5, rc.line(670, 340, 640, 290, { stroke: '#795548', strokeWidth: 2.5, roughness: 2.5 }), svg);
+        addRoughToGroup(groups, 5, rc.line(670, 340, 700, 280, { stroke: '#795548', strokeWidth: 2.5, roughness: 2.5 }), svg);
+        addRoughToGroup(groups, 5, rc.line(640, 290, 625, 265, { stroke: '#795548', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.line(700, 280, 720, 260, { stroke: '#795548', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.line(640, 290, 655, 270, { stroke: '#795548', strokeWidth: 1.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.line(700, 280, 685, 265, { stroke: '#795548', strokeWidth: 1.5, roughness: 2 }), svg);
+        // Dead fallen leaves on ground near stump
+        addRoughToGroup(groups, 5, rc.ellipse(610, 395, 10, 5, { stroke: '#A1887F', fill: '#BCAAA4', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 5, rc.ellipse(720, 393, 9, 5, { stroke: '#8D6E63', fill: '#A1887F', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 5, rc.ellipse(680, 398, 8, 4, { stroke: '#A1887F', fill: '#D7CCC8', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        // Cobweb on branch
+        addRoughToGroup(groups, 5, rc.line(625, 265, 640, 275, { stroke: '#BDBDBD', strokeWidth: 0.8, roughness: 1 }), svg);
+        addRoughToGroup(groups, 5, rc.line(625, 265, 630, 280, { stroke: '#BDBDBD', strokeWidth: 0.8, roughness: 1 }), svg);
+        addRoughToGroup(groups, 5, rc.line(630, 280, 640, 275, { stroke: '#BDBDBD', strokeWidth: 0.8, roughness: 1 }), svg);
+        // Downward arrow (declining)
+        addRoughToGroup(groups, 5, rc.line(790, 270, 790, 340, { stroke: '#D32F2F', strokeWidth: 2.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 5, rc.line(790, 340, 778, 325, { stroke: '#D32F2F', strokeWidth: 2, roughness: 1.5 }), svg);
+        addRoughToGroup(groups, 5, rc.line(790, 340, 802, 325, { stroke: '#D32F2F', strokeWidth: 2, roughness: 1.5 }), svg);
+
+        // GROUP 6: Red X over stump
+        addRoughToGroup(groups, 6, rc.line(610, 240, 730, 410, {
+            stroke: '#D32F2F', strokeWidth: 5, roughness: 2
+        }), svg);
+        addRoughToGroup(groups, 6, rc.line(730, 240, 610, 410, {
+            stroke: '#D32F2F', strokeWidth: 5, roughness: 2
+        }), svg);
+        // Dust particles near the stump (forgotten)
+        addRoughToGroup(groups, 6, rc.circle(580, 310, 4, { stroke: '#BDBDBD', fill: '#E0E0E0', fillStyle: 'solid', roughness: 1, strokeWidth: 0.8 }), svg);
+        addRoughToGroup(groups, 6, rc.circle(750, 290, 3, { stroke: '#BDBDBD', fill: '#E0E0E0', fillStyle: 'solid', roughness: 1, strokeWidth: 0.8 }), svg);
+        addRoughToGroup(groups, 6, rc.circle(600, 280, 3, { stroke: '#BDBDBD', fill: '#E0E0E0', fillStyle: 'solid', roughness: 1, strokeWidth: 0.8 }), svg);
+        addRoughToGroup(groups, 6, rc.circle(740, 320, 4, { stroke: '#BDBDBD', fill: '#E0E0E0', fillStyle: 'solid', roughness: 1, strokeWidth: 0.8 }), svg);
+        addRoughToGroup(groups, 6, rc.circle(560, 340, 3, { stroke: '#BDBDBD', fill: '#E0E0E0', fillStyle: 'solid', roughness: 1, strokeWidth: 0.8 }), svg);
+
+        // GROUP 7: Small saplings near the big tree (legacy spreading)
+        // Sapling 1
+        addRoughToGroup(groups, 7, rc.line(350, 400, 350, 360, { stroke: '#5D4037', strokeWidth: 2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(350, 345, 40, 35, { stroke: '#388E3C', fill: '#81C784', fillStyle: 'hachure', roughness: 2, hachureGap: 4, strokeWidth: 1.5 }), svg);
+        // Sapling 2
+        addRoughToGroup(groups, 7, rc.line(400, 400, 400, 370, { stroke: '#5D4037', strokeWidth: 1.5, roughness: 2 }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(400, 358, 30, 28, { stroke: '#388E3C', fill: '#A5D6A7', fillStyle: 'hachure', roughness: 2, hachureGap: 4, strokeWidth: 1.5 }), svg);
+        // Sapling 3 (tiny)
+        addRoughToGroup(groups, 7, rc.line(430, 400, 430, 385, { stroke: '#5D4037', strokeWidth: 1.2, roughness: 2 }), svg);
+        addRoughToGroup(groups, 7, rc.ellipse(430, 378, 20, 18, { stroke: '#4CAF50', fill: '#C8E6C9', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3, strokeWidth: 1 }), svg);
+        // People silhouettes (tiny) under tree representing 2 billion followers
+        addRoughToGroup(groups, 7, rc.circle(160, 390, 6, { stroke: '#5D4037', fill: '#8D6E63', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.line(160, 393, 160, 400, { stroke: '#5D4037', strokeWidth: 1.5, roughness: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.circle(250, 388, 6, { stroke: '#5D4037', fill: '#8D6E63', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.line(250, 391, 250, 400, { stroke: '#5D4037', strokeWidth: 1.5, roughness: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.circle(205, 392, 5, { stroke: '#5D4037', fill: '#A1887F', fillStyle: 'solid', roughness: 1, strokeWidth: 1 }), svg);
+        addRoughToGroup(groups, 7, rc.line(205, 395, 205, 400, { stroke: '#5D4037', strokeWidth: 1.2, roughness: 1 }), svg);
+
+        // GROUP 8: Label bubbles
+        addRoughToGroup(groups, 8, rc.ellipse(205, 460, 320, 50, {
+            stroke: '#2E7D32', strokeWidth: 2, roughness: 2, fill: '#E8F5E9', fillStyle: 'solid'
+        }), svg);
+        addRoughToGroup(groups, 8, rc.ellipse(670, 460, 260, 50, {
+            stroke: '#D32F2F', strokeWidth: 2, roughness: 2, fill: '#FFEBEE', fillStyle: 'solid'
+        }), svg);
+
+        const labels = [
+            addTextLabel(svg, "growing!", 205, 18, { size: '20', color: '#2E7D32', weight: '700' }),
+            addTextLabel(svg, "Prophet's legacy (2 billion)", 205, 460, { size: '19', color: '#1B5E20', weight: '700' }),
+            addTextLabel(svg, "enemy's legacy (forgotten)", 670, 460, { size: '18', color: '#C62828', weight: '700' }),
+        ];
+
+        return { svg, groups, labels };
+    }
+
+    // ===== PLAY SLIDE =====
+    const buildFunctions = [buildSlide0, buildSlide1, buildSlide2];
+
+    async function playSlide(idx) {
+        if (slideAnimIds[idx]) cancelAnimationFrame(slideAnimIds[idx]);
+        typewriterAborts[idx] = true;
+        await new Promise(r => setTimeout(r, 50));
+        typewriterAborts[idx] = false;
+        resetSlideText(idx);
+
+        const container = document.getElementById('drawing' + idx);
+        const penCursor = document.getElementById('pen' + idx);
+        const oldSvg = container.querySelector('.sceneSvg');
+        if (oldSvg) oldSvg.remove();
+
+        const { svg, groups, labels } = buildFunctions[idx](container);
+        hideAllPaths(groups);
+
+        // Timing per group
+        const timings = [
+            [600, 400, 800, 500, 700, 500, 500, 400, 400],           // slide 0 (9 groups)
+            [500, 700, 600, 500, 700, 500, 400, 400],                // slide 1 (8 groups)
+            [500, 500, 600, 800, 400, 600, 500, 500, 400],           // slide 2 (9 groups)
+        ];
+        const t = timings[idx] || [];
+        const gap = 150;
+
+        let textStarted = false;
+        let textPromise = null;
+
+        for (let i = 0; i < groups.length; i++) {
+            await animateGroup(groups[i], t[i] || 500, penCursor, svg, idx);
+
+            // Start text after ~half the groups are drawn
+            const textTrigger = Math.floor(groups.length / 2);
+            if (i === textTrigger && !textStarted) {
+                textStarted = true;
+                textPromise = animateBottomText(idx);
+            }
+
+            if (i < groups.length - 1) {
+                await new Promise(r => setTimeout(r, gap / speed));
+            }
+        }
+
+        hidePen(penCursor);
+
+        // Fade in labels
+        await new Promise(r => setTimeout(r, 100));
+        labels.forEach(el => el.style.opacity = '1');
+
+        if (textPromise) await textPromise;
+    }
+
+    // ===== AUTO-PLAY ON LOAD =====
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            slideBuilt[0] = true;
+            playSlide(0);
+        }, 600);
+    });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "quran-journey",
+  "elements": [
+    {
+      "id": "title", "type": "text", "x": 140, "y": 15, "width": 400, "height": 45,
+      "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 7001, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "3 Roads. Pick the Right One!", "fontSize": 32, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 28, "containerId": null,
+      "originalText": "3 Roads. Pick the Right One!", "lineHeight": 1.25
+    },
+    {
+      "id": "fork-point", "type": "ellipse", "x": 320, "y": 260, "width": 40, "height": 40,
+      "angle": 0, "strokeColor": "#2c3e50", "backgroundColor": "#D5DBDB",
+      "fillStyle": "solid", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": {"type": 2},
+      "seed": 7002, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "fork-label", "type": "text", "x": 320, "y": 305, "width": 50, "height": 20,
+      "angle": 0, "strokeColor": "#2c3e50", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 7003, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "YOU", "fontSize": 16, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 14, "containerId": null,
+      "originalText": "YOU", "lineHeight": 1.25
+    },
+    {
+      "id": "path-left", "type": "arrow", "x": 320, "y": 260, "width": -180, "height": -160,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 4, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 70, "groupIds": ["left-path"], "frameId": null, "roundness": {"type": 2},
+      "seed": 7004, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [-180, -160]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": "arrow"
+    },
+    {
+      "id": "path-center", "type": "arrow", "x": 340, "y": 260, "width": 0, "height": -180,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 5, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["center-path"], "frameId": null, "roundness": {"type": 2},
+      "seed": 7005, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [0, -180]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": "arrow"
+    },
+    {
+      "id": "path-right", "type": "arrow", "x": 360, "y": 260, "width": 180, "height": -160,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 4, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 70, "groupIds": ["right-path"], "frameId": null, "roundness": {"type": 2},
+      "seed": 7006, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [180, -160]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": "arrow"
+    },
+    {
+      "id": "check", "type": "text", "x": 325, "y": 60, "width": 30, "height": 35,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": ["center-path"], "frameId": null, "roundness": null,
+      "seed": 7007, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "V", "fontSize": 28, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 25, "containerId": null,
+      "originalText": "V", "lineHeight": 1.25
+    },
+    {
+      "id": "x-left", "type": "text", "x": 120, "y": 80, "width": 30, "height": 35,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": ["left-path"], "frameId": null, "roundness": null,
+      "seed": 7008, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "X", "fontSize": 28, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 25, "containerId": null,
+      "originalText": "X", "lineHeight": 1.25
+    },
+    {
+      "id": "x-right", "type": "text", "x": 530, "y": 80, "width": 30, "height": 35,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": ["right-path"], "frameId": null, "roundness": null,
+      "seed": 7009, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "X", "fontSize": 28, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 25, "containerId": null,
+      "originalText": "X", "lineHeight": 1.25
+    },
+    {
+      "id": "label-center", "type": "text", "x": 270, "y": 65, "width": 140, "height": 20,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": ["center-path"], "frameId": null, "roundness": null,
+      "seed": 7010, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Blessed people", "fontSize": 16, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 14, "containerId": null,
+      "originalText": "Blessed people", "lineHeight": 1.25
+    },
+    {
+      "id": "label-left", "type": "text", "x": 60, "y": 110, "width": 140, "height": 40,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": ["left-path"], "frameId": null, "roundness": null,
+      "seed": 7011, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Knew truth but\nignored it", "fontSize": 14, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 12, "containerId": null,
+      "originalText": "Knew truth but\nignored it", "lineHeight": 1.25
+    },
+    {
+      "id": "label-right", "type": "text", "x": 480, "y": 110, "width": 140, "height": 40,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": ["right-path"], "frameId": null, "roundness": null,
+      "seed": 7012, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Tried hard but\ngot lost", "fontSize": 14, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 12, "containerId": null,
+      "originalText": "Tried hard but\ngot lost", "lineHeight": 1.25
+    },
+    {
+      "id": "bottom", "type": "text", "x": 120, "y": 345, "width": 440, "height": 30,
+      "angle": 0, "strokeColor": "#2c3e50", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 7013, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "You need BOTH knowledge AND action to stay on the green path", "fontSize": 16, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 14, "containerId": null,
+      "originalText": "You need BOTH knowledge AND action to stay on the green path", "lineHeight": 1.25
+    }
+  ],
+  "appState": { "viewBackgroundColor": "#FFF9F0", "gridSize": null },
+  "files": {}
+}

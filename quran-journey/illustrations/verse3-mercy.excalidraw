@@ -1,0 +1,168 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "quran-journey",
+  "elements": [
+    {
+      "id": "title", "type": "text", "x": 180, "y": 20, "width": 340, "height": 45,
+      "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 3001, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Mercy for EVERYONE", "fontSize": 36, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 32, "containerId": null,
+      "originalText": "Mercy for EVERYONE", "lineHeight": 1.25
+    },
+    {
+      "id": "big-sun", "type": "ellipse", "x": 270, "y": 70, "width": 120, "height": 100,
+      "angle": 0, "strokeColor": "#e67e22", "backgroundColor": "#FFD700",
+      "fillStyle": "solid", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["sun"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3002, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "sun-label", "type": "text", "x": 285, "y": 100, "width": 90, "height": 30,
+      "angle": 0, "strokeColor": "#8B4513", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": ["sun"], "frameId": null, "roundness": null,
+      "seed": 3003, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Ar-Rahman", "fontSize": 16, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 14, "containerId": null,
+      "originalText": "Ar-Rahman", "lineHeight": 1.25
+    },
+    {
+      "id": "drop1", "type": "ellipse", "x": 200, "y": 200, "width": 12, "height": 18,
+      "angle": 0, "strokeColor": "#3498db", "backgroundColor": "#85C1E9",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 80, "groupIds": ["rain"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3004, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "drop2", "type": "ellipse", "x": 280, "y": 190, "width": 12, "height": 18,
+      "angle": 0, "strokeColor": "#3498db", "backgroundColor": "#85C1E9",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 80, "groupIds": ["rain"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3005, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "drop3", "type": "ellipse", "x": 360, "y": 205, "width": 12, "height": 18,
+      "angle": 0, "strokeColor": "#3498db", "backgroundColor": "#85C1E9",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 80, "groupIds": ["rain"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3006, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "drop4", "type": "ellipse", "x": 440, "y": 195, "width": 12, "height": 18,
+      "angle": 0, "strokeColor": "#3498db", "backgroundColor": "#85C1E9",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 80, "groupIds": ["rain"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3007, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "heart1", "type": "text", "x": 240, "y": 193, "width": 20, "height": 25,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 80, "groupIds": ["rain"], "frameId": null, "roundness": null,
+      "seed": 3008, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "<3", "fontSize": 20, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 18, "containerId": null,
+      "originalText": "<3", "lineHeight": 1.25
+    },
+    {
+      "id": "heart2", "type": "text", "x": 400, "y": 198, "width": 20, "height": 25,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 80, "groupIds": ["rain"], "frameId": null, "roundness": null,
+      "seed": 3009, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "<3", "fontSize": 20, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 18, "containerId": null,
+      "originalText": "<3", "lineHeight": 1.25
+    },
+    {
+      "id": "ground", "type": "line", "x": 80, "y": 310, "width": 520, "height": 0,
+      "angle": 0, "strokeColor": "#6B8E23", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["garden"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3010, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [520, 0]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "flower1-stem", "type": "line", "x": 160, "y": 260, "width": 0, "height": 50,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["garden"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3011, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [0, 50]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "flower1-head", "type": "ellipse", "x": 145, "y": 240, "width": 30, "height": 28,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "#F1948A",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["garden"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3012, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "flower2-stem", "type": "line", "x": 300, "y": 270, "width": 0, "height": 40,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["garden"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3013, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [0, 40]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "flower2-head", "type": "ellipse", "x": 285, "y": 250, "width": 30, "height": 28,
+      "angle": 0, "strokeColor": "#8e44ad", "backgroundColor": "#D2B4DE",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["garden"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3014, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "flower3-stem", "type": "line", "x": 450, "y": 265, "width": 0, "height": 45,
+      "angle": 0, "strokeColor": "#27ae60", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 3, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["garden"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3015, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "points": [[0, 0], [0, 45]], "lastCommittedPoint": null,
+      "startBinding": null, "endBinding": null, "startArrowhead": null, "endArrowhead": null
+    },
+    {
+      "id": "flower3-head", "type": "ellipse", "x": 435, "y": 245, "width": 30, "height": 28,
+      "angle": 0, "strokeColor": "#f39c12", "backgroundColor": "#F9E79F",
+      "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 2,
+      "opacity": 100, "groupIds": ["garden"], "frameId": null, "roundness": {"type": 2},
+      "seed": 3016, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false
+    },
+    {
+      "id": "label-special", "type": "text", "x": 140, "y": 340, "width": 400, "height": 50,
+      "angle": 0, "strokeColor": "#e74c3c", "backgroundColor": "transparent",
+      "fillStyle": "solid", "strokeWidth": 1, "strokeStyle": "solid", "roughness": 1,
+      "opacity": 100, "groupIds": [], "frameId": null, "roundness": null,
+      "seed": 3017, "version": 1, "versionNonce": 1, "isDeleted": false,
+      "boundElements": null, "updated": 1700000000000, "link": null, "locked": false,
+      "text": "Ar-Raheem = EXTRA special mercy\nfor those who try to be good", "fontSize": 18, "fontFamily": 1,
+      "textAlign": "center", "verticalAlign": "top", "baseline": 16, "containerId": null,
+      "originalText": "Ar-Raheem = EXTRA special mercy\nfor those who try to be good", "lineHeight": 1.25
+    }
+  ],
+  "appState": { "viewBackgroundColor": "#FFF9F0", "gridSize": null },
+  "files": {}
+}
