@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Kawthar - Abundance | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; line-height: 1.8; }
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #0d0d0d; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100; }
+        .nav-bar .logo { color: #c9a84c; font-weight: 700; font-size: 1.1em; text-decoration: none; }
+        .nav-bar .progress { color: #888; font-size: 0.9em; }
+        .hero { background: linear-gradient(135deg, #1a2a0a 0%, #2a4a1b 50%, #1a2a0a 100%); padding: 80px 20px; text-align: center; border-bottom: 2px solid #3a5c1a; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 70%); }
+        .hero h1 { font-family: 'Amiri', serif; font-size: 3em; color: #c9a84c; margin-bottom: 10px; }
+        .hero .arabic-title { font-family: 'Amiri', serif; font-size: 4em; color: #fff; direction: rtl; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.1em; color: #8ab4f8; font-weight: 300; }
+        .hero .badge { display: inline-block; margin-top: 20px; padding: 8px 20px; background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c; border-radius: 30px; color: #c9a84c; font-size: 0.9em; }
+        .view-toggle { display: flex; justify-content: center; gap: 0; background: #111; border-bottom: 1px solid #222; padding: 0; }
+        .view-toggle button { background: none; border: none; color: #888; padding: 16px 30px; font-size: 1em; font-family: 'Inter', sans-serif; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .carousel-wrapper { max-width: 900px; margin: 40px auto; padding: 0 20px; position: relative; }
+        .carousel-intro { text-align: center; margin-bottom: 30px; }
+        .carousel-intro h2 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 8px; }
+        .carousel-intro p { color: #888; font-size: 0.95em; }
+        .carousel-container { position: relative; overflow: hidden; border-radius: 20px; border: 3px solid #333; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .carousel-track { display: flex; transition: transform 0.5s ease; }
+        .carousel-slide { min-width: 100%; background: #FFF9F0; position: relative; display: flex; flex-direction: column; }
+        .slide-drawing { width: 100%; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .slide-drawing svg { width: 100%; height: 100%; }
+        .slide-bottom { background: #FFF3E0; padding: 24px 30px; border-top: 2px dashed #e0c9a0; }
+        .slide-bottom .verse-num-badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: #e67e22; color: #fff; border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px; }
+        .slide-bottom .slide-arabic-text { font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50; direction: rtl; text-align: center; margin-bottom: 4px; }
+        .slide-bottom .slide-translit-text { text-align: center; color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px; }
+        .slide-bottom .slide-kid-text { font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5; text-align: center; }
+        .carousel-nav { position: absolute; top: 40%; transform: translateY(-50%); background: rgba(44, 62, 80, 0.8); border: 2px solid #e67e22; color: #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.3em; z-index: 10; transition: all 0.3s; }
+        .carousel-nav:hover { background: #e67e22; }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+        .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .carousel-dot { width: 12px; height: 12px; border-radius: 50%; background: #333; cursor: pointer; transition: all 0.3s; border: 2px solid #555; }
+        .carousel-dot.active { background: #e67e22; border-color: #e67e22; transform: scale(1.2); }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: background 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .arabic-tip { background: #1a1a1a; border-radius: 12px; padding: 25px; margin: 15px 0; border: 1px solid #2a2a2a; }
+        .arabic-tip h4 { color: #c9a84c; margin-bottom: 10px; }
+        .arabic-tip p { color: #bbb; font-size: 0.95em; }
+        .arabic-letter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-top: 15px; }
+        .letter-card { background: #222; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #333; }
+        .letter-card .letter { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; }
+        .letter-card .name { font-size: 0.85em; color: #c9a84c; margin-top: 5px; }
+        .letter-card .sound { font-size: 0.8em; color: #888; }
+        .root-word-box { display: flex; align-items: center; gap: 20px; background: #1a1a1a; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid #2a2a2a; flex-wrap: wrap; }
+        .root-word-box .root { font-family: 'Amiri', serif; font-size: 2em; color: #c9a84c; direction: rtl; }
+        .root-word-box .arrow { color: #555; font-size: 1.5em; }
+        .root-word-box .derivatives { display: flex; gap: 12px; flex-wrap: wrap; }
+        .root-word-box .derivative { background: #222; padding: 8px 15px; border-radius: 8px; text-align: center; }
+        .root-word-box .derivative .ar { font-family: 'Amiri', serif; font-size: 1.3em; color: #fff; }
+        .root-word-box .derivative .en { font-size: 0.8em; color: #888; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        @media (max-width: 600px) { .hero h1 { font-size: 2em; } .hero .arabic-title { font-size: 2.8em; } .verse-arabic { font-size: 1.8em; } .section { padding: 20px; } .words-grid { gap: 8px; } .word-chip { min-width: 75px; padding: 10px 12px; } .slide-bottom { padding: 18px 20px; } .slide-bottom .slide-kid-text { font-size: 1.1em; } .slide-bottom .slide-arabic-text { font-size: 1.2em; } .carousel-nav { width: 36px; height: 36px; font-size: 1em; } }
+    </style>
+</head>
+<body>
+    <svg style="position:absolute;width:0;height:0;">
+        <defs>
+            <filter id="sketchy"><feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+    </svg>
+
+    <nav class="nav-bar">
+        <a href="/" class="logo" style="text-decoration:none;">Tafsir - Quran Journey</a>
+        <div class="progress">Surah 108 of 114</div>
+    </nav>
+
+    <header class="hero">
+        <div class="arabic-title">الكوثر</div>
+        <h1>Al-Kawthar</h1>
+        <p class="subtitle">Abundance - The Shortest Surah with the Biggest Promise</p>
+        <div class="badge">Makki Surah &middot; 3 Verses &middot; 10 Words</div>
+    </header>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <!-- ==================== CAROUSEL ==================== -->
+    <div class="carousel-section" id="carousel-view">
+        <div class="carousel-wrapper">
+            <div class="carousel-intro">
+                <h2>Al-Kawthar: A Visual Journey</h2>
+                <p>Only 3 verses. 10 words. But a promise that changed everything.</p>
+            </div>
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+
+                    <!-- SLIDE 1: Overflowing River -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="#ddd"/></pattern>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+                                <g filter="url(#sketchy)">
+                                    <!-- River flowing -->
+                                    <path d="M-20,200 Q100,160 200,200 Q300,240 400,200 Q500,160 600,200 Q700,240 750,200" fill="none" stroke="#3498db" stroke-width="60" stroke-linecap="round" opacity="0.2"/>
+                                    <path d="M-20,200 Q100,160 200,200 Q300,240 400,200 Q500,160 600,200 Q700,240 750,200" fill="none" stroke="#3498db" stroke-width="4" stroke-linecap="round"/>
+                                    <!-- River sparkles -->
+                                    <circle cx="150" cy="185" r="4" fill="#FFD700" opacity="0.8"/>
+                                    <circle cx="300" cy="210" r="5" fill="#FFD700" opacity="0.7"/>
+                                    <circle cx="450" cy="185" r="4" fill="#FFD700" opacity="0.8"/>
+                                    <circle cx="550" cy="205" r="3" fill="#FFD700" opacity="0.6"/>
+                                    <circle cx="250" cy="195" r="3" fill="#FFD700" opacity="0.7"/>
+                                    <!-- Banks with flowers -->
+                                    <line x1="120" y1="145" x2="120" y2="165" stroke="#27ae60" stroke-width="2.5" stroke-linecap="round"/>
+                                    <circle cx="120" cy="140" r="7" fill="#F1948A" stroke="#e74c3c" stroke-width="2"/>
+                                    <line x1="350" y1="140" x2="350" y2="158" stroke="#27ae60" stroke-width="2.5" stroke-linecap="round"/>
+                                    <circle cx="350" cy="135" r="6" fill="#D2B4DE" stroke="#8e44ad" stroke-width="2"/>
+                                    <line x1="550" y1="148" x2="550" y2="165" stroke="#27ae60" stroke-width="2.5" stroke-linecap="round"/>
+                                    <circle cx="550" cy="143" r="7" fill="#AED6F1" stroke="#3498db" stroke-width="2"/>
+                                    <!-- Overflowing drops -->
+                                    <ellipse cx="100" cy="230" rx="4" ry="7" fill="#85C1E9" opacity="0.6"/>
+                                    <ellipse cx="250" cy="245" rx="4" ry="7" fill="#85C1E9" opacity="0.5"/>
+                                    <ellipse cx="480" cy="235" rx="4" ry="7" fill="#85C1E9" opacity="0.6"/>
+                                    <ellipse cx="620" cy="240" rx="3" ry="6" fill="#85C1E9" opacity="0.5"/>
+                                    <!-- Stars above -->
+                                    <text x="80" y="80" font-family="Caveat" font-size="28" fill="#F39C12" opacity="0.7">*</text>
+                                    <text x="350" y="60" font-family="Caveat" font-size="24" fill="#F39C12" opacity="0.6">*</text>
+                                    <text x="600" y="75" font-family="Caveat" font-size="26" fill="#F39C12" opacity="0.8">*</text>
+                                </g>
+                                <text x="350" y="100" text-anchor="middle" font-family="Caveat" font-size="22" fill="#3498db" font-weight="600">Al-Kawthar</text>
+                                <text x="350" y="120" text-anchor="middle" font-family="Caveat" font-size="16" fill="#7f8c8d">(a river in Paradise, overflowing with good)</text>
+                                <text x="350" y="350" text-anchor="middle" font-family="Caveat" font-size="26" fill="#e67e22" font-weight="600">"WE gave YOU abundance!" - straight from Allah!</text>
+                                <text x="350" y="378" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Not a little. Not enough. ABUNDANCE.</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">1</div>
+                            <div class="slide-arabic-text">إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ</div>
+                            <div class="slide-translit-text">Inna a'tayna kal-kawthar</div>
+                            <div class="slide-kid-text">Allah says "WE gave YOU" - the King of the universe is personally giving the Prophet a gift. And not just any gift. Al-Kawthar means SO MUCH good that it overflows. A river in Paradise, prophethood, the Quran, and more good than you can count!</div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2: Prayer & Gratitude -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+                                <g filter="url(#sketchy)">
+                                    <!-- Prayer mat (abstract rectangle) -->
+                                    <rect x="250" y="180" width="200" height="120" rx="5" fill="#2ecc71" stroke="#27ae60" stroke-width="3" opacity="0.3"/>
+                                    <rect x="260" y="190" width="180" height="100" rx="3" fill="none" stroke="#27ae60" stroke-width="2" opacity="0.5"/>
+                                    <!-- Mihrab arch on mat -->
+                                    <path d="M310,190 Q350,160 390,190" fill="none" stroke="#27ae60" stroke-width="2.5"/>
+                                    <!-- Arrow pointing UP from mat to sky -->
+                                    <line x1="350" y1="170" x2="350" y2="60" stroke="#c9a84c" stroke-width="3" stroke-linecap="round"/>
+                                    <polygon points="350,50 340,70 360,70" fill="#c9a84c"/>
+                                    <!-- Light/glow at top -->
+                                    <circle cx="350" cy="40" r="25" fill="#FFD700" opacity="0.3"/>
+                                    <circle cx="350" cy="40" r="12" fill="#FFD700" opacity="0.5"/>
+                                    <!-- Gift box (sacrifice/gratitude) on right -->
+                                    <rect x="520" y="200" width="70" height="60" rx="3" fill="#e74c3c" stroke="#c0392b" stroke-width="3" opacity="0.7"/>
+                                    <line x1="555" y1="200" x2="555" y2="260" stroke="#FFD700" stroke-width="3"/>
+                                    <line x1="520" y1="230" x2="590" y2="230" stroke="#FFD700" stroke-width="3"/>
+                                    <!-- Bow on gift -->
+                                    <path d="M545,200 Q555,185 565,200" fill="none" stroke="#FFD700" stroke-width="2.5"/>
+                                    <!-- Heart above gift -->
+                                    <text x="555" y="185" text-anchor="middle" font-family="serif" font-size="18" fill="#e74c3c">&hearts;</text>
+                                </g>
+                                <text x="350" y="155" text-anchor="middle" font-family="Caveat" font-size="16" fill="#27ae60">pray to YOUR Lord</text>
+                                <text x="555" y="280" text-anchor="middle" font-family="Caveat" font-size="14" fill="#c0392b">and sacrifice</text>
+                                <text x="555" y="295" text-anchor="middle" font-family="Caveat" font-size="13" fill="#c0392b">(give back!)</text>
+                                <text x="350" y="350" text-anchor="middle" font-family="Caveat" font-size="26" fill="#e67e22" font-weight="600">Got blessings? Pray and give back!</text>
+                                <text x="350" y="378" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Gratitude is prayer + action combined.</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">2</div>
+                            <div class="slide-arabic-text">فَصَلِّ لِرَبِّكَ وَانْحَرْ</div>
+                            <div class="slide-translit-text">Fasalli li Rabbika wanhar</div>
+                            <div class="slide-kid-text">So what do you do when Allah gives you SO much? Two things: PRAY (connect with Him) and SACRIFICE (share with others). Don't hoard blessings. The response to abundance is gratitude through worship and generosity.</div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3: The Enemy Cut Off -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+                                <g filter="url(#sketchy)">
+                                    <!-- Left side: growing tree (Prophet's legacy) -->
+                                    <line x1="200" y1="180" x2="200" y2="300" stroke="#8B4513" stroke-width="8" stroke-linecap="round"/>
+                                    <ellipse cx="200" cy="150" rx="70" ry="55" fill="#77DD77" stroke="#228B22" stroke-width="3"/>
+                                    <ellipse cx="170" cy="180" rx="30" ry="25" fill="#82E0AA" stroke="#228B22" stroke-width="2"/>
+                                    <ellipse cx="235" cy="175" rx="28" ry="22" fill="#82E0AA" stroke="#228B22" stroke-width="2"/>
+                                    <!-- Branches spreading -->
+                                    <line x1="200" y1="220" x2="150" y2="190" stroke="#8B4513" stroke-width="4" stroke-linecap="round"/>
+                                    <line x1="200" y1="220" x2="250" y2="185" stroke="#8B4513" stroke-width="4" stroke-linecap="round"/>
+                                    <line x1="200" y1="200" x2="160" y2="165" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="200" y1="200" x2="240" y2="160" stroke="#8B4513" stroke-width="3" stroke-linecap="round"/>
+                                    <!-- Right side: dead stump (enemy's legacy) -->
+                                    <line x1="500" y1="250" x2="500" y2="300" stroke="#8B7355" stroke-width="8" stroke-linecap="round"/>
+                                    <line x1="500" y1="260" x2="470" y2="240" stroke="#8B7355" stroke-width="4" stroke-linecap="round"/>
+                                    <line x1="500" y1="265" x2="530" y2="245" stroke="#8B7355" stroke-width="4" stroke-linecap="round"/>
+                                    <!-- X over dead stump -->
+                                    <line x1="460" y1="220" x2="540" y2="300" stroke="#e74c3c" stroke-width="3" opacity="0.6"/>
+                                    <line x1="540" y1="220" x2="460" y2="300" stroke="#e74c3c" stroke-width="3" opacity="0.6"/>
+                                    <!-- Ground line -->
+                                    <line x1="80" y1="300" x2="620" y2="300" stroke="#6B8E23" stroke-width="3"/>
+                                    <!-- Arrow showing growth on left -->
+                                    <path d="M200,100 L200,70" stroke="#27ae60" stroke-width="2.5" stroke-linecap="round"/>
+                                    <polygon points="200,60 193,75 207,75" fill="#27ae60"/>
+                                    <text x="200" y="55" text-anchor="middle" font-family="Caveat" font-size="14" fill="#27ae60">growing!</text>
+                                </g>
+                                <text x="200" y="330" text-anchor="middle" font-family="Caveat" font-size="16" fill="#228B22">Prophet's legacy</text>
+                                <text x="200" y="348" text-anchor="middle" font-family="Caveat" font-size="14" fill="#228B22">(2 billion followers)</text>
+                                <text x="500" y="330" text-anchor="middle" font-family="Caveat" font-size="16" fill="#e74c3c">his enemy's legacy</text>
+                                <text x="500" y="348" text-anchor="middle" font-family="Caveat" font-size="14" fill="#e74c3c">(forgotten, cut off)</text>
+                                <text x="350" y="385" text-anchor="middle" font-family="Caveat" font-size="24" fill="#e67e22" font-weight="600">YOUR hater is the one who loses. Not you.</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">3</div>
+                            <div class="slide-arabic-text">إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ</div>
+                            <div class="slide-translit-text">Inna shani'aka huwal-abtar</div>
+                            <div class="slide-kid-text">People mocked the Prophet, saying his legacy would die because his sons passed away. Allah's response? "YOUR hater is the one who is cut off!" Today 2 billion people follow the Prophet. His enemies? No one even remembers their names.</div>
+                        </div>
+                    </div>
+
+                </div>
+                <button class="carousel-nav carousel-prev" onclick="moveSlide(-1)">&#8249;</button>
+                <button class="carousel-nav carousel-next" onclick="moveSlide(1)">&#8250;</button>
+            </div>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </div>
+
+    <!-- ==================== DEEP DIVE ==================== -->
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section">
+                <div class="section-title">Quick Facts</div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">108</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">3</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">10</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Distinction</div><div class="value" style="font-size:0.9em">Shortest Surah</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Abundance & Legacy</div></div>
+                </div>
+            </section>
+
+            <section class="section story">
+                <div class="section-title">The Story Behind This Surah</div>
+                <p>The Prophet Muhammad (peace be upon him) had sons who passed away in childhood. In Arab culture, a man without sons was considered <span class="highlight">"abtar"</span> - cut off, with no legacy. His enemies, particularly Al-'As ibn Wa'il, mocked him saying: "Leave him, he is abtar. When he dies, his name will die with him."</p>
+                <p>Imagine the pain. You've lost your children, and instead of comfort, people mock your grief and say your message will die with you.</p>
+                <p>Allah's response? <span class="highlight">The shortest surah in the entire Quran.</span> Just 10 words. But those 10 words turned history upside down.</p>
+                <div class="important">
+                    <p>The Prophet (peace be upon him) said: <strong>"Al-Kawthar is a river in Paradise. Its banks are of gold, and it flows over pearls and rubies. Its soil is more fragrant than musk, its water is sweeter than honey and whiter than milk."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sunan At-Tirmidhi 3361, Sahih Muslim 400</p>
+                </div>
+                <p>Today, <span class="highlight">nearly 2 billion people</span> follow the Prophet Muhammad. His name is said billions of times daily in the adhan and in prayer. And the man who mocked him? Al-'As ibn Wa'il? His name is only remembered because of this surah. He is the definition of "abtar" - cut off from any good legacy.</p>
+                <div class="important">
+                    <p>Anas ibn Malik narrated: The Prophet (peace be upon him) dozed off briefly, then raised his head smiling. He said: <strong>"A surah has just been revealed to me."</strong> Then he recited Surah Al-Kawthar. He asked, <strong>"Do you know what Al-Kawthar is?"</strong> They said, "Allah and His Messenger know best." He said, <strong>"It is a river that my Lord has promised me in Paradise."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih Muslim 400</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ</div>
+                    <div class="verse-transliteration">Inna a'tayna kal-kawthar</div>
+                    <div class="verse-translation">Indeed, We have granted you Al-Kawthar (abundance).</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (read right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                            <div class="word-chip"><span class="ar">أَعْطَيْنَاكَ</span><span class="trans">a'taynaka</span><span class="meaning">have given you</span></div>
+                            <div class="word-chip"><span class="ar">الْكَوْثَرَ</span><span class="trans">al-kawthar</span><span class="meaning">the abundance</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah uses <strong>"Inna"</strong> (indeed/certainly) - an emphatic particle. This isn't casual. It's a declaration. Then <strong>"Na"</strong> (We) - the Royal We, the Majestic We. The King of the universe is personally addressing His messenger. <strong>"A'taynaka"</strong> - "We gave YOU" - past tense, meaning it's already done. It's a guarantee. And what did He give? <strong>Al-Kawthar</strong> - from the root k-th-r meaning abundance so great it overflows. It includes the river in Paradise, prophethood, the Quran, the ummah, intercession, and every form of good.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">فَصَلِّ لِرَبِّكَ وَانْحَرْ</div>
+                    <div class="verse-transliteration">Fasalli li Rabbika wanhar</div>
+                    <div class="verse-translation">So pray to your Lord and sacrifice.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَصَلِّ</span><span class="trans">fa-salli</span><span class="meaning">So pray</span></div>
+                            <div class="word-chip"><span class="ar">لِرَبِّكَ</span><span class="trans">li-Rabbika</span><span class="meaning">to your Lord</span></div>
+                            <div class="word-chip"><span class="ar">وَانْحَرْ</span><span class="trans">wanhar</span><span class="meaning">and sacrifice</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p><strong>"Fa"</strong> means "so/therefore" - it connects the response to the gift. Because Allah gave you all this, your response should be: <strong>pray</strong> (your connection to Allah) and <strong>sacrifice</strong> (your connection to people through generosity). "Li Rabbika" - specifically to YOUR Lord, not to anyone else. "Wanhar" - sacrifice, referring to the Eid sacrifice but also broadly meaning to give, share, and be generous with what Allah gave you. Blessings are not meant to be hoarded.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ</div>
+                    <div class="verse-transliteration">Inna shani'aka huwal-abtar</div>
+                    <div class="verse-translation">Indeed, your enemy is the one who is cut off.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                            <div class="word-chip"><span class="ar">شَانِئَكَ</span><span class="trans">shani'aka</span><span class="meaning">your hater</span></div>
+                            <div class="word-chip"><span class="ar">هُوَ</span><span class="trans">huwa</span><span class="meaning">he (is)</span></div>
+                            <div class="word-chip"><span class="ar">الْأَبْتَرُ</span><span class="trans">al-abtar</span><span class="meaning">the one cut off</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p><strong>"Shani'aka"</strong> doesn't just mean enemy - it means someone who hates you with intense, burning hatred. And what about this hater? <strong>"Huwa"</strong> (HE is) - the pronoun "huwa" here is emphatic, it restricts the meaning: HE, not you, is the cut off one. <strong>"Al-Abtar"</strong> - the very word they used to insult the Prophet is turned back on them. Allah took their own insult and stamped it on them forever. This is the ultimate reversal. The one who mocks a believer's legacy will find his own legacy erased.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Learn Arabic Through Al-Kawthar</div>
+                <p style="color: #888; margin-bottom: 25px;">Only 10 words, but packed with powerful Arabic patterns.</p>
+
+                <div class="arabic-tip">
+                    <h4>Key Vocabulary</h4>
+                    <div class="arabic-letter-grid">
+                        <div class="letter-card"><div class="letter">أَعْطَى</div><div class="name">A'ta</div><div class="sound">To give - appears 29 times</div></div>
+                        <div class="letter-card"><div class="letter">صَلَّى</div><div class="name">Salla</div><div class="sound">To pray - appears 67 times</div></div>
+                        <div class="letter-card"><div class="letter">رَبّ</div><div class="name">Rabb</div><div class="sound">Lord - appears 970 times</div></div>
+                        <div class="letter-card"><div class="letter">كَوْثَر</div><div class="name">Kawthar</div><div class="sound">Abundance - appears 1 time</div></div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Root Word System: ك ث ر (K-TH-R) = Abundance/Plenty</h4>
+                    <p>One of the most common roots in the Quran. From it we get:</p>
+                    <div class="root-word-box">
+                        <div class="root">ك ث ر</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">كَثِير</div><div class="en">katheer (many/much)</div></div>
+                            <div class="derivative"><div class="ar">كَوْثَر</div><div class="en">kawthar (extreme abundance)</div></div>
+                            <div class="derivative"><div class="ar">أَكْثَر</div><div class="en">akthar (more/most)</div></div>
+                            <div class="derivative"><div class="ar">تَكَاثُر</div><div class="en">takathur (hoarding/competing)</div></div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; color: #aac8f0;">Al-Kawthar is the most extreme form - it doesn't just mean "a lot." It means so much that it overflows beyond measure.</p>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Grammar Tip: Pronouns Embedded in Verbs</h4>
+                    <div class="arabic-letter-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+                        <div class="letter-card"><div class="letter">أَعْطَيْنَاكَ</div><div class="name">A'taynaka</div><div class="sound">"We gave YOU" - na=We, ka=you</div></div>
+                        <div class="letter-card"><div class="letter">فَصَلِّ</div><div class="name">Fa-salli</div><div class="sound">"So pray" - command form (you)</div></div>
+                        <div class="letter-card"><div class="letter">شَانِئَكَ</div><div class="name">Shani'aka</div><div class="sound">"Your hater" - ka=your</div></div>
+                    </div>
+                    <p style="margin-top: 15px;">Notice how "a'taynaka" packs "We" + "gave" + "you" into a single word. Arabic is incredibly compact.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Key Lessons from Al-Kawthar</div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah's gifts are beyond counting.</strong><p style="color: #999; font-size: 0.95em;">Al-Kawthar isn't just a river. It's every blessing in your life. If you tried to count Allah's blessings, you couldn't. Recognize abundance even when the world tells you you're lacking.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Gratitude = worship + generosity.</strong><p style="color: #999; font-size: 0.95em;">The response to blessings isn't just saying "Alhamdulillah." It's praying (connecting with Allah) and sacrificing (sharing with others). Both are required.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Your haters will be forgotten.</strong><p style="color: #999; font-size: 0.95em;">Anyone who hates you for standing on truth will have their legacy erased. Don't let their mockery break you. History always proves who was really "cut off."</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">10 words can change everything.</strong><p style="color: #999; font-size: 0.95em;">The shortest surah in the Quran delivered the most devastating response to the Prophet's enemies. Power isn't in length. It's in truth.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> Based on Tafsir Ibn Kathir, Tafsir As-Sa'di, and Tafsir Al-Qurtubi. Hadith from Sahih Muslim and Sunan At-Tirmidhi. This is a learning aid - always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="/">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        function showView(view) { const c = document.getElementById('carousel-view'), d = document.getElementById('deep-dive-view'), b = document.querySelectorAll('.view-toggle button'); if (view === 'carousel') { c.classList.remove('hidden'); d.classList.remove('visible'); b[0].classList.add('active'); b[1].classList.remove('active'); } else { c.classList.add('hidden'); d.classList.add('visible'); b[1].classList.add('active'); b[0].classList.remove('active'); } }
+        let currentSlide = 0; const track = document.getElementById('carouselTrack'), slides = track.children, totalSlides = slides.length, dotsContainer = document.getElementById('carouselDots'); let autoAdvance;
+        for (let i = 0; i < totalSlides; i++) { const dot = document.createElement('button'); dot.className = 'carousel-dot' + (i === 0 ? ' active' : ''); dot.onclick = () => goToSlide(i); dotsContainer.appendChild(dot); }
+        function goToSlide(i) { currentSlide = i; track.style.transform = `translateX(-${currentSlide * 100}%)`; document.querySelectorAll('.carousel-dot').forEach((d, j) => d.classList.toggle('active', j === currentSlide)); resetAutoAdvance(); }
+        function moveSlide(d) { let n = currentSlide + d; if (n < 0) n = totalSlides - 1; if (n >= totalSlides) n = 0; goToSlide(n); }
+        document.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') moveSlide(-1); if (e.key === 'ArrowRight') moveSlide(1); });
+        function resetAutoAdvance() { clearInterval(autoAdvance); autoAdvance = setInterval(() => moveSlide(1), 10000); }
+        const container = document.querySelector('.carousel-container'); container.addEventListener('mouseenter', () => clearInterval(autoAdvance)); container.addEventListener('mouseleave', resetAutoAdvance);
+        let touchStartX = 0; container.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true }); container.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) moveSlide(diff > 0 ? 1 : -1); }, { passive: true });
+        resetAutoAdvance();
+    </script>
+</body>
+</html>

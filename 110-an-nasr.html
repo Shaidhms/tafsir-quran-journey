@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah An-Nasr - The Victory | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; line-height: 1.8; }
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #0d0d0d; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100; }
+        .nav-bar .logo { color: #c9a84c; font-weight: 700; font-size: 1.1em; text-decoration: none; }
+        .nav-bar .progress { color: #888; font-size: 0.9em; }
+        .hero { background: linear-gradient(135deg, #2a1a0a 0%, #4a2a0a 50%, #2a1a0a 100%); padding: 80px 20px; text-align: center; border-bottom: 2px solid #5c3a1a; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 70%); }
+        .hero h1 { font-family: 'Amiri', serif; font-size: 3em; color: #c9a84c; margin-bottom: 10px; }
+        .hero .arabic-title { font-family: 'Amiri', serif; font-size: 4em; color: #fff; direction: rtl; margin-bottom: 15px; }
+        .hero .subtitle { font-size: 1.1em; color: #8ab4f8; font-weight: 300; }
+        .hero .badge { display: inline-block; margin-top: 20px; padding: 8px 20px; background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c; border-radius: 30px; color: #c9a84c; font-size: 0.9em; }
+        .view-toggle { display: flex; justify-content: center; gap: 0; background: #111; border-bottom: 1px solid #222; padding: 0; }
+        .view-toggle button { background: none; border: none; color: #888; padding: 16px 30px; font-size: 1em; font-family: 'Inter', sans-serif; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; } .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .carousel-wrapper { max-width: 900px; margin: 40px auto; padding: 0 20px; position: relative; }
+        .carousel-intro { text-align: center; margin-bottom: 30px; }
+        .carousel-intro h2 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 8px; }
+        .carousel-intro p { color: #888; font-size: 0.95em; }
+        .carousel-container { position: relative; overflow: hidden; border-radius: 20px; border: 3px solid #333; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .carousel-track { display: flex; transition: transform 0.5s ease; }
+        .carousel-slide { min-width: 100%; background: #FFF9F0; position: relative; display: flex; flex-direction: column; }
+        .slide-drawing { width: 100%; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .slide-drawing svg { width: 100%; height: 100%; }
+        .slide-bottom { background: #FFF3E0; padding: 24px 30px; border-top: 2px dashed #e0c9a0; }
+        .slide-bottom .verse-num-badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: #e67e22; color: #fff; border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px; }
+        .slide-bottom .slide-arabic-text { font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50; direction: rtl; text-align: center; margin-bottom: 4px; }
+        .slide-bottom .slide-translit-text { text-align: center; color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px; }
+        .slide-bottom .slide-kid-text { font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5; text-align: center; }
+        .carousel-nav { position: absolute; top: 40%; transform: translateY(-50%); background: rgba(44, 62, 80, 0.8); border: 2px solid #e67e22; color: #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.3em; z-index: 10; transition: all 0.3s; }
+        .carousel-nav:hover { background: #e67e22; } .carousel-prev { left: 12px; } .carousel-next { right: 12px; }
+        .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .carousel-dot { width: 12px; height: 12px; border-radius: 50%; background: #333; cursor: pointer; transition: all 0.3s; border: 2px solid #555; }
+        .carousel-dot.active { background: #e67e22; border-color: #e67e22; transform: scale(1.2); }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; } .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: background 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .arabic-tip { background: #1a1a1a; border-radius: 12px; padding: 25px; margin: 15px 0; border: 1px solid #2a2a2a; }
+        .arabic-tip h4 { color: #c9a84c; margin-bottom: 10px; }
+        .arabic-tip p { color: #bbb; font-size: 0.95em; }
+        .arabic-letter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-top: 15px; }
+        .letter-card { background: #222; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #333; }
+        .letter-card .letter { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; }
+        .letter-card .name { font-size: 0.85em; color: #c9a84c; margin-top: 5px; }
+        .letter-card .sound { font-size: 0.8em; color: #888; }
+        .root-word-box { display: flex; align-items: center; gap: 20px; background: #1a1a1a; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid #2a2a2a; flex-wrap: wrap; }
+        .root-word-box .root { font-family: 'Amiri', serif; font-size: 2em; color: #c9a84c; direction: rtl; }
+        .root-word-box .arrow { color: #555; font-size: 1.5em; }
+        .root-word-box .derivatives { display: flex; gap: 12px; flex-wrap: wrap; }
+        .root-word-box .derivative { background: #222; padding: 8px 15px; border-radius: 8px; text-align: center; }
+        .root-word-box .derivative .ar { font-family: 'Amiri', serif; font-size: 1.3em; color: #fff; }
+        .root-word-box .derivative .en { font-size: 0.8em; color: #888; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; }
+        footer a { color: #c9a84c; text-decoration: none; } footer a:hover { text-decoration: underline; }
+        @media (max-width: 600px) { .hero h1 { font-size: 2em; } .hero .arabic-title { font-size: 2.8em; } .verse-arabic { font-size: 1.8em; } .section { padding: 20px; } .words-grid { gap: 8px; } .word-chip { min-width: 75px; padding: 10px 12px; } .slide-bottom { padding: 18px 20px; } .slide-bottom .slide-kid-text { font-size: 1.1em; } .slide-bottom .slide-arabic-text { font-size: 1.2em; } .carousel-nav { width: 36px; height: 36px; font-size: 1em; } }
+    </style>
+</head>
+<body>
+    <svg style="position:absolute;width:0;height:0;"><defs><filter id="sketchy"><feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
+
+    <nav class="nav-bar">
+        <a href="/" class="logo" style="text-decoration:none;">Tafsir - Quran Journey</a>
+        <div class="progress">Surah 110 of 114</div>
+    </nav>
+
+    <header class="hero">
+        <div class="arabic-title">النصر</div>
+        <h1>An-Nasr</h1>
+        <p class="subtitle">The Victory - The Last Surah and a Hidden Farewell</p>
+        <div class="badge">Madani Surah &middot; 3 Verses &middot; 19 Words</div>
+    </header>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <!-- ==================== CAROUSEL ==================== -->
+    <div class="carousel-section" id="carousel-view">
+        <div class="carousel-wrapper">
+            <div class="carousel-intro">
+                <h2>An-Nasr: A Visual Journey</h2>
+                <p>The last surah revealed. A victory celebration that was really a goodbye.</p>
+            </div>
+            <div class="carousel-container">
+                <div class="carousel-track" id="carouselTrack">
+
+                    <!-- SLIDE 1: Victory Arrives -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="#ddd"/></pattern>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+                                <g filter="url(#sketchy)">
+                                    <!-- Gates opening -->
+                                    <rect x="220" y="70" width="120" height="240" rx="3" fill="none" stroke="#8B6914" stroke-width="4"/>
+                                    <rect x="360" y="70" width="120" height="240" rx="3" fill="none" stroke="#8B6914" stroke-width="4"/>
+                                    <!-- Doors slightly open -->
+                                    <rect x="225" y="75" width="110" height="230" rx="2" fill="#FFF3B0" opacity="0.4"/>
+                                    <rect x="365" y="75" width="110" height="230" rx="2" fill="#FFF3B0" opacity="0.4"/>
+                                    <!-- Arch over gates -->
+                                    <path d="M220,70 Q350,10 480,70" fill="none" stroke="#8B6914" stroke-width="4"/>
+                                    <!-- Light pouring through gap -->
+                                    <rect x="335" y="80" width="30" height="225" fill="#FFD700" opacity="0.4"/>
+                                    <!-- Light rays -->
+                                    <line x1="350" y1="40" x2="350" y2="5" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="350" y1="40" x2="280" y2="10" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <line x1="350" y1="40" x2="420" y2="10" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                                    <!-- Flag/banner -->
+                                    <line x1="350" y1="20" x2="350" y2="-5" stroke="#8B6914" stroke-width="3"/>
+                                    <path d="M350,-5 Q375,5 350,15" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/>
+                                    <!-- Stars -->
+                                    <text x="150" y="60" font-family="Caveat" font-size="26" fill="#F39C12" opacity="0.7">*</text>
+                                    <text x="540" y="50" font-family="Caveat" font-size="24" fill="#F39C12" opacity="0.8">*</text>
+                                    <text x="120" y="180" font-family="Caveat" font-size="20" fill="#F39C12" opacity="0.5">*</text>
+                                    <text x="580" y="170" font-family="Caveat" font-size="22" fill="#F39C12" opacity="0.6">*</text>
+                                </g>
+                                <text x="350" y="345" text-anchor="middle" font-family="Caveat" font-size="26" fill="#e67e22" font-weight="600">The gates open. Victory has arrived.</text>
+                                <text x="350" y="375" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Makkah is conquered. The mission is almost complete.</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">1</div>
+                            <div class="slide-arabic-text">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</div>
+                            <div class="slide-translit-text">Idha ja'a nasrullahi wal-fath</div>
+                            <div class="slide-kid-text">After years of hardship, persecution, and patience, Allah's help finally arrives. The conquest of Makkah. The doors that were once closed are now wide open. Victory didn't come from an army. It came from Allah.</div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2: People Entering in Crowds -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+                                <g filter="url(#sketchy)">
+                                    <!-- Door/gate in center -->
+                                    <rect x="310" y="50" width="80" height="180" rx="3" fill="#FFF3B0" stroke="#8B6914" stroke-width="3" opacity="0.5"/>
+                                    <path d="M310,50 Q350,20 390,50" fill="none" stroke="#8B6914" stroke-width="3"/>
+                                    <!-- Circles representing people flowing toward the door from all sides -->
+                                    <!-- Wave 1 (closest) -->
+                                    <circle cx="250" cy="200" r="12" fill="#3498db" stroke="#2980b9" stroke-width="2" opacity="0.7"/>
+                                    <circle cx="450" cy="195" r="12" fill="#3498db" stroke="#2980b9" stroke-width="2" opacity="0.7"/>
+                                    <circle cx="300" cy="220" r="12" fill="#27ae60" stroke="#229954" stroke-width="2" opacity="0.7"/>
+                                    <circle cx="400" cy="225" r="12" fill="#27ae60" stroke="#229954" stroke-width="2" opacity="0.7"/>
+                                    <!-- Wave 2 -->
+                                    <circle cx="180" cy="240" r="11" fill="#e67e22" stroke="#d35400" stroke-width="2" opacity="0.6"/>
+                                    <circle cx="520" cy="235" r="11" fill="#e67e22" stroke="#d35400" stroke-width="2" opacity="0.6"/>
+                                    <circle cx="230" cy="260" r="11" fill="#8e44ad" stroke="#7d3c98" stroke-width="2" opacity="0.6"/>
+                                    <circle cx="470" cy="255" r="11" fill="#8e44ad" stroke="#7d3c98" stroke-width="2" opacity="0.6"/>
+                                    <circle cx="350" cy="260" r="11" fill="#e74c3c" stroke="#c0392b" stroke-width="2" opacity="0.6"/>
+                                    <!-- Wave 3 (farthest) -->
+                                    <circle cx="120" cy="280" r="10" fill="#3498db" stroke="#2980b9" stroke-width="2" opacity="0.4"/>
+                                    <circle cx="580" cy="275" r="10" fill="#3498db" stroke="#2980b9" stroke-width="2" opacity="0.4"/>
+                                    <circle cx="160" cy="300" r="10" fill="#27ae60" stroke="#229954" stroke-width="2" opacity="0.4"/>
+                                    <circle cx="540" cy="295" r="10" fill="#27ae60" stroke="#229954" stroke-width="2" opacity="0.4"/>
+                                    <circle cx="280" cy="290" r="10" fill="#e67e22" stroke="#d35400" stroke-width="2" opacity="0.4"/>
+                                    <circle cx="420" cy="285" r="10" fill="#e67e22" stroke="#d35400" stroke-width="2" opacity="0.4"/>
+                                    <circle cx="350" cy="300" r="10" fill="#8e44ad" stroke="#7d3c98" stroke-width="2" opacity="0.4"/>
+                                    <!-- Arrows flowing toward door -->
+                                    <path d="M250,190 Q280,170 310,155" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.5"/>
+                                    <path d="M450,185 Q420,170 390,155" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.5"/>
+                                </g>
+                                <text x="350" y="95" text-anchor="middle" font-family="Caveat" font-size="16" fill="#8B6914">Islam</text>
+                                <text x="350" y="345" text-anchor="middle" font-family="Caveat" font-size="26" fill="#e67e22" font-weight="600">Not one by one. In CROWDS. Afwaja!</text>
+                                <text x="350" y="375" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">The same people who fought Islam now embrace it.</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">2</div>
+                            <div class="slide-arabic-text">وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا</div>
+                            <div class="slide-translit-text">Wa ra'aytan-nasa yadkhuluna fi dinil-lahi afwaja</div>
+                            <div class="slide-kid-text">And you SEE it with your own eyes. People are entering Islam not one at a time, but in CROWDS, in waves. Entire tribes. The same people who once fought against the message are now running toward it. The truth won without a single forced conversion.</div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3: Praise and Seek Forgiveness -->
+                    <div class="carousel-slide">
+                        <div class="slide-drawing">
+                            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="700" height="400" fill="#FFF9F0"/>
+                                <rect width="700" height="400" fill="url(#dots)"/>
+                                <g filter="url(#sketchy)">
+                                    <!-- Hands raised in dua (abstract, no person) -->
+                                    <path d="M300,200 Q300,140 320,100 Q330,80 340,100 L340,180" fill="none" stroke="#c9a84c" stroke-width="4" stroke-linecap="round"/>
+                                    <path d="M400,200 Q400,140 380,100 Q370,80 360,100 L360,180" fill="none" stroke="#c9a84c" stroke-width="4" stroke-linecap="round"/>
+                                    <!-- Light descending between hands -->
+                                    <ellipse cx="350" cy="120" rx="30" ry="50" fill="#FFD700" opacity="0.2"/>
+                                    <ellipse cx="350" cy="120" rx="15" ry="30" fill="#FFD700" opacity="0.3"/>
+                                    <!-- Tears/drops (seeking forgiveness) -->
+                                    <ellipse cx="320" cy="220" rx="4" ry="7" fill="#85C1E9" opacity="0.7"/>
+                                    <ellipse cx="380" cy="225" rx="4" ry="7" fill="#85C1E9" opacity="0.6"/>
+                                    <ellipse cx="350" cy="235" rx="4" ry="7" fill="#85C1E9" opacity="0.5"/>
+                                    <!-- "SubhanAllah" text floating -->
+                                    <text x="180" y="120" font-family="Amiri" font-size="20" fill="#c9a84c" opacity="0.6">سُبْحَانَ</text>
+                                    <text x="450" y="115" font-family="Amiri" font-size="20" fill="#c9a84c" opacity="0.6">اسْتَغْفِرْ</text>
+                                    <!-- Sunset colors (end of mission, end of life) -->
+                                    <rect x="0" y="280" width="700" height="120" fill="#FDE9D9" opacity="0.5"/>
+                                    <circle cx="350" cy="310" r="40" fill="#F39C12" opacity="0.3"/>
+                                    <circle cx="350" cy="310" r="25" fill="#e67e22" opacity="0.3"/>
+                                </g>
+                                <text x="350" y="300" text-anchor="middle" font-family="Caveat" font-size="16" fill="#e67e22">sunset...</text>
+                                <text x="350" y="350" text-anchor="middle" font-family="Caveat" font-size="24" fill="#e67e22" font-weight="600">At your peak? Don't celebrate. Humble yourself.</text>
+                                <text x="350" y="378" text-anchor="middle" font-family="Caveat" font-size="18" fill="#7f8c8d">Glorify Allah. Seek forgiveness. Even at the top.</text>
+                            </svg>
+                        </div>
+                        <div class="slide-bottom">
+                            <div class="verse-num-badge">3</div>
+                            <div class="slide-arabic-text">فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا</div>
+                            <div class="slide-translit-text">Fasabbih bihamdi Rabbika wastaghfirhu, innahu kana tawwaba</div>
+                            <div class="slide-kid-text">Here's the shocking part. At the moment of greatest victory, Allah doesn't say "celebrate." He says: glorify Me, praise Me, and ASK FOR FORGIVENESS. Even the Prophet, at his peak, is told to seek forgiveness. Because the mission is ending. This was a hidden farewell.</div>
+                        </div>
+                    </div>
+
+                </div>
+                <button class="carousel-nav carousel-prev" onclick="moveSlide(-1)">&#8249;</button>
+                <button class="carousel-nav carousel-next" onclick="moveSlide(1)">&#8250;</button>
+            </div>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </div>
+
+    <!-- ==================== DEEP DIVE ==================== -->
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section">
+                <div class="section-title">Quick Facts</div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">110</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">3</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">19</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Madinah</div></div>
+                    <div class="fact-card"><div class="label">Distinction</div><div class="value" style="font-size:0.9em">Last Surah Revealed</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Victory & Farewell</div></div>
+                </div>
+            </section>
+
+            <section class="section story">
+                <div class="section-title">The Story Behind This Surah</div>
+                <p>This is the <span class="highlight">last complete surah revealed</span> to the Prophet Muhammad (peace be upon him). It came after the conquest of Makkah in the 10th year of Hijrah, during the Farewell Pilgrimage.</p>
+                <p>On the surface, it looks like a victory celebration. But the companions who understood deeply, like <span class="highlight">Ibn Abbas and Umar</span>, recognized it for what it truly was: an announcement that the Prophet's mission was complete, and his time in this world was coming to an end.</p>
+                <div class="important">
+                    <p>Umar ibn Al-Khattab asked Ibn Abbas about this surah in a gathering. Ibn Abbas said: <strong>"It was the announcement of the death of the Messenger of Allah. Allah informed him of it."</strong> Umar said: <strong>"I know nothing about it except what you have said."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih al-Bukhari 4970</p>
+                </div>
+                <p>Think about this: at the greatest moment of triumph, when Makkah is conquered and people are flooding into Islam, Allah tells His Prophet: "Your job is done. Now prepare to meet Me." The instruction isn't to celebrate. It's to <span class="highlight">glorify Allah and seek forgiveness</span>.</p>
+                <div class="important">
+                    <p>Aishah (may Allah be pleased with her) said: <strong>"After Surah An-Nasr was revealed, the Prophet (peace be upon him) would frequently say in his ruku' and sujud: 'Subhanaka Allahumma Rabbana wa bihamdik, Allahummaghfirli' (Glory be to You, O Allah our Lord, and praise be to You. O Allah, forgive me)."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih al-Bukhari 4967, Sahih Muslim 484</p>
+                </div>
+                <p>The Prophet passed away approximately <span class="highlight">80 days after this surah was revealed</span>.</p>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</div>
+                    <div class="verse-transliteration">Idha ja'a nasrullahi wal-fath</div>
+                    <div class="verse-translation">When the victory of Allah has come and the conquest.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (read right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                            <div class="word-chip"><span class="ar">جَاءَ</span><span class="trans">ja'a</span><span class="meaning">comes/has come</span></div>
+                            <div class="word-chip"><span class="ar">نَصْرُ</span><span class="trans">nasru</span><span class="meaning">victory/help (of)</span></div>
+                            <div class="word-chip"><span class="ar">اللَّهِ</span><span class="trans">Allahi</span><span class="meaning">Allah</span></div>
+                            <div class="word-chip"><span class="ar">وَالْفَتْحُ</span><span class="trans">wal-fathu</span><span class="meaning">and the conquest</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p><strong>"Idha"</strong> (when) implies certainty - this WILL happen, not "if." <strong>"Nasr"</strong> is divine help/victory, and <strong>"al-fath"</strong> is the conquest/opening, specifically referring to the Conquest of Makkah (Fath Makkah). The victory is attributed to Allah ("nasrULLAH") - it's His help, not your strength. The city that expelled the Prophet 8 years earlier now opens its doors to him.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا</div>
+                    <div class="verse-transliteration">Wa ra'aytan-nasa yadkhuluna fi dinil-lahi afwaja</div>
+                    <div class="verse-translation">And you see the people entering into the religion of Allah in multitudes.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَرَأَيْتَ</span><span class="trans">wa-ra'ayta</span><span class="meaning">and you see</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسَ</span><span class="trans">an-nasa</span><span class="meaning">the people</span></div>
+                            <div class="word-chip"><span class="ar">يَدْخُلُونَ</span><span class="trans">yadkhuluna</span><span class="meaning">entering</span></div>
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">into</span></div>
+                            <div class="word-chip"><span class="ar">دِينِ</span><span class="trans">dini</span><span class="meaning">religion (of)</span></div>
+                            <div class="word-chip"><span class="ar">اللَّهِ</span><span class="trans">Allahi</span><span class="meaning">Allah</span></div>
+                            <div class="word-chip"><span class="ar">أَفْوَاجًا</span><span class="trans">afwaja</span><span class="meaning">in multitudes</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p><strong>"Ra'ayta"</strong> - you SAW it, you witnessed it with your own eyes. <strong>"Yadkhuluna"</strong> is present tense, showing continuous action - they're streaming in, not just a one-time event. <strong>"Afwaja"</strong> (plural of fawj) means groups, crowds, waves. Before the conquest, people accepted Islam individually, often at great personal risk. After the conquest, entire tribes entered at once. The word "afwaja" paints a picture of waves of people flooding in.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا</div>
+                    <div class="verse-transliteration">Fasabbih bihamdi Rabbika wastaghfirhu, innahu kana tawwaba</div>
+                    <div class="verse-translation">Then exalt with praise of your Lord and ask forgiveness of Him. Indeed, He is ever Accepting of repentance.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَسَبِّحْ</span><span class="trans">fa-sabbih</span><span class="meaning">Then glorify</span></div>
+                            <div class="word-chip"><span class="ar">بِحَمْدِ</span><span class="trans">bi-hamdi</span><span class="meaning">with praise (of)</span></div>
+                            <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">Rabbika</span><span class="meaning">your Lord</span></div>
+                            <div class="word-chip"><span class="ar">وَاسْتَغْفِرْهُ</span><span class="trans">wastaghfirhu</span><span class="meaning">and seek His forgiveness</span></div>
+                            <div class="word-chip"><span class="ar">إِنَّهُ</span><span class="trans">innahu</span><span class="meaning">Indeed, He</span></div>
+                            <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">is (always)</span></div>
+                            <div class="word-chip"><span class="ar">تَوَّابًا</span><span class="trans">tawwaba</span><span class="meaning">Accepting of repentance</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The climax. At the peak of success: <strong>"Sabbih"</strong> (glorify) + <strong>"bihamdi"</strong> (with praise) - attribute the victory to Allah, not yourself. <strong>"Wastaghfirhu"</strong> - and seek forgiveness. Why forgiveness at the moment of victory? Because: (1) no matter how well you served, you could always have done more, (2) success can lead to pride, so stay humble, (3) this is preparation for meeting Allah. <strong>"Tawwaba"</strong> is the intensive form - He doesn't just accept repentance once, He LOVES to accept it, again and again.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Learn Arabic Through An-Nasr</div>
+
+                <div class="arabic-tip">
+                    <h4>Key Vocabulary</h4>
+                    <div class="arabic-letter-grid">
+                        <div class="letter-card"><div class="letter">نَصْر</div><div class="name">Nasr</div><div class="sound">Victory/Help - 12 times</div></div>
+                        <div class="letter-card"><div class="letter">فَتْح</div><div class="name">Fath</div><div class="sound">Conquest/Opening - 8 times</div></div>
+                        <div class="letter-card"><div class="letter">دِين</div><div class="name">Deen</div><div class="sound">Religion - 92 times</div></div>
+                        <div class="letter-card"><div class="letter">سَبَّحَ</div><div class="name">Sabbaha</div><div class="sound">To glorify - 92 times</div></div>
+                        <div class="letter-card"><div class="letter">اسْتَغْفَرَ</div><div class="name">Istaghfara</div><div class="sound">To seek forgiveness - 45 times</div></div>
+                        <div class="letter-card"><div class="letter">تَوَّاب</div><div class="name">Tawwab</div><div class="sound">Oft-Returning - 11 times</div></div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Root Word System: ن ص ر (N-S-R) = Help/Victory</h4>
+                    <div class="root-word-box">
+                        <div class="root">ن ص ر</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">نَصْر</div><div class="en">nasr (victory/help)</div></div>
+                            <div class="derivative"><div class="ar">نَاصِر</div><div class="en">nasir (helper)</div></div>
+                            <div class="derivative"><div class="ar">أَنصَار</div><div class="en">ansar (helpers - the Madinah Muslims)</div></div>
+                            <div class="derivative"><div class="ar">مَنصُور</div><div class="en">mansoor (victorious)</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Grammar Tip: The Verb Form X - Istaghfir</h4>
+                    <p><strong>"Istaghfir"</strong> uses Form X (istaf'ala) which means "to seek/request." The root is gh-f-r (forgiveness). So istaghfir literally means "to seek forgiveness."</p>
+                    <div class="root-word-box">
+                        <div class="root">غ ف ر</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">غَفَرَ</div><div class="en">ghafara (to forgive)</div></div>
+                            <div class="derivative"><div class="ar">غَفُور</div><div class="en">ghafoor (Most Forgiving)</div></div>
+                            <div class="derivative"><div class="ar">مَغْفِرَة</div><div class="en">maghfira (forgiveness)</div></div>
+                            <div class="derivative"><div class="ar">اسْتَغْفَرَ</div><div class="en">istaghfara (to seek forgiveness)</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-title">Key Lessons from An-Nasr</div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Victory belongs to Allah, not you.</strong><p style="color: #999; font-size: 0.95em;">"Nasr ALLAH" - the victory is His. Success in anything is from Allah. Your job is effort and patience. The result is His.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">At your peak, stay humble.</strong><p style="color: #999; font-size: 0.95em;">The greatest man who ever lived was told to seek forgiveness at his greatest moment. If he needed humility at the top, so do you.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Every mission has an end.</strong><p style="color: #999; font-size: 0.95em;">This surah was a farewell. The Prophet's work was done. Prepare for your ending. What legacy will you leave?</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah is always ready to forgive.</strong><p style="color: #999; font-size: 0.95em;">"Tawwab" - He doesn't forgive once. He loves to forgive, again and again. Never stop asking, no matter how many times you've fallen.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> Based on Tafsir Ibn Kathir, Tafsir As-Sa'di. Hadith from Sahih al-Bukhari and Sahih Muslim. This is a learning aid - always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="/">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        function showView(view) { const c = document.getElementById('carousel-view'), d = document.getElementById('deep-dive-view'), b = document.querySelectorAll('.view-toggle button'); if (view === 'carousel') { c.classList.remove('hidden'); d.classList.remove('visible'); b[0].classList.add('active'); b[1].classList.remove('active'); } else { c.classList.add('hidden'); d.classList.add('visible'); b[1].classList.add('active'); b[0].classList.remove('active'); } }
+        let currentSlide = 0; const track = document.getElementById('carouselTrack'), slides = track.children, totalSlides = slides.length, dotsContainer = document.getElementById('carouselDots'); let autoAdvance;
+        for (let i = 0; i < totalSlides; i++) { const dot = document.createElement('button'); dot.className = 'carousel-dot' + (i === 0 ? ' active' : ''); dot.onclick = () => goToSlide(i); dotsContainer.appendChild(dot); }
+        function goToSlide(i) { currentSlide = i; track.style.transform = `translateX(-${currentSlide * 100}%)`; document.querySelectorAll('.carousel-dot').forEach((d, j) => d.classList.toggle('active', j === currentSlide)); resetAutoAdvance(); }
+        function moveSlide(d) { let n = currentSlide + d; if (n < 0) n = totalSlides - 1; if (n >= totalSlides) n = 0; goToSlide(n); }
+        document.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') moveSlide(-1); if (e.key === 'ArrowRight') moveSlide(1); });
+        function resetAutoAdvance() { clearInterval(autoAdvance); autoAdvance = setInterval(() => moveSlide(1), 10000); }
+        const container = document.querySelector('.carousel-container'); container.addEventListener('mouseenter', () => clearInterval(autoAdvance)); container.addEventListener('mouseleave', resetAutoAdvance);
+        let touchStartX = 0; container.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true }); container.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) moveSlide(diff > 0 ? 1 : -1); }, { passive: true });
+        resetAutoAdvance();
+    </script>
+</body>
+</html>
