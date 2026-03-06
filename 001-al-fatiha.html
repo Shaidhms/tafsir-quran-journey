@@ -1100,20 +1100,6 @@
                 <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir, Tafsir As-Sa'di, and Tafsir Al-Qurtubi. Hadith references are from Sahih Al-Bukhari and Sahih Muslim. The Arabic word-by-word breakdown follows standard Quranic Arabic grammar. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
             </div>
 
-            <button class="prompts-toggle" onclick="togglePrompts()">Show AI Image Prompts for Each Verse</button>
-            <div class="prompts-section" id="promptsSection">
-                <div class="section" style="margin-top: 15px;">
-                    <div class="section-title">AI Image Prompts</div>
-                    <p style="color: #888; margin-bottom: 20px;">Use these prompts with Midjourney, DALL-E, or any AI image generator to create actual illustrations for each verse. All prompts respect Islamic guidelines: no depiction of faces, humans, prophets, or divine beings.</p>
-                    <div class="prompt-card"><h4>Verse 1: Bismillah - The Door of Light</h4><pre>A majestic arched doorway made of ornate Islamic geometric patterns, carved in gold and deep blue. The door is slightly open, with brilliant warm golden light streaming through the gap. The doorway stands alone in a vast cosmic space filled with subtle stars. No human figures. Style: hand-drawn sketch, Excalidraw style, warm colors. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 2: Alhamdulillah - Lord of All Worlds</h4><pre>A whimsical hand-drawn landscape showing multiple elements of creation: a bright sun, crescent moon, green mountains, blue ocean waves, a leafy tree, colorful fish, clouds, and stars. All drawn in a simple, childlike sketch style with warm crayon colors on cream paper. No human figures. Style: Excalidraw/whiteboard sketch. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 3: Ar-Rahman Ar-Raheem - Double Mercy</h4><pre>A big warm sun at the top raining down blue drops and red hearts onto a garden of colorful flowers below. Simple hand-drawn style like a child's illustration. Flowers are red, purple, yellow, pink, blue. Green stems and leaves. Warm cream background. No human figures. Style: whiteboard/notebook sketch. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 4: Maliki Yawmid-Deen - The Grand Scale</h4><pre>A hand-drawn balance scale on a wooden stand. Left bowl has green stars (good deeds), right bowl has grey stones (bad deeds). Simple sketch style on cream paper. A crossed-out crown in the corner (no king has power). No human figures. Style: Excalidraw/educational whiteboard. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 5: Iyyaka Na'budu - Only You</h4><pre>A bright golden star at the top center. A blue circle labeled "ME" at the bottom with a bold orange arrow pointing straight up to the star. Faded grey circles around the sides labeled "money", "fame", "power" with crossed-out dotted lines. Simple sketch on cream paper. No human figures. Style: hand-drawn diagram. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 6: Ihdinas-Sirat - The Straight Path</h4><pre>A straight road drawn in perspective going toward a bright light on the horizon. Orange dashes mark the center line. Green trees on both sides. Simple hand-drawn style on cream notebook paper. No human figures. Style: child's drawing / Excalidraw whiteboard. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 7: Three Roads - Choose Wisely</h4><pre>Three paths diverging from a blue circle labeled "YOU". Center path is bold green with a checkmark at the end. Left path is faded red with an X (labeled "knew truth, ignored it"). Right path is faded red with an X (labeled "tried hard, got lost"). Simple hand-drawn sketch on cream paper. No human figures. Style: educational diagram. Aspect ratio: 1:1.</pre></div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -1194,12 +1180,6 @@
 
         resetAutoAdvance();
 
-        function togglePrompts() {
-            const section = document.getElementById('promptsSection');
-            const btn = document.querySelector('.prompts-toggle');
-            section.classList.toggle('visible');
-            btn.textContent = section.classList.contains('visible') ? 'Hide AI Image Prompts' : 'Show AI Image Prompts for Each Verse';
-        }
     </script>
 
 </body>

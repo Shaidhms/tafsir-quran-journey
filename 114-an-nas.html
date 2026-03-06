@@ -940,19 +940,6 @@
                 <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir, Tafsir As-Sa'di, and Tafsir Al-Qurtubi. Hadith references are from Sahih Al-Bukhari, Sahih Muslim, Sunan Abu Dawud, Sunan At-Tirmidhi, and Sunan An-Nasa'i. The Arabic word-by-word breakdown follows standard Quranic Arabic grammar. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
             </div>
 
-            <button class="prompts-toggle" onclick="togglePrompts()">Show AI Image Prompts for Each Verse</button>
-            <div class="prompts-section" id="promptsSection">
-                <div class="section" style="margin-top: 15px;">
-                    <div class="section-title">AI Image Prompts</div>
-                    <p style="color: #888; margin-bottom: 20px;">Use these prompts with Midjourney, DALL-E, or any AI image generator to create actual illustrations for each verse. All prompts respect Islamic guidelines: no depiction of faces, humans, prophets, or divine beings.</p>
-                    <div class="prompt-card"><h4>Verse 1: Lord of Mankind - The Shield</h4><pre>A glowing golden shield with Islamic geometric patterns floating in a cosmic space. Dark smoky wisps approach from both sides but are repelled by the shield's golden light. Stars and light rays emanate from the shield. No human figures. Abstract, warm gold and deep indigo palette. Style: hand-drawn sketch on cream notebook paper, Excalidraw/whiteboard style. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 2: King of Mankind - The Only Crown</h4><pre>A large ornate golden crown with jewels at the center, radiating light. On either side, smaller grey crowns are crossed out with red X marks (symbolizing earthly rulers have no real power). Simple hand-drawn sketch style on cream paper. No human figures. Gold, grey, and red color palette. Style: educational whiteboard/Excalidraw. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 3: God of Mankind - One Light</h4><pre>A brilliant central golden light source with concentric glowing circles. Multiple orange arrows from all corners of the image point toward this single light. Small dimmed circles on the edges are crossed out (false gods). Cream background. No human figures. Style: hand-drawn diagram on notebook paper. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 4: The Retreating Whisperer</h4><pre>A soft pink heart shape in the center. Dark smoky tendrils approach from the left side, with small "psst" text. On the right, a golden light burst pushes the shadows away, with dashed retreat lines. The shadows are shrinking back. No human figures. Cream paper background. Style: hand-drawn sketch, Excalidraw style. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 5: Whispers in the Chest</h4><pre>An abstract chest/torso outline (no face or head) with a glowing red heart inside. Dark wispy thought lines enter from both sides. Thought bubbles around the edges contain negative phrases. A golden dashed circle surrounds the heart as a protective barrier. Cream paper background. No human face or figure details. Style: whiteboard sketch. Aspect ratio: 1:1.</pre></div>
-                    <div class="prompt-card"><h4>Verse 6: From Jinn and Mankind</h4><pre>Split composition. Left side: an abstract blue-tinted smoke/flame form (representing jinn, invisible). Right side: an abstract purple silhouette without any facial features (representing human whisperer). In the center, a small golden shield with a light. Labels "Jinn" and "People" below each side. Cream paper background. No human faces. Style: hand-drawn educational diagram. Aspect ratio: 1:1.</pre></div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -1033,12 +1020,6 @@
 
         resetAutoAdvance();
 
-        function togglePrompts() {
-            const section = document.getElementById('promptsSection');
-            const btn = document.querySelector('.prompts-toggle');
-            section.classList.toggle('visible');
-            btn.textContent = section.classList.contains('visible') ? 'Hide AI Image Prompts' : 'Show AI Image Prompts for Each Verse';
-        }
     </script>
 
 </body>
