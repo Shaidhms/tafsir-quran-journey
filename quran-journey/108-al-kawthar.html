@@ -18,6 +18,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            padding-top: 60px;
         }
 
         /* ===== HEADER ===== */
@@ -164,9 +165,70 @@
             .slide-kid-text { font-size: 1.1em; }
             .controls button { padding: 8px 16px; font-size: 0.85em; }
         }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
     </style>
 </head>
 <body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 108 of 114</div>
+    </nav>
 
     <div class="header">
         <div class="arabic-title">سُورَةُ الْكَوْثَرِ</div>
@@ -174,6 +236,12 @@
         <p>The Abundance - 3 Verses - Makkan</p>
     </div>
 
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
     <div class="slide-frame">
         <div class="slide-drawing" id="slideDrawing">
             <div id="penCursor">
@@ -246,6 +314,126 @@
         <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
         <span id="speedLabel">1x</span>
     </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">108</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">3</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">10</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">Abundance</div></div>
+                    <div class="fact-card"><div class="label">Shortest Surah?</div><div class="value" style="font-size:0.9em">Yes (by words)</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>When the Prophet Muhammad (peace be upon him) lost his son Abdullah, the enemies of Islam mocked him. A man named Al-'As ibn Wa'il called the Prophet <span class="highlight">"abtar"</span> - meaning "cut off" - suggesting that because the Prophet had no surviving sons, his legacy and message would die with him.</p>
+                <p>This deeply hurt the Prophet. So Allah revealed this surah as a <span class="highlight">direct consolation and response</span>.</p>
+                <div class="important">
+                    <p>The word <strong>"Al-Kawthar"</strong> means "abundance" or "the greatest good." It refers to a river in Paradise that Allah has promised to the Prophet Muhammad (peace be upon him).</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih al-Bukhari 6581</p>
+                </div>
+                <p>The irony? The man who called the Prophet "cut off" - <span class="highlight">Al-'As ibn Wa'il is the one whose name is forgotten</span>, while the Prophet Muhammad's name is mentioned billions of times every single day in the adhan, in prayers, and in the hearts of 2 billion Muslims worldwide.</p>
+                <p>This is the shortest surah in the Quran by word count, yet it carries one of the most <span class="highlight">powerful messages of hope</span>: Allah never abandons those who are patient.</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">&#x625;&#x650;&#x646;&#x651;&#x64E;&#x627; &#x623;&#x64E;&#x639;&#x652;&#x637;&#x64E;&#x64A;&#x652;&#x646;&#x64E;&#x627;&#x643;&#x64E; &#x627;&#x644;&#x652;&#x643;&#x64E;&#x648;&#x652;&#x62B;&#x64E;&#x631;&#x64E;</div>
+                    <div class="verse-transliteration">Inna a'tayna kal-kawthar</div>
+                    <div class="verse-translation">Indeed, We have granted you Al-Kawthar (abundance).</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">&#x625;&#x650;&#x646;&#x651;&#x64E;&#x627;</span><span class="trans">inna</span><span class="meaning">Indeed We</span></div>
+                            <div class="word-chip"><span class="ar">&#x623;&#x64E;&#x639;&#x652;&#x637;&#x64E;&#x64A;&#x652;&#x646;&#x64E;&#x627;&#x643;&#x64E;</span><span class="trans">a'taynaka</span><span class="meaning">have given you</span></div>
+                            <div class="word-chip"><span class="ar">&#x627;&#x644;&#x652;&#x643;&#x64E;&#x648;&#x652;&#x62B;&#x64E;&#x631;&#x64E;</span><span class="trans">al-kawthar</span><span class="meaning">the Abundance</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah starts with "Indeed" (inna) - a word of emphasis. He's saying: "Without a doubt, absolutely, We have given YOU abundance." The "We" is the royal plural, showing Allah's majesty. Al-Kawthar refers to a river in Paradise with banks of gold and pearls, water whiter than milk and sweeter than honey. But it also means every good thing Allah has given the Prophet: prophethood, the Quran, intercession, and an ummah of billions.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">&#x641;&#x64E;&#x635;&#x64E;&#x644;&#x651;&#x650; &#x644;&#x650;&#x631;&#x64E;&#x628;&#x651;&#x650;&#x643;&#x64E; &#x648;&#x64E;&#x627;&#x646;&#x652;&#x62D;&#x64E;&#x631;&#x652;</div>
+                    <div class="verse-transliteration">Fasalli li rabbika wanhar</div>
+                    <div class="verse-translation">So pray to your Lord and sacrifice.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">&#x641;&#x64E;&#x635;&#x64E;&#x644;&#x651;&#x650;</span><span class="trans">fasalli</span><span class="meaning">So pray</span></div>
+                            <div class="word-chip"><span class="ar">&#x644;&#x650;&#x631;&#x64E;&#x628;&#x651;&#x650;&#x643;&#x64E;</span><span class="trans">li-rabbika</span><span class="meaning">to your Lord</span></div>
+                            <div class="word-chip"><span class="ar">&#x648;&#x64E;&#x627;&#x646;&#x652;&#x62D;&#x64E;&#x631;&#x652;</span><span class="trans">wanhar</span><span class="meaning">and sacrifice</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Fa" means "so" or "therefore" - because Allah has given you so much, here's what you should do in return: pray and sacrifice for His sake alone. The prayer (salah) is the greatest act of worship, and the sacrifice (nahr) refers to the sacrifice during Eid al-Adha. Both are acts done exclusively for Allah - not for show, not for people, only for Him. This is the correct response to blessings: gratitude through worship.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">&#x625;&#x650;&#x646;&#x651;&#x64E; &#x634;&#x64E;&#x627;&#x646;&#x650;&#x626;&#x64E;&#x643;&#x64E; &#x647;&#x64F;&#x648;&#x64E; &#x627;&#x644;&#x652;&#x623;&#x64E;&#x628;&#x652;&#x62A;&#x64E;&#x631;&#x64F;</div>
+                    <div class="verse-transliteration">Inna shani'aka huwal-abtar</div>
+                    <div class="verse-translation">Indeed, your enemy - he is the one cut off.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">&#x625;&#x650;&#x646;&#x651;&#x64E;</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                            <div class="word-chip"><span class="ar">&#x634;&#x64E;&#x627;&#x646;&#x650;&#x626;&#x64E;&#x643;&#x64E;</span><span class="trans">shani'aka</span><span class="meaning">your hater</span></div>
+                            <div class="word-chip"><span class="ar">&#x647;&#x64F;&#x648;&#x64E;</span><span class="trans">huwa</span><span class="meaning">he (is)</span></div>
+                            <div class="word-chip"><span class="ar">&#x627;&#x644;&#x652;&#x623;&#x64E;&#x628;&#x652;&#x62A;&#x64E;&#x631;&#x64F;</span><span class="trans">al-abtar</span><span class="meaning">the cut off</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is the powerful conclusion. The very word "abtar" (cut off) that was used to mock the Prophet is thrown right back. Allah declares: the one who hates you - HE is the one who is truly cut off. Cut off from goodness, from legacy, from being remembered. And history proved it: nobody remembers Al-'As ibn Wa'il except as a footnote, while Muhammad (peace be upon him) is the most influential person in human history.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Al-Kawthar</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah's gifts surpass human mockery.</strong><p style="color: #999; font-size: 0.95em;">When people mock you for what you lack, know that Allah can give you more than they could ever imagine.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Gratitude is expressed through worship.</strong><p style="color: #999; font-size: 0.95em;">The proper response to blessings isn't arrogance - it's turning to Allah in prayer and sacrifice.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Legacy isn't about lineage alone.</strong><p style="color: #999; font-size: 0.95em;">The Prophet's legacy lives through billions of followers, not through biological sons. True legacy is impact.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Those who hate truth are ultimately forgotten.</strong><p style="color: #999; font-size: 0.95em;">History has proven this verse: the mockers are forgotten, the message lives on forever.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. Hadith references are from Sahih Al-Bukhari (6581). While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="110-an-nasr.html">Next: Surah An-Nasr &rarr;</a>
+    </footer>
 
     <script>
         const container = document.getElementById('slideDrawing');
@@ -1076,6 +1264,30 @@
             updateControls();
             setTimeout(() => playVerse(0), 500);
         });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
     </script>
 </body>
 </html>

@@ -18,6 +18,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            padding-top: 60px;
         }
 
         /* ===== HEADER ===== */
@@ -164,9 +165,107 @@
             .slide-kid-text { font-size: 1.1em; }
             .controls button { padding: 8px 16px; font-size: 0.85em; }
         }
+        /* ===== NAV BAR ===== */
+        .nav-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 30px; border-bottom: 1px solid #222;
+        }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+
+        /* ===== VIEW TOGGLE ===== */
+        .view-toggle {
+            display: flex; justify-content: center; gap: 30px; margin: 20px 0;
+        }
+        .view-toggle button {
+            background: none; border: none; color: #888; font-family: 'Inter', sans-serif;
+            font-size: 1.1em; padding: 8px 0; cursor: pointer;
+            border-bottom: 3px solid transparent; transition: all 0.3s;
+        }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+
+        /* ===== SECTION VISIBILITY ===== */
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+
+        /* ===== DEEP DIVE STYLES ===== */
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important {
+            background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c;
+            padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0;
+        }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .arabic-tip { background: #1a1a1a; border-radius: 12px; padding: 25px; margin: 15px 0; border: 1px solid #2a2a2a; }
+        .arabic-tip h4 { color: #c9a84c; margin-bottom: 10px; }
+        .arabic-tip p { color: #bbb; font-size: 0.95em; }
+        .arabic-letter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-top: 15px; }
+        .letter-card { background: #222; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #333; }
+        .letter-card .letter { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; }
+        .letter-card .name { font-size: 0.85em; color: #c9a84c; margin-top: 5px; }
+        .letter-card .sound { font-size: 0.8em; color: #888; }
+        .root-word-box { display: flex; align-items: center; gap: 20px; background: #1a1a1a; padding: 20px; border-radius: 12px; margin: 15px 0; border: 1px solid #2a2a2a; flex-wrap: wrap; }
+        .root-word-box .root { font-family: 'Amiri', serif; font-size: 2em; color: #c9a84c; direction: rtl; }
+        .root-word-box .arrow { color: #555; font-size: 1.5em; }
+        .root-word-box .derivatives { display: flex; gap: 12px; flex-wrap: wrap; }
+        .root-word-box .derivative { background: #222; padding: 8px 15px; border-radius: 8px; text-align: center; }
+        .root-word-box .derivative .ar { font-family: 'Amiri', serif; font-size: 1.3em; color: #fff; }
+        .root-word-box .derivative .en { font-size: 0.8em; color: #888; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* ===== SCROLL REVEAL ANIMATIONS ===== */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
     </style>
 </head>
 <body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 1 of 114</div>
+    </nav>
 
     <div class="header">
         <div class="arabic-title">سُورَةُ الْفَاتِحَة</div>
@@ -174,6 +273,12 @@
         <p>The Opening - 7 Verses - Makkan</p>
     </div>
 
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
     <div class="slide-frame">
         <div class="slide-drawing" id="slideDrawing">
             <div id="penCursor">
@@ -246,6 +351,295 @@
         <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
         <span id="speedLabel">1x</span>
     </div>
+    </div><!-- end carousel-section -->
+
+    <!-- ==================== DEEP DIVE ==================== -->
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">1</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">7</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">25</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Other Names</div><div class="value" style="font-size:0.9em">Umm Al-Quran</div></div>
+                    <div class="fact-card"><div class="label">Recited In</div><div class="value" style="font-size:0.9em">Every Salah</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Imagine you're about to open the most important book ever revealed to humanity. What would the very first page say?</p>
+                <p>Allah chose these 7 verses as the <span class="highlight">opening of the entire Quran</span>. Not a list of rules. Not a warning. But a <span class="highlight">conversation between you and Allah</span>.</p>
+                <div class="important">
+                    <p>The Prophet Muhammad (peace be upon him) said: <strong>"There is no Salah (prayer) for the one who does not recite the Opening of the Book (Al-Fatiha)."</strong></p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih al-Bukhari 756, Sahih Muslim 394</p>
+                </div>
+                <p>This surah is so special that it has many names:</p>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 5px 0; color: #ccc;"><span class="highlight">Al-Fatiha</span> - "The Opening" because it opens the Quran</li>
+                    <li style="padding: 5px 0; color: #ccc;"><span class="highlight">Umm Al-Quran</span> - "Mother of the Quran" because it summarizes the entire Quran's message</li>
+                    <li style="padding: 5px 0; color: #ccc;"><span class="highlight">As-Sab' Al-Mathani</span> - "The Seven Oft-Repeated" because we recite it in every unit of prayer</li>
+                    <li style="padding: 5px 0; color: #ccc;"><span class="highlight">Ash-Shifa</span> - "The Cure" because it has healing power</li>
+                </ul>
+                <p>Think about it: a Muslim who prays five daily prayers recites Al-Fatiha <span class="highlight">at least 17 times every single day</span>. That's over 6,000 times a year. Allah wanted this conversation to be the foundation of your entire relationship with Him.</p>
+                <div class="important">
+                    <p>In a Hadith Qudsi (where the Prophet narrates from Allah), Allah says: <strong>"I have divided the prayer between Myself and My servant into two halves, and My servant shall have what he asks for."</strong></p>
+                    <p style="margin-top: 8px; color: #aac8f0;">When you say "All praise is for Allah, Lord of all worlds" - Allah responds: "My servant has praised Me."</p>
+                    <p style="color: #aac8f0;">When you say "The Most Merciful, the Especially Merciful" - Allah responds: "My servant has glorified Me."</p>
+                    <p style="color: #aac8f0;">When you say "Master of the Day of Judgment" - Allah responds: "My servant has entrusted his affairs to Me."</p>
+                    <p style="color: #aac8f0;">When you say "You alone we worship, You alone we ask for help" - Allah says: "This is between Me and My servant, and My servant shall have what he asks for."</p>
+                    <p style="color: #aac8f0;">When you recite the last verses asking for guidance - Allah says: "This is for My servant, and My servant shall have what he asks for."</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih Muslim 395</p>
+                </div>
+                <p>So every time you recite Al-Fatiha in prayer, <span class="highlight">Allah is responding to you, verse by verse</span>. It's not a monologue. It's a dialogue.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Hover over any word to highlight it. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card reveal-3d">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ</div>
+                    <div class="verse-transliteration">Bismillah-ir-Rahman-ir-Raheem</div>
+                    <div class="verse-translation">In the name of Allah, the Most Gracious, the Most Merciful.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (read right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">بِسْمِ</span><span class="trans">bismi</span><span class="meaning">In the name (of)</span></div>
+                            <div class="word-chip"><span class="ar">اللَّهِ</span><span class="trans">Allahi</span><span class="meaning">Allah (God)</span></div>
+                            <div class="word-chip"><span class="ar">الرَّحْمَـٰنِ</span><span class="trans">ar-Rahmani</span><span class="meaning">The Most Gracious</span></div>
+                            <div class="word-chip"><span class="ar">الرَّحِيمِ</span><span class="trans">ar-Raheemi</span><span class="meaning">The Most Merciful</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Before you do anything important, you start by saying Allah's name. It's like saying: "I'm beginning this with God's help and blessing." The two names mentioned here - Ar-Rahman and Ar-Raheem - both come from the word "Rahma" (mercy). Allah chose to introduce Himself with mercy, not power, not anger. <strong>Mercy is the first thing He wants you to know about Him.</strong></p>
+                    </div>
+                </div>
+
+                <div class="verse-card reveal-3d">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
+                    <div class="verse-transliteration">Alhamdu lillahi Rabbil 'aalameen</div>
+                    <div class="verse-translation">All praise is for Allah, the Lord of all worlds.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الْحَمْدُ</span><span class="trans">al-hamdu</span><span class="meaning">All praise</span></div>
+                            <div class="word-chip"><span class="ar">لِلَّهِ</span><span class="trans">lillahi</span><span class="meaning">is for Allah</span></div>
+                            <div class="word-chip"><span class="ar">رَبِّ</span><span class="trans">Rabbi</span><span class="meaning">Lord / Sustainer</span></div>
+                            <div class="word-chip"><span class="ar">الْعَالَمِينَ</span><span class="trans">al-'aalameen</span><span class="meaning">of all the worlds</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>All thanks and praise belong to Allah - not just for this world, but for ALL worlds. The world of humans, animals, angels, jinn, galaxies we haven't even seen. The word "Rabb" doesn't just mean Lord - it means the One who creates, nurtures, sustains, and takes care of everything. Like a gardener who plants a seed and cares for it at every stage until it blooms.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card reveal-3d">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">الرَّحْمَـٰنِ الرَّحِيمِ</div>
+                    <div class="verse-transliteration">Ar-Rahman-ir-Raheem</div>
+                    <div class="verse-translation">The Most Gracious, the Most Merciful.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الرَّحْمَـٰنِ</span><span class="trans">ar-Rahmani</span><span class="meaning">The Most Gracious</span></div>
+                            <div class="word-chip"><span class="ar">الرَّحِيمِ</span><span class="trans">ar-Raheemi</span><span class="meaning">The Most Merciful</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p><strong>Ar-Rahman</strong> means His mercy is so vast that it covers ALL of creation - believers and disbelievers, humans and animals, everyone. The sun shines on everyone. Rain falls for everyone. That's Ar-Rahman.</p>
+                        <p style="margin-top: 8px;"><strong>Ar-Raheem</strong> means He has a special, focused mercy for those who believe and do good. It's the mercy that saves you on the Day of Judgment, the mercy that guides your heart, the mercy that answers your prayers.</p>
+                        <p style="margin-top: 8px;">Allah mentioned mercy TWICE because He wants you to never lose hope, no matter what you've done.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card reveal-3d">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">مَالِكِ يَوْمِ الدِّينِ</div>
+                    <div class="verse-transliteration">Maliki yawm-id-deen</div>
+                    <div class="verse-translation">Master of the Day of Judgment.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مَالِكِ</span><span class="trans">Maliki</span><span class="meaning">Master / Owner</span></div>
+                            <div class="word-chip"><span class="ar">يَوْمِ</span><span class="trans">yawmi</span><span class="meaning">Day (of)</span></div>
+                            <div class="word-chip"><span class="ar">الدِّينِ</span><span class="trans">ad-deeni</span><span class="meaning">the Judgment</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>After reminding you of His mercy, Allah reminds you of accountability. There's a Day coming where every person will stand before Allah. No president, no king, no billionaire will have any power on that day. Only Allah will be in charge. This verse creates balance - don't take Allah's mercy for granted, but also don't lose hope. He's merciful AND just.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card reveal-3d">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ</div>
+                    <div class="verse-transliteration">Iyyaka na'budu wa iyyaka nasta'een</div>
+                    <div class="verse-translation">You alone we worship, and You alone we ask for help.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِيَّاكَ</span><span class="trans">iyyaka</span><span class="meaning">You alone</span></div>
+                            <div class="word-chip"><span class="ar">نَعْبُدُ</span><span class="trans">na'budu</span><span class="meaning">we worship</span></div>
+                            <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">and</span></div>
+                            <div class="word-chip"><span class="ar">إِيَّاكَ</span><span class="trans">iyyaka</span><span class="meaning">You alone</span></div>
+                            <div class="word-chip"><span class="ar">نَسْتَعِينُ</span><span class="trans">nasta'een</span><span class="meaning">we ask for help</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is the CORE of the entire surah. This is where YOU speak directly to Allah. Notice the shift - the first 3 verses were about Allah (He, His). Now suddenly it's "YOU" - direct address. You're now face to face with your Creator.</p>
+                        <p style="margin-top: 8px;">"You ALONE we worship" - not money, not fame, not our desires. Only You.</p>
+                        <p style="margin-top: 8px;">"You ALONE we ask for help" - not our own strength, not other people as our ultimate reliance. Only You.</p>
+                        <p style="margin-top: 8px;">In Arabic, "iyyaka" (You alone) comes BEFORE the verb. This emphasis is deliberate - it means "ONLY You, no one else."</p>
+                    </div>
+                </div>
+
+                <div class="verse-card reveal-3d">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ</div>
+                    <div class="verse-transliteration">Ihdinas-siratal-mustaqeem</div>
+                    <div class="verse-translation">Guide us to the straight path.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">اهْدِنَا</span><span class="trans">ihdina</span><span class="meaning">Guide us</span></div>
+                            <div class="word-chip"><span class="ar">الصِّرَاطَ</span><span class="trans">as-sirata</span><span class="meaning">the path</span></div>
+                            <div class="word-chip"><span class="ar">الْمُسْتَقِيمَ</span><span class="trans">al-mustaqeem</span><span class="meaning">the straight (one)</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is the DUA (prayer/request) - the most important thing you could ever ask for. Not money. Not health. Not success. GUIDANCE. Because if you have guidance, everything else falls into place.</p>
+                        <p style="margin-top: 8px;">"Sirat al-Mustaqeem" - the straight path. Imagine life as a road. There are countless exits, distractions, and wrong turns. You're asking Allah 17+ times a day: "Keep me on the right road. Don't let me get lost."</p>
+                        <p style="margin-top: 8px;">Even the Prophet Muhammad (peace be upon him) recited this. Even the most guided person still needs to ask for guidance every single day.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card reveal-3d">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ</div>
+                    <div class="verse-transliteration">Siratal-ladhina an'amta 'alayhim, ghayril-maghdubi 'alayhim wa lad-dalleen</div>
+                    <div class="verse-translation">The path of those You have blessed, not of those who earned Your anger, nor of those who went astray.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">صِرَاطَ</span><span class="trans">sirata</span><span class="meaning">Path (of)</span></div>
+                            <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">those who</span></div>
+                            <div class="word-chip"><span class="ar">أَنْعَمْتَ</span><span class="trans">an'amta</span><span class="meaning">You have blessed</span></div>
+                            <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">upon them</span></div>
+                            <div class="word-chip"><span class="ar">غَيْرِ</span><span class="trans">ghayri</span><span class="meaning">not (of)</span></div>
+                            <div class="word-chip"><span class="ar">الْمَغْضُوبِ</span><span class="trans">al-maghdubi</span><span class="meaning">those who earned anger</span></div>
+                            <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">upon them</span></div>
+                            <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">and not</span></div>
+                            <div class="word-chip"><span class="ar">الضَّالِّينَ</span><span class="trans">ad-dalleen</span><span class="meaning">those who went astray</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Now you're being specific about which path. You want the path of the prophets, the truthful ones, the martyrs, the righteous - the people Allah was pleased with.</p>
+                        <p style="margin-top: 8px;">And you're asking protection from two types of wrong paths:</p>
+                        <p style="margin-top: 8px;"><strong>"Al-Maghdubi 'alayhim"</strong> - Those who KNEW the truth but chose to reject or disobey it anyway. They had knowledge but no action.</p>
+                        <p style="margin-top: 8px;"><strong>"Ad-Dalleen"</strong> - Those who were sincere but were LOST - they worshipped without knowledge, going in the wrong direction with good intentions.</p>
+                        <p style="margin-top: 8px;">The lesson: You need BOTH knowledge AND action. Knowledge without action leads to anger. Action without knowledge leads to going astray.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Learn Arabic Through Al-Fatiha</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Al-Fatiha is the perfect starting point for learning Quranic Arabic. Here are key vocabulary and patterns you'll see throughout the entire Quran.</p>
+
+                <div class="arabic-tip">
+                    <h4>Key Vocabulary from Al-Fatiha</h4>
+                    <p>These words appear hundreds of times in the Quran. Learn them here, recognize them everywhere.</p>
+                    <div class="arabic-letter-grid">
+                        <div class="letter-card"><div class="letter">&#x0671;&#x0644;&#x0644;&#x0651;&#x0647;</div><div class="name">Allah</div><div class="sound">God - appears 2,699 times</div></div>
+                        <div class="letter-card"><div class="letter">&#x0631;&#x064E;&#x0628;&#x0651;</div><div class="name">Rabb</div><div class="sound">Lord - appears 970 times</div></div>
+                        <div class="letter-card"><div class="letter">&#x064A;&#x064E;&#x0648;&#x0652;&#x0645;</div><div class="name">Yawm</div><div class="sound">Day - appears 405 times</div></div>
+                        <div class="letter-card"><div class="letter">&#x0635;&#x0650;&#x0631;&#x064E;&#x0627;&#x0637;</div><div class="name">Sirat</div><div class="sound">Path - appears 45 times</div></div>
+                        <div class="letter-card"><div class="letter">&#x0647;&#x064E;&#x062F;&#x064E;&#x0649;</div><div class="name">Hada</div><div class="sound">Guidance - appears 316 times</div></div>
+                        <div class="letter-card"><div class="letter">&#x0639;&#x064E;&#x0628;&#x064E;&#x062F;&#x064E;</div><div class="name">'Abada</div><div class="sound">Worship - appears 275 times</div></div>
+                    </div>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Arabic Pattern: "Al" (&#x0627;&#x0644;&#x0640;) = "The"</h4>
+                    <p>In Arabic, adding "Al" (&#x0627;&#x0644;&#x0640;) before a word makes it definite (like "the" in English).</p>
+                    <div class="root-word-box">
+                        <div><div class="root">&#x062D;&#x064E;&#x0645;&#x0652;&#x062F;</div><div style="color: #888; font-size: 0.9em; text-align: center;">hamd (praise)</div></div>
+                        <div class="arrow">+ &#x0627;&#x0644;&#x0640; =</div>
+                        <div><div class="root">&#x0627;&#x0644;&#x0652;&#x062D;&#x064E;&#x0645;&#x0652;&#x062F;&#x064F;</div><div style="color: #888; font-size: 0.9em; text-align: center;">AL-hamd (THE praise / ALL praise)</div></div>
+                    </div>
+                    <p style="margin-top: 10px;">You'll see this pattern in Al-Fatiha: <strong>Al-Hamd, Ar-Rahman, Ar-Raheem, As-Sirat, Al-Mustaqeem, Al-Maghdub, Ad-Dalleen</strong></p>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Root Word System: &#x0631; &#x062D; &#x0645; (R-H-M) = Mercy</h4>
+                    <p>Arabic words come from 3-letter roots. From the root R-H-M (mercy), we get:</p>
+                    <div class="root-word-box">
+                        <div class="root">&#x0631; &#x062D; &#x0645;</div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="derivatives">
+                            <div class="derivative"><div class="ar">&#x0631;&#x064E;&#x062D;&#x0652;&#x0645;&#x064E;&#x0629;</div><div class="en">Rahma (mercy)</div></div>
+                            <div class="derivative"><div class="ar">&#x0631;&#x064E;&#x062D;&#x0652;&#x0645;&#x064E;&#x0670;&#x0646;</div><div class="en">Rahman (Most Gracious)</div></div>
+                            <div class="derivative"><div class="ar">&#x0631;&#x064E;&#x062D;&#x0650;&#x064A;&#x0645;</div><div class="en">Raheem (Most Merciful)</div></div>
+                            <div class="derivative"><div class="ar">&#x0631;&#x064E;&#x062D;&#x0650;&#x0645;</div><div class="en">Rahim (womb)</div></div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; color: #aac8f0;">Notice: even the Arabic word for "womb" (rahim) comes from the same root as mercy. The connection between a mother's womb and Allah's mercy is built into the language itself.</p>
+                </div>
+
+                <div class="arabic-tip">
+                    <h4>Grammar Tip: Verb Forms in Al-Fatiha</h4>
+                    <p>Notice these verb patterns:</p>
+                    <div class="arabic-letter-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+                        <div class="letter-card"><div class="letter">&#x0646;&#x064E;&#x0639;&#x0652;&#x0628;&#x064F;&#x062F;&#x064F;</div><div class="name">Na'budu</div><div class="sound">"We worship" - "Na" = We</div></div>
+                        <div class="letter-card"><div class="letter">&#x0646;&#x064E;&#x0633;&#x0652;&#x062A;&#x064E;&#x0639;&#x0650;&#x064A;&#x0646;&#x064F;</div><div class="name">Nasta'een</div><div class="sound">"We seek help" - "Na" = We</div></div>
+                        <div class="letter-card"><div class="letter">&#x0627;&#x0647;&#x0652;&#x062F;&#x0650;&#x0646;&#x064E;&#x0627;</div><div class="name">Ihdina</div><div class="sound">"Guide us" - "na" = us</div></div>
+                        <div class="letter-card"><div class="letter">&#x0623;&#x064E;&#x0646;&#x0652;&#x0639;&#x064E;&#x0645;&#x0652;&#x062A;&#x064E;</div><div class="name">An'amta</div><div class="sound">"You blessed" - "ta" = You</div></div>
+                    </div>
+                    <p style="margin-top: 15px;">In Arabic, the pronoun is often built INTO the verb. Once you learn these patterns, you'll recognize them across the entire Quran.</p>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Al-Fatiha</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Mercy comes first.</strong><p style="color: #999; font-size: 0.95em;">Allah introduced Himself with mercy before anything else. No matter what you've done, His mercy is the first door.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Guidance is the greatest gift.</strong><p style="color: #999; font-size: 0.95em;">Out of everything you could ask for, Al-Fatiha teaches you to ask for guidance. If you're guided, everything else follows.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">You need knowledge AND action.</strong><p style="color: #999; font-size: 0.95em;">Knowledge without action = earning anger. Action without knowledge = going astray. The straight path requires both.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Prayer is a conversation.</strong><p style="color: #999; font-size: 0.95em;">Allah responds to every verse of Al-Fatiha. Next time you pray, slow down and feel the conversation.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">We are never self-sufficient.</strong><p style="color: #999; font-size: 0.95em;">"You alone we ask for help" - a daily reminder that no matter how capable you become, your ultimate reliance is on Allah.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir, Tafsir As-Sa'di, and Tafsir Al-Qurtubi. Hadith references are from Sahih Al-Bukhari (756) and Sahih Muslim (394, 395). The Arabic word-by-word breakdown follows standard Quranic Arabic grammar. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="108-al-kawthar.html">Next: Surah Al-Kawthar &rarr;</a>
+    </footer>
 
     <script>
         const container = document.getElementById('slideDrawing');
@@ -1143,6 +1537,42 @@
             updateControls();
             setTimeout(() => playVerse(0), 500);
         });
+
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                // Trigger scroll reveal
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+
+        // ===== SCROLL REVEAL =====
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal, .reveal-3d, .reveal-scale, .glow-line').forEach(el => {
+                observer.observe(el);
+            });
+        }
     </script>
 </body>
 </html>

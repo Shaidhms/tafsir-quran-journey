@@ -18,7 +18,65 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            padding-top: 60px;
         }
+
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
 
         /* ===== HEADER ===== */
         .header {
@@ -168,12 +226,23 @@
 </head>
 <body>
 
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 111 of 114</div>
+    </nav>
+
     <div class="header">
         <div class="arabic-title">سُورَةُ الْمَسَد</div>
         <h1>Surah Al-Masad</h1>
         <p>The Palm Fiber - 5 Verses - Makkan</p>
     </div>
 
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
     <div class="slide-frame">
         <div class="slide-drawing" id="slideDrawing">
             <div id="penCursor">
@@ -246,6 +315,168 @@
         <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
         <span id="speedLabel">1x</span>
     </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">111</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">5</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">23</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Also Known As</div><div class="value" style="font-size:0.9em">Al-Lahab</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Palm Fiber</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Abu Lahab was the Prophet Muhammad's own <span class="highlight">uncle</span>. His real name was Abdul-Uzza ibn Abdul-Muttalib. "Abu Lahab" (Father of Flame) was a nickname given because of his fiery red complexion.</p>
+                <p>When the Prophet (peace be upon him) first publicly called people to Islam from Mount Safa, he called out to each clan by name. When they gathered, he asked: <span class="highlight">"If I told you there was an army behind this mountain about to attack, would you believe me?"</span> They all said yes. Then he called them to worship Allah alone.</p>
+                <div class="important">
+                    <p>Abu Lahab's response was: <strong>"May you perish! Is this what you gathered us for?"</strong> He picked up a stone to throw at his own nephew.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih al-Bukhari 4971</p>
+                </div>
+                <p>Abu Lahab and his wife Umm Jamil (Arwa bint Harb, sister of Abu Sufyan) were among the <span class="highlight">most vicious enemies of Islam</span>. She would tie bundles of thorny branches and scatter them on the paths the Prophet walked at night, hoping to injure him.</p>
+                <p>This is the only surah in the Quran where a specific person is <span class="highlight">condemned by name</span>. It's also a prophecy: Abu Lahab is told he will never accept Islam. And indeed, he died as a disbeliever - proving the Quran's prophecy true. If the Quran were not from Allah, Abu Lahab could have simply said "I believe" to disprove it. He never did.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse broken down word by word.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ</div>
+                    <div class="verse-transliteration">Tabbat yada abi lahabin wa tabb</div>
+                    <div class="verse-translation">May the hands of Abu Lahab be ruined, and ruined is he.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">تَبَّتْ</span><span class="trans">tabbat</span><span class="meaning">perished / ruined</span></div>
+                            <div class="word-chip"><span class="ar">يَدَا</span><span class="trans">yada</span><span class="meaning">(the two) hands (of)</span></div>
+                            <div class="word-chip"><span class="ar">أَبِي</span><span class="trans">abi</span><span class="meaning">father (of)</span></div>
+                            <div class="word-chip"><span class="ar">لَهَبٍ</span><span class="trans">lahab</span><span class="meaning">flame</span></div>
+                            <div class="word-chip"><span class="ar">وَتَبَّ</span><span class="trans">wa tabb</span><span class="meaning">and he perished</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Tabbat yada" - "may the hands perish." In Arabic, "hands" represents a person's efforts and actions. The first "tabbat" is a supplication (du'a) against him, and the second "tabb" is a statement of fact - he HAS perished. Both his efforts to stop Islam and he himself are doomed. His nickname "Abu Lahab" (Father of Flame) becomes bitterly ironic - the flame he's associated with becomes the fire he'll face.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ</div>
+                    <div class="verse-transliteration">Ma aghna 'anhu maluhu wa ma kasab</div>
+                    <div class="verse-translation">His wealth will not avail him or that which he gained.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">not / will not</span></div>
+                            <div class="word-chip"><span class="ar">أَغْنَىٰ</span><span class="trans">aghna</span><span class="meaning">avail / benefit</span></div>
+                            <div class="word-chip"><span class="ar">عَنْهُ</span><span class="trans">'anhu</span><span class="meaning">him</span></div>
+                            <div class="word-chip"><span class="ar">مَالُهُ</span><span class="trans">maluhu</span><span class="meaning">his wealth</span></div>
+                            <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">and what</span></div>
+                            <div class="word-chip"><span class="ar">كَسَبَ</span><span class="trans">kasab</span><span class="meaning">he earned</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Abu Lahab was a wealthy man. He thought his money and status could protect him and give him power. This verse declares: none of it will help. "Ma kasab" (what he earned) refers to both his material earnings and his children, who he was proud of. On the Day of Judgment, wealth is worthless. Status is meaningless. Only your deeds matter.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ</div>
+                    <div class="verse-transliteration">Sayasla naran dhata lahab</div>
+                    <div class="verse-translation">He will burn in a Fire of blazing flame.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">سَيَصْلَىٰ</span><span class="trans">sayasla</span><span class="meaning">he will burn in</span></div>
+                            <div class="word-chip"><span class="ar">نَارًا</span><span class="trans">naran</span><span class="meaning">a fire</span></div>
+                            <div class="word-chip"><span class="ar">ذَاتَ</span><span class="trans">dhata</span><span class="meaning">of / possessing</span></div>
+                            <div class="word-chip"><span class="ar">لَهَبٍ</span><span class="trans">lahab</span><span class="meaning">flame</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The word "lahab" (flame) appears again - the same word in his nickname. Abu Lahab, "the Father of Flame," will enter a fire OF flame. The wordplay is devastating. "Sa" (will) makes this a definite prophecy - he WILL enter the fire. This is also proof the Quran is from Allah: it declared Abu Lahab would never believe, and he never did.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ</div>
+                    <div class="verse-transliteration">Wamra'atuhu hammalatal-hatab</div>
+                    <div class="verse-translation">And his wife, the carrier of firewood.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَامْرَأَتُهُ</span><span class="trans">wamra'atuhu</span><span class="meaning">and his wife</span></div>
+                            <div class="word-chip"><span class="ar">حَمَّالَةَ</span><span class="trans">hammalata</span><span class="meaning">carrier (of)</span></div>
+                            <div class="word-chip"><span class="ar">الْحَطَبِ</span><span class="trans">al-hatab</span><span class="meaning">the firewood</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Umm Jamil, Abu Lahab's wife, was from one of the most noble families of Quraysh. She was wealthy and proud. Yet the Quran calls her "carrier of firewood" - a job done by the lowest classes. Some scholars say this refers to her literally carrying thorny branches to place on the Prophet's path. Others say it refers to her carrying gossip and slander like carrying firewood to fuel a fire of conflict.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">فِي جِيدِهَا حَبْلٌ مِّن مَّسَدٍ</div>
+                    <div class="verse-transliteration">Fi jidiha hablun min masad</div>
+                    <div class="verse-translation">Around her neck is a rope of palm fiber.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">around / in</span></div>
+                            <div class="word-chip"><span class="ar">جِيدِهَا</span><span class="trans">jidiha</span><span class="meaning">her neck</span></div>
+                            <div class="word-chip"><span class="ar">حَبْلٌ</span><span class="trans">hablun</span><span class="meaning">a rope</span></div>
+                            <div class="word-chip"><span class="ar">مِّن</span><span class="trans">min</span><span class="meaning">of / from</span></div>
+                            <div class="word-chip"><span class="ar">مَّسَدٍ</span><span class="trans">masad</span><span class="meaning">palm fiber</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The word "jid" is a poetic Arabic word for neck - usually used to describe a beautiful neck adorned with jewelry. But instead of a beautiful necklace, she'll have a rough rope of palm fiber. The contrast is intentional: she was proud of her wealth and beauty, but in the Hereafter, her "necklace" will be a coarse rope. Some scholars say this is the rope she used to carry thorny branches; others say it describes her punishment in the Fire.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Al-Masad</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Family ties don't guarantee salvation.</strong><p style="color: #999; font-size: 0.95em;">Abu Lahab was the Prophet's own uncle. Lineage means nothing without faith and good deeds.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Wealth and status cannot save you.</strong><p style="color: #999; font-size: 0.95em;">All of Abu Lahab's money and social standing were worthless before Allah.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Those who fight truth are ultimately destroyed.</strong><p style="color: #999; font-size: 0.95em;">Abu Lahab died a painful death from a plague. His own family abandoned his body for days.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The Quran's prophecies are proof of its divine origin.</strong><p style="color: #999; font-size: 0.95em;">This surah predicted Abu Lahab would never believe, and he never did - despite having every reason to disprove it.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Spouses influence each other's fate.</strong><p style="color: #999; font-size: 0.95em;">Umm Jamil supported her husband in opposing Islam. Partners in sin share the consequences.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> Explanations based on Tafsir Ibn Kathir and Tafsir As-Sa'di. Hadith from Sahih Al-Bukhari (4971). This is a learning aid - always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="114-an-nas.html">Next: Surah An-Nas &rarr;</a>
+    </footer>
 
     <script>
         const container = document.getElementById('slideDrawing');
@@ -1043,6 +1274,17 @@
             updateControls();
             setTimeout(() => playVerse(0), 500);
         });
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') { carousel.classList.remove('hidden'); deepDive.classList.remove('visible'); buttons[0].classList.add('active'); buttons[1].classList.remove('active'); }
+            else { carousel.classList.add('hidden'); deepDive.classList.add('visible'); buttons[1].classList.add('active'); buttons[0].classList.remove('active'); setTimeout(setupScrollReveal, 100); }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
     </script>
 </body>
 </html>
