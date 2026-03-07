@@ -290,6 +290,72 @@
             .slide-bottom .slide-arabic-text { font-size: 1.2em; }
             .carousel-nav { width: 36px; height: 36px; font-size: 1em; }
         }
+        /* ===== SCROLL ANIMATIONS ===== */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .reveal-3d {
+            opacity: 0;
+            transform: perspective(800px) rotateY(8deg) translateX(-30px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-3d.visible {
+            opacity: 1; transform: perspective(800px) rotateY(0deg) translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0; transform: scale(0.9) translateY(20px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        .glow-line {
+            width: 80px; height: 2px; margin: 15px auto 25px;
+            background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+            opacity: 0; transform: scaleX(0);
+            transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+
+        /* Hero entrance */
+        .hero { perspective: 1000px; overflow: hidden; }
+        .hero .arabic-title {
+            opacity: 0; transform: translateZ(40px) rotateX(10deg);
+            animation: heroArabicIn 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+        }
+        @keyframes heroArabicIn { to { opacity: 1; transform: translateZ(0) rotateX(0); } }
+        .hero h1 { opacity: 0; transform: translateY(20px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 0.6s forwards; }
+        .hero .subtitle { opacity: 0; transform: translateY(15px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 0.8s forwards; }
+        .hero .badge { opacity: 0; transform: translateY(10px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 1.0s forwards; }
+        @keyframes fadeSlideUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* Nav blur */
+        .nav-bar { background: rgba(13, 13, 13, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
+        /* Verse card 3D hover */
+        .verse-card { transform-style: preserve-3d; }
+        .verse-card:hover { transform: translateY(-4px) rotateX(2deg); box-shadow: 0 12px 30px rgba(201, 168, 76, 0.08); }
+
+        /* Word chip animation */
+        .word-chip { transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { transform: translateY(-4px) scale(1.05); }
+
+        /* Fact card hover */
+        .fact-card { transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
     </style>
 </head>
 <body>
@@ -482,8 +548,8 @@
         <div class="container">
 
             <!-- Quick Facts -->
-            <div class="section">
-                <div class="section-title">Quick Facts</div>
+            <div class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
                 <div class="facts-grid">
                     <div class="fact-card"><div class="label">Surah Number</div><div class="value">114</div></div>
                     <div class="fact-card"><div class="label">Verses</div><div class="value">6</div></div>
@@ -495,8 +561,8 @@
             </div>
 
             <!-- Story -->
-            <div class="section story">
-                <div class="section-title">The Story Behind An-Nas</div>
+            <div class="section story reveal">
+                <div class="section-title">The Story Behind An-Nas</div><div class="glow-line reveal"></div>
 
                 <p>This is the <span class="highlight">last surah of the Quran</span>. The final words of guidance. And what does Allah choose to end with? Not a grand statement about His power. Not a warning about the Day of Judgment. He ends with something deeply personal: <span class="highlight">how to protect your heart from invisible enemies</span>.</p>
 
@@ -522,11 +588,11 @@
             </div>
 
             <!-- Verse by Verse -->
-            <div class="section">
-                <div class="section-title">Verse-by-Verse Breakdown</div>
+            <div class="section reveal">
+                <div class="section-title">Verse-by-Verse Breakdown</div><div class="glow-line reveal"></div>
 
                 <!-- Verse 1 -->
-                <div class="verse-card">
+                <div class="verse-card reveal-3d">
                     <div class="verse-number">1</div>
                     <div class="verse-arabic">قُلْ أَعُوذُ بِرَبِّ النَّاسِ</div>
                     <div class="verse-transliteration">Qul a'udhu bi Rabbin-nas</div>
@@ -547,7 +613,7 @@
                 </div>
 
                 <!-- Verse 2 -->
-                <div class="verse-card">
+                <div class="verse-card reveal-3d">
                     <div class="verse-number">2</div>
                     <div class="verse-arabic">مَلِكِ النَّاسِ</div>
                     <div class="verse-transliteration">Malikin-nas</div>
@@ -566,7 +632,7 @@
                 </div>
 
                 <!-- Verse 3 -->
-                <div class="verse-card">
+                <div class="verse-card reveal-3d">
                     <div class="verse-number">3</div>
                     <div class="verse-arabic">إِلَـٰهِ النَّاسِ</div>
                     <div class="verse-transliteration">Ilahin-nas</div>
@@ -585,7 +651,7 @@
                 </div>
 
                 <!-- Verse 4 -->
-                <div class="verse-card">
+                <div class="verse-card reveal-3d">
                     <div class="verse-number">4</div>
                     <div class="verse-arabic">مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ</div>
                     <div class="verse-transliteration">Min sharril-waswasil-khannas</div>
@@ -606,7 +672,7 @@
                 </div>
 
                 <!-- Verse 5 -->
-                <div class="verse-card">
+                <div class="verse-card reveal-3d">
                     <div class="verse-number">5</div>
                     <div class="verse-arabic">الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ</div>
                     <div class="verse-transliteration">Alladhi yuwaswisu fi sudurin-nas</div>
@@ -628,7 +694,7 @@
                 </div>
 
                 <!-- Verse 6 -->
-                <div class="verse-card">
+                <div class="verse-card reveal-3d">
                     <div class="verse-number">6</div>
                     <div class="verse-arabic">مِنَ الْجِنَّةِ وَالنَّاسِ</div>
                     <div class="verse-transliteration">Minal-jinnati wan-nas</div>
@@ -650,8 +716,8 @@
             </div>
 
             <!-- Arabic Learning -->
-            <div class="section">
-                <div class="section-title">Arabic Learning</div>
+            <div class="section reveal">
+                <div class="section-title">Arabic Learning</div><div class="glow-line reveal"></div>
 
                 <div class="arabic-tip">
                     <h4>Key Vocabulary in the Quran</h4>
@@ -705,8 +771,8 @@
             </div>
 
             <!-- Key Lessons -->
-            <div class="section">
-                <div class="section-title">Key Lessons</div>
+            <div class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
                 <ul class="lesson-list">
                     <li><span class="bullet">1.</span><div><strong style="color:#c9a84c">Your biggest enemy is invisible.</strong><br><span style="color:#aaa">You can't see him, but he's always there. Awareness is the first step to protection.</span></div></li>
                     <li><span class="bullet">2.</span><div><strong style="color:#c9a84c">Shaytan is a coward.</strong><br><span style="color:#aaa">He whispers, but the moment you remember Allah, he runs. Every. Single. Time. "Khannas" means he habitually retreats.</span></div></li>
@@ -1860,6 +1926,17 @@
         setTimeout(() => triggerSlideAnimation(0), 500);
     });
 
+
+    // ===== SCROLL REVEAL OBSERVER =====
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-3d, .reveal-scale, .glow-line').forEach(el => {
+        revealObserver.observe(el);
+    });
     </script>
 </body>
 </html>

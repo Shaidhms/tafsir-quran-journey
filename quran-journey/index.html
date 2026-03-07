@@ -20,66 +20,157 @@
             color: #e0e0e0;
             line-height: 1.8;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* ===== NAVIGATION ===== */
         .nav-bar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 30px; background: #0d0d0d;
+            padding: 20px 30px; background: rgba(13, 13, 13, 0.9);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100;
         }
         .nav-bar .logo { color: #c9a84c; font-weight: 700; font-size: 1.1em; text-decoration: none; }
         .nav-bar .tagline { color: #666; font-size: 0.85em; }
 
-        /* ===== HERO ===== */
+        /* ===== HERO - SPLIT LAYOUT ===== */
         .hero {
             background: linear-gradient(135deg, #0d1b2a 0%, #1b2a4a 40%, #0d1b2a 70%, #1a0a2e 100%);
-            padding: 100px 20px 80px; text-align: center;
+            padding: 60px 40px;
             position: relative; overflow: hidden;
         }
         .hero::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 40%, rgba(201, 168, 76, 0.08) 0%, transparent 60%);
+            background: radial-gradient(circle at 30% 50%, rgba(201, 168, 76, 0.06) 0%, transparent 60%);
         }
-        .hero .arabic-main {
-            font-family: 'Amiri', serif; font-size: 4.5em; color: #fff;
-            direction: rtl; margin-bottom: 10px; opacity: 0.9;
+        .hero-particles {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; overflow: hidden;
         }
-        .hero h1 {
-            font-family: 'Inter', sans-serif; font-size: 2.8em; color: #c9a84c;
-            font-weight: 700; margin-bottom: 15px;
+        .hero-particle {
+            position: absolute; width: 3px; height: 3px;
+            background: rgba(201, 168, 76, 0.4); border-radius: 50%;
+            animation: particleFloat 6s ease-in-out infinite;
         }
-        .hero .subtitle {
-            font-size: 1.15em; color: #8ab4f8; font-weight: 300;
-            max-width: 600px; margin: 0 auto 30px;
-        }
-        .hero .stats {
-            display: flex; justify-content: center; gap: 40px; margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        .hero .stat {
-            text-align: center;
-        }
-        .hero .stat .number {
-            font-size: 2em; color: #c9a84c; font-weight: 700; display: block;
-        }
-        .hero .stat .label {
-            font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px;
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-30px) scale(1.5); opacity: 0.7; }
         }
 
-        /* ===== FEATURES ===== */
-        .features {
-            display: flex; justify-content: center; gap: 30px;
-            max-width: 900px; margin: -30px auto 0; padding: 0 20px;
-            position: relative; z-index: 10; flex-wrap: wrap;
+        .hero-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 50px; align-items: center;
+            position: relative; z-index: 2;
         }
-        .feature-card {
-            background: #111; border: 1px solid #222; border-radius: 16px;
-            padding: 25px; flex: 1; min-width: 220px; text-align: center;
+
+        .hero-left { perspective: 1000px; }
+
+        .hero-left .arabic-main {
+            font-family: 'Amiri', serif; font-size: 3.5em; color: #fff;
+            direction: rtl; margin-bottom: 8px; opacity: 0;
+            transform: translateZ(40px) rotateX(10deg);
+            animation: heroArabicIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
         }
-        .feature-card .icon { font-size: 2em; margin-bottom: 10px; }
-        .feature-card h3 { color: #c9a84c; font-size: 1em; margin-bottom: 8px; }
-        .feature-card p { color: #888; font-size: 0.85em; line-height: 1.6; }
+        @keyframes heroArabicIn {
+            to { opacity: 0.9; transform: translateZ(0) rotateX(0deg); }
+        }
+
+        .hero-left h1 {
+            font-family: 'Inter', sans-serif; font-size: 2.4em; color: #c9a84c;
+            font-weight: 700; margin-bottom: 12px; opacity: 0;
+            transform: translateY(20px);
+            animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+        }
+
+        .hero-left .subtitle {
+            font-size: 1em; color: #8ab4f8; font-weight: 300;
+            max-width: 420px; line-height: 1.7;
+            opacity: 0; transform: translateY(15px);
+            animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+        }
+
+        .hero-left .stats {
+            display: flex; gap: 30px; margin-top: 25px;
+            flex-wrap: wrap; opacity: 0;
+            animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+        }
+        .hero-left .stat { text-align: left; }
+        .hero-left .stat .number {
+            font-size: 1.8em; color: #c9a84c; font-weight: 700; display: block;
+            line-height: 1.2;
+        }
+        .hero-left .stat .label {
+            font-size: 0.75em; color: #888; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        @keyframes fadeSlideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Feature tiles on the right */
+        .hero-right {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 16px; perspective: 1200px;
+        }
+
+        .feature-tile {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px;
+            padding: 22px 20px; text-align: center;
+            transform-style: preserve-3d;
+            opacity: 0; transform: perspective(800px) rotateY(10deg) translateX(30px);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .feature-tile.visible {
+            opacity: 1; transform: perspective(800px) rotateY(0deg) translateX(0);
+        }
+        .feature-tile:hover {
+            border-color: rgba(201, 168, 76, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(201, 168, 76, 0.05);
+        }
+        .feature-tile .icon { font-size: 1.6em; margin-bottom: 8px; display: block; }
+        .feature-tile h3 { color: #c9a84c; font-size: 0.85em; margin-bottom: 5px; font-weight: 600; }
+        .feature-tile p { color: #777; font-size: 0.75em; line-height: 1.5; }
+
+        /* The third tile spans full width */
+        .feature-tile:nth-child(3) {
+            grid-column: 1 / -1;
+        }
+
+        /* ===== SCROLL REVEAL BASE ===== */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .reveal-3d {
+            opacity: 0;
+            transform: perspective(800px) rotateY(8deg) translateX(-30px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-3d.visible {
+            opacity: 1; transform: perspective(800px) rotateY(0deg) translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0; transform: scale(0.85) translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+        .stagger-7 { transition-delay: 0.7s; }
 
         /* ===== SURAH GRID ===== */
         .surahs-section {
@@ -95,22 +186,34 @@
 
         .surah-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
+            gap: 20px; perspective: 1200px;
         }
         .surah-card {
             background: #111; border: 1px solid #222; border-radius: 16px;
-            padding: 25px; transition: all 0.3s; text-decoration: none;
-            display: block; position: relative; overflow: hidden;
+            padding: 25px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none; display: block; position: relative; overflow: hidden;
+            transform-style: preserve-3d;
         }
+        .surah-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.05) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.4s; border-radius: 16px;
+        }
+        .surah-card:hover::before { opacity: 1; }
         .surah-card:hover {
-            border-color: #c9a84c; transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(201, 168, 76, 0.1);
+            border-color: #c9a84c;
+            box-shadow: 0 15px 35px rgba(201, 168, 76, 0.12), 0 5px 15px rgba(0,0,0,0.3);
         }
         .surah-card .surah-num {
             display: inline-flex; align-items: center; justify-content: center;
             width: 40px; height: 40px; background: rgba(201, 168, 76, 0.15);
             border: 1px solid #c9a84c; border-radius: 50%;
             color: #c9a84c; font-weight: 700; font-size: 0.9em; margin-bottom: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .surah-card:hover .surah-num {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(201, 168, 76, 0.2);
         }
         .surah-card .surah-arabic {
             font-family: 'Amiri', serif; font-size: 2em; color: #fff;
@@ -131,23 +234,17 @@
             border-radius: 20px; padding: 3px 12px; font-size: 0.7em; color: #8ab4f8;
         }
 
-        /* Coming soon cards */
-        .surah-card.coming-soon {
-            opacity: 0.5; pointer-events: none;
-        }
+        .surah-card.coming-soon { opacity: 0.5; pointer-events: none; }
         .surah-card.coming-soon .surah-badge {
-            background: rgba(136, 136, 136, 0.1); border-color: rgba(136, 136, 136, 0.2);
-            color: #666;
+            background: rgba(136, 136, 136, 0.1); border-color: rgba(136, 136, 136, 0.2); color: #666;
         }
 
         /* ===== ABOUT ===== */
         .about-section {
-            max-width: 700px; margin: 80px auto; padding: 0 20px;
-            text-align: center;
+            max-width: 700px; margin: 80px auto; padding: 0 20px; text-align: center;
         }
         .about-section h2 {
-            font-family: 'Amiri', serif; font-size: 1.8em; color: #c9a84c;
-            margin-bottom: 20px;
+            font-family: 'Amiri', serif; font-size: 1.8em; color: #c9a84c; margin-bottom: 20px;
         }
         .about-section p {
             color: #999; font-size: 0.95em; line-height: 1.9; margin-bottom: 15px;
@@ -160,6 +257,15 @@
         }
         .about-section .source-note strong { color: #c9a84c; }
 
+        /* ===== GLOW LINE ===== */
+        .glow-line {
+            width: 80px; height: 2px; margin: 15px auto 25px;
+            background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+            opacity: 0; transform: scaleX(0);
+            transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+
         /* ===== FOOTER ===== */
         footer {
             text-align: center; padding: 40px 20px; color: #555;
@@ -168,12 +274,28 @@
         footer a { color: #c9a84c; text-decoration: none; }
         footer a:hover { text-decoration: underline; }
 
-        @media (max-width: 600px) {
-            .hero .arabic-main { font-size: 3em; }
-            .hero h1 { font-size: 2em; }
-            .hero .stats { gap: 25px; }
-            .features { flex-direction: column; align-items: center; }
-            .feature-card { min-width: unset; width: 100%; }
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+            .hero { padding: 40px 20px; }
+            .hero-inner {
+                grid-template-columns: 1fr; gap: 30px; text-align: center;
+            }
+            .hero-left .subtitle { max-width: 100%; margin: 0 auto; }
+            .hero-left .stats { justify-content: center; }
+            .hero-left .stat { text-align: center; }
+            .hero-left .arabic-main { font-size: 2.8em; }
+            .hero-left h1 { font-size: 1.8em; }
+            .hero-right {
+                grid-template-columns: 1fr 1fr; gap: 12px;
+            }
+            .feature-tile { padding: 16px 14px; }
+            .feature-tile h3 { font-size: 0.8em; }
+            .feature-tile p { font-size: 0.7em; }
+        }
+
+        @media (max-width: 400px) {
+            .hero-right { grid-template-columns: 1fr; }
+            .feature-tile:nth-child(3) { grid-column: auto; }
         }
     </style>
 </head>
@@ -185,50 +307,62 @@
     </nav>
 
     <header class="hero">
-        <div class="arabic-main">تفسير</div>
-        <h1>Quran Journey</h1>
-        <p class="subtitle">Learn the Quran visually. Verse-by-verse explanations, word-by-word Arabic, and interactive stories that make every surah come alive.</p>
-        <div class="stats">
-            <div class="stat">
-                <span class="number">5</span>
-                <span class="label">Surahs Ready</span>
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="arabic-main">تفسير</div>
+                <h1>Quran Journey</h1>
+                <p class="subtitle">Learn the Quran visually. Verse-by-verse explanations, word-by-word Arabic, and interactive stories that make every surah come alive.</p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="number" data-count="5">0</span>
+                        <span class="label">Surahs</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number" data-count="24">0</span>
+                        <span class="label">Verses</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number" data-count="100">0</span>
+                        <span class="label">Arabic Words</span>
+                    </div>
+                </div>
             </div>
-            <div class="stat">
-                <span class="number">24</span>
-                <span class="label">Verses Explained</span>
-            </div>
-            <div class="stat">
-                <span class="number">100+</span>
-                <span class="label">Arabic Words</span>
+            <div class="hero-right">
+                <div class="feature-tile" style="animation: tileIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;">
+                    <span class="icon">&#x1F3A8;</span>
+                    <h3>Visual Story Mode</h3>
+                    <p>Hand-drawn illustrations for every verse. Swipe through like a picture book.</p>
+                </div>
+                <div class="feature-tile" style="animation: tileIn 0.8s cubic-bezier(0.16,1,0.3,1) 1.0s forwards;">
+                    <span class="icon">&#x1F4D6;</span>
+                    <h3>Word-by-Word Arabic</h3>
+                    <p>Break down every word. Arabic, transliteration, and meaning side by side.</p>
+                </div>
+                <div class="feature-tile" style="animation: tileIn 0.8s cubic-bezier(0.16,1,0.3,1) 1.2s forwards;">
+                    <span class="icon">&#x1F9E0;</span>
+                    <h3>Deep Tafsir</h3>
+                    <p>Classical explanations from Ibn Kathir, As-Sa'di, and Al-Qurtubi made accessible for everyone.</p>
+                </div>
             </div>
         </div>
     </header>
 
-    <div class="features">
-        <div class="feature-card">
-            <div class="icon">&#x1F3A8;</div>
-            <h3>Visual Story Mode</h3>
-            <p>Each verse gets a hand-drawn illustration. Swipe through like a picture book.</p>
-        </div>
-        <div class="feature-card">
-            <div class="icon">&#x1F4D6;</div>
-            <h3>Word-by-Word Arabic</h3>
-            <p>Break down every verse into individual words. Arabic, transliteration, and meaning.</p>
-        </div>
-        <div class="feature-card">
-            <div class="icon">&#x1F9E0;</div>
-            <h3>Deep Tafsir</h3>
-            <p>Explanations from Ibn Kathir, As-Sa'di, and Al-Qurtubi made accessible.</p>
-        </div>
-    </div>
+    <style>
+        @keyframes tileIn {
+            from { opacity: 0; transform: perspective(800px) rotateY(10deg) translateX(30px); }
+            to { opacity: 1; transform: perspective(800px) rotateY(0deg) translateX(0); }
+        }
+    </style>
 
     <section class="surahs-section">
-        <h2>Explore Surahs</h2>
-        <p class="section-sub">Click any surah to start your journey. More surahs added regularly.</p>
+        <h2 class="reveal">Explore Surahs</h2>
+        <div class="glow-line reveal"></div>
+        <p class="section-sub reveal">Click any surah to start your journey. More surahs added regularly.</p>
 
         <div class="surah-grid">
 
-            <a href="001-al-fatiha.html" class="surah-card">
+            <a href="001-al-fatiha.html" class="surah-card reveal-3d stagger-1">
                 <div class="surah-badge">7 verses</div>
                 <div class="surah-num">1</div>
                 <div class="surah-arabic">الفاتحة</div>
@@ -241,7 +375,7 @@
                 </div>
             </a>
 
-            <a href="108-al-kawthar.html" class="surah-card">
+            <a href="108-al-kawthar.html" class="surah-card reveal-3d stagger-2">
                 <div class="surah-badge">3 verses</div>
                 <div class="surah-num">108</div>
                 <div class="surah-arabic">الكوثر</div>
@@ -254,7 +388,7 @@
                 </div>
             </a>
 
-            <a href="110-an-nasr.html" class="surah-card">
+            <a href="110-an-nasr.html" class="surah-card reveal-3d stagger-3">
                 <div class="surah-badge">3 verses</div>
                 <div class="surah-num">110</div>
                 <div class="surah-arabic">النصر</div>
@@ -267,7 +401,7 @@
                 </div>
             </a>
 
-            <a href="111-al-masad.html" class="surah-card">
+            <a href="111-al-masad.html" class="surah-card reveal-3d stagger-4">
                 <div class="surah-badge">5 verses</div>
                 <div class="surah-num">111</div>
                 <div class="surah-arabic">المسد</div>
@@ -280,7 +414,7 @@
                 </div>
             </a>
 
-            <a href="114-an-nas.html" class="surah-card">
+            <a href="114-an-nas.html" class="surah-card reveal-3d stagger-5">
                 <div class="surah-badge">6 verses</div>
                 <div class="surah-num">114</div>
                 <div class="surah-arabic">النَّاس</div>
@@ -293,7 +427,7 @@
                 </div>
             </a>
 
-            <div class="surah-card coming-soon">
+            <div class="surah-card coming-soon reveal-3d stagger-6">
                 <div class="surah-badge">Coming Soon</div>
                 <div class="surah-num">113</div>
                 <div class="surah-arabic">الفلق</div>
@@ -305,7 +439,7 @@
                 </div>
             </div>
 
-            <div class="surah-card coming-soon">
+            <div class="surah-card coming-soon reveal-3d stagger-7">
                 <div class="surah-badge">Coming Soon</div>
                 <div class="surah-num">112</div>
                 <div class="surah-arabic">الإخلاص</div>
@@ -321,18 +455,97 @@
     </section>
 
     <section class="about-section">
-        <h2>About This Project</h2>
-        <p>Tafsir - Quran Journey is a personal project to make the Quran <span class="highlight">accessible, visual, and deeply understood</span>. Each surah page includes interactive carousels with hand-drawn illustrations, detailed verse-by-verse explanations, and word-by-word Arabic breakdowns to help you learn Quranic Arabic naturally.</p>
-        <p>Whether you're a beginner exploring the Quran for the first time or someone who wants to go deeper into the meaning of the surahs you recite daily, this is for you.</p>
-        <div class="source-note">
+        <h2 class="reveal">About This Project</h2>
+        <div class="glow-line reveal"></div>
+        <p class="reveal stagger-1">Tafsir - Quran Journey is a personal project to make the Quran <span class="highlight">accessible, visual, and deeply understood</span>. Each surah page includes interactive carousels with hand-drawn illustrations, detailed verse-by-verse explanations, and word-by-word Arabic breakdowns to help you learn Quranic Arabic naturally.</p>
+        <p class="reveal stagger-2">Whether you're a beginner exploring the Quran for the first time or someone who wants to go deeper into the meaning of the surahs you recite daily, this is for you.</p>
+        <div class="source-note reveal stagger-3">
             <strong>Sources & Approach:</strong> All explanations are based on classical tafsir sources including Tafsir Ibn Kathir, Tafsir As-Sa'di, and Tafsir Al-Qurtubi. Hadith references are from authentic collections (Sahih Al-Bukhari, Sahih Muslim, etc.). This is a learning aid, not a scholarly work. Always verify with qualified scholars for detailed rulings and interpretations.
         </div>
     </section>
 
-    <footer>
+    <footer class="reveal">
         Tafsir - Quran Journey &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
         Built with care. This is a learning aid, not a scholarly work.
     </footer>
+
+    <script>
+    // ===== INTERSECTION OBSERVER FOR SCROLL REVEALS =====
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-3d, .reveal-scale, .glow-line').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // ===== ANIMATED COUNTERS =====
+    function animateCounters() {
+        document.querySelectorAll('.stat .number').forEach(counter => {
+            const target = parseInt(counter.dataset.count);
+            const suffix = counter.dataset.count === '100' ? '+' : '';
+            const duration = 1800;
+            const start = performance.now();
+            function tick(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                counter.textContent = Math.round(target * eased) + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        });
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { animateCounters(); statsObserver.disconnect(); }
+        });
+    }, { threshold: 0.5 });
+    const statsEl = document.querySelector('.stats');
+    if (statsEl) statsObserver.observe(statsEl);
+
+    // ===== HERO PARTICLES =====
+    (function() {
+        const container = document.getElementById('heroParticles');
+        if (!container) return;
+        for (let i = 0; i < 25; i++) {
+            const p = document.createElement('div');
+            p.className = 'hero-particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animationDelay = (Math.random() * 6) + 's';
+            p.style.animationDuration = (4 + Math.random() * 4) + 's';
+            p.style.width = (2 + Math.random() * 3) + 'px';
+            p.style.height = p.style.width;
+            container.appendChild(p);
+        }
+    })();
+
+    // ===== 3D TILT ON MOUSE MOVE FOR SURAH CARDS =====
+    document.querySelectorAll('.surah-card:not(.coming-soon)').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = `translateY(-6px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg)`;
+        });
+        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+
+    // ===== 3D TILT ON MOUSE MOVE FOR FEATURE TILES =====
+    document.querySelectorAll('.feature-tile').forEach(tile => {
+        tile.addEventListener('mousemove', (e) => {
+            const rect = tile.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            tile.style.transform = `rotateX(${-y * 10}deg) rotateY(${x * 10}deg)`;
+        });
+        tile.addEventListener('mouseleave', () => { tile.style.transform = ''; });
+    });
+    </script>
 
 </body>
 </html>

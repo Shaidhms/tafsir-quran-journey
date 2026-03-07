@@ -429,6 +429,66 @@
             .toggle-btn { padding: 8px 18px; font-size: 0.82em; }
             .dd-card { padding: 20px; }
         }
+
+        /* ===== SCROLL ANIMATIONS ===== */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .reveal-3d {
+            opacity: 0;
+            transform: perspective(800px) rotateY(8deg) translateX(-30px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-3d.visible {
+            opacity: 1; transform: perspective(800px) rotateY(0deg) translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0; transform: scale(0.9) translateY(20px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        .glow-line {
+            width: 80px; height: 2px; margin: 15px auto 25px;
+            background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+            opacity: 0; transform: scaleX(0);
+            transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+
+        .hero { perspective: 1000px; overflow: hidden; }
+        .hero .arabic-title {
+            opacity: 0; transform: translateZ(40px) rotateX(10deg);
+            animation: heroArabicIn 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+        }
+        @keyframes heroArabicIn { to { opacity: 1; transform: translateZ(0) rotateX(0); } }
+        .hero h1 { opacity: 0; transform: translateY(20px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 0.6s forwards; }
+        .hero .subtitle { opacity: 0; transform: translateY(15px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 0.8s forwards; }
+        .hero .badge { opacity: 0; transform: translateY(10px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 1.0s forwards; }
+        @keyframes fadeSlideUp { to { opacity: 1; transform: translateY(0); } }
+
+        .nav-bar { background: rgba(13, 13, 13, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
+        .verse-card { transform-style: preserve-3d; }
+        .verse-card:hover { transform: translateY(-4px) rotateX(2deg); box-shadow: 0 12px 30px rgba(201, 168, 76, 0.08); }
+        .word-chip { transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { transform: translateY(-4px) scale(1.05); }
+        .fact-card { transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
     </style>
 </head>
 <body>
@@ -497,8 +557,9 @@
     <!-- DEEP DIVE SECTION -->
     <div class="deep-dive-section" id="deepSection">
 
-        <div class="dd-card">
+        <div class="dd-card reveal">
             <h3>Quick Facts</h3>
+            <div class="glow-line reveal"></div>
             <div class="quick-facts">
                 <span class="fact-chip">Surah 110</span>
                 <span class="fact-chip">3 Verses</span>
@@ -509,8 +570,9 @@
             </div>
         </div>
 
-        <div class="dd-card">
+        <div class="dd-card reveal">
             <h3>The Story Behind This Surah</h3>
+            <div class="glow-line reveal"></div>
             <p>
                 Surah An-Nasr is the last complete surah revealed to the Prophet (peace be upon him). It came after the conquest of Makkah, in the 10th year of Hijrah.
             </p>
@@ -525,11 +587,12 @@
             </p>
         </div>
 
-        <div class="dd-card">
+        <div class="dd-card reveal">
             <h3>Verse-by-Verse Breakdown</h3>
+            <div class="glow-line reveal"></div>
             <div class="verse-breakdown">
 
-                <div class="verse-row">
+                <div class="verse-row reveal-3d">
                     <div class="v-label">Verse 1</div>
                     <div class="v-arabic">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</div>
                     <div class="word-grid">
@@ -541,7 +604,7 @@
                     </div>
                 </div>
 
-                <div class="verse-row">
+                <div class="verse-row reveal-3d">
                     <div class="v-label">Verse 2</div>
                     <div class="v-arabic">وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا</div>
                     <div class="word-grid">
@@ -555,7 +618,7 @@
                     </div>
                 </div>
 
-                <div class="verse-row">
+                <div class="verse-row reveal-3d">
                     <div class="v-label">Verse 3</div>
                     <div class="v-arabic">فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا</div>
                     <div class="word-grid">
@@ -572,8 +635,9 @@
             </div>
         </div>
 
-        <div class="dd-card">
+        <div class="dd-card reveal">
             <h3>Arabic Learning</h3>
+            <div class="glow-line reveal"></div>
             <p style="margin-bottom:10px;"><strong style="color:#e67e22;">Root N-S-R (help/victory):</strong> nasr, nasir, ansar, mansoor</p>
             <p style="margin-bottom:14px;"><strong style="color:#e67e22;">Verb Form X:</strong> istaghfir - from the root gh-f-r (to cover/forgive). Form X adds the meaning of "seeking" the action.</p>
 
@@ -588,8 +652,9 @@
             </table>
         </div>
 
-        <div class="dd-card">
+        <div class="dd-card reveal">
             <h3>Key Lessons</h3>
+            <div class="glow-line reveal"></div>
             <ol class="lesson-list">
                 <li>Victory belongs to Allah. Not your strategy, not your effort alone. When He decides, the doors open.</li>
                 <li>At your peak, stay humble. The moment of greatest triumph is the moment for the deepest gratitude and humility.</li>
@@ -598,8 +663,9 @@
             </ol>
         </div>
 
-        <div class="dd-card">
+        <div class="dd-card reveal">
             <h3>Sources</h3>
+            <div class="glow-line reveal"></div>
             <p class="sources-text">
                 Tafsir Ibn Kathir | Tafsir As-Sa'di | Sahih al-Bukhari 4970 (Ibn Abbas on the farewell) | Sahih al-Bukhari 4967 (Aishah on increased istighfar) | Sahih Muslim 484
             </p>
@@ -1762,6 +1828,17 @@
         window.addEventListener('load', () => {
             setTimeout(() => playSlide(0), 500);
         });
+
+    // ===== SCROLL REVEAL OBSERVER =====
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-3d, .reveal-scale, .glow-line').forEach(el => {
+        revealObserver.observe(el);
+    });
     </script>
 
 </body>
