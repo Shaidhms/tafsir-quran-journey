@@ -827,13 +827,42 @@
 
     // ===== PEN CURSOR HTML =====
     const PEN_SVG = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
-        <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
-        <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
-        <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
-        <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
-        <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
+        <defs>
+            <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#E8C840"/>
+                <stop offset="30%" stop-color="#F5DC6E"/>
+                <stop offset="70%" stop-color="#E8C840"/>
+                <stop offset="100%" stop-color="#C9A832"/>
+            </linearGradient>
+            <linearGradient id="ferrule" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#B8B8B8"/>
+                <stop offset="40%" stop-color="#D4D4D4"/>
+                <stop offset="100%" stop-color="#9A9A9A"/>
+            </linearGradient>
+        </defs>
+        <g transform="rotate(35, 32, 32)">
+            <!-- Pencil body -->
+            <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" stroke="#B8962A" stroke-width="0.8"/>
+            <!-- Wood grain lines -->
+            <line x1="30" y1="6" x2="30" y2="40" stroke="#D4B644" stroke-width="0.3" opacity="0.6"/>
+            <line x1="34" y1="6" x2="34" y2="40" stroke="#C9A832" stroke-width="0.3" opacity="0.4"/>
+            <!-- Band/text area -->
+            <rect x="26" y="10" width="12" height="5" fill="#1a1a1a" opacity="0.8" rx="0.5"/>
+            <rect x="27.5" y="11.5" width="9" height="2" rx="0.5" fill="#C9A84C" opacity="0.5"/>
+            <!-- Ferrule (metal band) -->
+            <rect x="25.5" y="40" width="13" height="6" rx="0.5" fill="url(#ferrule)" stroke="#888" stroke-width="0.5"/>
+            <line x1="25.5" y1="41.5" x2="38.5" y2="41.5" stroke="#aaa" stroke-width="0.3"/>
+            <line x1="25.5" y1="44.5" x2="38.5" y2="44.5" stroke="#aaa" stroke-width="0.3"/>
+            <!-- Eraser -->
+            <rect x="27" y="2" width="10" height="5" rx="2" fill="#E8758A" stroke="#C25068" stroke-width="0.5"/>
+            <!-- Sharpened tip -->
+            <polygon points="28,46 36,46 32,58" fill="#F5DEB3" stroke="#C9A832" stroke-width="0.5"/>
+            <polygon points="30.5,52 33.5,52 32,58" fill="#3a3a3a"/>
+            <!-- Tip point -->
+            <circle cx="32" cy="58" r="0.8" fill="#1a1a1a"/>
+            <!-- Subtle shadow -->
+            <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" opacity="0.15" transform="translate(1.5, 1)"/>
+        </g>
     </svg>`;
 
     // Insert pen cursor into each slide
