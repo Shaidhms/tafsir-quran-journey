@@ -5,254 +5,256 @@ description: Generate interactive Quran learning pages with verse-by-verse expla
 
 # Quran Journey
 
-Create beautiful, interactive HTML learning pages for each surah of the Quran. Each page combines deep explanation with visual learning, Arabic word-by-word breakdowns, and animated whiteboard-style doodle carousels.
+Create beautiful, interactive HTML learning pages for each surah of the Quran. Each page features **3D cartoon-style doodle illustrations** that animate with a pencil drawing effect, verse-by-verse.
 
 ## Islamic Guidelines (Non-negotiable)
 
 - NEVER depict Allah, prophets, angels, or any religious figures visually
-- No faces or human figures in illustrations - use abstract, geometric, nature-based visuals only
+- Cartoon figures should be generic (no specific prophet likenesses) - use simple cartoon people with head coverings
 - All explanations must be sourced from authentic tafsir: Ibn Kathir, As-Sa'di, Al-Qurtubi
 - All hadith references must be from authentic collections (Sahih Bukhari, Sahih Muslim, etc.)
 - Include source citations for every hadith and scholarly reference
 - When uncertain about a religious detail, flag it and recommend the user verify with a scholar
 
+## Architecture: 3D Cartoon Doodle System
+
+### Overview
+
+Each surah page is a **single self-contained HTML file** with:
+- A carousel of verses, each with an animated cartoon illustration
+- Pen cursor that follows the drawing point
+- Typewriter text that types out Arabic, transliteration, and explanation
+- Prev/Next navigation + verse dots + keyboard arrows + speed control
+
+### Key Difference from Old System
+
+**Old:** Rough.js flat hand-drawn doodles with hachure fills
+**New:** SVG with gradients, shadows, highlights for **3D cartoon look** - like a skilled artist drawing cartoon characters on a whiteboard
+
+### Technical Stack
+
+- **Single self-contained HTML file** per surah (no build step, no external dependencies except fonts)
+- **Pure SVG** with gradients, filters, and cartoon-style paths (NO Rough.js)
+- **Google Fonts:** Amiri (Arabic), Caveat (handwriting), Inter (UI)
+- **Animation:** `stroke-dasharray` / `stroke-dashoffset` for draw-on effect + opacity fades for fills
+
 ## Page Structure
 
-Every surah page has TWO main sections toggled by tabs: "Visual Story" (carousel) and "Deep Dive" (detailed learning).
+### HTML Shell
 
-### Section 1: Animated Doodle Carousel (Visual Story)
+```html
+<div class="header">
+    <div class="arabic-title">[Arabic surah name]</div>
+    <h1>[English surah name]</h1>
+    <p>[Details - verse count, Makkan/Madani]</p>
+</div>
 
-An interactive, swipeable carousel at the top of the page. Each verse gets a slide with an **animated whiteboard-style doodle** that draws itself live.
+<div class="slide-frame">
+    <div class="slide-drawing" id="slideDrawing">
+        <div id="penCursor">[realistic pencil SVG]</div>
+    </div>
+    <div class="slide-bottom">
+        <div class="verse-num-badge" id="verseBadge"></div>
+        <div class="slide-arabic-text" id="arabicText"></div>
+        <div class="slide-translit-text" id="translitText"></div>
+        <div class="slide-kid-text" id="kidText"></div>
+    </div>
+</div>
 
-#### Animation System (Rough.js + SVG)
+<div class="controls">
+    <button id="prevBtn">Prev</button>
+    <span class="verse-indicator" id="verseIndicator">1 / N</span>
+    <button id="nextBtn">Next</button>
+    <button>Replay</button>
+</div>
+<div class="verse-dots" id="verseDots"></div>
+<div class="speed-control">[slider 0.3x - 3x]</div>
+```
 
-Each slide uses **Rough.js in SVG mode** to create hand-drawn doodle illustrations that animate with a "draw-on" effect:
-
-- **Rough.js CDN:** `https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js`
-- **Rendering:** SVG mode (`rough.svg(svgElement)`) - NOT canvas mode
-- **Animation:** `stroke-dasharray` / `stroke-dashoffset` technique to draw each path progressively
-- **Sequencing:** Elements are organized into groups that draw sequentially. Each group animates simultaneously, groups play one after another
-- **Fill reveal:** Hachure/solid fills appear after stroke is 60% complete
-- **Easing:** Ease-out cubic for natural drawing feel
-- **Timing:** ~500-800ms per group, 150ms gap between groups
-
-**CRITICAL - addRoughToGroup pattern:**
-When adding Rough.js elements to animation groups, you MUST also append them to the SVG DOM. Rough.js `rc.path()` / `rc.circle()` etc. return `<g>` elements that exist only in memory. The helper function must:
-1. Collect child `<path>` elements into the animation group array
-2. **Call `svg.appendChild(roughNode)`** to add the `<g>` to the DOM
+### Verse Data Array
 
 ```js
-function addRoughToGroup(roughNode, groupIndex, groups, svg) {
-    const paths = roughNode.querySelectorAll('path');
-    paths.forEach(p => { if (!groups[groupIndex]) groups[groupIndex] = []; groups[groupIndex].push(p); });
-    svg.appendChild(roughNode); // REQUIRED - without this, shapes are invisible
+const verses = [
+    {
+        num: 1,
+        arabic: '[Arabic text]',
+        translit: '[Transliteration]',
+        explanation: '[Kid-friendly explanation]',
+        build: buildVerse1
+    },
+    // ...
+];
+```
+
+Each verse has a `build` function that returns `{ svg, groups }`.
+
+## SVG Illustration System
+
+### Common Setup (reusable across all surahs)
+
+Every build function starts with:
+```js
+function buildVerseN() {
+    const { svg, groups, add } = initSvg();
+    // add(groupIndex, svgElement) - adds to group AND appends to SVG DOM
+    // ... draw scene ...
+    return { svg, groups };
 }
 ```
 
-**Unicode in HTML vs JS:**
-- `\uXXXX` escape sequences only work inside JavaScript strings, NOT in HTML content
-- For Arabic text in HTML elements (headings, paragraphs), use the actual Unicode characters directly
-- For Arabic text in JS string literals (e.g., slide data arrays), `\uXXXX` escapes work fine
+`initSvg()` creates the SVG, adds common defs (gradients, filters, patterns), and returns the `add` helper.
 
-#### Pen Cursor (Hand with Pencil)
+### CRITICAL: Always append to SVG DOM
 
-A small SVG hand-holding-pencil cursor follows the drawing point:
+The `add()` function MUST do both:
+1. Push the node to the animation group array
+2. Call `svg.appendChild(node)` to add it to the DOM
 
-```html
-<div id="penCursor">
-    <svg viewBox="0 0 64 64" fill="none">
-        <rect x="30" y="4" width="8" height="36" rx="1.5" fill="#F9A825" stroke="#E65100" stroke-width="1.5" transform="rotate(35, 34, 22)"/>
-        <polygon points="18,50 22,38 26,42" fill="#5D4037" stroke="#3E2723" stroke-width="1"/>
-        <polygon points="18,50 20,46 22,48" fill="#2c2c2c"/>
-        <rect x="42" y="2" width="8" height="6" rx="1.5" fill="#F48FB1" stroke="#E91E63" stroke-width="1" transform="rotate(35, 46, 5)"/>
-        <path d="M26,42 Q20,46 16,52 Q14,56 18,58 Q22,60 28,56 Q32,52 36,50 Q40,48 42,44 Q38,42 34,40 Z" fill="#FFCC80" stroke="#E65100" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M34,40 Q30,44 28,42" fill="none" stroke="#E65100" stroke-width="1" stroke-linecap="round"/>
-        <path d="M30,48 Q32,46 34,47" fill="none" stroke="#EF6C00" stroke-width="0.8" stroke-linecap="round"/>
-    </svg>
-</div>
+Without step 2, elements are invisible.
+
+### Common Gradients & Filters (defined in `addCommonDefs`)
+
+**Linear gradients:** skyGrad, skyNight, skyDramatic, groundGrad, trunkGrad, robeGrad, doorGrad, lightGrad, pathGold, waterGrad
+**Radial gradients:** sunGlow, skinGrad, cloudGrad, leafGrad, mercyGlow
+**Filters:** glow (gaussian blur merge), softShadow (drop shadow)
+**Patterns:** dots (dot grid for whiteboard feel)
+
+### SVG Helper Functions
+
+```js
+el(tag, attrs)           // Create any SVG element
+pathEl(d, fill, stroke, sw, join)  // Create <path>
+lineEl(x1, y1, x2, y2, stroke, sw) // Create <line>
+textEl(text, x, y, opts) // Create <text> with Caveat font
+cartoonCloud(cx, cy, scale) // 3D puffy cloud (5 ellipses + highlight)
+cartoonSparkle(cx, cy, size) // 4-pointed star with glow filter
+cartoonStar(cx, cy, outerR, innerR, fill, stroke) // 5-pointed star
+drawPerson(add, gi, cx, cy, scale, opts) // Reusable cartoon person
 ```
 
-CSS: `position: absolute; z-index: 100; width: 48px; height: 48px; pointer-events: none;`
-Positioning: pencil tip is at ~28% x, 78% y of the 48px div. Offset accordingly with `getPointAtLength()`.
+### 3D Cartoon Style Guidelines
 
-#### Typewriter Text (Bottom Panel)
+**What makes it "3D cartoon":**
+- **Gradients** on everything: linear for flat surfaces (trunks, robes), radial for round objects (sun, heads, fruits)
+- **Highlights:** White/light overlays at the light-facing side (e.g., top-left of circles, left side of trunks)
+- **Drop shadows:** `filter: url(#softShadow)` on clouds, characters, key objects
+- **Glow effects:** `filter: url(#glow)` on sparkles, sun, light sources
+- **Cartoon eyes:** White ellipse + dark pupil + tiny white shine dot
+- **Thick outlines:** 2-3px strokes with rounded joins
+- **Warm color palette:** Rich gradients, not flat colors
 
-The bottom text panel animates with a typewriter/keystroke effect, synced with the drawing:
+**Cartoon person (reusable `drawPerson`):**
+- Head: circle with skin gradient, highlight, cartoon eyes (white + pupil + shine)
+- Head covering: curved path in light grey
+- Body: robe with gradient, fold lines
+- Mouth: smile path or "awe" ellipse
+- Optional: raised arms with circular hands
 
-1. **Verse badge** pops in (opacity transition)
-2. **Arabic text** types out character-by-character (RTL, ~55ms/char) with blinking cursor
-3. **Transliteration** types out LTR (~35ms/char)
-4. **Kid-friendly explanation** types out LTR (~25ms/char)
+### Scene Composition Per Verse
 
-Typewriter starts after ~40% of the drawing is complete (e.g., after group 2 finishes).
+Each verse illustration should be a **complete scene**, not isolated symbols.
 
-#### Doodle Visual Style
+**Layer order (back to front):**
+1. Sky/atmosphere (gradient fills)
+2. Distant elements (hills, mountains, clouds)
+3. Mid-ground (buildings, trees, water)
+4. Foreground (characters, ground details)
+5. Overlay effects (sparkles, light rays, labels)
+6. Title text
 
-- **Background:** Cream/off-white (#FFF9F0) with dot grid pattern (mimics notebook)
-- **Lines:** Rough.js with `roughness: 1.5-2.5`, hand-drawn wobble
-- **Fills:** Hachure style (cross-hatching) for a sketched look
-- **Colors:** Warm, muted palette - browns (#5D4037), golds (#F9A825, #c9a84c), greens (#4CAF50), blues (#42A5F5), pinks (#E91E63)
-- **Labels:** Caveat font (handwriting style), slight random rotation for hand-written feel
-- **No human faces/figures** - use abstract shapes, nature elements, symbols
+**Group count:** 6-10 animation groups per verse. Each group animates ~600ms with 100ms gaps.
 
-#### Realistic Scene Composition
+### Realistic Pencil Cursor
 
-Each slide should be a **richly layered environment**, not just isolated symbols. Think of each slide as a detailed whiteboard illustration that tells a visual story.
+A detailed SVG pencil with:
+- Yellow body with 3D linear gradient + highlight stripe
+- Silver ferrule with crimp lines
+- Pink eraser with highlight
+- Sharpened wood cone with gradient
+- Dark graphite tip with shine
+- Drop shadow filter
 
-**Scene Layering (back to front):**
-1. **Sky/atmosphere:** Clouds (3 overlapping ellipses per cloud), birds (V-shapes), celestial objects (moon, stars, planets with rings)
-2. **Background terrain:** Mountains with snow caps, hills, distant trees, sunset gradients
-3. **Mid-ground environment:** Buildings (brick walls, arches, doors with wood grain), fences (picket style), paths (cobblestone), rivers (layered wave lines with ripples)
-4. **Foreground details:** Flowers with stems and leaves, grass tufts (double-leaf sprouts), vines on structures, scattered rocks
-5. **Atmospheric effects:** Mist (translucent ellipses), dust clouds, smoke wisps, rain, confetti, light rays
+```css
+#penCursor { width: 52px; height: 65px; }
+```
+Tip offset: `tipOffsetX = 18, tipOffsetY = 58`
 
-**Detail Touches (what makes scenes feel realistic):**
-- Doors: Wood grain lines, golden knobs, ornate arches above
-- Walls: Individual brick/stone rectangles in rows
-- Trees: Bark texture lines on trunks, varied foliage (pine triangles vs round canopy)
-- Water: Multiple wave layers at different Y-positions, fish silhouettes
-- Paths: Individual cobblestones or footprint marks
-- Rope/chains: Individual fiber lines or chain links
-- Structures: Iron studs on doors, crenellations on walls, decorative rings on pedestals
+## Animation Engine
 
-**Emotional/Thematic Elements:**
-- **Positive themes:** Rainbow arcs (6 colored bands), butterflies, blooming flowers, golden gates with light rays, confetti
-- **Negative themes:** Cracked ground, dead trees (bare branches), thorns, lightning bolts, poison drops, cobwebs, frayed rope fibers
-- **Spiritual themes:** Mosque arches, crescent moons, calligraphic swirls, shield shapes with emblems, heartbeat lines
-- **Journey themes:** Signposts with colored arrows, lamp posts with glowing lights, perspective trees receding into distance
+### Hide + Animate Pattern
 
-**Group Count Target:** Each slide should have **7-11 animation groups** for a rich drawing experience. Simple slides (e.g., a single object) still need environmental context.
+1. **Build scene** -> returns `{ svg, groups }`
+2. **hideAllPaths(groups)** -> sets `strokeDashoffset` or `opacity: 0` on all elements
+3. **Loop through groups sequentially:**
+   - `await animateGroup(groups[i], 600)`
+   - Trigger typewriter text at ~40% through groups
+4. **hidePen()** when done
 
-#### Reusable Doodle Primitives
+### Key: try/catch around getTotalLength
 
-Build scenes using these composable primitives (all drawn with Rough.js):
+Elements inside `<g>` with filters may throw "non-rendered element" errors. Always wrap:
+```js
+try {
+    if (el.getTotalLength) {
+        const len = el.getTotalLength();
+        // ... use strokeDasharray/offset
+    }
+} catch(e) {}
+// fallback: opacity-based animation
+```
 
-**Basic shapes:**
-- **Star:** 5-pointed polygon with hachure fill
-- **Heart:** Bezier path with hachure fill
-- **Tree:** Rectangle trunk + overlapping circles for foliage (add bark lines for detail)
-- **Mountain:** Triangle with hachure + snow cap polygon + optional ridge lines
-- **Sun:** Circle + radiating lines
-- **Cloud:** 3 overlapping ellipses with solid fill (not just 1 circle)
-- **Raindrop:** Teardrop bezier path
-- **Flower:** Circle center + 5 petal circles + line stem + leaves
-- **Arrow:** Line + arrowhead lines
-- **Speech bubble:** Ellipse with solid fill + text label
+### Typewriter Engine
 
-**Environment primitives:**
-- **Brick wall:** Grid of small rectangles in offset rows
-- **Arch/door:** Rectangle + arc path + wood grain lines + knob circle
-- **Picket fence:** Vertical rectangles + horizontal rail lines
-- **Cobblestone path:** Scattered small ellipses in path shape
-- **River/waves:** Multiple wavy lines at different Y-positions
-- **Grass tuft:** Short curved lines in clusters, double-leaf sprouts
-- **Vine:** Wavy line with small leaf ellipses branching off
+Animates text character-by-character with blinking cursor:
+1. Verse badge pops in
+2. Arabic text types RTL (~50ms/char)
+3. Transliteration types LTR (~30ms/char)
+4. Kid-friendly explanation types LTR (~20ms/char)
 
-**Atmospheric primitives:**
-- **Bird (V-shape):** Two short angled lines
-- **Butterfly:** Two small ellipses + line body
-- **Mist/fog:** Large translucent ellipses (low opacity fill)
-- **Lightning:** Zigzag polyline
-- **Confetti:** Scattered small rectangles at random angles
-- **Smoke wisp:** Wavy bezier path, no fill
-- **Light rays:** Lines radiating from a point with low opacity
-
-Each primitive is a function: `drawTree(rc, ctx, x, y, scale)` etc.
-
-#### Carousel Behavior
-
-- Left/right navigation arrows
-- Dot indicators for current slide
-- Keyboard arrow key support
-- Smooth slide transitions (CSS transform translateX)
-- Each slide animates its doodle when it becomes visible
-- Speed slider (0.3x to 3x) affects both drawing and typewriter
-- Replay button per slide
-
-### Section 2: Deep Dive (Detailed Learning)
-
-Same as before - dark mode detailed content section:
-
-1. **Quick Facts:** Surah number, verse count, word count, revelation place, other names, when recited
-2. **The Story Behind This Surah:** Narrative-style context of revelation, why it matters, relevant hadith
-3. **Verse by Verse with Word-by-Word Arabic:**
-   - Arabic text (Amiri font, right-to-left)
-   - Transliteration
-   - English translation
-   - Word-by-word breakdown grid (Arabic -> transliteration -> meaning)
-   - Friendly explanation for each verse
-4. **Arabic Learning Section:**
-   - Key vocabulary from this surah (with Quran-wide frequency)
-   - Grammar patterns found in this surah
-   - Root word analysis
-   - Verb forms and pronoun patterns
-5. **Key Lessons:** Practical takeaways
-6. **Recommended Resources:** For further study
-7. **Sources & Authenticity Note:** Full citation of tafsir and hadith sources used
+Starts after ~40% of drawing groups complete.
 
 ## Visual Design
 
-### Overall Theme
-- Dark mode for deep dive: Background #0a0a0a, cards #111, borders #222
-- Gold accent: #c9a84c (for headings, highlights, verse numbers)
-- Blue accent: #8ab4f8 (for transliterations, links, soft highlights)
-- Text: #e0e0e0 primary, #ccc secondary, #888 tertiary
-- Arabic font: 'Amiri' (Google Fonts)
-- Latin font: 'Inter' (Google Fonts)
-- Handwriting font: 'Caveat' (Google Fonts) - for carousel labels and kid text
+### Color Scheme
+- **Dark UI:** Background #0a0a0a, text #e0e0e0
+- **Gold accent:** #c9a84c (headings, highlights, verse nav)
+- **Canvas:** Cream #FFF9F0 with dot grid, bottom panel #FFF3E0
+- **Verse badge:** Orange #e67e22
 
-### Carousel Slides
-- Light mode: Cream background (#FFF9F0) with dot grid
-- Bottom panel: Warm (#FFF3E0) with dashed border-top
-- Full-width, 16:9 aspect ratio canvas area
-- SVG viewBox: 0 0 900 506
+### Fonts
+- **Arabic:** 'Amiri', serif (RTL)
+- **Handwriting/labels:** 'Caveat', cursive
+- **UI:** 'Inter', sans-serif
 
-### Responsive
-- Mobile-first: works on phones, tablets, desktops
-- Touch-swipe support on mobile
-- Arabic text scales appropriately
-- Pen cursor hides on mobile (optional)
-
-## Technical Stack
-
-- **Single self-contained HTML file** per surah (no build step)
-- **Rough.js 4.6.6** from CDN for hand-drawn SVG rendering
-- **Google Fonts:** Amiri, Caveat, Inter
-- **No other dependencies**
+### SVG Canvas
+- ViewBox: `0 0 900 506` (16:9 aspect ratio)
+- Slide frame: max-width 900px, rounded corners, border, box-shadow
 
 ## File Structure
 
 ```
 quran-journey/
-  001-al-fatiha.html
-  108-al-kawthar.html
-  110-an-nasr.html
-  111-al-masad.html
-  114-an-nas.html
-  index.html              (table of contents)
-  doodle-poc.html          (proof of concept - reference)
-  doodle-animated-poc.html (animated reference)
+  index.html                    (table of contents)
+  001-al-fatiha.html           (3D cartoon version)
+  108-al-kawthar.html          (3D cartoon version)
+  110-an-nasr.html             (3D cartoon version)
+  111-al-masad.html            (3D cartoon version)
+  114-an-nas.html              (3D cartoon version)
+  3d-cartoon-poc.html          (original PoC - reference)
+  archives/                    (old Rough.js versions)
 ```
 
 File naming: `[3-digit-number]-[surah-name-transliterated].html`
 
 ## Process
 
-1. **Research:** Gather tafsir from Ibn Kathir and As-Sa'di for the surah. Note authentic hadith related to it.
-2. **Structure content:** Break down each verse with word-by-word Arabic analysis
-3. **Design doodle scenes:** Choose visual metaphors for each verse using the primitive library (stars, trees, mountains, hearts, arrows, etc.)
-4. **Write explanations:** Two versions per verse - kid-friendly (carousel typewriter) and detailed (deep dive)
-5. **Compose animation groups:** Organize each scene into sequential drawing groups for the animation engine
-6. **Arabic learning:** Identify key vocabulary, patterns, and root words from the surah
-7. **Generate HTML:** Single self-contained HTML file with embedded CSS and JS
-8. **Open in browser** for the user to review
-9. **Iterate** based on feedback
+1. **Research:** Gather tafsir from Ibn Kathir and As-Sa'di. Note relevant hadith.
+2. **Plan scenes:** Choose a visual concept for each verse (nature scenes, metaphors, journeys)
+3. **Build verse data:** Arabic text, transliteration, kid-friendly explanation per verse
+4. **Draw scenes:** Using SVG helpers, gradients, cartoon style - compose rich layered scenes
+5. **Test animation:** Open in browser, check all verses animate correctly, no JS errors
+6. **Open for review:** Let user navigate through all verses
 
-## Output
+## Reference Implementation
 
-Save each surah page to: `quran-journey/[number]-[name].html`
-
-Present to user:
-1. Open the page in the browser
-2. Briefly describe what's included
-3. Ask: "Want me to adjust anything or continue to the next surah?"
+See `001-al-fatiha.html` for the complete reference implementation with all 7 verses, full animation engine, realistic pencil cursor, and navigation controls.

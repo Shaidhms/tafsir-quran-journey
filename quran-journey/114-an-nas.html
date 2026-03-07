@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surah An-Nas - Mankind | Quran Journey</title>
+    <title>Surah An-Nas - 3D Cartoon Doodle | Quran Journey</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,2104 +13,1197 @@
             font-family: 'Inter', sans-serif;
             background: #0a0a0a;
             color: #e0e0e0;
-            line-height: 1.8;
-        }
-
-        /* ===== NAVIGATION ===== */
-        .nav-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px; background: #0d0d0d;
-            border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 200;
-        }
-        .nav-bar .logo { color: #c9a84c; font-weight: 700; font-size: 1.1em; text-decoration: none; }
-        .nav-bar .progress { color: #888; font-size: 0.9em; }
-
-        /* ===== HERO ===== */
-        .hero {
-            background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%);
-            padding: 80px 20px; text-align: center;
-            border-bottom: 2px solid #3a1a5c; position: relative; overflow: hidden;
-        }
-        .hero::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
-        }
-        .hero h1 { font-family: 'Amiri', serif; font-size: 3em; color: #c9a84c; margin-bottom: 10px; }
-        .hero .arabic-title { font-family: 'Amiri', serif; font-size: 4em; color: #fff; direction: rtl; margin-bottom: 15px; }
-        .hero .subtitle { font-size: 1.1em; color: #8ab4f8; font-weight: 300; }
-        .hero .badge {
-            display: inline-block; margin-top: 20px; padding: 8px 20px;
-            background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c;
-            border-radius: 30px; color: #c9a84c; font-size: 0.9em;
-        }
-
-        /* ===== VIEW TOGGLE ===== */
-        .view-toggle {
-            display: flex; justify-content: center; gap: 0;
-            background: #111; border-bottom: 1px solid #222; padding: 0;
-        }
-        .view-toggle button {
-            background: none; border: none; color: #888;
-            padding: 16px 30px; font-size: 1em; font-family: 'Inter', sans-serif;
-            cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s;
-        }
-        .view-toggle button:hover { color: #c9a84c; }
-        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
-
-        /* ===== CAROUSEL SECTION ===== */
-        .carousel-section { display: block; }
-        .carousel-section.hidden { display: none; }
-        .deep-dive-section { display: none; }
-        .deep-dive-section.visible { display: block; }
-
-        .carousel-wrapper {
-            max-width: 900px; margin: 40px auto; padding: 0 20px; position: relative;
-        }
-        .carousel-intro { text-align: center; margin-bottom: 30px; }
-        .carousel-intro h2 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 8px; }
-        .carousel-intro p { color: #888; font-size: 0.95em; }
-
-        .carousel-container {
-            position: relative; overflow: hidden;
-            border-radius: 20px; border: 3px solid #333;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-        }
-        .carousel-track { display: flex; transition: transform 0.5s ease; }
-
-        .carousel-slide {
-            min-width: 100%;
-            background: #FFF9F0;
-            position: relative;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
         }
 
         .slide-drawing {
             width: 100%;
             aspect-ratio: 16 / 9;
+            background: #FFF9F0;
             position: relative;
             overflow: hidden;
-            background: #FFF9F0;
-        }
-        .slide-drawing svg {
-            width: 100%;
-            height: 100%;
         }
 
-        /* Pen cursor */
-        .pen-cursor {
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
             position: absolute;
             pointer-events: none;
             opacity: 0;
             z-index: 100;
-            width: 48px;
-            height: 48px;
-            left: 0;
-            top: 0;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
         }
-        .pen-cursor svg {
-            width: 48px;
-            height: 48px;
-            display: block;
-        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
 
+        /* ===== VERSE TEXT AREA ===== */
         .slide-bottom {
             background: #FFF3E0;
             padding: 24px 30px;
             border-top: 2px dashed #e0c9a0;
+            text-align: center;
         }
-        .slide-bottom .verse-num-badge {
+        .verse-num-badge {
             display: inline-flex; align-items: center; justify-content: center;
             width: 30px; height: 30px; background: #e67e22; color: #fff;
             border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
             opacity: 0; transition: opacity 0.3s;
         }
-        .slide-bottom .slide-arabic-text {
+        .slide-arabic-text {
             font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
-            direction: rtl; text-align: center; margin-bottom: 4px; min-height: 1.8em;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
         }
-        .slide-bottom .slide-translit-text {
-            text-align: center; color: #7f8c8d; font-style: italic; font-size: 0.85em;
-            margin-bottom: 10px; min-height: 1.2em;
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
         }
-        .slide-bottom .slide-kid-text {
-            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e;
-            line-height: 1.5; text-align: center; min-height: 2em;
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
         }
 
-        /* Typewriter cursor */
         .typewriter-cursor {
             display: inline-block; width: 2px; height: 1em;
-            background: currentColor; margin-left: 2px;
-            vertical-align: text-bottom;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
             animation: cursorBlink 0.6s step-end infinite;
         }
         .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
         @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* Carousel Nav */
-        .carousel-nav {
-            position: absolute; top: 40%; transform: translateY(-50%);
-            background: rgba(44, 62, 80, 0.8); border: 2px solid #e67e22;
-            color: #fff; width: 44px; height: 44px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 1.3em; z-index: 10; transition: all 0.3s;
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
-        .carousel-nav:hover { background: #e67e22; }
-        .carousel-prev { left: 12px; }
-        .carousel-next { right: 12px; }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
 
-        .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
-        .carousel-dot {
-            width: 12px; height: 12px; border-radius: 50%; background: #333;
-            cursor: pointer; transition: all 0.3s; border: 2px solid #555;
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
         }
-        .carousel-dot.active { background: #e67e22; border-color: #e67e22; transform: scale(1.2); }
 
         .speed-control {
-            display: flex; justify-content: center; align-items: center;
-            gap: 10px; margin-top: 15px; color: #666; font-size: 0.85em;
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
         }
         .speed-control input { width: 120px; }
 
-        /* ===== DEEP DIVE ===== */
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .section {
-            margin: 40px 0; padding: 35px; background: #111;
-            border-radius: 16px; border: 1px solid #222;
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
         }
-        .section-title {
-            font-size: 1.5em; color: #c9a84c; margin-bottom: 20px;
-            font-weight: 600; display: flex; align-items: center; gap: 12px;
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
-        .story .highlight { color: #8ab4f8; font-weight: 500; }
-        .story .important {
-            background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c;
-            padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0;
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
         }
-        .facts-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px; margin-top: 15px;
-        }
-        .fact-card {
-            background: #1a1a1a; padding: 18px; border-radius: 12px;
-            text-align: center; border: 1px solid #2a2a2a;
-        }
-        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
-        .verse-card {
-            background: #1a1a1a; border-radius: 16px; padding: 30px;
-            margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s;
-        }
-        .verse-card:hover { border-color: #c9a84c; }
-        .verse-number {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 36px; height: 36px; background: #c9a84c; color: #000;
-            border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px;
-        }
-        .verse-arabic {
-            font-family: 'Amiri', serif; font-size: 2.4em; color: #fff;
-            direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0;
-        }
-        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
-        .verse-translation {
-            font-size: 1.1em; color: #ccc; margin-bottom: 20px;
-            padding-bottom: 20px; border-bottom: 1px solid #2a2a2a;
-        }
-        .word-breakdown { margin-top: 15px; }
-        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
-        .word-chip {
-            background: #222; border: 1px solid #333; border-radius: 12px;
-            padding: 12px 16px; text-align: center; min-width: 90px; transition: background 0.3s;
-        }
-        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; }
-        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
-        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
-        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
-        .friendly-explanation {
-            background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15);
-            border-radius: 12px; padding: 18px; margin-top: 15px;
-        }
-        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
-        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
-        .arabic-tip {
-            background: #1a1a1a; border-radius: 12px; padding: 25px;
-            margin: 15px 0; border: 1px solid #2a2a2a;
-        }
-        .arabic-tip h4 { color: #c9a84c; margin-bottom: 10px; }
-        .arabic-tip p { color: #bbb; font-size: 0.95em; }
-        .arabic-letter-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px; margin-top: 15px;
-        }
-        .letter-card {
-            background: #222; border-radius: 10px; padding: 15px;
-            text-align: center; border: 1px solid #333;
-        }
-        .letter-card .letter { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; }
-        .letter-card .name { font-size: 0.85em; color: #c9a84c; margin-top: 5px; }
-        .letter-card .sound { font-size: 0.8em; color: #888; }
-        .root-word-box {
-            display: flex; align-items: center; gap: 20px; background: #1a1a1a;
-            padding: 20px; border-radius: 12px; margin: 15px 0;
-            border: 1px solid #2a2a2a; flex-wrap: wrap;
-        }
-        .root-word-box .root { font-family: 'Amiri', serif; font-size: 2em; color: #c9a84c; direction: rtl; }
-        .root-word-box .arrow { color: #555; font-size: 1.5em; }
-        .root-word-box .derivatives { display: flex; gap: 12px; flex-wrap: wrap; }
-        .root-word-box .derivative { background: #222; padding: 8px 15px; border-radius: 8px; text-align: center; }
-        .root-word-box .derivative .ar { font-family: 'Amiri', serif; font-size: 1.3em; color: #fff; }
-        .root-word-box .derivative .en { font-size: 0.8em; color: #888; }
-        .lesson-list { list-style: none; padding: 0; }
-        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
-        .lesson-list li:last-child { border-bottom: none; }
-        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
-        .source-note {
-            background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2);
-            border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999;
-        }
-        .source-note strong { color: #c9a84c; }
-        footer {
-            text-align: center; padding: 40px 20px; color: #555;
-            font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px;
-        }
-        footer a { color: #c9a84c; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+
         @media (max-width: 600px) {
-            .hero h1 { font-size: 2em; }
-            .hero .arabic-title { font-size: 2.8em; }
-            .verse-arabic { font-size: 1.8em; }
-            .section { padding: 20px; }
-            .words-grid { gap: 8px; }
-            .word-chip { min-width: 75px; padding: 10px 12px; }
-            .slide-bottom { padding: 18px 20px; }
-            .slide-bottom .slide-kid-text { font-size: 1.1em; }
-            .slide-bottom .slide-arabic-text { font-size: 1.2em; }
-            .carousel-nav { width: 36px; height: 36px; font-size: 1em; }
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
         }
-        /* ===== SCROLL ANIMATIONS ===== */
-        .reveal {
-            opacity: 0; transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-
-        .reveal-3d {
-            opacity: 0;
-            transform: perspective(800px) rotateY(8deg) translateX(-30px);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-3d.visible {
-            opacity: 1; transform: perspective(800px) rotateY(0deg) translateX(0);
-        }
-
-        .reveal-scale {
-            opacity: 0; transform: scale(0.9) translateY(20px);
-            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
-
-        .stagger-1 { transition-delay: 0.1s; }
-        .stagger-2 { transition-delay: 0.2s; }
-        .stagger-3 { transition-delay: 0.3s; }
-        .stagger-4 { transition-delay: 0.4s; }
-        .stagger-5 { transition-delay: 0.5s; }
-        .stagger-6 { transition-delay: 0.6s; }
-
-        .glow-line {
-            width: 80px; height: 2px; margin: 15px auto 25px;
-            background: linear-gradient(90deg, transparent, #c9a84c, transparent);
-            opacity: 0; transform: scaleX(0);
-            transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .glow-line.visible { opacity: 1; transform: scaleX(1); }
-
-        /* Hero entrance */
-        .hero { perspective: 1000px; overflow: hidden; }
-        .hero .arabic-title {
-            opacity: 0; transform: translateZ(40px) rotateX(10deg);
-            animation: heroArabicIn 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-        }
-        @keyframes heroArabicIn { to { opacity: 1; transform: translateZ(0) rotateX(0); } }
-        .hero h1 { opacity: 0; transform: translateY(20px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 0.6s forwards; }
-        .hero .subtitle { opacity: 0; transform: translateY(15px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 0.8s forwards; }
-        .hero .badge { opacity: 0; transform: translateY(10px); animation: fadeSlideUp 1s cubic-bezier(0.16,1,0.3,1) 1.0s forwards; }
-        @keyframes fadeSlideUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* Nav blur */
-        .nav-bar { background: rgba(13, 13, 13, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-
-        /* Verse card 3D hover */
-        .verse-card { transform-style: preserve-3d; }
-        .verse-card:hover { transform: translateY(-4px) rotateX(2deg); box-shadow: 0 12px 30px rgba(201, 168, 76, 0.08); }
-
-        /* Word chip animation */
-        .word-chip { transition: transform 0.3s, background 0.3s, border-color 0.3s; }
-        .word-chip:hover { transform: translateY(-4px) scale(1.05); }
-
-        /* Fact card hover */
-        .fact-card { transition: transform 0.3s, border-color 0.3s; }
-        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
     </style>
 </head>
 <body>
 
-    <nav class="nav-bar">
-        <a href="index.html" class="logo">Tafsir - Quran Journey</a>
-        <div class="progress">Surah 114 of 114</div>
-    </nav>
-
-    <header class="hero">
-        <div class="arabic-title">النَّاس</div>
-        <h1>An-Nas</h1>
-        <p class="subtitle">Mankind - The Final Shield Against Invisible Enemies</p>
-        <div class="badge">Makki Surah &middot; 6 Verses &middot; Revealed in Makkah</div>
-    </header>
-
-    <div class="view-toggle">
-        <button class="active" onclick="showView('carousel')">Visual Story</button>
-        <button onclick="showView('deep-dive')">Deep Dive</button>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ النَّاسِ</div>
+        <h1>Surah An-Nas</h1>
+        <p>Mankind - 6 Verses - Makkan</p>
     </div>
 
-    <!-- ==================== CAROUSEL ==================== -->
-    <div class="carousel-section" id="carousel-view">
-        <div class="carousel-wrapper">
-            <div class="carousel-intro">
-                <h2>An-Nas: A Visual Journey</h2>
-                <p>Swipe through each verse. Watch the whiteboard draw itself.</p>
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
             </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
 
-            <div class="carousel-container">
-                <div class="carousel-track" id="carouselTrack">
-
-                    <!-- SLIDE 1 -->
-                    <div class="carousel-slide" data-slide="0">
-                        <div class="slide-drawing" id="slideDrawing0">
-                            <div class="pen-cursor" id="penCursor0">
-                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#E8C840"/>
-                                            <stop offset="30%" stop-color="#F5DC6E"/>
-                                            <stop offset="70%" stop-color="#E8C840"/>
-                                            <stop offset="100%" stop-color="#C9A832"/>
-                                        </linearGradient>
-                                        <linearGradient id="ferrule" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#B8B8B8"/>
-                                            <stop offset="40%" stop-color="#D4D4D4"/>
-                                            <stop offset="100%" stop-color="#9A9A9A"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <g transform="rotate(35, 32, 32)">
-                                        <!-- Pencil body -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" stroke="#B8962A" stroke-width="0.8"/>
-                                        <!-- Wood grain lines -->
-                                        <line x1="30" y1="6" x2="30" y2="40" stroke="#D4B644" stroke-width="0.3" opacity="0.6"/>
-                                        <line x1="34" y1="6" x2="34" y2="40" stroke="#C9A832" stroke-width="0.3" opacity="0.4"/>
-                                        <!-- Band/text area -->
-                                        <rect x="26" y="10" width="12" height="5" fill="#1a1a1a" opacity="0.8" rx="0.5"/>
-                                        <rect x="27.5" y="11.5" width="9" height="2" rx="0.5" fill="#C9A84C" opacity="0.5"/>
-                                        <!-- Ferrule (metal band) -->
-                                        <rect x="25.5" y="40" width="13" height="6" rx="0.5" fill="url(#ferrule)" stroke="#888" stroke-width="0.5"/>
-                                        <line x1="25.5" y1="41.5" x2="38.5" y2="41.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <line x1="25.5" y1="44.5" x2="38.5" y2="44.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <!-- Eraser -->
-                                        <rect x="27" y="2" width="10" height="5" rx="2" fill="#E8758A" stroke="#C25068" stroke-width="0.5"/>
-                                        <!-- Sharpened tip -->
-                                        <polygon points="28,46 36,46 32,58" fill="#F5DEB3" stroke="#C9A832" stroke-width="0.5"/>
-                                        <polygon points="30.5,52 33.5,52 32,58" fill="#3a3a3a"/>
-                                        <!-- Tip point -->
-                                        <circle cx="32" cy="58" r="0.8" fill="#1a1a1a"/>
-                                        <!-- Subtle shadow -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" opacity="0.15" transform="translate(1.5, 1)"/>
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="slide-bottom">
-                            <div class="verse-num-badge" id="badge0">1</div>
-                            <div class="slide-arabic-text" id="arabic0"></div>
-                            <div class="slide-translit-text" id="translit0"></div>
-                            <div class="slide-kid-text" id="kid0"></div>
-                        </div>
-                    </div>
-
-                    <!-- SLIDE 2 -->
-                    <div class="carousel-slide" data-slide="1">
-                        <div class="slide-drawing" id="slideDrawing1">
-                            <div class="pen-cursor" id="penCursor1">
-                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#E8C840"/>
-                                            <stop offset="30%" stop-color="#F5DC6E"/>
-                                            <stop offset="70%" stop-color="#E8C840"/>
-                                            <stop offset="100%" stop-color="#C9A832"/>
-                                        </linearGradient>
-                                        <linearGradient id="ferrule" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#B8B8B8"/>
-                                            <stop offset="40%" stop-color="#D4D4D4"/>
-                                            <stop offset="100%" stop-color="#9A9A9A"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <g transform="rotate(35, 32, 32)">
-                                        <!-- Pencil body -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" stroke="#B8962A" stroke-width="0.8"/>
-                                        <!-- Wood grain lines -->
-                                        <line x1="30" y1="6" x2="30" y2="40" stroke="#D4B644" stroke-width="0.3" opacity="0.6"/>
-                                        <line x1="34" y1="6" x2="34" y2="40" stroke="#C9A832" stroke-width="0.3" opacity="0.4"/>
-                                        <!-- Band/text area -->
-                                        <rect x="26" y="10" width="12" height="5" fill="#1a1a1a" opacity="0.8" rx="0.5"/>
-                                        <rect x="27.5" y="11.5" width="9" height="2" rx="0.5" fill="#C9A84C" opacity="0.5"/>
-                                        <!-- Ferrule (metal band) -->
-                                        <rect x="25.5" y="40" width="13" height="6" rx="0.5" fill="url(#ferrule)" stroke="#888" stroke-width="0.5"/>
-                                        <line x1="25.5" y1="41.5" x2="38.5" y2="41.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <line x1="25.5" y1="44.5" x2="38.5" y2="44.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <!-- Eraser -->
-                                        <rect x="27" y="2" width="10" height="5" rx="2" fill="#E8758A" stroke="#C25068" stroke-width="0.5"/>
-                                        <!-- Sharpened tip -->
-                                        <polygon points="28,46 36,46 32,58" fill="#F5DEB3" stroke="#C9A832" stroke-width="0.5"/>
-                                        <polygon points="30.5,52 33.5,52 32,58" fill="#3a3a3a"/>
-                                        <!-- Tip point -->
-                                        <circle cx="32" cy="58" r="0.8" fill="#1a1a1a"/>
-                                        <!-- Subtle shadow -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" opacity="0.15" transform="translate(1.5, 1)"/>
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="slide-bottom">
-                            <div class="verse-num-badge" id="badge1">2</div>
-                            <div class="slide-arabic-text" id="arabic1"></div>
-                            <div class="slide-translit-text" id="translit1"></div>
-                            <div class="slide-kid-text" id="kid1"></div>
-                        </div>
-                    </div>
-
-                    <!-- SLIDE 3 -->
-                    <div class="carousel-slide" data-slide="2">
-                        <div class="slide-drawing" id="slideDrawing2">
-                            <div class="pen-cursor" id="penCursor2">
-                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#E8C840"/>
-                                            <stop offset="30%" stop-color="#F5DC6E"/>
-                                            <stop offset="70%" stop-color="#E8C840"/>
-                                            <stop offset="100%" stop-color="#C9A832"/>
-                                        </linearGradient>
-                                        <linearGradient id="ferrule" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#B8B8B8"/>
-                                            <stop offset="40%" stop-color="#D4D4D4"/>
-                                            <stop offset="100%" stop-color="#9A9A9A"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <g transform="rotate(35, 32, 32)">
-                                        <!-- Pencil body -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" stroke="#B8962A" stroke-width="0.8"/>
-                                        <!-- Wood grain lines -->
-                                        <line x1="30" y1="6" x2="30" y2="40" stroke="#D4B644" stroke-width="0.3" opacity="0.6"/>
-                                        <line x1="34" y1="6" x2="34" y2="40" stroke="#C9A832" stroke-width="0.3" opacity="0.4"/>
-                                        <!-- Band/text area -->
-                                        <rect x="26" y="10" width="12" height="5" fill="#1a1a1a" opacity="0.8" rx="0.5"/>
-                                        <rect x="27.5" y="11.5" width="9" height="2" rx="0.5" fill="#C9A84C" opacity="0.5"/>
-                                        <!-- Ferrule (metal band) -->
-                                        <rect x="25.5" y="40" width="13" height="6" rx="0.5" fill="url(#ferrule)" stroke="#888" stroke-width="0.5"/>
-                                        <line x1="25.5" y1="41.5" x2="38.5" y2="41.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <line x1="25.5" y1="44.5" x2="38.5" y2="44.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <!-- Eraser -->
-                                        <rect x="27" y="2" width="10" height="5" rx="2" fill="#E8758A" stroke="#C25068" stroke-width="0.5"/>
-                                        <!-- Sharpened tip -->
-                                        <polygon points="28,46 36,46 32,58" fill="#F5DEB3" stroke="#C9A832" stroke-width="0.5"/>
-                                        <polygon points="30.5,52 33.5,52 32,58" fill="#3a3a3a"/>
-                                        <!-- Tip point -->
-                                        <circle cx="32" cy="58" r="0.8" fill="#1a1a1a"/>
-                                        <!-- Subtle shadow -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" opacity="0.15" transform="translate(1.5, 1)"/>
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="slide-bottom">
-                            <div class="verse-num-badge" id="badge2">3</div>
-                            <div class="slide-arabic-text" id="arabic2"></div>
-                            <div class="slide-translit-text" id="translit2"></div>
-                            <div class="slide-kid-text" id="kid2"></div>
-                        </div>
-                    </div>
-
-                    <!-- SLIDE 4 -->
-                    <div class="carousel-slide" data-slide="3">
-                        <div class="slide-drawing" id="slideDrawing3">
-                            <div class="pen-cursor" id="penCursor3">
-                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#E8C840"/>
-                                            <stop offset="30%" stop-color="#F5DC6E"/>
-                                            <stop offset="70%" stop-color="#E8C840"/>
-                                            <stop offset="100%" stop-color="#C9A832"/>
-                                        </linearGradient>
-                                        <linearGradient id="ferrule" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#B8B8B8"/>
-                                            <stop offset="40%" stop-color="#D4D4D4"/>
-                                            <stop offset="100%" stop-color="#9A9A9A"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <g transform="rotate(35, 32, 32)">
-                                        <!-- Pencil body -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" stroke="#B8962A" stroke-width="0.8"/>
-                                        <!-- Wood grain lines -->
-                                        <line x1="30" y1="6" x2="30" y2="40" stroke="#D4B644" stroke-width="0.3" opacity="0.6"/>
-                                        <line x1="34" y1="6" x2="34" y2="40" stroke="#C9A832" stroke-width="0.3" opacity="0.4"/>
-                                        <!-- Band/text area -->
-                                        <rect x="26" y="10" width="12" height="5" fill="#1a1a1a" opacity="0.8" rx="0.5"/>
-                                        <rect x="27.5" y="11.5" width="9" height="2" rx="0.5" fill="#C9A84C" opacity="0.5"/>
-                                        <!-- Ferrule (metal band) -->
-                                        <rect x="25.5" y="40" width="13" height="6" rx="0.5" fill="url(#ferrule)" stroke="#888" stroke-width="0.5"/>
-                                        <line x1="25.5" y1="41.5" x2="38.5" y2="41.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <line x1="25.5" y1="44.5" x2="38.5" y2="44.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <!-- Eraser -->
-                                        <rect x="27" y="2" width="10" height="5" rx="2" fill="#E8758A" stroke="#C25068" stroke-width="0.5"/>
-                                        <!-- Sharpened tip -->
-                                        <polygon points="28,46 36,46 32,58" fill="#F5DEB3" stroke="#C9A832" stroke-width="0.5"/>
-                                        <polygon points="30.5,52 33.5,52 32,58" fill="#3a3a3a"/>
-                                        <!-- Tip point -->
-                                        <circle cx="32" cy="58" r="0.8" fill="#1a1a1a"/>
-                                        <!-- Subtle shadow -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" opacity="0.15" transform="translate(1.5, 1)"/>
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="slide-bottom">
-                            <div class="verse-num-badge" id="badge3">4</div>
-                            <div class="slide-arabic-text" id="arabic3"></div>
-                            <div class="slide-translit-text" id="translit3"></div>
-                            <div class="slide-kid-text" id="kid3"></div>
-                        </div>
-                    </div>
-
-                    <!-- SLIDE 5 -->
-                    <div class="carousel-slide" data-slide="4">
-                        <div class="slide-drawing" id="slideDrawing4">
-                            <div class="pen-cursor" id="penCursor4">
-                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#E8C840"/>
-                                            <stop offset="30%" stop-color="#F5DC6E"/>
-                                            <stop offset="70%" stop-color="#E8C840"/>
-                                            <stop offset="100%" stop-color="#C9A832"/>
-                                        </linearGradient>
-                                        <linearGradient id="ferrule" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#B8B8B8"/>
-                                            <stop offset="40%" stop-color="#D4D4D4"/>
-                                            <stop offset="100%" stop-color="#9A9A9A"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <g transform="rotate(35, 32, 32)">
-                                        <!-- Pencil body -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" stroke="#B8962A" stroke-width="0.8"/>
-                                        <!-- Wood grain lines -->
-                                        <line x1="30" y1="6" x2="30" y2="40" stroke="#D4B644" stroke-width="0.3" opacity="0.6"/>
-                                        <line x1="34" y1="6" x2="34" y2="40" stroke="#C9A832" stroke-width="0.3" opacity="0.4"/>
-                                        <!-- Band/text area -->
-                                        <rect x="26" y="10" width="12" height="5" fill="#1a1a1a" opacity="0.8" rx="0.5"/>
-                                        <rect x="27.5" y="11.5" width="9" height="2" rx="0.5" fill="#C9A84C" opacity="0.5"/>
-                                        <!-- Ferrule (metal band) -->
-                                        <rect x="25.5" y="40" width="13" height="6" rx="0.5" fill="url(#ferrule)" stroke="#888" stroke-width="0.5"/>
-                                        <line x1="25.5" y1="41.5" x2="38.5" y2="41.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <line x1="25.5" y1="44.5" x2="38.5" y2="44.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <!-- Eraser -->
-                                        <rect x="27" y="2" width="10" height="5" rx="2" fill="#E8758A" stroke="#C25068" stroke-width="0.5"/>
-                                        <!-- Sharpened tip -->
-                                        <polygon points="28,46 36,46 32,58" fill="#F5DEB3" stroke="#C9A832" stroke-width="0.5"/>
-                                        <polygon points="30.5,52 33.5,52 32,58" fill="#3a3a3a"/>
-                                        <!-- Tip point -->
-                                        <circle cx="32" cy="58" r="0.8" fill="#1a1a1a"/>
-                                        <!-- Subtle shadow -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" opacity="0.15" transform="translate(1.5, 1)"/>
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="slide-bottom">
-                            <div class="verse-num-badge" id="badge4">5</div>
-                            <div class="slide-arabic-text" id="arabic4"></div>
-                            <div class="slide-translit-text" id="translit4"></div>
-                            <div class="slide-kid-text" id="kid4"></div>
-                        </div>
-                    </div>
-
-                    <!-- SLIDE 6 -->
-                    <div class="carousel-slide" data-slide="5">
-                        <div class="slide-drawing" id="slideDrawing5">
-                            <div class="pen-cursor" id="penCursor5">
-                                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#E8C840"/>
-                                            <stop offset="30%" stop-color="#F5DC6E"/>
-                                            <stop offset="70%" stop-color="#E8C840"/>
-                                            <stop offset="100%" stop-color="#C9A832"/>
-                                        </linearGradient>
-                                        <linearGradient id="ferrule" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stop-color="#B8B8B8"/>
-                                            <stop offset="40%" stop-color="#D4D4D4"/>
-                                            <stop offset="100%" stop-color="#9A9A9A"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <g transform="rotate(35, 32, 32)">
-                                        <!-- Pencil body -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" stroke="#B8962A" stroke-width="0.8"/>
-                                        <!-- Wood grain lines -->
-                                        <line x1="30" y1="6" x2="30" y2="40" stroke="#D4B644" stroke-width="0.3" opacity="0.6"/>
-                                        <line x1="34" y1="6" x2="34" y2="40" stroke="#C9A832" stroke-width="0.3" opacity="0.4"/>
-                                        <!-- Band/text area -->
-                                        <rect x="26" y="10" width="12" height="5" fill="#1a1a1a" opacity="0.8" rx="0.5"/>
-                                        <rect x="27.5" y="11.5" width="9" height="2" rx="0.5" fill="#C9A84C" opacity="0.5"/>
-                                        <!-- Ferrule (metal band) -->
-                                        <rect x="25.5" y="40" width="13" height="6" rx="0.5" fill="url(#ferrule)" stroke="#888" stroke-width="0.5"/>
-                                        <line x1="25.5" y1="41.5" x2="38.5" y2="41.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <line x1="25.5" y1="44.5" x2="38.5" y2="44.5" stroke="#aaa" stroke-width="0.3"/>
-                                        <!-- Eraser -->
-                                        <rect x="27" y="2" width="10" height="5" rx="2" fill="#E8758A" stroke="#C25068" stroke-width="0.5"/>
-                                        <!-- Sharpened tip -->
-                                        <polygon points="28,46 36,46 32,58" fill="#F5DEB3" stroke="#C9A832" stroke-width="0.5"/>
-                                        <polygon points="30.5,52 33.5,52 32,58" fill="#3a3a3a"/>
-                                        <!-- Tip point -->
-                                        <circle cx="32" cy="58" r="0.8" fill="#1a1a1a"/>
-                                        <!-- Subtle shadow -->
-                                        <rect x="26" y="6" width="12" height="34" rx="1" fill="url(#pencilBody)" opacity="0.15" transform="translate(1.5, 1)"/>
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="slide-bottom">
-                            <div class="verse-num-badge" id="badge5">6</div>
-                            <div class="slide-arabic-text" id="arabic5"></div>
-                            <div class="slide-translit-text" id="translit5"></div>
-                            <div class="slide-kid-text" id="kid5"></div>
-                        </div>
-                    </div>
-
-                </div><!-- carousel-track -->
-
-                <button class="carousel-nav carousel-prev" onclick="prevSlide()">&lsaquo;</button>
-                <button class="carousel-nav carousel-next" onclick="nextSlide()">&rsaquo;</button>
-            </div><!-- carousel-container -->
-
-            <div class="carousel-dots" id="carouselDots"></div>
-
-            <div class="speed-control">
-                <span>Speed:</span>
-                <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
-                <span id="speedLabel">1x</span>
-            </div>
-
-        </div><!-- carousel-wrapper -->
-    </div><!-- carousel-section -->
-
-    <!-- ==================== DEEP DIVE ==================== -->
-    <div class="deep-dive-section" id="deep-dive-view">
-        <div class="container">
-
-            <!-- Quick Facts -->
-            <div class="section reveal">
-                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
-                <div class="facts-grid">
-                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">114</div></div>
-                    <div class="fact-card"><div class="label">Verses</div><div class="value">6</div></div>
-                    <div class="fact-card"><div class="label">Words</div><div class="value">20</div></div>
-                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
-                    <div class="fact-card"><div class="label">Paired With</div><div class="value">Al-Falaq</div></div>
-                    <div class="fact-card"><div class="label">Recited For</div><div class="value">Protection</div></div>
-                </div>
-            </div>
-
-            <!-- Story -->
-            <div class="section story reveal">
-                <div class="section-title">The Story Behind An-Nas</div><div class="glow-line reveal"></div>
-
-                <p>This is the <span class="highlight">last surah of the Quran</span>. The final words of guidance. And what does Allah choose to end with? Not a grand statement about His power. Not a warning about the Day of Judgment. He ends with something deeply personal: <span class="highlight">how to protect your heart from invisible enemies</span>.</p>
-
-                <p>Surah An-Nas and Surah Al-Falaq together are called <span class="highlight">Al-Mu'awwidhatayn</span>, the two surahs of seeking refuge. They were revealed together, and the Prophet (peace be upon him) treated them as a pair.</p>
-
-                <div class="important">
-                    <p><strong>Hadith:</strong> The Prophet (peace be upon him) said: <em>"Recite Surah Al-Ikhlas, Surah Al-Falaq and Surah An-Nas three times in the morning and evening. They will suffice you in all respects."</em> (Abu Dawud 5082, Tirmidhi 3575)</p>
-                </div>
-
-                <p>Think about this: the most dangerous enemy you face isn't one you can see. It's the one that <span class="highlight">whispers</span>. Shaytan doesn't come at you with swords. He comes with thoughts. Tiny, quiet nudges. "Skip this prayer." "Nobody's watching." "You deserve this." And the scary part? Sometimes you can't tell the difference between his voice and yours.</p>
-
-                <div class="important">
-                    <p><strong>Hadith:</strong> The Prophet (peace be upon him) said: <em>"Shaytan sits on the paths of the son of Adam. He sat for him on the path of Islam and said, 'Will you accept Islam and leave your religion?'..."</em> (Nasa'i 3134). He literally waits on every path you take toward good.</p>
-                </div>
-
-                <p>But here's the key word: <span class="highlight">Khannas</span>. It means the one who retreats, who shrinks back, who is a habitual coward. The moment you remember Allah, the moment you say "A'udhu billah," the whisper stops. He runs. Every single time. That's his nature.</p>
-
-                <div class="important">
-                    <p><strong>Hadith:</strong> Aisha (may Allah be pleased with her) reported that the Prophet (peace be upon him) would recite Al-Mu'awwidhatayn before sleeping, blow into his hands, and wipe them over his body. When he became ill, she would do it for him. (Bukhari 5017)</p>
-                </div>
-
-                <p>The surah also reveals something many people miss: the whisperers aren't just jinn. They're also <span class="highlight">people</span>. That friend who says "just try it, no one will know." That voice on social media pulling you toward something wrong. Allah warns about both kinds because both are real threats to your heart.</p>
-            </div>
-
-            <!-- Verse by Verse -->
-            <div class="section reveal">
-                <div class="section-title">Verse-by-Verse Breakdown</div><div class="glow-line reveal"></div>
-
-                <!-- Verse 1 -->
-                <div class="verse-card reveal-3d">
-                    <div class="verse-number">1</div>
-                    <div class="verse-arabic">قُلْ أَعُوذُ بِرَبِّ النَّاسِ</div>
-                    <div class="verse-transliteration">Qul a'udhu bi Rabbin-nas</div>
-                    <div class="verse-translation">Say: "I seek refuge in the Lord of mankind"</div>
-                    <div class="word-breakdown">
-                        <h4>Word by Word</h4>
-                        <div class="words-grid">
-                            <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
-                            <div class="word-chip"><span class="ar">أَعُوذُ</span><span class="trans">a'udhu</span><span class="meaning">I seek refuge</span></div>
-                            <div class="word-chip"><span class="ar">بِرَبِّ</span><span class="trans">bi-Rabbi</span><span class="meaning">in the Lord of</span></div>
-                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
-                        </div>
-                    </div>
-                    <div class="friendly-explanation">
-                        <div class="label">In Simple Words</div>
-                        <p>The surah opens with a command: SAY it. Don't just think it. Verbalize your need for protection. And the first attribute of Allah mentioned is Rabb - He who nurtures, sustains, and protects you from the moment you existed.</p>
-                    </div>
-                </div>
-
-                <!-- Verse 2 -->
-                <div class="verse-card reveal-3d">
-                    <div class="verse-number">2</div>
-                    <div class="verse-arabic">مَلِكِ النَّاسِ</div>
-                    <div class="verse-transliteration">Malikin-nas</div>
-                    <div class="verse-translation">The King of mankind</div>
-                    <div class="word-breakdown">
-                        <h4>Word by Word</h4>
-                        <div class="words-grid">
-                            <div class="word-chip"><span class="ar">مَلِكِ</span><span class="trans">maliki</span><span class="meaning">King of</span></div>
-                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
-                        </div>
-                    </div>
-                    <div class="friendly-explanation">
-                        <div class="label">In Simple Words</div>
-                        <p>The second attribute: Malik. He isn't just your caretaker. He is the sovereign authority over all of creation. Every ruler, every government, every boss reports to Him whether they know it or not.</p>
-                    </div>
-                </div>
-
-                <!-- Verse 3 -->
-                <div class="verse-card reveal-3d">
-                    <div class="verse-number">3</div>
-                    <div class="verse-arabic">إِلَـٰهِ النَّاسِ</div>
-                    <div class="verse-transliteration">Ilahin-nas</div>
-                    <div class="verse-translation">The God of mankind</div>
-                    <div class="word-breakdown">
-                        <h4>Word by Word</h4>
-                        <div class="words-grid">
-                            <div class="word-chip"><span class="ar">إِلَـٰهِ</span><span class="trans">ilahi</span><span class="meaning">God of</span></div>
-                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
-                        </div>
-                    </div>
-                    <div class="friendly-explanation">
-                        <div class="label">In Simple Words</div>
-                        <p>The third and highest attribute: Ilah. The only one truly worthy of worship. The progression is deliberate: He nurtures you (Rabb), He has authority over you (Malik), and He alone deserves your devotion (Ilah). Complete protection from every angle.</p>
-                    </div>
-                </div>
-
-                <!-- Verse 4 -->
-                <div class="verse-card reveal-3d">
-                    <div class="verse-number">4</div>
-                    <div class="verse-arabic">مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ</div>
-                    <div class="verse-transliteration">Min sharril-waswasil-khannas</div>
-                    <div class="verse-translation">From the evil of the retreating whisperer</div>
-                    <div class="word-breakdown">
-                        <h4>Word by Word</h4>
-                        <div class="words-grid">
-                            <div class="word-chip"><span class="ar">مِن</span><span class="trans">min</span><span class="meaning">From</span></div>
-                            <div class="word-chip"><span class="ar">شَرِّ</span><span class="trans">sharri</span><span class="meaning">evil of</span></div>
-                            <div class="word-chip"><span class="ar">الْوَسْوَاسِ</span><span class="trans">al-waswasi</span><span class="meaning">the whisperer</span></div>
-                            <div class="word-chip"><span class="ar">الْخَنَّاسِ</span><span class="trans">al-khannasi</span><span class="meaning">the retreater</span></div>
-                        </div>
-                    </div>
-                    <div class="friendly-explanation">
-                        <div class="label">In Simple Words</div>
-                        <p>Now the enemy is named. Al-Waswas: the whisperer. Al-Khannas: the one who habitually retreats. Two descriptions that tell you everything. He attacks through whispers (not force), and he's a coward who runs the moment you turn to Allah.</p>
-                    </div>
-                </div>
-
-                <!-- Verse 5 -->
-                <div class="verse-card reveal-3d">
-                    <div class="verse-number">5</div>
-                    <div class="verse-arabic">الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ</div>
-                    <div class="verse-transliteration">Alladhi yuwaswisu fi sudurin-nas</div>
-                    <div class="verse-translation">Who whispers in the breasts of mankind</div>
-                    <div class="word-breakdown">
-                        <h4>Word by Word</h4>
-                        <div class="words-grid">
-                            <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The one who</span></div>
-                            <div class="word-chip"><span class="ar">يُوَسْوِسُ</span><span class="trans">yuwaswisu</span><span class="meaning">whispers</span></div>
-                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">in</span></div>
-                            <div class="word-chip"><span class="ar">صُدُورِ</span><span class="trans">suduri</span><span class="meaning">breasts of</span></div>
-                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
-                        </div>
-                    </div>
-                    <div class="friendly-explanation">
-                        <div class="label">In Simple Words</div>
-                        <p>Allah says "sudur" (chests), not heads. The attack isn't intellectual. It's emotional. The whisperer targets the place where your feelings, motivations, and decisions live. He plants doubt where it hurts most.</p>
-                    </div>
-                </div>
-
-                <!-- Verse 6 -->
-                <div class="verse-card reveal-3d">
-                    <div class="verse-number">6</div>
-                    <div class="verse-arabic">مِنَ الْجِنَّةِ وَالنَّاسِ</div>
-                    <div class="verse-transliteration">Minal-jinnati wan-nas</div>
-                    <div class="verse-translation">From among the jinn and mankind</div>
-                    <div class="word-breakdown">
-                        <h4>Word by Word</h4>
-                        <div class="words-grid">
-                            <div class="word-chip"><span class="ar">مِنَ</span><span class="trans">mina</span><span class="meaning">From</span></div>
-                            <div class="word-chip"><span class="ar">الْجِنَّةِ</span><span class="trans">al-jinnati</span><span class="meaning">the jinn</span></div>
-                            <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">and</span></div>
-                            <div class="word-chip"><span class="ar">النَّاسِ</span><span class="trans">an-nasi</span><span class="meaning">mankind</span></div>
-                        </div>
-                    </div>
-                    <div class="friendly-explanation">
-                        <div class="label">In Simple Words</div>
-                        <p>The final reveal: whisperers come from BOTH worlds. Jinn you can't see, and people you can. That toxic friend, that misleading influencer, that person who normalizes what's wrong. Both are covered in this protection.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Arabic Learning -->
-            <div class="section reveal">
-                <div class="section-title">Arabic Learning</div><div class="glow-line reveal"></div>
-
-                <div class="arabic-tip">
-                    <h4>Key Vocabulary in the Quran</h4>
-                    <p>These words from Surah An-Nas appear frequently throughout the entire Quran:</p>
-                    <div class="arabic-letter-grid">
-                        <div class="letter-card"><div class="letter">نَاس</div><div class="name">Nas (Mankind)</div><div class="sound">241 times</div></div>
-                        <div class="letter-card"><div class="letter">رَبّ</div><div class="name">Rabb (Lord)</div><div class="sound">970 times</div></div>
-                        <div class="letter-card"><div class="letter">مَلِك</div><div class="name">Malik (King)</div><div class="sound">49 times</div></div>
-                        <div class="letter-card"><div class="letter">إِلَـٰه</div><div class="name">Ilah (God)</div><div class="sound">147 times</div></div>
-                        <div class="letter-card"><div class="letter">شَرّ</div><div class="name">Sharr (Evil)</div><div class="sound">30 times</div></div>
-                        <div class="letter-card"><div class="letter">جِنّ</div><div class="name">Jinn</div><div class="sound">32 times</div></div>
-                    </div>
-                </div>
-
-                <div class="arabic-tip">
-                    <h4>The Three Names Progression</h4>
-                    <p>The surah builds from Rabb (nurturer, closest relationship) to Malik (sovereign authority) to Ilah (the only one worthy of worship). Each name escalates the level of protection you're seeking. It's like going from your parent to a king to God Himself.</p>
-                </div>
-
-                <div class="arabic-tip">
-                    <h4>Root: W-S-W-S (Quadriliteral)</h4>
-                    <p>The root of "waswas" is unusual. It's a quadriliteral root (four letters instead of the typical three). The repetition of the sound W-S mimics the actual sound of whispering. Arabic is built to make you feel the meaning.</p>
-                    <div class="root-word-box">
-                        <div class="root">و-س-و-س</div>
-                        <div class="arrow">&rarr;</div>
-                        <div class="derivatives">
-                            <div class="derivative"><div class="ar">وَسْوَسَ</div><div class="en">to whisper</div></div>
-                            <div class="derivative"><div class="ar">وَسْوَاس</div><div class="en">the whisperer</div></div>
-                            <div class="derivative"><div class="ar">يُوَسْوِسُ</div><div class="en">he whispers</div></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="arabic-tip">
-                    <h4>Root: KH-N-S (Habitual Retreater)</h4>
-                    <p>"Khannas" comes from the root KH-N-S. The "fa'al" pattern (intensive form) means this isn't a one-time retreat. He does it over and over. Whisper, retreat when you remember Allah, wait, whisper again. That's his cycle.</p>
-                    <div class="root-word-box">
-                        <div class="root">خ-ن-س</div>
-                        <div class="arrow">&rarr;</div>
-                        <div class="derivatives">
-                            <div class="derivative"><div class="ar">خَنَسَ</div><div class="en">to retreat</div></div>
-                            <div class="derivative"><div class="ar">خَنَّاس</div><div class="en">habitual retreater</div></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="arabic-tip">
-                    <h4>Takrar: Repetition of "An-Nas"</h4>
-                    <p>The word "an-nas" (mankind) appears 5 times in just 6 verses. This repetition (takrar) is a powerful rhetorical device. It emphasizes that this surah is about YOU. About people. Every single verse circles back to humanity because the protection is FOR you, the King is OF you, the God is OF you, and the enemy targets YOU.</p>
-                </div>
-            </div>
-
-            <!-- Key Lessons -->
-            <div class="section reveal">
-                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
-                <ul class="lesson-list">
-                    <li><span class="bullet">1.</span><div><strong style="color:#c9a84c">Your biggest enemy is invisible.</strong><br><span style="color:#aaa">You can't see him, but he's always there. Awareness is the first step to protection.</span></div></li>
-                    <li><span class="bullet">2.</span><div><strong style="color:#c9a84c">Shaytan is a coward.</strong><br><span style="color:#aaa">He whispers, but the moment you remember Allah, he runs. Every. Single. Time. "Khannas" means he habitually retreats.</span></div></li>
-                    <li><span class="bullet">3.</span><div><strong style="color:#c9a84c">Not all whispers come from jinn.</strong><br><span style="color:#aaa">People whisper too. Bad friends, toxic influences, misleading voices. Allah warns about both kinds.</span></div></li>
-                    <li><span class="bullet">4.</span><div><strong style="color:#c9a84c">The attack is emotional, not logical.</strong><br><span style="color:#aaa">He targets your chest (sudur), not your brain. He goes after your feelings, your motivation, your resolve.</span></div></li>
-                    <li><span class="bullet">5.</span><div><strong style="color:#c9a84c">Three attributes = complete protection.</strong><br><span style="color:#aaa">Rabb (He nurtures you), Malik (He has authority), Ilah (He alone deserves worship). Every angle is covered.</span></div></li>
-                    <li><span class="bullet">6.</span><div><strong style="color:#c9a84c">Make it a daily habit.</strong><br><span style="color:#aaa">The Prophet recited this every morning, every evening, and before sleep. It's not a one-time thing. It's a shield you put on daily.</span></div></li>
-                </ul>
-            </div>
-
-            <!-- Sources -->
-            <div class="source-note">
-                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Tafsir Al-Qurtubi, Sahih al-Bukhari 5017, Sunan Abu Dawud 5082, Jami at-Tirmidhi 3575, Sunan an-Nasa'i 3134
-            </div>
-
-        </div><!-- container -->
-    </div><!-- deep-dive-section -->
-
-    <footer>
-        <p>Quran Journey &middot; Learning the Quran, one surah at a time</p>
-        <p><a href="index.html">Back to Index</a></p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 6</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
 
     <script>
-    // ===== VIEW TOGGLE =====
-    function showView(view) {
-        const btns = document.querySelectorAll('.view-toggle button');
-        btns.forEach(b => b.classList.remove('active'));
-        if (view === 'carousel') {
-            btns[0].classList.add('active');
-            document.getElementById('carousel-view').classList.remove('hidden');
-            document.getElementById('deep-dive-view').classList.remove('visible');
-        } else {
-            btns[1].classList.add('active');
-            document.getElementById('carousel-view').classList.add('hidden');
-            document.getElementById('deep-dive-view').classList.add('visible');
-        }
-    }
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
 
-    // ===== CAROUSEL =====
-    const totalSlides = 6;
-    let currentSlide = 0;
-    let slideAnimations = {}; // track animation state per slide
-    let speed = 1;
-
-    const speedSlider = document.getElementById('speedSlider');
-    const speedLabel = document.getElementById('speedLabel');
-    speedSlider.addEventListener('input', () => {
-        speed = parseFloat(speedSlider.value);
-        speedLabel.textContent = speed + 'x';
-    });
-
-    // Build dots
-    const dotsEl = document.getElementById('carouselDots');
-    for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => goToSlide(i);
-        dotsEl.appendChild(dot);
-    }
-
-    function updateDots() {
-        document.querySelectorAll('.carousel-dot').forEach((d, i) => {
-            d.classList.toggle('active', i === currentSlide);
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
         });
-    }
 
-    function goToSlide(idx) {
-        if (idx < 0 || idx >= totalSlides) return;
-        currentSlide = idx;
-        document.getElementById('carouselTrack').style.transform = `translateX(-${idx * 100}%)`;
-        updateDots();
-        triggerSlideAnimation(idx);
-    }
+        const svgNS = 'http://www.w3.org/2000/svg';
 
-    function nextSlide() { goToSlide(Math.min(currentSlide + 1, totalSlides - 1)); }
-    function prevSlide() { goToSlide(Math.max(currentSlide - 1, 0)); }
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0642\u064F\u0644\u0652 \u0623\u064E\u0639\u064F\u0648\u0630\u064F \u0628\u0650\u0631\u064E\u0628\u0651\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+                translit: "Qul a'udhu bi-rabbi n-nas",
+                explanation: "Say: I seek refuge in the Lord of mankind. He is the ultimate protector, wrapping His people in a shield of light.",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u0645\u064E\u0644\u0650\u0643\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+                translit: "Maliki n-nas",
+                explanation: "The Sovereign of mankind. He is the King above all kings, the true ruler of every soul.",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u0625\u0650\u0644\u064E\u0670\u0647\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+                translit: "Ilahi n-nas",
+                explanation: "The God of mankind. The One truly worthy of worship, whose light fills every heart that turns to Him.",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u0645\u0650\u0646 \u0634\u064E\u0631\u0651\u0650 \u0627\u0644\u0652\u0648\u064E\u0633\u0652\u0648\u064E\u0627\u0633\u0650 \u0627\u0644\u0652\u062E\u064E\u0646\u0651\u064E\u0627\u0633\u0650',
+                translit: "Min sharri l-waswasi l-khannas",
+                explanation: "From the evil of the retreating whisperer. The one who whispers doubt and darkness, but flees when you remember Allah.",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u0627\u0644\u0651\u064E\u0630\u0650\u064A \u064A\u064F\u0648\u064E\u0633\u0652\u0648\u0650\u0633\u064F \u0641\u0650\u064A \u0635\u064F\u062F\u064F\u0648\u0631\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+                translit: "Alladhi yuwaswisu fi suduri n-nas",
+                explanation: "Who whispers evil into the breasts of mankind. Dark thoughts creep in, but the light of faith burns them away.",
+                build: buildVerse5
+            },
+            {
+                num: 6,
+                arabic: '\u0645\u0650\u0646\u064E \u0627\u0644\u0652\u062C\u0650\u0646\u0651\u064E\u0629\u0650 \u0648\u064E\u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
+                translit: "Minal jinnati wan-nas",
+                explanation: "From among the jinn and mankind. Evil whispers come from both unseen and seen sources, but Allah's shield protects all.",
+                build: buildVerse6
+            }
+        ];
 
-    // Swipe support
-    let touchStartX = 0;
-    const track = document.getElementById('carouselTrack');
-    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend', e => {
-        const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
-    }, { passive: true });
-
-    // ===== SLIDE DATA =====
-    const slideData = [
-        {
-            verse: 1,
-            arabic: '\u0642\u064F\u0644\u0652 \u0623\u064E\u0639\u064F\u0648\u0630\u064F \u0628\u0650\u0631\u064E\u0628\u0651\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
-            translit: "Qul a'udhu bi Rabbin-nas",
-            kid: 'When something scary or invisible tries to bother you, what do you do? You run to someone who protects you. Allah says: "Run to Me! I am the Lord of ALL people. I am your shield."'
-        },
-        {
-            verse: 2,
-            arabic: '\u0645\u064E\u0644\u0650\u0643\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
-            translit: 'Malikin-nas',
-            kid: "He's not just your caretaker. He is the KING. Every president, every ruler? Their power is borrowed. Allah is the King of all people. His authority is the only one that truly matters."
-        },
-        {
-            verse: 3,
-            arabic: '\u0625\u0650\u0644\u064E\u0640\u0670\u0647\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
-            translit: 'Ilahin-nas',
-            kid: "He's the only one truly worthy of worship. Not money, not fame, not any person. Everything points to Him. Why go to anything less than the true God?"
-        },
-        {
-            verse: 4,
-            arabic: '\u0645\u0650\u0646 \u0634\u064E\u0631\u0651\u0650 \u0627\u0644\u0652\u0648\u064E\u0633\u0652\u0648\u064E\u0627\u0633\u0650 \u0627\u0644\u0652\u062E\u064E\u0646\u0651\u064E\u0627\u0633\u0650',
-            translit: 'Min sharril-waswasil-khannas',
-            kid: 'Here\'s the enemy: the Whisperer. He sneaks up and whispers bad thoughts. But he\'s a COWARD! The moment you remember Allah, he RUNS AWAY. That\'s what "khannas" means.'
-        },
-        {
-            verse: 5,
-            arabic: '\u0627\u0644\u0651\u064E\u0630\u0650\u064A \u064A\u064F\u0648\u064E\u0633\u0652\u0648\u0650\u0633\u064F \u0641\u0650\u064A \u0635\u064F\u062F\u064F\u0648\u0631\u0650 \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
-            translit: 'Alladhi yuwaswisu fi sudurin-nas',
-            kid: 'The whisperer targets your CHEST - where your feelings and decisions live. He plants doubt, laziness, jealousy. "Skip the prayer..." "Give up..." Those whispers? Not you. That\'s him.'
-        },
-        {
-            verse: 6,
-            arabic: '\u0645\u0650\u0646\u064E \u0627\u0644\u0652\u062C\u0650\u0646\u0651\u064E\u0629\u0650 \u0648\u064E\u0627\u0644\u0646\u0651\u064E\u0627\u0633\u0650',
-            translit: 'Minal-jinnati wan-nas',
-            kid: 'The big reveal: whisperers aren\'t just invisible jinn! Some are actual PEOPLE around you. That friend who says "just do it, no one will know." Allah warns about BOTH kinds.'
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
         }
-    ];
-
-    // ===== ANIMATION ENGINE =====
-
-    function getPathLength(el) {
-        try { return el.getTotalLength(); } catch(e) { return 300; }
-    }
-
-    function hideAllPaths(groups) {
-        groups.forEach(group => {
-            group.forEach(el => {
-                if (el.getTotalLength) {
-                    const len = el.getTotalLength();
-                    el.style.strokeDasharray = len;
-                    el.style.strokeDashoffset = len;
-                    el.style.fillOpacity = '0';
-                } else {
-                    el.style.opacity = '0';
-                }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
             });
-        });
-    }
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
 
-    function animateGroup(group, duration, penCursor, svg, viewBox) {
-        return new Promise(resolve => {
-            const startTime = performance.now();
-            const elements = group.map(el => {
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            defs.appendChild(createLinearGrad('skyGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyNight', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            defs.appendChild(createLinearGrad('skyDramatic', '0%','0%','0%','100%',
+                [['0%','#4A148C'],['30%','#6A1B9A'],['60%','#E65100'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('trunkGrad', '0%','0%','100%','0%',
+                [['0%','#5D4037'],['30%','#8D6E63'],['60%','#A1887F'],['80%','#8D6E63'],['100%','#4E342E']]));
+            defs.appendChild(createLinearGrad('robeGrad', '0%','0%','100%','100%',
+                [['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            defs.appendChild(createLinearGrad('doorGrad', '0%','0%','100%','0%',
+                [['0%','#5D4037'],['30%','#795548'],['70%','#8D6E63'],['100%','#4E342E']]));
+            defs.appendChild(createLinearGrad('lightGrad', '50%','0%','50%','100%',
+                [['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('pathGold', '0%','0%','100%','0%',
+                [['0%','#FFD54F'],['50%','#FFF176'],['100%','#FFD54F']]));
+            defs.appendChild(createLinearGrad('waterGrad', '0%','0%','0%','100%',
+                [['0%','#4FC3F7'],['50%','#29B6F6'],['100%','#0288D1']]));
+            // Protection shield gradient
+            defs.appendChild(createLinearGrad('shieldGrad', '0%','0%','0%','100%',
+                [['0%','#FFD54F'],['30%','#FFEE58'],['60%','#FFF9C4'],['100%','#FFD54F']]));
+            // Dark shadow gradient
+            defs.appendChild(createLinearGrad('darkGrad', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['50%','#2d2d44'],['100%','#0d0d1a']]));
+            // Crown gradient
+            defs.appendChild(createLinearGrad('crownGrad', '0%','0%','100%','0%',
+                [['0%','#F9A825'],['25%','#FFD54F'],['50%','#FFF176'],['75%','#FFD54F'],['100%','#F9A825']]));
+            // Mosque dome gradient
+            defs.appendChild(createLinearGrad('domeGrad', '0%','0%','0%','100%',
+                [['0%','#E8EAF6'],['40%','#C5CAE9'],['100%','#9FA8DA']]));
+
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('skinGrad', '40%','35%','50%',
+                [['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('leafGrad', '40%','30%','50%',
+                [['0%','#81C784'],['40%','#4CAF50'],['80%','#2E7D32'],['100%','#1B5E20']]));
+            defs.appendChild(createRadialGrad('mercyGlow', '50%','50%','50%',
+                [['0%','rgba(255,183,77,0.6)'],['50%','rgba(255,183,77,0.2)'],['100%','rgba(255,183,77,0)']]));
+            // Warm protective glow
+            defs.appendChild(createRadialGrad('protectGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,215,0,0.25)'],['70%','rgba(255,215,0,0.08)'],['100%','rgba(255,215,0,0)']]));
+            // Heart glow
+            defs.appendChild(createRadialGrad('heartGlow', '50%','50%','50%',
+                [['0%','#FF5252'],['40%','#FF8A80'],['70%','rgba(255,82,82,0.3)'],['100%','rgba(255,82,82,0)']]));
+            // Dark aura
+            defs.appendChild(createRadialGrad('darkAura', '50%','50%','50%',
+                [['0%','rgba(26,26,46,0.7)'],['50%','rgba(26,26,46,0.3)'],['100%','rgba(26,26,46,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const strongGlow = document.createElementNS(svgNS, 'filter');
+            strongGlow.setAttribute('id', 'strongGlow');
+            strongGlow.innerHTML = '<feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(strongGlow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // Helper: draw a cartoon person (reusable)
+        function drawPerson(add, gi, cx, cy, scale, opts = {}) {
+            const s = scale;
+            // Shadow
+            add(gi, el('ellipse', { cx, cy: cy + 50*s, rx: 20*s, ry: 4*s, fill: 'rgba(0,0,0,0.12)' }));
+            // Body
+            add(gi, pathEl(
+                `M${cx-14*s},${cy} Q${cx-18*s},${cy+25*s} ${cx-20*s},${cy+45*s} L${cx+20*s},${cy+45*s} Q${cx+18*s},${cy+25*s} ${cx+14*s},${cy} Q${cx},${cy-5*s} ${cx-14*s},${cy} Z`,
+                opts.robe || 'url(#robeGrad)', '#78909C', 2*s, 'round'));
+            // Head
+            add(gi, el('circle', { cx, cy: cy - 14*s, r: 16*s, fill: 'url(#skinGrad)',
+                stroke: '#E65100', 'stroke-width': 1.5*s }));
+            // Eyes
+            add(gi, el('ellipse', { cx: cx - 5*s, cy: cy - 16*s, rx: 3.5*s, ry: 4.5*s, fill: '#FFF', stroke: '#5D4037', 'stroke-width': 1.2*s }));
+            add(gi, el('ellipse', { cx: cx + 5*s, cy: cy - 16*s, rx: 3.5*s, ry: 4.5*s, fill: '#FFF', stroke: '#5D4037', 'stroke-width': 1.2*s }));
+            add(gi, el('circle', { cx: cx - 5*s, cy: cy - 17*s, r: 2*s, fill: '#2C1810' }));
+            add(gi, el('circle', { cx: cx + 5*s, cy: cy - 17*s, r: 2*s, fill: '#2C1810' }));
+            add(gi, el('circle', { cx: cx - 6*s, cy: cy - 18*s, r: 0.8*s, fill: '#FFF' }));
+            add(gi, el('circle', { cx: cx + 4*s, cy: cy - 18*s, r: 0.8*s, fill: '#FFF' }));
+            // Smile
+            if (opts.mouth === 'awe') {
+                add(gi, el('ellipse', { cx, cy: cy - 7*s, rx: 3.5*s, ry: 3*s, fill: '#D32F2F', stroke: '#B71C1C', 'stroke-width': 0.8*s }));
+            } else {
+                add(gi, pathEl(`M${cx-5*s},${cy-8*s} Q${cx},${cy-4*s} ${cx+5*s},${cy-8*s}`, 'none', '#5D4037', 1.8*s, 'round'));
+            }
+            // Head covering
+            add(gi, pathEl(
+                `M${cx-15*s},${cy-18*s} Q${cx-17*s},${cy-28*s} ${cx-10*s},${cy-34*s} Q${cx},${cy-38*s} ${cx+10*s},${cy-34*s} Q${cx+17*s},${cy-28*s} ${cx+15*s},${cy-18*s}`,
+                '#ECEFF1', '#B0BEC5', 1.5*s, 'round'));
+        }
+
+        // Helper: draw a small person silhouette
+        function drawSmallPerson(add, gi, cx, cy, scale, color) {
+            const s = scale;
+            add(gi, el('circle', { cx, cy: cy - 10*s, r: 7*s, fill: color, stroke: color === '#1a1a2e' ? '#0d0d1a' : '#E65100', 'stroke-width': 1*s }));
+            add(gi, pathEl(
+                `M${cx-8*s},${cy} Q${cx-10*s},${cy+15*s} ${cx-12*s},${cy+30*s} L${cx+12*s},${cy+30*s} Q${cx+10*s},${cy+15*s} ${cx+8*s},${cy}`,
+                color, color === '#1a1a2e' ? '#0d0d1a' : '#78909C', 1.2*s, 'round'));
+        }
+
+        // ===== VERSE 1: SEEK REFUGE - Shield/protective bubble =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Warm golden sky background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#FFF8E1', 'none', 0));
+            add(0, pathEl('M0,0 L900,0 L900,350 Q700,310 450,330 Q200,350 0,320 Z',
+                'url(#skyGrad)', '#FFCC80', 1.5, 'round'));
+
+            // G1: Soft ground
+            add(1, pathEl('M0,380 Q200,360 450,370 Q700,360 900,375 L900,506 L0,506 Z',
+                'url(#groundGrad)', '#4CAF50', 2, 'round'));
+
+            // G2: Protective golden bubble/shield around center
+            add(2, el('circle', { cx: 450, cy: 280, r: 160, fill: 'url(#protectGlow)' }));
+            add(2, el('circle', { cx: 450, cy: 280, r: 130, fill: 'none', stroke: '#FFD54F', 'stroke-width': 3, filter: 'url(#glow)' }));
+            add(2, el('circle', { cx: 450, cy: 280, r: 125, fill: 'none', stroke: 'rgba(255,213,79,0.4)', 'stroke-width': 8 }));
+            // Shield hexagonal overlay
+            add(2, pathEl('M450,150 L560,215 L560,345 L450,410 L340,345 L340,215 Z',
+                'none', '#FDD835', 2.5, 'round'));
+
+            // G3: Group of people inside the bubble
+            drawPerson(add, 3, 450, 290, 0.85);
+            drawSmallPerson(add, 3, 390, 310, 0.65, 'url(#robeGrad)');
+            drawSmallPerson(add, 3, 510, 310, 0.65, 'url(#robeGrad)');
+            // Small child figure
+            add(3, el('circle', { cx: 430, cy: 335, r: 5, fill: 'url(#skinGrad)' }));
+            add(3, pathEl('M425,340 L425,355 L435,355 L435,340', '#C5CAE9', '#7986CB', 1, 'round'));
+            add(3, el('circle', { cx: 470, cy: 338, r: 4.5, fill: 'url(#skinGrad)' }));
+            add(3, pathEl('M466,343 L466,356 L474,356 L474,343', '#FFCCBC', '#E65100', 1, 'round'));
+
+            // G4: Golden light rays from above
+            for (let i = 0; i < 9; i++) {
+                const angle = -0.8 + (i/8) * 1.6;
+                const x2 = 450 + 200 * Math.cos(angle - Math.PI/2);
+                const y2 = 100 + 200 * Math.sin(angle - Math.PI/2);
+                add(4, lineEl(450, 80, x2, y2, 'rgba(253,216,53,0.4)', 3));
+            }
+            // Central light source
+            add(4, el('circle', { cx: 450, cy: 80, r: 35, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+
+            // G5: Dark wisps OUTSIDE the bubble (being repelled)
+            add(5, pathEl('M80,200 Q120,220 140,180 Q160,150 130,140', 'none', '#37474F', 3, 'round'));
+            add(5, pathEl('M60,300 Q100,280 110,320 Q130,350 100,360', 'none', '#263238', 2.5, 'round'));
+            add(5, pathEl('M800,220 Q760,200 750,250 Q730,280 760,290', 'none', '#37474F', 3, 'round'));
+            add(5, pathEl('M830,350 Q790,330 780,370 Q770,400 800,390', 'none', '#263238', 2.5, 'round'));
+            // Dark cloud on edges
+            add(5, el('ellipse', { cx: 100, cy: 250, rx: 50, ry: 30, fill: 'rgba(38,50,56,0.2)' }));
+            add(5, el('ellipse', { cx: 800, cy: 280, rx: 45, ry: 25, fill: 'rgba(38,50,56,0.2)' }));
+
+            // G6: Sparkles on the shield
+            [[370,180],[530,190],[340,280],[560,270],[380,370],[520,380],[450,145],[450,415]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+
+            // G7: Shield emblem at top
+            add(7, pathEl('M450,130 L465,155 L490,155 L470,170 L478,195 L450,180 L422,195 L430,170 L410,155 L435,155 Z',
+                '#FFD54F', '#F9A825', 1.5, 'round'));
+
+            // G8: Title text
+            add(8, textEl('"I seek refuge in the Lord of mankind"', 450, 480, { size: 22, color: '#BF360C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: THE SOVEREIGN - Grand golden crown =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Regal deep background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#1a1a2e', 'none', 0));
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#skyNight)', 'none', 0));
+
+            // G1: Grand light beam from throne area
+            add(1, pathEl('M350,0 L300,506 L600,506 L550,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(1, el('circle', { cx: 450, cy: 60, r: 50, fill: 'url(#sunGlow)', filter: 'url(#strongGlow)' }));
+
+            // G2: Majestic crown
+            // Crown base
+            add(2, pathEl('M340,140 L560,140 L570,180 L330,180 Z', 'url(#crownGrad)', '#C49000', 2.5, 'round'));
+            // Crown points
+            add(2, pathEl('M340,140 L350,80 L380,120 L410,60 L450,110 L490,60 L520,120 L550,80 L560,140',
+                'url(#crownGrad)', '#C49000', 2.5, 'round'));
+            // Crown fill
+            add(2, pathEl('M340,140 L350,80 L380,120 L410,60 L450,110 L490,60 L520,120 L550,80 L560,140 Z',
+                'url(#crownGrad)', 'none', 0));
+            // Jewels on crown
+            add(2, el('circle', { cx: 350, cy: 95, r: 6, fill: '#E53935', stroke: '#B71C1C', 'stroke-width': 1.2 }));
+            add(2, el('circle', { cx: 410, cy: 75, r: 7, fill: '#1E88E5', stroke: '#0D47A1', 'stroke-width': 1.2 }));
+            add(2, el('circle', { cx: 450, cy: 118, r: 6, fill: '#43A047', stroke: '#1B5E20', 'stroke-width': 1.2 }));
+            add(2, el('circle', { cx: 490, cy: 75, r: 7, fill: '#E53935', stroke: '#B71C1C', 'stroke-width': 1.2 }));
+            add(2, el('circle', { cx: 550, cy: 95, r: 6, fill: '#1E88E5', stroke: '#0D47A1', 'stroke-width': 1.2 }));
+            // Crown band
+            add(2, pathEl('M335,155 L565,155 L567,170 L333,170 Z', '#F9A825', '#C49000', 1.5, 'round'));
+            // Jewels on band
+            [[370,162],[420,162],[450,162],[480,162],[530,162]].forEach(([x,y]) => {
+                add(2, el('circle', { cx: x, cy: y, r: 4, fill: '#FFF9C4', stroke: '#FFD54F', 'stroke-width': 1 }));
+            });
+
+            // G3: Light beams radiating from crown
+            for (let i = 0; i < 12; i++) {
+                const angle = (Math.PI * 2 / 12) * i;
+                const x1 = 450 + 100 * Math.cos(angle);
+                const y1 = 120 + 60 * Math.sin(angle);
+                const x2 = 450 + 180 * Math.cos(angle);
+                const y2 = 120 + 120 * Math.sin(angle);
+                add(3, lineEl(x1, y1, x2, y2, 'rgba(253,216,53,0.5)', 2.5));
+            }
+
+            // G4: Floor/ground
+            add(4, pathEl('M0,380 L900,380 L900,506 L0,506 Z', '#16213e', '#0f3460', 1));
+
+            // G5: People looking up in awe
+            [[200,350],[300,360],[380,355],[520,355],[600,360],[700,350]].forEach(([px,py], i) => {
+                drawSmallPerson(add, 5, px, py, 0.6 + (i%2)*0.1, 'url(#robeGrad)');
+            });
+            // Arms raised in awe (for a few figures)
+            add(5, pathEl('M192,345 Q185,330 180,315', 'none', '#B0BEC5', 3, 'round'));
+            add(5, pathEl('M208,345 Q215,330 220,315', 'none', '#B0BEC5', 3, 'round'));
+            add(5, pathEl('M592,355 Q585,340 580,325', 'none', '#B0BEC5', 3, 'round'));
+            add(5, pathEl('M608,355 Q615,340 620,325', 'none', '#B0BEC5', 3, 'round'));
+
+            // G6: Stars in the sky
+            [[100,50],[180,100],[750,80],[820,130],[150,160],[680,45],[550,30],[350,25]].forEach(([x,y]) => {
+                add(6, cartoonStar(x, y, 6, 3, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G7: Sparkles around crown
+            [[300,100],[600,100],[380,60],[520,60],[340,170],[560,170],[450,50],[350,130],[550,130]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*6));
+            });
+
+            // G8: Title
+            add(8, textEl('"The Sovereign of mankind"', 450, 470, { size: 24, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: THE GOD - Mosque with spiritual glow =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Serene twilight sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#E8EAF6', 'none', 0));
+            add(0, pathEl('M0,0 L900,0 L900,350 L0,350 Z',
+                '#E3F2FD', '#BBDEFB', 1));
+
+            // G1: Grand mosque silhouette
+            // Main dome
+            add(1, pathEl('M300,220 Q300,120 450,100 Q600,120 600,220 L600,380 L300,380 Z',
+                'url(#domeGrad)', '#7986CB', 2.5, 'round'));
+            // Dome highlight
+            add(1, pathEl('M380,160 Q420,130 460,160', 'none', 'rgba(255,255,255,0.5)', 2, 'round'));
+            // Walls
+            add(1, pathEl('M280,220 L280,380 L300,380 L300,220 Z', '#9FA8DA', '#7986CB', 1.5, 'round'));
+            add(1, pathEl('M600,220 L600,380 L620,380 L620,220 Z', '#9FA8DA', '#7986CB', 1.5, 'round'));
+
+            // G2: Minarets
+            // Left minaret
+            add(2, pathEl('M230,150 L230,380 L265,380 L265,150 Z', '#B0BEC5', '#78909C', 1.5, 'round'));
+            add(2, pathEl('M225,150 Q247,125 270,150', '#C5CAE9', '#7986CB', 1.5, 'round'));
+            add(2, lineEl(247, 100, 247, 130, '#FFD54F', 2));
+            add(2, el('circle', { cx: 247, cy: 97, r: 5, fill: '#FFD54F', stroke: '#F9A825', 'stroke-width': 1 }));
+            // Right minaret
+            add(2, pathEl('M635,150 L635,380 L670,380 L670,150 Z', '#B0BEC5', '#78909C', 1.5, 'round'));
+            add(2, pathEl('M630,150 Q652,125 675,150', '#C5CAE9', '#7986CB', 1.5, 'round'));
+            add(2, lineEl(652, 100, 652, 130, '#FFD54F', 2));
+            add(2, el('circle', { cx: 652, cy: 97, r: 5, fill: '#FFD54F', stroke: '#F9A825', 'stroke-width': 1 }));
+
+            // G3: Crescent moon on top of dome
+            add(3, el('circle', { cx: 450, cy: 80, r: 15, fill: '#FFD54F', stroke: '#F9A825', 'stroke-width': 1.5, filter: 'url(#glow)' }));
+            add(3, el('circle', { cx: 457, cy: 76, r: 11, fill: '#E8EAF6' }));
+            add(3, cartoonStar(440, 70, 5, 2.5, '#FFD54F', '#F9A825'));
+            // Pole
+            add(3, lineEl(450, 93, 450, 105, '#FFD54F', 2.5));
+
+            // G4: Spiritual glow emanating from mosque
+            add(4, el('circle', { cx: 450, cy: 230, r: 120, fill: 'url(#protectGlow)' }));
+            add(4, el('circle', { cx: 450, cy: 230, r: 80, fill: 'url(#mercyGlow)' }));
+
+            // G5: Hearts rising from the mosque
+            [[400,200],[450,180],[500,195],[420,160],[480,170],[380,230],[520,225],[450,140]].forEach(([hx,hy], i) => {
+                const s = 6 + (i % 3) * 2;
+                add(5, pathEl(
+                    `M${hx},${hy+s*0.3} Q${hx-s*0.5},${hy-s*0.2} ${hx-s*0.3},${hy-s*0.5} Q${hx},${hy-s*0.8} ${hx+s*0.3},${hy-s*0.5} Q${hx+s*0.5},${hy-s*0.2} ${hx},${hy+s*0.3} Z`,
+                    i < 4 ? 'rgba(239,83,80,0.5)' : 'rgba(239,83,80,0.3)',
+                    '#EF5350', 1, 'round'));
+            });
+
+            // G6: Ground
+            add(6, pathEl('M0,380 L900,380 L900,506 L0,506 Z', '#C8E6C9', '#A5D6A7', 1.5));
+            // Path to mosque door
+            add(6, pathEl('M400,380 L430,506 L470,506 L500,380 Z', '#D7CCC8', '#BCAAA4', 1, 'round'));
+            // Mosque door
+            add(6, pathEl('M420,300 Q450,270 480,300 L480,380 L420,380 Z', 'url(#doorGrad)', '#3E2723', 2, 'round'));
+            // Door light
+            add(6, pathEl('M425,310 Q450,285 475,310 L475,380 L425,380 Z', 'rgba(255,238,88,0.3)', 'none', 0));
+
+            // G7: Small figures walking toward mosque
+            drawSmallPerson(add, 7, 350, 370, 0.45, 'url(#robeGrad)');
+            drawSmallPerson(add, 7, 550, 370, 0.45, 'url(#robeGrad)');
+            drawSmallPerson(add, 7, 300, 375, 0.4, 'url(#robeGrad)');
+
+            // G8: Sparkles and stars
+            [[150,80],[750,60],[100,130],[800,110],[250,50],[650,70]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 5 + Math.random()*4));
+            });
+
+            // G9: Title
+            add(9, textEl('"The God of mankind"', 450, 480, { size: 24, color: '#3F51B5', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: THE RETREATING WHISPERER - Dark shadow retreating from light =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Split scene - dark left, light right
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#1a1a2e', 'none', 0));
+            // Light side gradient
+            add(0, pathEl('M400,0 L900,0 L900,506 L350,506 Z', '#FFF8E1', 'none', 0));
+
+            // G1: Central light source / dividing line
+            add(1, pathEl('M420,0 L380,506 L480,506 L440,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(1, el('circle', { cx: 450, cy: 120, r: 50, fill: 'url(#sunGlow)', filter: 'url(#strongGlow)' }));
+            // Light rays pushing outward
+            for (let i = 0; i < 7; i++) {
+                const angle = -0.3 + (i/6) * 0.6;
+                const x2 = 450 + 200 * Math.cos(angle);
+                const y2 = 120 + 200 * Math.sin(angle);
+                add(1, lineEl(450, 120, x2, y2, 'rgba(253,216,53,0.4)', 2.5));
+            }
+
+            // G2: Dark shadowy figure retreating (left side)
+            // Shadow body - amorphous, retreating shape
+            add(2, pathEl('M200,180 Q150,200 130,260 Q110,320 140,370 Q170,400 200,380 Q230,350 220,300 Q240,250 210,200 Z',
+                'rgba(26,26,46,0.7)', '#0d0d1a', 2, 'round'));
+            // Shadow tendrils retreating
+            add(2, pathEl('M220,250 Q280,240 320,260 Q350,270 340,280', 'none', 'rgba(26,26,46,0.5)', 3, 'round'));
+            add(2, pathEl('M210,300 Q260,290 300,310 Q330,320 320,340', 'none', 'rgba(26,26,46,0.4)', 2.5, 'round'));
+            add(2, pathEl('M200,200 Q250,180 290,200 Q310,210 300,220', 'none', 'rgba(26,26,46,0.4)', 2, 'round'));
+            // Evil eyes on shadow
+            add(2, el('ellipse', { cx: 165, cy: 240, rx: 8, ry: 5, fill: '#B71C1C', opacity: 0.7 }));
+            add(2, el('ellipse', { cx: 195, cy: 238, rx: 8, ry: 5, fill: '#B71C1C', opacity: 0.7 }));
+            add(2, el('circle', { cx: 165, cy: 240, r: 3, fill: '#FFD54F' }));
+            add(2, el('circle', { cx: 195, cy: 238, r: 3, fill: '#FFD54F' }));
+
+            // G3: Dark aura around shadow
+            add(3, el('circle', { cx: 180, cy: 290, r: 100, fill: 'url(#darkAura)' }));
+            // Wispy dark smoke
+            add(3, pathEl('M100,150 Q80,180 90,220 Q70,250 80,280', 'none', 'rgba(38,50,56,0.3)', 2, 'round'));
+            add(3, pathEl('M250,150 Q230,170 240,200 Q220,230 230,260', 'none', 'rgba(38,50,56,0.3)', 2, 'round'));
+
+            // G4: Protected people on the light side
+            drawPerson(add, 4, 600, 300, 0.85);
+            drawSmallPerson(add, 4, 680, 320, 0.55, 'url(#robeGrad)');
+            drawSmallPerson(add, 4, 540, 325, 0.5, 'url(#robeGrad)');
+            // Protective bubble around them
+            add(4, el('circle', { cx: 610, cy: 310, r: 100, fill: 'none', stroke: 'rgba(255,213,79,0.4)', 'stroke-width': 3, filter: 'url(#glow)' }));
+
+            // G5: Light particles pushing darkness back
+            [[350,200],[360,280],[370,350],[380,150],[340,400]].forEach(([x,y]) => {
+                add(5, cartoonSparkle(x, y, 6 + Math.random()*4));
+            });
+            // Arrows of light pointing left (pushing shadow back)
+            add(5, pathEl('M380,250 L340,250 L350,240 M340,250 L350,260', 'none', '#FFD54F', 2.5, 'round'));
+            add(5, pathEl('M370,320 L330,320 L340,310 M330,320 L340,330', 'none', '#FFD54F', 2.5, 'round'));
+
+            // G6: Ground
+            add(6, pathEl('M0,420 L900,420 L900,506 L0,506 Z', '#263238', '#1a1a2e', 1));
+            add(6, pathEl('M400,420 L900,420 L900,506 L350,506 Z', '#C8E6C9', '#A5D6A7', 1));
+
+            // G7: "Retreating" motion lines on shadow
+            add(7, lineEl(100, 230, 60, 230, 'rgba(38,50,56,0.3)', 1.5));
+            add(7, lineEl(110, 280, 55, 280, 'rgba(38,50,56,0.3)', 1.5));
+            add(7, lineEl(105, 330, 50, 330, 'rgba(38,50,56,0.3)', 1.5));
+            add(7, lineEl(120, 200, 70, 195, 'rgba(38,50,56,0.3)', 1.5));
+            add(7, lineEl(115, 360, 65, 365, 'rgba(38,50,56,0.3)', 1.5));
+
+            // G8: Title
+            add(8, textEl('"From the evil of the retreating whisperer"', 450, 470, { size: 20, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: WHISPERS IN THE BREAST - Dark wisps near glowing heart =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep moody background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#16213e', 'none', 0));
+
+            // G1: Central figure (larger, close-up feel)
+            // Body silhouette (large)
+            add(1, pathEl('M350,200 Q340,280 330,380 Q330,420 320,506 L580,506 Q570,420 570,380 Q560,280 550,200 Q500,170 450,165 Q400,170 350,200 Z',
+                'url(#robeGrad)', '#546E7A', 2.5, 'round'));
+            // Head
+            add(1, el('circle', { cx: 450, cy: 140, r: 35, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 2 }));
+            // Eyes (closed/contemplative)
+            add(1, pathEl('M435,132 Q440,136 445,132', 'none', '#5D4037', 2, 'round'));
+            add(1, pathEl('M455,132 Q460,136 465,132', 'none', '#5D4037', 2, 'round'));
+            // Head covering
+            add(1, pathEl('M418,125 Q415,100 430,90 Q450,82 470,90 Q485,100 482,125', '#ECEFF1', '#B0BEC5', 2, 'round'));
+
+            // G2: Glowing heart in the chest
+            add(2, el('circle', { cx: 450, cy: 280, r: 50, fill: 'url(#heartGlow)' }));
+            // Heart shape
+            add(2, pathEl('M450,295 Q430,270 420,260 Q410,248 420,240 Q435,232 450,250 Q465,232 480,240 Q490,248 480,260 Q470,270 450,295 Z',
+                '#EF5350', '#C62828', 2, 'round'));
+            // Heart inner glow
+            add(2, el('circle', { cx: 450, cy: 268, r: 20, fill: 'rgba(255,255,255,0.15)' }));
+            // Heartbeat lines
+            add(2, pathEl('M400,270 L420,270 L430,255 L440,285 L450,260 L460,280 L470,270 L500,270',
+                'none', 'rgba(239,83,80,0.5)', 1.5, 'round'));
+
+            // G3: Dark whisper wisps trying to reach the heart
+            // From left
+            add(3, pathEl('M100,200 Q200,230 280,260 Q340,280 370,275', 'none', 'rgba(26,26,46,0.6)', 3.5, 'round'));
+            add(3, pathEl('M80,300 Q180,290 260,280 Q320,278 360,280', 'none', 'rgba(26,26,46,0.5)', 3, 'round'));
+            add(3, pathEl('M120,350 Q200,330 280,310 Q340,295 365,290', 'none', 'rgba(26,26,46,0.4)', 2.5, 'round'));
+            // From right
+            add(3, pathEl('M800,220 Q700,240 620,260 Q560,275 530,278', 'none', 'rgba(26,26,46,0.6)', 3.5, 'round'));
+            add(3, pathEl('M820,310 Q720,300 640,285 Q580,278 540,280', 'none', 'rgba(26,26,46,0.5)', 3, 'round'));
+            add(3, pathEl('M780,370 Q700,340 620,310 Q560,295 535,290', 'none', 'rgba(26,26,46,0.4)', 2.5, 'round'));
+
+            // G4: Dark snake-like whisper entities
+            // Left whisper creature
+            add(4, pathEl('M80,250 Q100,240 120,250 Q140,260 130,275 Q120,285 100,278 Q85,270 80,250 Z',
+                'rgba(26,26,46,0.7)', '#0d0d1a', 1.5, 'round'));
+            add(4, el('circle', { cx: 105, cy: 255, r: 3, fill: '#B71C1C' }));
+            add(4, el('circle', { cx: 115, cy: 253, r: 3, fill: '#B71C1C' }));
+            // Right whisper creature
+            add(4, pathEl('M800,270 Q820,260 830,270 Q840,285 825,295 Q810,300 795,290 Q785,280 800,270 Z',
+                'rgba(26,26,46,0.7)', '#0d0d1a', 1.5, 'round'));
+            add(4, el('circle', { cx: 808, cy: 278, r: 3, fill: '#B71C1C' }));
+            add(4, el('circle', { cx: 818, cy: 276, r: 3, fill: '#B71C1C' }));
+
+            // G5: Protective light barrier around heart
+            add(5, el('circle', { cx: 450, cy: 275, r: 55, fill: 'none', stroke: '#FFD54F', 'stroke-width': 2, filter: 'url(#glow)' }));
+            add(5, el('circle', { cx: 450, cy: 275, r: 60, fill: 'none', stroke: 'rgba(255,213,79,0.3)', 'stroke-width': 5 }));
+            // Wisps being burned/stopped at the barrier
+            [[390,260],[510,265],[395,295],[505,290]].forEach(([x,y]) => {
+                add(5, cartoonSparkle(x, y, 5));
+            });
+
+            // G6: Small text labels
+            add(6, textEl('whispers', 180, 220, { size: 18, color: 'rgba(120,144,156,0.6)' }));
+            add(6, textEl('doubt', 720, 240, { size: 16, color: 'rgba(120,144,156,0.5)' }));
+            add(6, textEl('fear', 150, 360, { size: 15, color: 'rgba(120,144,156,0.4)' }));
+            add(6, textEl('envy', 750, 350, { size: 15, color: 'rgba(120,144,156,0.4)' }));
+
+            // G7: Light sparkles around the figure
+            [[350,150],[550,160],[320,350],[580,340],[450,100],[400,380],[500,370]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*4));
+            });
+
+            // G8: Title
+            add(8, textEl('"Who whispers evil into the breasts of mankind"', 450, 475, { size: 19, color: '#EF5350', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 6: FROM JINN AND MANKIND - Dark figures, bright protected center =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark atmospheric background with lighter center
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#0d0d1a', 'none', 0));
+            // Central light area
+            add(0, el('circle', { cx: 450, cy: 253, r: 200, fill: 'url(#protectGlow)' }));
+            add(0, el('circle', { cx: 450, cy: 253, r: 140, fill: 'rgba(255,248,225,0.3)' }));
+
+            // G1: Grand shield in the center
+            // Outer shield ring
+            add(1, el('circle', { cx: 450, cy: 253, r: 130, fill: 'none', stroke: '#FFD54F', 'stroke-width': 4, filter: 'url(#strongGlow)' }));
+            add(1, el('circle', { cx: 450, cy: 253, r: 125, fill: 'none', stroke: 'rgba(255,213,79,0.3)', 'stroke-width': 10 }));
+            // Inner shield hexagon
+            add(1, pathEl('M450,123 L562,188 L562,318 L450,383 L338,318 L338,188 Z',
+                'rgba(255,248,225,0.1)', '#FDD835', 2, 'round'));
+            // Shield cross pattern
+            add(1, lineEl(450, 130, 450, 376, 'rgba(253,216,53,0.2)', 1.5));
+            add(1, lineEl(345, 253, 555, 253, 'rgba(253,216,53,0.2)', 1.5));
+
+            // G2: Protected people inside the shield
+            drawPerson(add, 2, 450, 260, 0.8);
+            drawSmallPerson(add, 2, 400, 280, 0.5, 'url(#robeGrad)');
+            drawSmallPerson(add, 2, 500, 280, 0.5, 'url(#robeGrad)');
+            // Family group - children
+            add(2, el('circle', { cx: 430, cy: 310, r: 5, fill: 'url(#skinGrad)' }));
+            add(2, pathEl('M425,315 L425,330 L435,330 L435,315', '#C5CAE9', '#7986CB', 1, 'round'));
+            add(2, el('circle', { cx: 470, cy: 312, r: 4.5, fill: 'url(#skinGrad)' }));
+            add(2, pathEl('M466,317 L466,330 L474,330 L474,317', '#FFCCBC', '#E65100', 1, 'round'));
+
+            // G3: Dark JINN figures on the left edge (smoky, ethereal)
+            // Jinn 1 - tall smoky figure
+            add(3, pathEl('M60,150 Q50,200 55,260 Q45,320 60,370 Q80,380 90,350 Q100,300 95,250 Q100,200 85,160 Q75,140 60,150 Z',
+                'rgba(26,26,46,0.7)', 'rgba(100,50,150,0.5)', 2, 'round'));
+            add(3, el('circle', { cx: 70, cy: 195, r: 4, fill: '#B71C1C', opacity: 0.8 }));
+            add(3, el('circle', { cx: 82, cy: 193, r: 4, fill: '#B71C1C', opacity: 0.8 }));
+            // Smoke tendrils
+            add(3, pathEl('M90,250 Q130,240 170,260 Q210,270 240,250', 'none', 'rgba(100,50,150,0.3)', 2, 'round'));
+            add(3, pathEl('M85,300 Q120,290 160,310 Q200,320 230,300', 'none', 'rgba(100,50,150,0.25)', 1.8, 'round'));
+
+            // Jinn 2 - crouching smoky figure
+            add(3, pathEl('M120,380 Q110,340 120,310 Q140,290 160,310 Q170,340 160,380 Q140,400 120,380 Z',
+                'rgba(26,26,46,0.6)', 'rgba(100,50,150,0.4)', 1.5, 'round'));
+            add(3, el('circle', { cx: 132, cy: 320, r: 3, fill: '#B71C1C', opacity: 0.7 }));
+            add(3, el('circle', { cx: 142, cy: 318, r: 3, fill: '#B71C1C', opacity: 0.7 }));
+
+            // G4: Dark HUMAN whisperer figures on the right edge
+            // Evil person 1
+            drawSmallPerson(add, 4, 800, 220, 0.7, '#1a1a2e');
+            // Dark aura
+            add(4, el('circle', { cx: 800, cy: 240, r: 40, fill: 'url(#darkAura)' }));
+            // Whisper lines from mouth
+            add(4, pathEl('M785,230 Q750,235 720,240 Q690,250 670,255', 'none', 'rgba(26,26,46,0.3)', 1.5, 'round'));
+
+            // Evil person 2
+            drawSmallPerson(add, 4, 760, 340, 0.6, '#1a1a2e');
+            add(4, el('circle', { cx: 760, cy: 355, r: 35, fill: 'url(#darkAura)' }));
+            add(4, pathEl('M745,350 Q710,345 680,350 Q650,360 630,355', 'none', 'rgba(26,26,46,0.25)', 1.5, 'round'));
+
+            // Evil person 3 (far right)
+            drawSmallPerson(add, 4, 850, 330, 0.55, '#1a1a2e');
+
+            // G5: Labels for the two types
+            add(5, textEl('Jinn', 80, 130, { size: 20, color: 'rgba(156,39,176,0.6)', weight: 700 }));
+            add(5, textEl('Mankind', 800, 180, { size: 20, color: 'rgba(120,144,156,0.6)', weight: 700 }));
+
+            // G6: Shield sparkles at the boundary where darkness meets light
+            [[340,180],[340,320],[560,190],[560,310],[380,140],[520,140],[380,365],[520,360]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+            // Burst effects where whispers hit the shield
+            [[320,240],[580,250],[330,300],[570,290]].forEach(([x,y]) => {
+                add(6, el('circle', { cx: x, cy: y, r: 8, fill: 'none', stroke: 'rgba(255,213,79,0.5)', 'stroke-width': 2 }));
+                add(6, el('circle', { cx: x, cy: y, r: 4, fill: 'rgba(255,213,79,0.3)' }));
+            });
+
+            // G7: Central light beam from above
+            add(7, pathEl('M420,0 L400,506 L500,506 L480,0 Z', 'rgba(255,249,196,0.15)', 'none', 0));
+            add(7, el('circle', { cx: 450, cy: 50, r: 30, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            // Stars in the dark sky
+            [[100,50],[200,80],[700,60],[820,90],[150,120],[750,130],[50,250],[850,260]].forEach(([x,y]) => {
+                add(7, cartoonStar(x, y, 4, 2, '#FFF9C4', 'rgba(255,249,196,0.5)'));
+            });
+
+            // G8: Ground
+            add(8, pathEl('M0,430 L900,430 L900,506 L0,506 Z', '#0d0d1a', 'rgba(26,26,46,0.5)', 1));
+            add(8, pathEl('M300,430 L600,430 L620,506 L280,506 Z', 'rgba(255,248,225,0.15)', 'none', 0));
+
+            // G9: Title
+            add(9, textEl('"From among the jinn and mankind"', 450, 480, { size: 22, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
                 if (el.getTotalLength) {
                     const len = el.getTotalLength();
                     el.style.strokeDasharray = len;
                     el.style.strokeDashoffset = len;
                     el.style.fillOpacity = '0';
-                    return { el, len, hasPath: true };
-                } else {
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
                     el.style.opacity = '0';
                     return { el, hasPath: false };
                 }
-            });
-
-            let rafId;
-            function tick(now) {
-                const elapsed = (now - startTime) * speed;
-                const t = Math.min(elapsed / duration, 1);
-                const eased = 1 - Math.pow(1 - t, 3);
-
-                elements.forEach(({ el, len, hasPath }) => {
-                    if (hasPath) {
-                        el.style.strokeDashoffset = len * (1 - eased);
-                        if (eased > 0.6) {
-                            el.style.fillOpacity = (eased - 0.6) / 0.4;
-                        }
-                    } else {
-                        el.style.opacity = eased;
-                    }
-                });
-
-                if (t < 1) {
-                    for (let j = elements.length - 1; j >= 0; j--) {
-                        if (elements[j].hasPath) {
-                            try {
-                                const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
-                                if (pt && isFinite(pt.x) && isFinite(pt.y)) {
-                                    movePen(penCursor, svg, pt.x, pt.y, viewBox);
-                                    break;
-                                }
-                            } catch(e) {}
-                        }
-                    }
-                    rafId = requestAnimationFrame(tick);
-                } else {
-                    elements.forEach(({ el, hasPath }) => {
-                        if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
-                        else { el.style.opacity = '1'; }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
                     });
-                    resolve();
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
                 }
-            }
-            rafId = requestAnimationFrame(tick);
-        });
-    }
-
-    function movePen(penCursor, svg, svgX, svgY, viewBox) {
-        if (!svg || !penCursor) return;
-        const rect = svg.getBoundingClientRect();
-        const scaleX = rect.width / viewBox[0];
-        const scaleY = rect.height / viewBox[1];
-        penCursor.style.opacity = '1';
-        penCursor.style.left = (svgX * scaleX - 13) + 'px';
-        penCursor.style.top = (svgY * scaleY - 37) + 'px';
-    }
-
-    function hidePen(penCursor) {
-        if (penCursor) penCursor.style.opacity = '0';
-    }
-
-    // ===== TYPEWRITER =====
-    let typewriterAbortFlags = {};
-
-    function typewrite(element, text, opts = {}, slideIdx) {
-        return new Promise(resolve => {
-            const charDelay = opts.charDelay || 40;
-            const isRTL = opts.rtl || false;
-            element.textContent = '';
-            const cursor = document.createElement('span');
-            cursor.className = 'typewriter-cursor' + (isRTL ? ' rtl' : '');
-            element.appendChild(cursor);
-            let i = 0;
-            function typeNext() {
-                if (typewriterAbortFlags[slideIdx]) { cursor.remove(); resolve(); return; }
-                if (i < text.length) {
-                    const charNode = document.createTextNode(text[i]);
-                    element.insertBefore(charNode, cursor);
-                    i++;
-                    setTimeout(typeNext, charDelay / speed);
-                } else {
-                    setTimeout(() => { cursor.remove(); resolve(); }, 400 / speed);
-                }
-            }
-            typeNext();
-        });
-    }
-
-    // ===== SCENE BUILDERS =====
-    const VB_W = 900, VB_H = 506;
-
-    function createBaseSvg(container, id) {
-        const svgNS = 'http://www.w3.org/2000/svg';
-        const old = document.getElementById(id);
-        if (old) old.remove();
-        const svg = document.createElementNS(svgNS, 'svg');
-        svg.setAttribute('id', id);
-        svg.setAttribute('viewBox', `0 0 ${VB_W} ${VB_H}`);
-        svg.setAttribute('xmlns', svgNS);
-        container.appendChild(svg);
-
-        // Dot grid background
-        const defs = document.createElementNS(svgNS, 'defs');
-        const pat = document.createElementNS(svgNS, 'pattern');
-        pat.setAttribute('id', 'dotgrid_' + id);
-        pat.setAttribute('width', '20'); pat.setAttribute('height', '20');
-        pat.setAttribute('patternUnits', 'userSpaceOnUse');
-        const dot = document.createElementNS(svgNS, 'circle');
-        dot.setAttribute('cx', '10'); dot.setAttribute('cy', '10');
-        dot.setAttribute('r', '0.8'); dot.setAttribute('fill', '#e0d8c8');
-        pat.appendChild(dot); defs.appendChild(pat); svg.appendChild(defs);
-
-        const bg = document.createElementNS(svgNS, 'rect');
-        bg.setAttribute('width', VB_W); bg.setAttribute('height', VB_H);
-        bg.setAttribute('fill', '#FFF9F0'); svg.appendChild(bg);
-
-        const grid = document.createElementNS(svgNS, 'rect');
-        grid.setAttribute('width', VB_W); grid.setAttribute('height', VB_H);
-        grid.setAttribute('fill', `url(#dotgrid_${id})`); svg.appendChild(grid);
-
-        return { svg, svgNS, groups: [] };
-    }
-
-    function addToGroup(groups, idx, node) {
-        if (!groups[idx]) groups[idx] = [];
-        groups[idx].push(node);
-    }
-
-    function addRoughToGroup(groups, idx, svg, roughNode) {
-        const children = roughNode.querySelectorAll('path, line, circle, ellipse, rect, polygon');
-        children.forEach(child => addToGroup(groups, idx, child));
-        svg.appendChild(roughNode);
-    }
-
-    function addSvgText(svg, text, x, y, opts = {}) {
-        const svgNS = 'http://www.w3.org/2000/svg';
-        const el = document.createElementNS(svgNS, 'text');
-        el.setAttribute('x', x); el.setAttribute('y', y);
-        el.setAttribute('text-anchor', opts.anchor || 'middle');
-        el.setAttribute('dominant-baseline', 'middle');
-        el.setAttribute('font-family', opts.font || 'Caveat, cursive');
-        el.setAttribute('font-size', opts.size || '22');
-        el.setAttribute('font-weight', opts.weight || '600');
-        el.setAttribute('fill', opts.color || '#2c3e50');
-        if (opts.opacity) el.setAttribute('opacity', opts.opacity);
-        if (opts.style) el.setAttribute('font-style', opts.style);
-        el.textContent = text;
-        el.style.opacity = '0';
-        svg.appendChild(el);
-        return el;
-    }
-
-    function roughStar(rc, cx, cy, outerR, innerR, opts) {
-        const pts = [];
-        for (let i = 0; i < 10; i++) {
-            const r = i % 2 === 0 ? outerR : innerR;
-            const a = (Math.PI / 5) * i - Math.PI / 2;
-            pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
-        }
-        return rc.polygon(pts, opts);
-    }
-
-    // ===== BUILD SLIDE 1: Lord of Mankind (Shield) =====
-    function buildSlide0(container) {
-        const { svg, svgNS, groups } = createBaseSvg(container, 'scene0');
-        const rc = rough.svg(svg);
-
-        // G0: Shield outer with ornate border
-        addRoughToGroup(groups, 0, svg, rc.path('M450,60 L580,110 L580,260 Q580,380 450,400 Q320,380 320,260 L320,110 Z', {
-            stroke: '#8B6914', strokeWidth: 3.5, fill: '#FFF3B0', fillStyle: 'hachure',
-            roughness: 2, hachureGap: 8, hachureAngle: 60, fillWeight: 1.5
-        }));
-        // Shield rim highlight
-        addRoughToGroup(groups, 0, svg, rc.path('M450,65 L575,113 L575,258 Q575,373 450,393 Q325,373 325,258 L325,113 Z', {
-            stroke: '#DAA520', strokeWidth: 1.5, fill: 'none', roughness: 1.5
-        }));
-
-        // G1: Shield inner glow with cross-hatch pattern
-        addRoughToGroup(groups, 1, svg, rc.path('M450,95 L555,135 L555,255 Q555,355 450,375 Q345,355 345,255 L345,135 Z', {
-            stroke: '#c9a84c', strokeWidth: 2.5, fill: '#FFE680', fillStyle: 'solid',
-            roughness: 1.5
-        }));
-        // Inner shield decorative diamond
-        addRoughToGroup(groups, 1, svg, rc.polygon([[450,140],[500,220],[450,300],[400,220]], {
-            stroke: '#DAA520', strokeWidth: 1.5, fill: '#FFF3B0', fillStyle: 'hachure',
-            roughness: 1, hachureGap: 5, hachureAngle: 45
-        }));
-        // Central shield emblem circle
-        addRoughToGroup(groups, 1, svg, rc.circle(450, 220, 45, {
-            stroke: '#8B6914', strokeWidth: 2, fill: '#FFD700', fillStyle: 'solid', roughness: 1
-        }));
-        // Inner emblem dot
-        addRoughToGroup(groups, 1, svg, rc.circle(450, 220, 18, {
-            stroke: '#BF8C00', strokeWidth: 1.5, fill: '#FFF8E1', fillStyle: 'solid', roughness: 0.8
-        }));
-
-        // G2: Light rays from shield (more rays, varied lengths)
-        const rays = [
-            [450, 55, 450, 10], [390, 70, 330, 20], [510, 70, 570, 20],
-            [315, 180, 245, 150], [585, 180, 655, 150],
-            [315, 300, 250, 340], [585, 300, 650, 340],
-            [340, 130, 280, 90], [560, 130, 620, 90],
-            [330, 340, 280, 380], [570, 340, 620, 380]
-        ];
-        rays.forEach(([x1,y1,x2,y2]) => {
-            addRoughToGroup(groups, 2, svg, rc.line(x1,y1,x2,y2, {
-                stroke: '#FFD700', strokeWidth: 2.5, roughness: 2
-            }));
-        });
-        // Secondary faint glow rays
-        const glowRays = [
-            [450, 50, 450, 0], [370, 75, 310, 10], [530, 75, 590, 10]
-        ];
-        glowRays.forEach(([x1,y1,x2,y2]) => {
-            addRoughToGroup(groups, 2, svg, rc.line(x1,y1,x2,y2, {
-                stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2.5
-            }));
-        });
-
-        // G3: Dark wisps repelled (left) - more tendrils
-        addRoughToGroup(groups, 3, svg, rc.path('M80,140 Q120,120 140,160 Q160,200 140,240', {
-            stroke: '#555', strokeWidth: 3, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M60,190 Q90,170 100,210 Q110,250 90,270', {
-            stroke: '#666', strokeWidth: 2.5, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M50,160 Q75,145 85,175 Q95,210 75,230', {
-            stroke: '#777', strokeWidth: 2, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M95,250 Q120,235 130,265 Q135,290 110,305', {
-            stroke: '#888', strokeWidth: 1.8, roughness: 3, fill: 'none'
-        }));
-        // Dark wisps repelled (right) - more tendrils
-        addRoughToGroup(groups, 3, svg, rc.path('M820,150 Q780,130 760,170 Q740,210 760,250', {
-            stroke: '#555', strokeWidth: 3, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M840,200 Q810,180 800,220 Q790,260 810,280', {
-            stroke: '#666', strokeWidth: 2.5, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M850,160 Q825,145 815,175 Q805,210 825,230', {
-            stroke: '#777', strokeWidth: 2, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M805,250 Q780,235 770,265 Q765,290 790,305', {
-            stroke: '#888', strokeWidth: 1.8, roughness: 3, fill: 'none'
-        }));
-
-        // G4: Stars scattered
-        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 160, 80, 14, 5, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 740, 70, 12, 4, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 120, 350, 10, 4, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 780, 360, 11, 4, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 200, 200, 9, 3, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 700, 210, 10, 4, starOpts));
-
-        // G5: Protective aura rings around shield
-        addRoughToGroup(groups, 5, svg, rc.ellipse(450, 230, 340, 400, {
-            stroke: '#FFE082', strokeWidth: 1.5, fill: 'none', roughness: 2.5,
-            strokeLineDash: [8, 6]
-        }));
-        addRoughToGroup(groups, 5, svg, rc.ellipse(450, 230, 380, 440, {
-            stroke: '#FFF3B0', strokeWidth: 1, fill: 'none', roughness: 3,
-            strokeLineDash: [5, 8]
-        }));
-
-        // G6: Cloud wisps in corners (atmosphere)
-        addRoughToGroup(groups, 6, svg, rc.ellipse(80, 50, 130, 40, {
-            stroke: '#ddd', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
-        }));
-        addRoughToGroup(groups, 6, svg, rc.ellipse(130, 45, 80, 30, {
-            stroke: '#ddd', strokeWidth: 1, fill: '#f5f0e0', fillStyle: 'solid', roughness: 2.5
-        }));
-        addRoughToGroup(groups, 6, svg, rc.ellipse(820, 55, 120, 35, {
-            stroke: '#ddd', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
-        }));
-        addRoughToGroup(groups, 6, svg, rc.ellipse(780, 50, 70, 28, {
-            stroke: '#ddd', strokeWidth: 1, fill: '#f5f0e0', fillStyle: 'solid', roughness: 2.5
-        }));
-        // Tiny sparkle dots near shield
-        addRoughToGroup(groups, 6, svg, rc.circle(280, 100, 5, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 6, svg, rc.circle(620, 100, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 6, svg, rc.circle(270, 350, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 6, svg, rc.circle(630, 350, 5, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-
-        // G7: Label bubble
-        addRoughToGroup(groups, 7, svg, rc.ellipse(450, 460, 320, 55, {
-            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
-        }));
-
-        // Text labels (fade in with last group)
-        const labels = [];
-        labels.push(addSvgText(svg, 'RABB (your Lord, your Shield)', 450, 240, { size: '26', color: '#8B6914', weight: '700' }));
-        labels.push(addSvgText(svg, 'Say: "I seek protection!"', 450, 460, { size: '24', color: '#BF8C00', weight: '700' }));
-
-        return { svg, groups, labels };
-    }
-
-    // ===== BUILD SLIDE 2: King of Mankind (Crown) =====
-    function buildSlide1(container) {
-        const { svg, svgNS, groups } = createBaseSvg(container, 'scene1');
-        const rc = rough.svg(svg);
-
-        // G0: Main crown with layered depth
-        addRoughToGroup(groups, 0, svg, rc.path('M310,190 L340,100 L390,160 L450,70 L510,160 L560,100 L590,190 Z', {
-            stroke: '#8B6914', strokeWidth: 3.5, fill: '#FFD700', fillStyle: 'hachure',
-            roughness: 2, hachureGap: 6, hachureAngle: 45
-        }));
-        // Crown inner highlight
-        addRoughToGroup(groups, 0, svg, rc.path('M330,185 L355,115 L395,165 L450,85 L505,165 L545,115 L570,185 Z', {
-            stroke: '#DAA520', strokeWidth: 1.5, fill: 'none', roughness: 1.5
-        }));
-        addRoughToGroup(groups, 0, svg, rc.rectangle(310, 190, 280, 40, {
-            stroke: '#8B6914', strokeWidth: 3, fill: '#FFD700', fillStyle: 'solid', roughness: 1.5
-        }));
-        // Crown band decorative line
-        addRoughToGroup(groups, 0, svg, rc.line(315, 200, 585, 200, {
-            stroke: '#BF8C00', strokeWidth: 1.5, roughness: 1
-        }));
-        addRoughToGroup(groups, 0, svg, rc.line(315, 220, 585, 220, {
-            stroke: '#BF8C00', strokeWidth: 1.5, roughness: 1
-        }));
-
-        // G1: Jewels on crown - more ornate with halos
-        addRoughToGroup(groups, 1, svg, rc.circle(390, 155, 20, { stroke: '#FFECB3', fill: 'none', roughness: 1.5 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(390, 155, 16, { stroke: '#8B6914', fill: '#e74c3c', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(450, 105, 22, { stroke: '#FFECB3', fill: 'none', roughness: 1.5 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(450, 105, 18, { stroke: '#8B6914', fill: '#3498db', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(510, 155, 20, { stroke: '#FFECB3', fill: 'none', roughness: 1.5 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(510, 155, 16, { stroke: '#8B6914', fill: '#2ecc71', fillStyle: 'solid', roughness: 1 }));
-        // Band jewels with diamond shapes between them
-        addRoughToGroup(groups, 1, svg, rc.circle(370, 210, 10, { stroke: '#8B6914', fill: '#e74c3c', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 1, svg, rc.polygon([[395,205],[400,210],[395,215],[390,210]], { stroke: '#DAA520', fill: '#FFE680', fillStyle: 'solid', roughness: 0.8 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(420, 210, 10, { stroke: '#8B6914', fill: '#3498db', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 1, svg, rc.polygon([[445,205],[450,210],[445,215],[440,210]], { stroke: '#DAA520', fill: '#FFE680', fillStyle: 'solid', roughness: 0.8 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(470, 210, 10, { stroke: '#8B6914', fill: '#2ecc71', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 1, svg, rc.polygon([[495,205],[500,210],[495,215],[490,210]], { stroke: '#DAA520', fill: '#FFE680', fillStyle: 'solid', roughness: 0.8 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(520, 210, 10, { stroke: '#8B6914', fill: '#9b59b6', fillStyle: 'solid', roughness: 1 }));
-
-        // G2: Light rays - more abundant
-        addRoughToGroup(groups, 2, svg, rc.line(450, 65, 450, 15, { stroke: '#FFD700', strokeWidth: 3, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(340, 95, 295, 50, { stroke: '#FFD700', strokeWidth: 2.5, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(560, 95, 605, 50, { stroke: '#FFD700', strokeWidth: 2.5, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(370, 80, 340, 35, { stroke: '#FFECB3', strokeWidth: 2, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(530, 80, 560, 35, { stroke: '#FFECB3', strokeWidth: 2, roughness: 2 }));
-        // Sparkle at tip
-        addRoughToGroup(groups, 2, svg, roughStar(rc, 450, 10, 10, 4, { stroke: '#FFD700', fill: '#FFF9C4', fillStyle: 'solid', roughness: 1 }));
-
-        // G3: Velvet cushion under crown
-        addRoughToGroup(groups, 3, svg, rc.ellipse(450, 245, 320, 40, {
-            stroke: '#8e44ad', strokeWidth: 2, fill: '#D7BDE2', fillStyle: 'hachure',
-            roughness: 2, hachureGap: 5, hachureAngle: 0
-        }));
-        // Tassel details on cushion
-        addRoughToGroup(groups, 3, svg, rc.path('M290,245 Q280,260 285,280', { stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 3, svg, rc.path('M610,245 Q620,260 615,280', { stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 3, svg, rc.circle(285, 285, 8, { stroke: '#8e44ad', fill: '#9b59b6', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(615, 285, 8, { stroke: '#8e44ad', fill: '#9b59b6', fillStyle: 'solid', roughness: 1 }));
-
-        // G4: Left small crown (crossed out)
-        addRoughToGroup(groups, 4, svg, rc.path('M110,340 L130,300 L150,325 L170,290 L190,325 L210,300 L230,340 Z', {
-            stroke: '#aaa', strokeWidth: 2, fill: '#e0e0e0', fillStyle: 'hachure', roughness: 2, hachureGap: 6
-        }));
-        addRoughToGroup(groups, 4, svg, rc.line(100, 285, 240, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-        addRoughToGroup(groups, 4, svg, rc.line(240, 285, 100, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-
-        // G5: Right small crown (crossed out)
-        addRoughToGroup(groups, 5, svg, rc.path('M670,340 L690,300 L710,325 L730,290 L750,325 L770,300 L790,340 Z', {
-            stroke: '#aaa', strokeWidth: 2, fill: '#e0e0e0', fillStyle: 'hachure', roughness: 2, hachureGap: 6
-        }));
-        addRoughToGroup(groups, 5, svg, rc.line(660, 285, 800, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-        addRoughToGroup(groups, 5, svg, rc.line(800, 285, 660, 350, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-
-        // G6: Stars and geometric patterns in background
-        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
-        addRoughToGroup(groups, 6, svg, roughStar(rc, 100, 80, 12, 4, starOpts));
-        addRoughToGroup(groups, 6, svg, roughStar(rc, 800, 80, 12, 4, starOpts));
-        addRoughToGroup(groups, 6, svg, roughStar(rc, 50, 200, 10, 3, starOpts));
-        addRoughToGroup(groups, 6, svg, roughStar(rc, 850, 200, 10, 3, starOpts));
-        // Decorative arches flanking the crown
-        addRoughToGroup(groups, 6, svg, rc.path('M260,100 Q250,60 280,50 Q310,60 300,100', {
-            stroke: '#DAA520', strokeWidth: 1.5, roughness: 2, fill: 'none'
-        }));
-        addRoughToGroup(groups, 6, svg, rc.path('M600,100 Q590,60 620,50 Q650,60 640,100', {
-            stroke: '#DAA520', strokeWidth: 1.5, roughness: 2, fill: 'none'
-        }));
-
-        // G7: Label bubble
-        addRoughToGroup(groups, 7, svg, rc.ellipse(450, 430, 400, 55, {
-            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
-        }));
-
-        const labels = [];
-        labels.push(addSvgText(svg, 'MALIK - Only ONE real King', 450, 165, { size: '22', color: '#8B4513', weight: '700' }));
-        labels.push(addSvgText(svg, 'Only ONE real King. Everyone else? Temporary.', 450, 430, { size: '22', color: '#BF8C00', weight: '700' }));
-
-        return { svg, groups, labels };
-    }
-
-    // ===== BUILD SLIDE 3: God of Mankind (One Light) =====
-    function buildSlide2(container) {
-        const { svg, svgNS, groups } = createBaseSvg(container, 'scene2');
-        const rc = rough.svg(svg);
-
-        // G0: Concentric glowing circles with outermost aura
-        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 180, { stroke: '#FFECB3', strokeWidth: 1.5, fill: '#FFFDE7', fillStyle: 'solid', roughness: 2.5 }));
-        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 140, { stroke: '#FFD700', strokeWidth: 2, fill: '#FFF3B0', fillStyle: 'solid', roughness: 2 }));
-        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 95, { stroke: '#c9a84c', strokeWidth: 2.5, fill: '#FFE680', fillStyle: 'solid', roughness: 1.5 }));
-        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 50, { stroke: '#8B6914', strokeWidth: 3, fill: '#FFD700', fillStyle: 'solid', roughness: 1 }));
-        // Innermost bright dot
-        addRoughToGroup(groups, 0, svg, rc.circle(450, 200, 18, { stroke: '#FFF', strokeWidth: 2, fill: '#FFF8E1', fillStyle: 'solid', roughness: 0.5 }));
-
-        // G1: 12 radiating lines (more directions)
-        const angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
-        angles.forEach(deg => {
-            const rad = deg * Math.PI / 180;
-            const x1 = 450 + 80 * Math.cos(rad);
-            const y1 = 200 + 80 * Math.sin(rad);
-            const x2 = 450 + 150 * Math.cos(rad);
-            const y2 = 200 + 150 * Math.sin(rad);
-            addRoughToGroup(groups, 1, svg, rc.line(x1, y1, x2, y2, {
-                stroke: '#FFD700', strokeWidth: 2.5, roughness: 2
-            }));
-        });
-        // Secondary faint outer rays
-        [0, 90, 180, 270].forEach(deg => {
-            const rad = deg * Math.PI / 180;
-            const x1 = 450 + 150 * Math.cos(rad);
-            const y1 = 200 + 150 * Math.sin(rad);
-            const x2 = 450 + 200 * Math.cos(rad);
-            const y2 = 200 + 200 * Math.sin(rad);
-            addRoughToGroup(groups, 1, svg, rc.line(x1, y1, x2, y2, {
-                stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2.5
-            }));
-        });
-
-        // G2: Compass arrows from corners pointing to center
-        const arrows = [
-            [100, 50, 340, 130], [800, 50, 560, 130],
-            [100, 380, 340, 275], [800, 380, 560, 275]
-        ];
-        arrows.forEach(([x1,y1,x2,y2]) => {
-            addRoughToGroup(groups, 2, svg, rc.line(x1, y1, x2, y2, {
-                stroke: '#e67e22', strokeWidth: 2.5, roughness: 1.5
-            }));
-        });
-        // Arrowhead triangles at endpoints
-        addRoughToGroup(groups, 2, svg, rc.polygon([[340,130],[330,120],[350,120]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 2, svg, rc.polygon([[560,130],[550,120],[570,120]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 2, svg, rc.polygon([[340,275],[330,285],[350,285]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 2, svg, rc.polygon([[560,275],[550,285],[570,285]], { stroke: '#e67e22', fill: '#e67e22', fillStyle: 'solid', roughness: 1 }));
-
-        // G3: Dimmed circles with red X (false gods) - more detailed
-        // Left false idol
-        addRoughToGroup(groups, 3, svg, rc.circle(130, 200, 40, { stroke: '#bbb', strokeWidth: 1.5, fill: '#e8e8e8', fillStyle: 'solid', roughness: 2 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(130, 200, 25, { stroke: '#ccc', strokeWidth: 1, fill: '#ddd', fillStyle: 'solid', roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.line(108, 178, 152, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.line(152, 178, 108, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-        // Right false idol
-        addRoughToGroup(groups, 3, svg, rc.circle(770, 200, 40, { stroke: '#bbb', strokeWidth: 1.5, fill: '#e8e8e8', fillStyle: 'solid', roughness: 2 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(770, 200, 25, { stroke: '#ccc', strokeWidth: 1, fill: '#ddd', fillStyle: 'solid', roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.line(748, 178, 792, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.line(792, 178, 748, 222, { stroke: '#e74c3c', strokeWidth: 3.5, roughness: 1.5 }));
-
-        // G4: Stars scattered around the light
-        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 250, 60, 12, 4, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 650, 55, 11, 4, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 180, 340, 10, 3, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 720, 340, 10, 3, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 300, 370, 9, 3, starOpts));
-        addRoughToGroup(groups, 4, svg, roughStar(rc, 600, 370, 9, 3, starOpts));
-        // Geometric pattern ring between inner and outer circles
-        addRoughToGroup(groups, 4, svg, rc.circle(450, 200, 120, {
-            stroke: '#DAA520', strokeWidth: 1, fill: 'none', roughness: 1.5,
-            strokeLineDash: [4, 6]
-        }));
-
-        // G5: Clouds and atmospheric wisps
-        addRoughToGroup(groups, 5, svg, rc.ellipse(80, 50, 120, 35, {
-            stroke: '#e0d8c8', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
-        }));
-        addRoughToGroup(groups, 5, svg, rc.ellipse(125, 48, 70, 25, {
-            stroke: '#e0d8c8', strokeWidth: 1, fill: '#f8f3e5', fillStyle: 'solid', roughness: 2.5
-        }));
-        addRoughToGroup(groups, 5, svg, rc.ellipse(830, 50, 110, 35, {
-            stroke: '#e0d8c8', strokeWidth: 1.5, fill: '#f5f0e0', fillStyle: 'solid', roughness: 3
-        }));
-        addRoughToGroup(groups, 5, svg, rc.ellipse(790, 48, 60, 22, {
-            stroke: '#e0d8c8', strokeWidth: 1, fill: '#f8f3e5', fillStyle: 'solid', roughness: 2.5
-        }));
-        // Tiny sparkle dots around the light
-        addRoughToGroup(groups, 5, svg, rc.circle(350, 95, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(555, 100, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(370, 310, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(530, 315, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-
-        // G6: Label bubble
-        addRoughToGroup(groups, 6, svg, rc.ellipse(450, 440, 400, 55, {
-            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
-        }));
-
-        const labels = [];
-        labels.push(addSvgText(svg, 'ILAH - Only ONE deserves worship', 450, 205, { size: '20', color: '#8B4513', weight: '700' }));
-        labels.push(addSvgText(svg, 'Everything points to Him. Only ONE.', 450, 440, { size: '22', color: '#BF8C00', weight: '700' }));
-
-        return { svg, groups, labels };
-    }
-
-    // ===== BUILD SLIDE 4: The Whisperer Who Retreats =====
-    function buildSlide3(container) {
-        const { svg, svgNS, groups } = createBaseSvg(container, 'scene3');
-        const rc = rough.svg(svg);
-
-        // G0: Heart in center with inner detail
-        addRoughToGroup(groups, 0, svg, rc.path(
-            'M450,210 C450,170 400,120 365,155 C330,190 355,230 450,290 C545,230 570,190 535,155 C500,120 450,170 450,210 Z',
-            { stroke: '#E91E63', strokeWidth: 3, fill: '#FADBD8', fillStyle: 'solid', roughness: 2 }
-        ));
-        // Inner heart glow
-        addRoughToGroup(groups, 0, svg, rc.path(
-            'M450,220 C450,195 420,160 400,180 C380,200 395,220 450,260 C505,220 520,200 500,180 C480,160 450,195 450,220 Z',
-            { stroke: '#F48FB1', strokeWidth: 1.5, fill: '#FCE4EC', fillStyle: 'solid', roughness: 1.5 }
-        ));
-        // Heartbeat line through heart
-        addRoughToGroup(groups, 0, svg, rc.path('M400,215 L425,215 L435,195 L445,235 L455,195 L465,235 L475,215 L500,215', {
-            stroke: '#e74c3c', strokeWidth: 2, roughness: 1.5, fill: 'none'
-        }));
-
-        // G1: Dark smoke/whisper lines from left - more tendrils
-        addRoughToGroup(groups, 1, svg, rc.path('M40,150 Q90,120 140,160 Q190,200 240,175 Q285,155 320,180', {
-            stroke: '#333', strokeWidth: 4.5, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 1, svg, rc.path('M60,200 Q110,175 160,210 Q200,240 245,215 Q285,195 325,215', {
-            stroke: '#444', strokeWidth: 3.5, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 1, svg, rc.path('M80,250 Q130,230 170,255 Q210,275 250,250 Q280,235 315,248', {
-            stroke: '#555', strokeWidth: 2.5, roughness: 3, fill: 'none'
-        }));
-        // Dark smoky blobs at the source
-        addRoughToGroup(groups, 1, svg, rc.ellipse(45, 180, 50, 70, {
-            stroke: '#333', strokeWidth: 2, fill: '#444', fillStyle: 'hachure', roughness: 3, hachureGap: 4, hachureAngle: 30
-        }));
-        addRoughToGroup(groups, 1, svg, rc.ellipse(30, 210, 35, 50, {
-            stroke: '#444', strokeWidth: 1.5, fill: '#555', fillStyle: 'hachure', roughness: 3, hachureGap: 5
-        }));
-
-        // G2: "psst" and "do it" text labels with whisper bubbles
-        addRoughToGroup(groups, 2, svg, rc.ellipse(140, 130, 90, 35, {
-            stroke: '#999', strokeWidth: 1, fill: '#f0ece0', fillStyle: 'solid', roughness: 2
-        }));
-        const psst = addSvgText(svg, 'psst...', 140, 130, { size: '18', color: '#666', weight: '400', style: 'italic' });
-        addToGroup(groups, 2, psst);
-        addRoughToGroup(groups, 2, svg, rc.ellipse(210, 160, 80, 30, {
-            stroke: '#999', strokeWidth: 1, fill: '#f0ece0', fillStyle: 'solid', roughness: 2
-        }));
-        const doit = addSvgText(svg, 'do it...', 210, 160, { size: '16', color: '#666', weight: '400', style: 'italic' });
-        addToGroup(groups, 2, doit);
-        addRoughToGroup(groups, 2, svg, rc.ellipse(160, 280, 100, 30, {
-            stroke: '#999', strokeWidth: 1, fill: '#f0ece0', fillStyle: 'solid', roughness: 2
-        }));
-        const nobody = addSvgText(svg, 'no one sees...', 160, 280, { size: '14', color: '#777', weight: '400', style: 'italic' });
-        addToGroup(groups, 2, nobody);
-
-        // G3: Golden light burst on right - larger, more radiant
-        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 90, { stroke: '#FFECB3', strokeWidth: 1.5, fill: '#FFFDE7', fillStyle: 'solid', roughness: 2 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 65, { stroke: '#FFD700', strokeWidth: 2, fill: '#FFF3B0', fillStyle: 'solid', roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 35, { stroke: '#8B6914', strokeWidth: 2.5, fill: '#FFD700', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(700, 210, 15, { stroke: '#FFF', strokeWidth: 1.5, fill: '#FFF8E1', fillStyle: 'solid', roughness: 0.5 }));
-        // Rays from light - more directions
-        const lightRays = [
-            [700,160,700,125], [700,260,700,295],
-            [740,195,770,180], [740,230,770,245],
-            [660,195,630,180], [660,230,630,245],
-            [730,180,755,160], [730,245,755,265],
-            [670,180,645,160], [670,245,645,265]
-        ];
-        lightRays.forEach(([x1,y1,x2,y2]) => {
-            addRoughToGroup(groups, 3, svg, rc.line(x1, y1, x2, y2, {
-                stroke: '#FFD700', strokeWidth: 2, roughness: 2
-            }));
-        });
-
-        // G4: Shadow retreating with more detail
-        addRoughToGroup(groups, 4, svg, rc.path('M620,195 Q600,180 585,200', {
-            stroke: '#555', strokeWidth: 2.5, roughness: 2, fill: 'none',
-            strokeLineDash: [6, 6]
-        }));
-        addRoughToGroup(groups, 4, svg, rc.path('M615,225 Q595,215 585,235', {
-            stroke: '#666', strokeWidth: 2, roughness: 2, fill: 'none',
-            strokeLineDash: [5, 5]
-        }));
-        addRoughToGroup(groups, 4, svg, rc.path('M610,210 Q590,205 580,215', {
-            stroke: '#777', strokeWidth: 1.5, roughness: 2, fill: 'none',
-            strokeLineDash: [4, 4]
-        }));
-        // Retreat arrow with green glow
-        addRoughToGroup(groups, 4, svg, rc.line(620, 310, 680, 310, { stroke: '#2ecc71', strokeWidth: 2.5, roughness: 1.5 }));
-        addRoughToGroup(groups, 4, svg, rc.polygon([[680,305],[695,310],[680,315]], { stroke: '#2ecc71', fill: '#2ecc71', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 4, svg, rc.line(620, 330, 680, 330, { stroke: '#27ae60', strokeWidth: 1.5, roughness: 1.5 }));
-        addRoughToGroup(groups, 4, svg, rc.polygon([[680,326],[690,330],[680,334]], { stroke: '#27ae60', fill: '#27ae60', fillStyle: 'solid', roughness: 1 }));
-
-        // G5: Stars and atmospheric dust
-        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 750, 80, 11, 4, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 820, 150, 9, 3, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 800, 300, 10, 4, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 450, 60, 8, 3, starOpts));
-        // Small sparkle circles
-        addRoughToGroup(groups, 5, svg, rc.circle(500, 100, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(400, 80, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(550, 350, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-
-        // G6: Broken chain links (shaytan flees)
-        addRoughToGroup(groups, 6, svg, rc.ellipse(560, 330, 25, 15, { stroke: '#888', strokeWidth: 2, fill: 'none', roughness: 2 }));
-        addRoughToGroup(groups, 6, svg, rc.ellipse(540, 345, 25, 15, { stroke: '#888', strokeWidth: 2, fill: 'none', roughness: 2 }));
-        addRoughToGroup(groups, 6, svg, rc.ellipse(520, 355, 25, 15, { stroke: '#999', strokeWidth: 1.5, fill: 'none', roughness: 2 }));
-        // Crack/break mark between chains
-        addRoughToGroup(groups, 6, svg, rc.line(550, 335, 545, 345, { stroke: '#e74c3c', strokeWidth: 2, roughness: 1.5 }));
-
-        // G7: Label bubble
-        addRoughToGroup(groups, 7, svg, rc.ellipse(450, 440, 500, 55, {
-            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
-        }));
-
-        const labels = [];
-        labels.push(addSvgText(svg, 'your heart', 450, 255, { size: '18', color: '#8B4513' }));
-        labels.push(addSvgText(svg, 'dhikr!', 700, 310, { size: '18', color: '#27ae60', weight: '700' }));
-        labels.push(addSvgText(svg, 'he RUNS!', 700, 340, { size: '16', color: '#27ae60' }));
-        labels.push(addSvgText(svg, 'He whispers... but RUNS when you remember Allah!', 450, 440, { size: '20', color: '#BF8C00', weight: '700' }));
-
-        return { svg, groups, labels };
-    }
-
-    // ===== BUILD SLIDE 5: Whispers in the Chest =====
-    function buildSlide4(container) {
-        const { svg, svgNS, groups } = createBaseSvg(container, 'scene4');
-        const rc = rough.svg(svg);
-
-        // G0: Large chest/ribcage outline (abstract oval) with layered depth
-        addRoughToGroup(groups, 0, svg, rc.ellipse(450, 220, 300, 320, {
-            stroke: '#d4b896', strokeWidth: 1.5, fill: '#FFF3E0', fillStyle: 'solid', roughness: 3
-        }));
-        addRoughToGroup(groups, 0, svg, rc.ellipse(450, 220, 280, 300, {
-            stroke: '#c9a84c', strokeWidth: 3, fill: '#FDE9D9', fillStyle: 'solid', roughness: 2.5
-        }));
-        // Ribcage abstract lines (curved ribs)
-        addRoughToGroup(groups, 0, svg, rc.path('M370,130 Q430,120 490,130', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 0, svg, rc.path('M355,160 Q430,148 505,160', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 0, svg, rc.path('M345,310 Q430,325 515,310', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 0, svg, rc.path('M355,340 Q430,352 505,340', { stroke: '#d4b896', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
-
-        // G1: Heart inside with detail
-        addRoughToGroup(groups, 1, svg, rc.path(
-            'M450,195 C450,170 420,145 400,165 C380,185 395,210 450,245 C505,210 520,185 500,165 C480,145 450,170 450,195 Z',
-            { stroke: '#e74c3c', strokeWidth: 2.5, fill: '#F1948A', fillStyle: 'solid', roughness: 1.5 }
-        ));
-        // Inner heart highlight
-        addRoughToGroup(groups, 1, svg, rc.path(
-            'M450,205 C450,190 430,170 418,182 C406,194 415,210 450,232 C485,210 494,194 482,182 C470,170 450,190 450,205 Z',
-            { stroke: '#F48FB1', strokeWidth: 1.5, fill: '#FCE4EC', fillStyle: 'solid', roughness: 1 }
-        ));
-        // Heartbeat pulse line
-        addRoughToGroup(groups, 1, svg, rc.path('M410,210 L425,210 L435,192 L445,228 L455,192 L465,228 L475,210 L490,210', {
-            stroke: '#c0392b', strokeWidth: 1.8, roughness: 1, fill: 'none'
-        }));
-
-        // G2: Dark wispy thought lines entering from sides - more elaborate
-        addRoughToGroup(groups, 2, svg, rc.path('M80,145 Q130,130 180,155 Q225,175 270,160 Q300,150 320,165', {
-            stroke: '#444', strokeWidth: 3, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 2, svg, rc.path('M100,195 Q150,180 200,205 Q235,220 270,205 Q300,190 320,200', {
-            stroke: '#555', strokeWidth: 2.5, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 2, svg, rc.path('M120,245 Q160,230 200,250 Q235,265 270,248 Q295,235 315,242', {
-            stroke: '#666', strokeWidth: 2, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 2, svg, rc.path('M820,155 Q770,140 720,165 Q680,180 640,168 Q610,158 590,170', {
-            stroke: '#444', strokeWidth: 3, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 2, svg, rc.path('M800,205 Q750,190 700,215 Q665,230 630,215 Q600,200 585,210', {
-            stroke: '#555', strokeWidth: 2.5, roughness: 3, fill: 'none'
-        }));
-        addRoughToGroup(groups, 2, svg, rc.path('M790,255 Q740,240 695,260 Q660,272 630,258 Q605,245 590,252', {
-            stroke: '#666', strokeWidth: 2, roughness: 3, fill: 'none'
-        }));
-        // Dark smoke sources on edges
-        addRoughToGroup(groups, 2, svg, rc.ellipse(65, 190, 50, 80, {
-            stroke: '#444', strokeWidth: 1.5, fill: '#555', fillStyle: 'hachure', roughness: 3, hachureGap: 5
-        }));
-        addRoughToGroup(groups, 2, svg, rc.ellipse(835, 195, 50, 80, {
-            stroke: '#444', strokeWidth: 1.5, fill: '#555', fillStyle: 'hachure', roughness: 3, hachureGap: 5
-        }));
-
-        // G3: Thought bubbles with connecting dots
-        addRoughToGroup(groups, 3, svg, rc.ellipse(100, 90, 140, 55, {
-            stroke: '#bbb', strokeWidth: 2, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
-        }));
-        addRoughToGroup(groups, 3, svg, rc.circle(145, 125, 10, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(160, 140, 6, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.ellipse(800, 90, 140, 55, {
-            stroke: '#bbb', strokeWidth: 2, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
-        }));
-        addRoughToGroup(groups, 3, svg, rc.circle(755, 125, 10, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
-        addRoughToGroup(groups, 3, svg, rc.circle(740, 140, 6, { stroke: '#ccc', fill: '#e8e8e8', fillStyle: 'solid', roughness: 1.5 }));
-
-        // Additional bottom thought bubbles
-        addRoughToGroup(groups, 3, svg, rc.ellipse(130, 360, 120, 45, {
-            stroke: '#bbb', strokeWidth: 1.5, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
-        }));
-        addRoughToGroup(groups, 3, svg, rc.ellipse(770, 360, 120, 45, {
-            stroke: '#bbb', strokeWidth: 1.5, fill: '#f0f0f0', fillStyle: 'solid', roughness: 2
-        }));
-
-        // G3 text labels in bubbles
-        const t1 = addSvgText(svg, '"skip prayer..."', 100, 82, { size: '14', color: '#888', weight: '400' });
-        const t2 = addSvgText(svg, '"give up..."', 100, 100, { size: '14', color: '#888', weight: '400' });
-        const t3 = addSvgText(svg, '"no one cares..."', 800, 82, { size: '14', color: '#888', weight: '400' });
-        const t4 = addSvgText(svg, '"why bother..."', 800, 100, { size: '14', color: '#888', weight: '400' });
-        const t5 = addSvgText(svg, '"you\'re alone..."', 130, 360, { size: '13', color: '#888', weight: '400' });
-        const t6 = addSvgText(svg, '"just this once..."', 770, 360, { size: '13', color: '#888', weight: '400' });
-        addToGroup(groups, 3, t1); addToGroup(groups, 3, t2);
-        addToGroup(groups, 3, t3); addToGroup(groups, 3, t4);
-        addToGroup(groups, 3, t5); addToGroup(groups, 3, t6);
-
-        // G4: Golden dashed circle shield around heart
-        addRoughToGroup(groups, 4, svg, rc.circle(450, 215, 120, {
-            stroke: '#FFD700', strokeWidth: 2.5, fill: 'none', roughness: 2,
-            strokeLineDash: [8, 5]
-        }));
-        // Outer protective ring
-        addRoughToGroup(groups, 4, svg, rc.circle(450, 215, 140, {
-            stroke: '#FFECB3', strokeWidth: 1.5, fill: 'none', roughness: 2.5,
-            strokeLineDash: [5, 8]
-        }));
-
-        // G5: Light sparkles representing dhikr protection
-        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 380, 130, 10, 4, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 520, 130, 10, 4, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 360, 300, 9, 3, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 540, 300, 9, 3, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 330, 215, 8, 3, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 570, 215, 8, 3, starOpts));
-        // Tiny sparkle dots
-        addRoughToGroup(groups, 5, svg, rc.circle(400, 115, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(500, 115, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(350, 250, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(550, 250, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-
-        // G6: Label bubble
-        addRoughToGroup(groups, 6, svg, rc.ellipse(450, 450, 460, 55, {
-            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
-        }));
-
-        const labels = [];
-        labels.push(addSvgText(svg, 'sadr (chest)', 450, 220, { size: '16', color: '#8B4513' }));
-        labels.push(addSvgText(svg, 'He targets your CHEST, where feelings live', 450, 450, { size: '20', color: '#BF8C00', weight: '700' }));
-
-        return { svg, groups, labels };
-    }
-
-    // ===== BUILD SLIDE 6: From Jinn AND Mankind =====
-    function buildSlide5(container) {
-        const { svg, svgNS, groups } = createBaseSvg(container, 'scene5');
-        const rc = rough.svg(svg);
-
-        // G0: Left - Abstract blue smoke/fire form = Jinn (more layered)
-        addRoughToGroup(groups, 0, svg, rc.path(
-            'M140,120 Q170,80 190,130 Q210,170 180,220 Q150,280 190,310 Q170,350 130,320 Q90,280 110,220 Q80,170 120,130 Z',
-            { stroke: '#3498db', strokeWidth: 3, fill: '#AED6F1', fillStyle: 'hachure', roughness: 2.5, hachureGap: 6, hachureAngle: 30 }
-        ));
-        // Inner flame wisps
-        addRoughToGroup(groups, 0, svg, rc.path(
-            'M155,145 Q175,115 185,155 Q195,195 170,235 Q150,265 165,285',
-            { stroke: '#2980b9', strokeWidth: 2, roughness: 3, fill: 'none' }
-        ));
-        addRoughToGroup(groups, 0, svg, rc.path(
-            'M130,160 Q145,140 150,170 Q155,200 140,230 Q130,255 140,275',
-            { stroke: '#5DADE2', strokeWidth: 1.5, roughness: 3, fill: 'none' }
-        ));
-        // Blue sparks/embers floating off
-        addRoughToGroup(groups, 0, svg, rc.circle(110, 100, 6, { stroke: '#5DADE2', fill: '#AED6F1', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 0, svg, rc.circle(180, 85, 5, { stroke: '#5DADE2', fill: '#AED6F1', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 0, svg, rc.circle(95, 140, 4, { stroke: '#85C1E9', fill: '#D6EAF8', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 0, svg, rc.circle(200, 110, 4, { stroke: '#85C1E9', fill: '#D6EAF8', fillStyle: 'solid', roughness: 1 }));
-
-        // G1: Right - Purple abstract silhouette (NO face) with speech lines
-        addRoughToGroup(groups, 1, svg, rc.path(
-            'M720,100 Q760,90 780,130 Q800,180 790,230 Q780,290 750,330 Q720,350 700,330 Q670,290 680,230 Q660,180 680,130 Q700,90 720,100 Z',
-            { stroke: '#8e44ad', strokeWidth: 3, fill: '#D7BDE2', fillStyle: 'hachure', roughness: 2.5, hachureGap: 6, hachureAngle: -30 }
-        ));
-        // Inner silhouette shadow layers
-        addRoughToGroup(groups, 1, svg, rc.path(
-            'M730,130 Q755,120 765,150 Q775,195 768,230 Q760,270 740,300 Q725,315 715,300 Q695,270 705,230 Q690,195 705,155 Q715,125 730,130 Z',
-            { stroke: '#7D3C98', strokeWidth: 1.5, fill: '#E8DAEF', fillStyle: 'solid', roughness: 2 }
-        ));
-        // Speech/whisper lines from silhouette - more elaborate
-        addRoughToGroup(groups, 1, svg, rc.path('M665,175 Q640,165 620,170', { stroke: '#8e44ad', strokeWidth: 2.5, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 1, svg, rc.path('M665,205 Q635,198 610,205', { stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 1, svg, rc.path('M665,235 Q640,232 625,240', { stroke: '#9b59b6', strokeWidth: 2, roughness: 2, fill: 'none' }));
-        addRoughToGroup(groups, 1, svg, rc.path('M665,260 Q645,258 630,265', { stroke: '#9b59b6', strokeWidth: 1.5, roughness: 2, fill: 'none' }));
-        // Purple sparks
-        addRoughToGroup(groups, 1, svg, rc.circle(790, 95, 5, { stroke: '#9b59b6', fill: '#D7BDE2', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(810, 150, 4, { stroke: '#9b59b6', fill: '#D7BDE2', fillStyle: 'solid', roughness: 1 }));
-        addRoughToGroup(groups, 1, svg, rc.circle(670, 90, 4, { stroke: '#BB8FCE', fill: '#E8DAEF', fillStyle: 'solid', roughness: 1 }));
-
-        // G2: Center - Golden shield with glow = YOU (enhanced)
-        // Outer aura
-        addRoughToGroup(groups, 2, svg, rc.path('M450,105 L535,140 L535,270 Q535,355 450,375 Q365,355 365,270 L365,140 Z', {
-            stroke: '#FFECB3', strokeWidth: 1.5, fill: '#FFFDE7', fillStyle: 'solid', roughness: 2.5
-        }));
-        addRoughToGroup(groups, 2, svg, rc.path('M450,120 L520,150 L520,260 Q520,340 450,360 Q380,340 380,260 L380,150 Z', {
-            stroke: '#8B6914', strokeWidth: 3.5, fill: '#FFE680', fillStyle: 'solid', roughness: 2
-        }));
-        // Shield emblem
-        addRoughToGroup(groups, 2, svg, rc.circle(450, 230, 60, {
-            stroke: '#FFD700', strokeWidth: 2, fill: '#FFF3B0', fillStyle: 'solid', roughness: 1.5
-        }));
-        addRoughToGroup(groups, 2, svg, rc.circle(450, 230, 30, {
-            stroke: '#BF8C00', strokeWidth: 1.5, fill: '#FFD700', fillStyle: 'solid', roughness: 1
-        }));
-        // Shield decorative inner lines
-        addRoughToGroup(groups, 2, svg, rc.polygon([[450,160],[485,210],[450,260],[415,210]], {
-            stroke: '#DAA520', strokeWidth: 1.5, fill: 'none', roughness: 1.5
-        }));
-        // Light emanating from shield - more rays
-        addRoughToGroup(groups, 2, svg, rc.line(450, 115, 450, 75, { stroke: '#FFD700', strokeWidth: 2.5, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(375, 145, 340, 115, { stroke: '#FFD700', strokeWidth: 2, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(525, 145, 560, 115, { stroke: '#FFD700', strokeWidth: 2, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(375, 300, 340, 330, { stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2 }));
-        addRoughToGroup(groups, 2, svg, rc.line(525, 300, 560, 330, { stroke: '#FFECB3', strokeWidth: 1.5, roughness: 2 }));
-
-        // G3: Whisper deflection lines (whispers bouncing off shield)
-        addRoughToGroup(groups, 3, svg, rc.path('M230,180 Q280,175 330,190', {
-            stroke: '#3498db', strokeWidth: 2, roughness: 2, fill: 'none',
-            strokeLineDash: [5, 5]
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M250,230 Q290,225 340,235', {
-            stroke: '#3498db', strokeWidth: 1.5, roughness: 2, fill: 'none',
-            strokeLineDash: [4, 5]
-        }));
-        // Deflected lines bouncing away
-        addRoughToGroup(groups, 3, svg, rc.path('M370,170 Q350,150 330,130', {
-            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
-            strokeLineDash: [4, 4]
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M370,280 Q350,300 330,315', {
-            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
-            strokeLineDash: [4, 4]
-        }));
-        // Right side deflection
-        addRoughToGroup(groups, 3, svg, rc.path('M610,190 Q575,188 540,195', {
-            stroke: '#8e44ad', strokeWidth: 2, roughness: 2, fill: 'none',
-            strokeLineDash: [5, 5]
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M600,240 Q570,238 545,242', {
-            stroke: '#8e44ad', strokeWidth: 1.5, roughness: 2, fill: 'none',
-            strokeLineDash: [4, 5]
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M530,170 Q550,150 570,130', {
-            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
-            strokeLineDash: [4, 4]
-        }));
-        addRoughToGroup(groups, 3, svg, rc.path('M530,280 Q550,300 570,315', {
-            stroke: '#FFD700', strokeWidth: 1.5, roughness: 2, fill: 'none',
-            strokeLineDash: [4, 4]
-        }));
-
-        // G4: Labels for Jinn and People
-        const jinnLabel = addSvgText(svg, 'JINN', 155, 360, { size: '22', color: '#2980b9', weight: '700' });
-        const jinnSub = addSvgText(svg, '(invisible but real)', 155, 385, { size: '16', color: '#3498db' });
-        addToGroup(groups, 4, jinnLabel);
-        addToGroup(groups, 4, jinnSub);
-
-        const pplLabel = addSvgText(svg, 'PEOPLE', 740, 360, { size: '22', color: '#8e44ad', weight: '700' });
-        const pplSub = addSvgText(svg, '(looks friendly but whispers)', 740, 385, { size: '14', color: '#9b59b6' });
-        addToGroup(groups, 4, pplLabel);
-        addToGroup(groups, 4, pplSub);
-
-        const youLabel = addSvgText(svg, 'YOU', 450, 235, { size: '24', color: '#8B6914', weight: '700' });
-        addToGroup(groups, 4, youLabel);
-
-        // G5: Stars and atmospheric details
-        const starOpts = { stroke: '#FFD54F', fill: '#FFF9C4', fillStyle: 'hachure', roughness: 1.5, hachureGap: 3 };
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 450, 55, 12, 4, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 310, 60, 9, 3, starOpts));
-        addRoughToGroup(groups, 5, svg, roughStar(rc, 590, 60, 9, 3, starOpts));
-        // Ground/floor line
-        addRoughToGroup(groups, 5, svg, rc.line(50, 410, 850, 410, {
-            stroke: '#d4b896', strokeWidth: 1.5, roughness: 3
-        }));
-        addRoughToGroup(groups, 5, svg, rc.line(100, 415, 800, 415, {
-            stroke: '#e0d0b8', strokeWidth: 1, roughness: 2.5
-        }));
-        // Sparkle dots
-        addRoughToGroup(groups, 5, svg, rc.circle(350, 90, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(550, 85, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(420, 400, 3, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-        addRoughToGroup(groups, 5, svg, rc.circle(480, 395, 4, { stroke: '#FFD700', fill: '#FFD700', fillStyle: 'solid', roughness: 0.5 }));
-
-        // G6: Label bubble
-        addRoughToGroup(groups, 6, svg, rc.ellipse(450, 450, 460, 55, {
-            stroke: '#c9a84c', strokeWidth: 2.5, roughness: 2, fill: '#FFF8E1', fillStyle: 'solid'
-        }));
-
-        const labels = [];
-        labels.push(addSvgText(svg, 'Whisperers from BOTH: jinn AND humans!', 450, 450, { size: '22', color: '#BF8C00', weight: '700' }));
-
-        return { svg, groups, labels };
-    }
-
-    const buildFunctions = [buildSlide0, buildSlide1, buildSlide2, buildSlide3, buildSlide4, buildSlide5];
-
-    // ===== PLAY SLIDE ANIMATION =====
-    async function playSlideAnimation(idx) {
-        const container = document.getElementById('slideDrawing' + idx);
-        const penCursor = document.getElementById('penCursor' + idx);
-        const data = slideData[idx];
-
-        // Abort any previous typewriter for this slide
-        typewriterAbortFlags[idx] = true;
-        await new Promise(r => setTimeout(r, 50));
-        typewriterAbortFlags[idx] = false;
-
-        // Reset bottom text
-        const badge = document.getElementById('badge' + idx);
-        const arabic = document.getElementById('arabic' + idx);
-        const translit = document.getElementById('translit' + idx);
-        const kid = document.getElementById('kid' + idx);
-        badge.style.opacity = '0';
-        arabic.textContent = '';
-        translit.textContent = '';
-        kid.textContent = '';
-
-        // Build scene
-        const { svg, groups, labels } = buildFunctions[idx](container);
-        hideAllPaths(groups);
-
-        // Timing per group
-        const timings = [800, 600, 500, 500, 400, 400, 350, 350];
-        const gap = 150;
-
-        let textStarted = false;
-        let textPromise = null;
-
-        for (let i = 0; i < groups.length; i++) {
-            if (!groups[i] || groups[i].length === 0) continue;
-            await animateGroup(groups[i], timings[i] || 500, penCursor, svg, [VB_W, VB_H]);
-
-            // Start bottom text after group 2
-            if (i === 2 && !textStarted) {
-                textStarted = true;
-                textPromise = (async () => {
-                    badge.style.opacity = '1';
-                    await new Promise(r => setTimeout(r, 200 / speed));
-                    await typewrite(arabic, data.arabic, { charDelay: 55, rtl: true }, idx);
-                    await new Promise(r => setTimeout(r, 150 / speed));
-                    await typewrite(translit, data.translit, { charDelay: 35 }, idx);
-                    await new Promise(r => setTimeout(r, 150 / speed));
-                    await typewrite(kid, data.kid, { charDelay: 20 }, idx);
-                })();
-            }
-
-            if (i < groups.length - 1) {
-                await new Promise(r => setTimeout(r, gap / speed));
-            }
+                animationId = requestAnimationFrame(tick);
+            });
         }
 
-        // Fade in labels
-        hidePen(penCursor);
-        await new Promise(r => setTimeout(r, 100));
-        labels.forEach(el => {
-            el.style.transition = `opacity ${0.5/speed}s ease`;
-            el.style.opacity = '1';
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            // Auto-calculate timing: ~600ms per group
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
         });
 
-        if (textPromise) await textPromise;
-
-        slideAnimations[idx] = 'done';
-    }
-
-    function triggerSlideAnimation(idx) {
-        // Always replay when navigating
-        slideAnimations[idx] = 'playing';
-        playSlideAnimation(idx);
-    }
-
-    // Auto-play first slide on load
-    window.addEventListener('load', () => {
-        setTimeout(() => triggerSlideAnimation(0), 500);
-    });
-
-
-    // ===== SCROLL REVEAL OBSERVER =====
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.reveal, .reveal-3d, .reveal-scale, .glow-line').forEach(el => {
-        revealObserver.observe(el);
-    });
     </script>
 </body>
 </html>

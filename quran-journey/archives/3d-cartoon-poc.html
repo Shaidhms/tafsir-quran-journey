@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Cartoon Doodle PoC - Al-Kawthar Verse 1</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .subtitle { color: #888; font-size: 0.9em; margin-bottom: 25px; }
+
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg {
+            width: 100%;
+            height: 100%;
+        }
+
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0;
+            top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg {
+            width: 52px;
+            height: 65px;
+            display: block;
+        }
+
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 12px 28px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 1em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+
+        .speed-control {
+            margin-top: 15px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>3D Cartoon Doodle PoC</h1>
+    <p class="subtitle">Surah Al-Kawthar, Verse 1 - "We have given you abundance"</p>
+
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Pencil body gradient - wooden yellow with 3D shading -->
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <!-- Metal ferrule gradient -->
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <!-- Eraser gradient -->
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <!-- Wood tip gradient -->
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <!-- Eraser -->
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <!-- Eraser highlight -->
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <!-- Ferrule (metal band) -->
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <!-- Ferrule crimp lines -->
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <!-- Pencil body -->
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <!-- Pencil body highlight stripe -->
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <!-- Pencil brand text area -->
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <!-- Sharpened wood cone -->
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <!-- Wood cone shading -->
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <!-- Graphite tip -->
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <!-- Graphite shine -->
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== BUILD THE CARTOON SCENE =====
+        // Al-Kawthar: "We have granted you abundance"
+        // Scene: A lush cartoon river (Al-Kawthar) flowing through paradise
+        // with cartoon palm trees, a glowing sky, and a small figure in awe
+
+        function buildScene() {
+            const oldSvg = document.getElementById('sceneSvg');
+            if (oldSvg) oldSvg.remove();
+
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+
+            const groups = [];
+            function addToGroup(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+
+            // ===== DEFS: Gradients for 3D cartoon look =====
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            // Sky gradient - warm paradise sunset
+            const skyGrad = createLinearGrad('skyGrad', '0%', '0%', '0%', '100%', [
+                ['0%', '#FFE0B2'], ['40%', '#FFCC80'], ['70%', '#FFF9C4'], ['100%', '#E1F5FE']
+            ]);
+            defs.appendChild(skyGrad);
+
+            // River water gradient - 3D depth
+            const riverGrad = createLinearGrad('riverGrad', '0%', '0%', '0%', '100%', [
+                ['0%', '#4FC3F7'], ['30%', '#29B6F6'], ['60%', '#0288D1'], ['100%', '#01579B']
+            ]);
+            defs.appendChild(riverGrad);
+
+            // River surface highlight
+            const riverHighlight = createLinearGrad('riverHighlight', '0%', '0%', '100%', '0%', [
+                ['0%', 'rgba(255,255,255,0)'], ['30%', 'rgba(255,255,255,0.4)'],
+                ['50%', 'rgba(255,255,255,0.6)'], ['70%', 'rgba(255,255,255,0.4)'],
+                ['100%', 'rgba(255,255,255,0)']
+            ]);
+            defs.appendChild(riverHighlight);
+
+            // Tree trunk gradient - 3D cylinder
+            const trunkGrad = createLinearGrad('trunkGrad', '0%', '0%', '100%', '0%', [
+                ['0%', '#5D4037'], ['30%', '#8D6E63'], ['60%', '#A1887F'], ['80%', '#8D6E63'], ['100%', '#4E342E']
+            ]);
+            defs.appendChild(trunkGrad);
+
+            // Leaf gradient - 3D volume
+            const leafGrad = createRadialGrad('leafGrad', '40%', '30%', '50%', [
+                ['0%', '#81C784'], ['40%', '#4CAF50'], ['80%', '#2E7D32'], ['100%', '#1B5E20']
+            ]);
+            defs.appendChild(leafGrad);
+
+            // Ground gradient
+            const groundGrad = createLinearGrad('groundGrad', '0%', '0%', '0%', '100%', [
+                ['0%', '#A5D6A7'], ['40%', '#66BB6A'], ['100%', '#388E3C']
+            ]);
+            defs.appendChild(groundGrad);
+
+            // Sun glow radial
+            const sunGlow = createRadialGrad('sunGlow', '50%', '50%', '50%', [
+                ['0%', '#FFF9C4'], ['40%', '#FFEE58'], ['70%', '#FDD835'], ['100%', '#F9A825']
+            ]);
+            defs.appendChild(sunGlow);
+
+            // Skin tone gradient for figure
+            const skinGrad = createRadialGrad('skinGrad', '40%', '35%', '50%', [
+                ['0%', '#FFCC80'], ['60%', '#FFB74D'], ['100%', '#F57C00']
+            ]);
+            defs.appendChild(skinGrad);
+
+            // Robe gradient
+            const robeGrad = createLinearGrad('robeGrad', '0%', '0%', '100%', '100%', [
+                ['0%', '#ECEFF1'], ['30%', '#CFD8DC'], ['70%', '#B0BEC5'], ['100%', '#78909C']
+            ]);
+            defs.appendChild(robeGrad);
+
+            // Cloud gradient - soft 3D
+            const cloudGrad = createRadialGrad('cloudGrad', '40%', '30%', '55%', [
+                ['0%', '#FFFFFF'], ['50%', '#F5F5F5'], ['100%', '#E0E0E0']
+            ]);
+            defs.appendChild(cloudGrad);
+
+            // Sparkle filter
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            // Soft shadow filter
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x', '-20%'); shadow.setAttribute('y', '-20%');
+            shadow.setAttribute('width', '140%'); shadow.setAttribute('height', '140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            svg.appendChild(defs);
+
+            // ===== DOT GRID (instant background) =====
+            const bgRect = el('rect', { width: 900, height: 506, fill: '#FFF9F0' });
+            svg.appendChild(bgRect);
+            // Dot pattern
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id', 'dots'); dotPattern.setAttribute('width', '18');
+            dotPattern.setAttribute('height', '18'); dotPattern.setAttribute('patternUnits', 'userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx: 9, cy: 9, r: 0.7, fill: '#e0d8c8' }));
+            defs.appendChild(dotPattern);
+            svg.appendChild(el('rect', { width: 900, height: 506, fill: 'url(#dots)' }));
+
+            // ===== GROUP 0: SKY =====
+            addToGroup(0, pathEl('M0,0 L900,0 L900,340 Q700,300 450,320 Q200,340 0,310 Z',
+                'url(#skyGrad)', '#FFCC80', 2, 'round'));
+
+            // ===== GROUP 1: SUN with 3D glow =====
+            addToGroup(1, el('circle', { cx: 750, cy: 100, r: 55, fill: 'url(#sunGlow)',
+                stroke: '#F9A825', 'stroke-width': 2.5, filter: 'url(#glow)' }));
+            // Sun face - cartoon eyes and smile
+            addToGroup(1, el('circle', { cx: 738, cy: 92, r: 5, fill: '#5D4037' })); // left eye
+            addToGroup(1, el('circle', { cx: 762, cy: 92, r: 5, fill: '#5D4037' })); // right eye
+            addToGroup(1, el('circle', { cx: 738, cy: 90, r: 2, fill: '#FFF' })); // eye shine L
+            addToGroup(1, el('circle', { cx: 762, cy: 90, r: 2, fill: '#FFF' })); // eye shine R
+            addToGroup(1, pathEl('M735,106 Q750,120 765,106', 'none', '#5D4037', 2.5, 'round')); // smile
+            // Rosy cheeks
+            addToGroup(1, el('ellipse', { cx: 728, cy: 108, rx: 8, ry: 5, fill: '#FF8A65', opacity: 0.5 }));
+            addToGroup(1, el('ellipse', { cx: 772, cy: 108, rx: 8, ry: 5, fill: '#FF8A65', opacity: 0.5 }));
+            // Sun rays (thick cartoon style)
+            const rayAngles = [0, 40, 80, 120, 160, 200, 240, 280, 320];
+            rayAngles.forEach(deg => {
+                const rad = deg * Math.PI / 180;
+                const x1 = 750 + 62 * Math.cos(rad), y1 = 100 + 62 * Math.sin(rad);
+                const x2 = 750 + 82 * Math.cos(rad), y2 = 100 + 82 * Math.sin(rad);
+                addToGroup(1, lineEl(x1, y1, x2, y2, '#FDD835', 4, 'round'));
+            });
+
+            // ===== GROUP 2: CLOUDS (3D puffy) =====
+            addToGroup(2, cartoonCloud(130, 80, 1.0));
+            addToGroup(2, cartoonCloud(400, 55, 0.7));
+            addToGroup(2, cartoonCloud(600, 95, 0.85));
+
+            // ===== GROUP 3: FAR HILLS (3D layered) =====
+            addToGroup(3, pathEl(
+                'M0,310 Q100,270 200,285 Q350,260 450,280 Q550,260 650,275 Q800,255 900,280 L900,350 Q700,320 450,340 Q200,360 0,330 Z',
+                '#C8E6C9', '#81C784', 2, 'round'));
+            // Hill shadow
+            addToGroup(3, pathEl(
+                'M0,325 Q200,345 450,335 Q700,315 900,340 L900,350 Q700,320 450,340 Q200,360 0,330 Z',
+                '#A5D6A7', 'none', 0));
+
+            // ===== GROUP 4: GROUND =====
+            addToGroup(4, pathEl(
+                'M0,400 Q150,380 300,390 Q450,375 600,385 Q750,370 900,380 L900,506 L0,506 Z',
+                'url(#groundGrad)', '#4CAF50', 2.5, 'round'));
+            // Ground texture lines
+            for (let i = 0; i < 6; i++) {
+                const x = 80 + i * 140;
+                addToGroup(4, pathEl(
+                    `M${x},${415 + (i%2)*10} Q${x+30},${408 + (i%2)*10} ${x+60},${415 + (i%2)*10}`,
+                    'none', '#388E3C', 1.5, 'round'));
+            }
+
+            // ===== GROUP 5: THE RIVER (Al-Kawthar) - 3D cartoon water =====
+            // River banks
+            addToGroup(5, pathEl(
+                'M200,395 Q300,360 450,370 Q600,355 750,380 L730,506 L180,506 Z',
+                'url(#riverGrad)', '#0277BD', 3, 'round'));
+            // Water surface highlights
+            addToGroup(5, pathEl(
+                'M230,410 Q350,385 450,390 Q560,378 720,400',
+                'none', 'rgba(255,255,255,0.6)', 3, 'round'));
+            addToGroup(5, pathEl(
+                'M260,430 Q380,410 470,415 Q570,405 690,425',
+                'none', 'rgba(255,255,255,0.4)', 2, 'round'));
+            addToGroup(5, pathEl(
+                'M290,455 Q400,440 480,442 Q560,435 660,450',
+                'none', 'rgba(255,255,255,0.3)', 1.5, 'round'));
+            // River edge foam
+            addToGroup(5, pathEl(
+                'M195,398 Q210,392 225,396 Q240,390 255,395 Q270,388 285,393',
+                'none', '#E1F5FE', 2, 'round'));
+            addToGroup(5, pathEl(
+                'M680,385 Q695,378 710,383 Q725,377 740,382',
+                'none', '#E1F5FE', 2, 'round'));
+
+            // ===== GROUP 6: LEFT PALM TREE (3D cartoon) =====
+            // Trunk - curved, with segments for 3D
+            addToGroup(6, pathEl(
+                'M140,400 Q135,350 130,310 Q128,280 132,250 Q136,220 140,200',
+                'none', 'url(#trunkGrad)', 14, 'round'));
+            // Trunk segment lines (bark texture)
+            for (let i = 0; i < 6; i++) {
+                const y = 240 + i * 28;
+                addToGroup(6, pathEl(
+                    `M125,${y} Q133,${y-4} 148,${y}`,
+                    'none', '#4E342E', 1.2, 'round'));
+            }
+            // Trunk highlight
+            addToGroup(6, pathEl(
+                'M137,395 Q134,350 132,310 Q130,280 133,250 Q136,225 139,205',
+                'none', '#A1887F', 4, 'round'));
+            // Palm leaves - big cartoon fronds with 3D curve
+            const leftLeaves = [
+                'M140,200 Q100,160 60,170 Q80,175 100,180 Q120,190 140,200',
+                'M140,200 Q110,150 80,130 Q100,145 120,160 Q130,180 140,200',
+                'M140,200 Q150,140 170,120 Q160,145 155,170 Q148,190 140,200',
+                'M140,200 Q180,160 210,155 Q190,168 170,180 Q155,192 140,200',
+                'M140,200 Q190,180 220,190 Q195,188 170,192 Q155,197 140,200',
+            ];
+            leftLeaves.forEach(d => {
+                addToGroup(6, pathEl(d, 'url(#leafGrad)', '#2E7D32', 2.5, 'round'));
+            });
+            // Coconuts
+            addToGroup(6, el('circle', { cx: 138, cy: 208, r: 8, fill: '#795548', stroke: '#4E342E', 'stroke-width': 1.5 }));
+            addToGroup(6, el('circle', { cx: 148, cy: 212, r: 7, fill: '#6D4C41', stroke: '#4E342E', 'stroke-width': 1.5 }));
+            // Coconut highlights
+            addToGroup(6, el('circle', { cx: 135, cy: 205, r: 2.5, fill: '#A1887F' }));
+            addToGroup(6, el('circle', { cx: 146, cy: 209, r: 2, fill: '#A1887F' }));
+
+            // ===== GROUP 7: RIGHT PALM TREE =====
+            addToGroup(7, pathEl(
+                'M780,385 Q785,340 788,300 Q790,265 786,235 Q783,210 780,190',
+                'none', 'url(#trunkGrad)', 13, 'round'));
+            for (let i = 0; i < 5; i++) {
+                const y = 235 + i * 28;
+                addToGroup(7, pathEl(
+                    `M773,${y} Q781,${y-4} 795,${y}`,
+                    'none', '#4E342E', 1.2, 'round'));
+            }
+            addToGroup(7, pathEl(
+                'M777,380 Q782,340 785,300 Q787,265 784,235 Q782,215 779,195',
+                'none', '#A1887F', 3.5, 'round'));
+            const rightLeaves = [
+                'M780,190 Q820,150 850,160 Q830,162 810,170 Q795,182 780,190',
+                'M780,190 Q810,140 830,120 Q815,140 800,160 Q790,178 780,190',
+                'M780,190 Q770,130 755,115 Q765,138 770,162 Q775,180 780,190',
+                'M780,190 Q740,155 710,150 Q730,160 750,175 Q765,185 780,190',
+                'M780,190 Q730,175 700,185 Q725,182 750,186 Q765,190 780,190',
+            ];
+            rightLeaves.forEach(d => {
+                addToGroup(7, pathEl(d, 'url(#leafGrad)', '#2E7D32', 2.5, 'round'));
+            });
+            addToGroup(7, el('circle', { cx: 778, cy: 198, r: 7, fill: '#795548', stroke: '#4E342E', 'stroke-width': 1.5 }));
+            addToGroup(7, el('circle', { cx: 787, cy: 202, r: 6.5, fill: '#6D4C41', stroke: '#4E342E', 'stroke-width': 1.5 }));
+
+            // ===== GROUP 8: CARTOON FIGURE (person in awe) =====
+            // Drop shadow under figure
+            addToGroup(8, el('ellipse', { cx: 450, cy: 398, rx: 30, ry: 6, fill: 'rgba(0,0,0,0.15)' }));
+            // Robe / body - 3D with gradient
+            addToGroup(8, pathEl(
+                'M430,310 Q425,340 420,370 Q418,385 425,395 L475,395 Q482,385 480,370 Q475,340 470,310 Q460,305 450,303 Q440,305 430,310 Z',
+                'url(#robeGrad)', '#78909C', 2.5, 'round'));
+            // Robe fold lines
+            addToGroup(8, pathEl('M440,330 Q445,355 442,380', 'none', '#90A4AE', 1.2, 'round'));
+            addToGroup(8, pathEl('M460,330 Q457,355 458,380', 'none', '#90A4AE', 1.2, 'round'));
+            // Arms raised in awe
+            addToGroup(8, pathEl(
+                'M430,320 Q415,305 405,285 Q400,275 405,270',
+                'none', 'url(#robeGrad)', 8, 'round'));
+            addToGroup(8, pathEl(
+                'M470,320 Q485,305 495,285 Q500,275 495,270',
+                'none', 'url(#robeGrad)', 8, 'round'));
+            // Hands - cartoon 3D
+            addToGroup(8, el('circle', { cx: 405, cy: 268, r: 8, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 1.5 }));
+            addToGroup(8, el('circle', { cx: 495, cy: 268, r: 8, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 1.5 }));
+            // Fingers (simple cartoon)
+            addToGroup(8, pathEl('M399,262 L396,256', 'none', '#FFB74D', 3, 'round'));
+            addToGroup(8, pathEl('M403,260 L401,253', 'none', '#FFB74D', 3, 'round'));
+            addToGroup(8, pathEl('M408,260 L408,253', 'none', '#FFB74D', 3, 'round'));
+            addToGroup(8, pathEl('M491,262 L494,256', 'none', '#FFB74D', 3, 'round'));
+            addToGroup(8, pathEl('M495,260 L497,253', 'none', '#FFB74D', 3, 'round'));
+            addToGroup(8, pathEl('M499,260 L500,254', 'none', '#FFB74D', 3, 'round'));
+            // Head - 3D cartoon face
+            addToGroup(8, el('circle', { cx: 450, cy: 285, r: 22, fill: 'url(#skinGrad)',
+                stroke: '#E65100', 'stroke-width': 2, filter: 'url(#softShadow)' }));
+            // Head highlight
+            addToGroup(8, el('circle', { cx: 443, cy: 276, r: 8, fill: 'rgba(255,255,255,0.3)' }));
+            // Eyes - big cartoon eyes looking up
+            addToGroup(8, el('ellipse', { cx: 442, cy: 282, rx: 5, ry: 6, fill: '#FFF', stroke: '#5D4037', 'stroke-width': 1.5 }));
+            addToGroup(8, el('ellipse', { cx: 458, cy: 282, rx: 5, ry: 6, fill: '#FFF', stroke: '#5D4037', 'stroke-width': 1.5 }));
+            // Pupils (looking up)
+            addToGroup(8, el('circle', { cx: 442, cy: 279, r: 3, fill: '#2C1810' }));
+            addToGroup(8, el('circle', { cx: 458, cy: 279, r: 3, fill: '#2C1810' }));
+            // Eye shine
+            addToGroup(8, el('circle', { cx: 440, cy: 278, r: 1.2, fill: '#FFF' }));
+            addToGroup(8, el('circle', { cx: 456, cy: 278, r: 1.2, fill: '#FFF' }));
+            // Mouth - open in awe
+            addToGroup(8, el('ellipse', { cx: 450, cy: 296, rx: 5, ry: 4, fill: '#D32F2F', stroke: '#B71C1C', 'stroke-width': 1 }));
+            // Eyebrows raised
+            addToGroup(8, pathEl('M436,273 Q442,268 448,273', 'none', '#5D4037', 2, 'round'));
+            addToGroup(8, pathEl('M452,273 Q458,268 464,273', 'none', '#5D4037', 2, 'round'));
+            // Turban/head covering
+            addToGroup(8, pathEl(
+                'M430,278 Q428,268 432,258 Q440,248 450,246 Q460,248 468,258 Q472,268 470,278',
+                '#ECEFF1', '#B0BEC5', 2, 'round'));
+            addToGroup(8, pathEl(
+                'M432,270 Q440,260 450,258 Q460,260 468,270',
+                'none', '#CFD8DC', 1.5, 'round'));
+
+            // ===== GROUP 9: SPARKLES over the river =====
+            const sparklePositions = [
+                [320, 380], [400, 370], [500, 365], [580, 375], [350, 420],
+                [480, 400], [550, 410], [630, 395], [280, 400], [650, 420]
+            ];
+            sparklePositions.forEach(([x, y]) => {
+                addToGroup(9, cartoonSparkle(x, y, 6 + Math.random() * 6));
+            });
+
+            // ===== GROUP 10: BIRDS (simple cartoon) =====
+            addToGroup(10, pathEl('M280,130 Q290,118 300,130', 'none', '#5D4037', 2, 'round'));
+            addToGroup(10, pathEl('M300,130 Q310,118 320,130', 'none', '#5D4037', 2, 'round'));
+            addToGroup(10, pathEl('M340,110 Q348,100 356,110', 'none', '#5D4037', 1.8, 'round'));
+            addToGroup(10, pathEl('M356,110 Q364,100 372,110', 'none', '#5D4037', 1.8, 'round'));
+
+            // ===== GROUP 11: Title text =====
+            const title = textEl('"We have granted you Al-Kawthar"', 450, 38, {
+                size: 26, family: 'Caveat, cursive', weight: 700, color: '#BF360C'
+            });
+            addToGroup(11, title);
+
+            return { svg, groups };
+        }
+
+        // ===== SVG HELPERS =====
+
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+            return e;
+        }
+
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+
+        function lineEl(x1, y1, x2, y2, stroke, sw, cap) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': cap || 'round' });
+        }
+
+        function textEl(text, x, y, opts) {
+            const e = el('text', {
+                x, y, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Inter, sans-serif',
+                'font-size': opts.size || 16, 'font-weight': opts.weight || 400,
+                fill: opts.color || '#333'
+            });
+            e.textContent = text;
+            return e;
+        }
+
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            // Multiple overlapping ellipses for puffy 3D cloud
+            const parts = [
+                [cx - 30*s, cy + 5*s, 35*s, 22*s],
+                [cx, cy - 5*s, 40*s, 28*s],
+                [cx + 30*s, cy + 3*s, 32*s, 20*s],
+                [cx - 10*s, cy + 10*s, 38*s, 18*s],
+                [cx + 15*s, cy + 8*s, 35*s, 20*s],
+            ];
+            parts.forEach(([x, y, rx, ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            // Top highlight
+            g.appendChild(el('ellipse', { cx: cx, cy: cy - 8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            // 4-pointed star sparkle
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+
+        // ===== ANIMATION ENGINE =====
+
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    // Handle <g> groups
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            hideElement(child);
+                        });
+                        // Also hide the group itself
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch (e) {}
+            el.style.opacity = '0';
+        }
+
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+
+                // Flatten group elements (expand <g> children)
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        const children = item.querySelectorAll('path, line, circle, ellipse, rect, polygon');
+                        children.forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch (e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) {
+                            el.style.opacity = eased;
+                        } else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) {
+                                el.style.fillOpacity = (eased - 0.5) / 0.5;
+                            }
+                        } else {
+                            el.style.opacity = eased;
+                        }
+                    });
+
+                    // Move pen cursor
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) {
+                                        movePen(pt.x, pt.y);
+                                        break;
+                                    }
+                                } catch (e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) {
+                                el.style.opacity = '1';
+                            } else if (hasPath) {
+                                el.style.strokeDashoffset = '0';
+                                el.style.fillOpacity = '1';
+                            } else {
+                                el.style.opacity = '1';
+                            }
+                        });
+                        resolve();
+                    }
+                }
+
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            const scaleX = rect.width / 900;
+            const scaleY = rect.height / 506;
+            const tipOffsetX = 18, tipOffsetY = 58;
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * scaleX - tipOffsetX) + 'px';
+            penCursor.style.top = (svgY * scaleY - tipOffsetY) + 'px';
+        }
+
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                const isRTL = opts.rtl || false;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (isRTL ? ' rtl' : '');
+                element.appendChild(cursor);
+
+                let i = 0;
+                function typeNext() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(typeNext, charDelay / speed);
+                    } else {
+                        setTimeout(() => { cursor.remove(); resolve(); }, 400 / speed);
+                    }
+                }
+                typeNext();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            document.getElementById('arabicText').textContent = '';
+            document.getElementById('translitText').textContent = '';
+            document.getElementById('kidText').textContent = '';
+        }
+
+        async function animateBottomText() {
+            const badge = document.getElementById('verseBadge');
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'),
+                'إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ', { charDelay: 55, rtl: true });
+            await new Promise(r => setTimeout(r, 150 / speed));
+            await typewrite(document.getElementById('translitText'),
+                'Inna a\'tayna-kal kawthar', { charDelay: 35 });
+            await new Promise(r => setTimeout(r, 150 / speed));
+            await typewrite(document.getElementById('kidText'),
+                'Allah gave you something so special and so abundant - a river in Jannah, overflowing with goodness and blessings beyond imagination.', { charDelay: 22 });
+        }
+
+        // ===== PLAY =====
+
+        async function playAnimation() {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            resetBottomText();
+
+            const { svg, groups } = buildScene();
+            hideAllPaths(groups);
+
+            const timings = [
+                600,   // 0: sky
+                800,   // 1: sun with face
+                700,   // 2: clouds
+                500,   // 3: far hills
+                600,   // 4: ground
+                900,   // 5: river
+                800,   // 6: left palm tree
+                800,   // 7: right palm tree
+                1200,  // 8: cartoon figure
+                500,   // 9: sparkles
+                300,   // 10: birds
+                400,   // 11: title
+            ];
+
+            const gap = 120;
+            let textStarted = false;
+            let textPromise = null;
+
+            for (let i = 0; i < groups.length; i++) {
+                await animateGroup(groups[i], timings[i] || 500);
+
+                if (i === 5 && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText();
+                }
+
+                if (i < groups.length - 1) {
+                    await new Promise(r => setTimeout(r, gap / speed));
+                }
+            }
+
+            hidePen();
+            if (textPromise) await textPromise;
+        }
+
+        function replayAnimation() { playAnimation(); }
+
+        window.addEventListener('load', () => {
+            setTimeout(playAnimation, 500);
+        });
+    </script>
+
+</body>
+</html>
