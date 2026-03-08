@@ -255,8 +255,8 @@
         footer a:hover { text-decoration: underline; }
 
         /* ===== SCROLL REVEAL ANIMATIONS ===== */
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal, .reveal-3d { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible, .reveal-3d.visible { opacity: 1; transform: translateY(0); }
         .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
         .glow-line.visible { opacity: 1; transform: scaleX(1); }
     </style>
@@ -1568,7 +1568,7 @@
                         entry.target.classList.add('visible');
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.01, rootMargin: '0px 0px 100px 0px' });
 
             document.querySelectorAll('.reveal, .reveal-3d, .reveal-scale, .glow-line').forEach(el => {
                 observer.observe(el);
