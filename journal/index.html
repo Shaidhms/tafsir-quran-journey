@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Nisha Journal</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #E8652B;
+    --accent-glow: rgba(232, 101, 43, 0.15);
+    --green: #3fb950;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --yellow: #d29922;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+    text-align: center;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .header h1 span { color: var(--accent); }
+
+  .header p {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .entries {
+    padding: 2rem 0 4rem;
+  }
+
+  .month-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .month-label:first-child {
+    margin-top: 0;
+  }
+
+  .entry-card {
+    display: flex;
+    align-items: stretch;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .entry-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .entry-date-strip {
+    width: 72px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+    border-right: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .entry-day-num {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .entry-day-name {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .entry-body {
+    flex-grow: 1;
+    padding: 1rem 1.25rem;
+  }
+
+  .entry-vibe {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .entry-stats {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .entry-stat {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .entry-stat strong {
+    font-weight: 700;
+  }
+
+  .entry-stat:nth-child(1) strong { color: var(--green); }
+  .entry-stat:nth-child(2) strong { color: var(--blue); }
+  .entry-stat:nth-child(3) strong { color: var(--purple); }
+  .entry-stat:nth-child(4) strong { color: var(--yellow); }
+
+  .entry-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-muted);
+  }
+
+  .empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state code {
+    background: var(--surface);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <h1>Nisha <span>Journal</span></h1>
+    <p>Daily log of everything built with Claude</p>
+  </div>
+</div>
+
+<div class="container entries">
+
+  <!-- JOURNAL_ENTRIES_START -->
+  <div class="month-label">March 2026</div>
+
+  <a class="entry-card" href="2026-03-10.html">
+    <div class="entry-date-strip">
+      <div class="entry-day-num">10</div>
+      <div class="entry-day-name">Tue</div>
+    </div>
+    <div class="entry-body">
+      <div class="entry-vibe">One carousel. 16 slides. 7 real screenshots. Added a table slide type to the generator.</div>
+      <div class="entry-stats">
+        <div class="entry-stat"><strong>1</strong> carousel</div>
+        <div class="entry-stat"><strong>16</strong> slides</div>
+        <div class="entry-stat"><strong>7</strong> screenshots</div>
+        <div class="entry-stat"><strong>1</strong> skill upgraded</div>
+      </div>
+    </div>
+    <div class="entry-arrow">&rsaquo;</div>
+  </a>
+
+  <a class="entry-card" href="2026-03-08.html">
+    <div class="entry-date-strip">
+      <div class="entry-day-num">08</div>
+      <div class="entry-day-name">Sun</div>
+    </div>
+    <div class="entry-body">
+      <div class="entry-vibe">Dark carousels + WhatsApp AI agent. Nisha now lives on WhatsApp.</div>
+      <div class="entry-stats">
+        <div class="entry-stat"><strong>4</strong> carousels</div>
+        <div class="entry-stat"><strong>700</strong> lines</div>
+        <div class="entry-stat"><strong>1</strong> AI agent</div>
+        <div class="entry-stat"><strong>2</strong> drafts</div>
+      </div>
+    </div>
+    <div class="entry-arrow">&rsaquo;</div>
+  </a>
+
+  <a class="entry-card" href="2026-03-07.html">
+    <div class="entry-date-strip">
+      <div class="entry-day-num">07</div>
+      <div class="entry-day-name">Sat</div>
+    </div>
+    <div class="entry-body">
+      <div class="entry-vibe">Built the Expense Manager skill. Stress-tested it against real Gmail data.</div>
+      <div class="entry-stats">
+        <div class="entry-stat"><strong>1</strong> skill</div>
+        <div class="entry-stat"><strong>4</strong> Gmail sources</div>
+        <div class="entry-stat"><strong>28</strong> txns parsed</div>
+        <div class="entry-stat"><strong>3</strong> memory files</div>
+      </div>
+    </div>
+    <div class="entry-arrow">&rsaquo;</div>
+  </a>
+
+  <a class="entry-card" href="2026-03-06.html">
+    <div class="entry-date-strip">
+      <div class="entry-day-num">06</div>
+      <div class="entry-day-name">Fri</div>
+    </div>
+    <div class="entry-body">
+      <div class="entry-vibe">Set up Nisha from scratch. Didn't stop building until midnight.</div>
+      <div class="entry-stats">
+        <div class="entry-stat"><strong>10</strong> commits</div>
+        <div class="entry-stat"><strong>7</strong> skills</div>
+        <div class="entry-stat"><strong>5</strong> drafts</div>
+        <div class="entry-stat"><strong>3</strong> carousels</div>
+      </div>
+    </div>
+    <div class="entry-arrow">&rsaquo;</div>
+  </a>
+  <!-- JOURNAL_ENTRIES_END -->
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Journal: Saturday, March 7, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #E8652B;
+    --accent-glow: rgba(232, 101, 43, 0.15);
+    --green: #3fb950;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --yellow: #d29922;
+    --pink: #f778ba;
+    --cyan: #39d2c0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 0;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 span {
+    color: var(--accent);
+  }
+
+  .date-badge {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .vibe {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--accent-glow);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin: 2rem 0;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+
+  .stat:hover {
+    border-color: var(--accent);
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+
+  .stat:nth-child(1) .stat-value { color: var(--green); }
+  .stat:nth-child(2) .stat-value { color: var(--blue); }
+  .stat:nth-child(3) .stat-value { color: var(--purple); }
+  .stat:nth-child(4) .stat-value { color: var(--yellow); }
+  .stat:nth-child(5) .stat-value { color: var(--pink); }
+  .stat:nth-child(6) .stat-value { color: var(--cyan); }
+
+  .section {
+    margin-bottom: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .section-header:hover {
+    background: var(--surface-2);
+  }
+
+  .section-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    flex-grow: 1;
+  }
+
+  .section-count {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .chevron {
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    font-size: 0.8rem;
+  }
+
+  .section.collapsed .chevron {
+    transform: rotate(-90deg);
+  }
+
+  .section-body {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+
+  .section.collapsed .section-body {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .item:last-child {
+    border-bottom: none;
+  }
+
+  .item-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .item-desc {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  .item-desc ul {
+    list-style: none;
+    margin-top: 0.4rem;
+  }
+
+  .item-desc ul li {
+    padding: 0.15rem 0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .item-desc ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-right: 0.35rem;
+    margin-top: 0.25rem;
+  }
+
+  .tag-skill { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+  .tag-content { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
+  .tag-project { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+  .tag-commit { background: rgba(210, 153, 34, 0.15); color: var(--yellow); }
+  .tag-file { background: rgba(247, 120, 186, 0.15); color: var(--pink); }
+  .tag-finance { background: rgba(57, 210, 192, 0.15); color: var(--cyan); }
+
+  .filepath {
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 0.8rem;
+    color: var(--blue);
+    background: rgba(88, 166, 255, 0.08);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  /* Finance table */
+  .finance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .finance-table th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .finance-table td {
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .finance-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .finance-table .amount {
+    font-family: 'SF Mono', monospace;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .finance-table .total-row td {
+    border-top: 2px solid var(--accent);
+    font-weight: 700;
+    padding-top: 0.6rem;
+  }
+
+  .amount-positive { color: var(--green); }
+  .amount-negative { color: var(--pink); }
+  .amount-net { color: var(--cyan); }
+
+  .next-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .next-item:last-child {
+    border-bottom: none;
+  }
+
+  .next-bullet {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .next-text {
+    font-size: 0.9rem;
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    margin-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .nav a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.35rem; }
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .stat-value { font-size: 1.35rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <div>
+      <h1>Journal <span>/</span> March 7</h1>
+      <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Saturday, 2026</div>
+    </div>
+    <div class="date-badge">Day 2 with Nisha</div>
+  </div>
+</div>
+
+<div class="container" style="padding-top: 0.5rem; padding-bottom: 3rem;">
+
+  <div class="vibe">
+    Late night into early morning session. Built the Expense Manager skill and stress-tested it against real Gmail data. Nisha now knows my money.
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-value">0</span>
+      <span class="stat-label">Commits</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">1</span>
+      <span class="stat-label">Skills</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">4</span>
+      <span class="stat-label">Gmail Sources</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">1</span>
+      <span class="stat-label">Carousels</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">3</span>
+      <span class="stat-label">Memory Files</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">28</span>
+      <span class="stat-label">Txns Parsed</span>
+    </div>
+  </div>
+
+  <!-- What I Built -->
+  <div class="section" id="built">
+    <div class="section-header" onclick="toggleSection('built')">
+      <div class="section-icon" style="background: rgba(63, 185, 80, 0.15);">&#9881;</div>
+      <span class="section-title">What I Built</span>
+      <span class="section-count">3 areas</span>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="item">
+        <div class="item-title">Expense Manager Skill <span class="tag tag-skill">New Skill</span></div>
+        <div class="item-desc">
+          Full skill at <span class="filepath">.claude/skills/expense-manager/SKILL.md</span> for pulling bank transactions from Gmail.
+          <ul>
+            <li>5 query types: credit card spend, UPI transactions, HDFC account, salary status, full monthly summary</li>
+            <li>Transaction caching system -- reads memory ledger first, only fetches new data from Gmail after last sync date</li>
+            <li>Categorization engine for recurring merchants (food, fuel, subscriptions, vehicle, utilities, transfers)</li>
+            <li>Income accounting rule: previous month's last-working-day salary counts as current month income</li>
+          </ul>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-title">Financial Memory System <span class="tag tag-file">Persistent</span></div>
+        <div class="item-desc">
+          <ul>
+            <li><span class="filepath">memory/finances.md</span> -- all bank accounts, credit cards, email alert sources, recurring expenses</li>
+            <li><span class="filepath">memory/transactions-2026-03.md</span> -- full March ledger with income, CC spend, UPI debits, NACH debits</li>
+            <li>Category-wise breakdown with monthly totals, synced through March 6</li>
+          </ul>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-title">Carousel V2 <span class="tag tag-content">Iteration</span></div>
+        <div class="item-desc">
+          Iterated on Skill Creator carousel -- generated V2 at <span class="filepath">templates/carousel-skill-creator-v2.pdf</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gmail MCP Testing -->
+  <div class="section" id="testing">
+    <div class="section-header" onclick="toggleSection('testing')">
+      <div class="section-icon" style="background: rgba(88, 166, 255, 0.15);">&#128269;</div>
+      <span class="section-title">Gmail MCP Testing</span>
+      <span class="section-count">4 sources tested</span>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="item">
+        <div class="item-title">Standard Chartered UPI Alerts</div>
+        <div class="item-desc">
+          Source: <span class="filepath">from:upi@sc.com</span> -- parsed 16 UPI debits with amounts, payees, and remarks. Detailed data, good for categorization.
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-title">HDFC InstaAlerts</div>
+        <div class="item-desc">
+          Source: <span class="filepath">from:hdfcbank</span> -- parsed credit card debits (3 transactions) and account credits. Snippet-level parsing works.
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-title">SC Banking Alerts</div>
+        <div class="item-desc">
+          Source: <span class="filepath">from:alerts.in@sc.com</span> -- bank debits and general alerts. Salary NEFT comes from <span class="filepath">AdvicesIN@sc.com</span> instead.
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-title">HDFC NACH Auto-Debit</div>
+        <div class="item-desc">
+          Source: <span class="filepath">from:nachautoemailer@hdfcbank.bank.in</span> -- Tata Capital EMI (Rs. 284/month). Discovery: HDFC does NOT send UPI debit alerts via email.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Financial Snapshot -->
+  <div class="section" id="finance">
+    <div class="section-header" onclick="toggleSection('finance')">
+      <div class="section-icon" style="background: rgba(57, 210, 192, 0.15);">&#8377;</div>
+      <span class="section-title">March Financial Snapshot</span>
+      <span class="tag tag-finance">From Testing</span>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <table class="finance-table">
+        <tr>
+          <td>Total Income</td>
+          <td class="amount amount-positive">Rs. 95,486.00</td>
+        </tr>
+        <tr>
+          <td>Total Expenses</td>
+          <td class="amount amount-negative">Rs. 34,285.23</td>
+        </tr>
+        <tr class="total-row">
+          <td>Remaining</td>
+          <td class="amount amount-net">Rs. 61,200.77</td>
+        </tr>
+      </table>
+      <div style="margin-top: 1rem;">
+        <div class="item-desc">
+          <strong style="color: var(--text);">Top categories:</strong>
+          <ul>
+            <li>Transfers: Rs. 19,257 (Najima)</li>
+            <li>Food: Rs. 6,905 (AL Madhina, Sahdar, Country Delight, Blinkit)</li>
+            <li>Credit Card: Rs. 5,705 (ChatGPT, Blinkit, Fuel)</li>
+            <li>Vehicle: Rs. 2,400 (Kandhan Tyres, KIA)</li>
+            <li>Subscriptions: Rs. 1,678 (Hostinger, Cosmofeed)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Files -->
+  <div class="section collapsed" id="files">
+    <div class="section-header" onclick="toggleSection('files')">
+      <div class="section-icon" style="background: rgba(247, 120, 186, 0.15);">&#128196;</div>
+      <span class="section-title">Key Files</span>
+      <span class="section-count">4 files</span>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="item">
+        <div class="item-desc">
+          <ul>
+            <li><span class="filepath">.claude/skills/expense-manager/SKILL.md</span> -- Expense Manager skill definition</li>
+            <li><span class="filepath">memory/finances.md</span> -- Bank account reference (persistent)</li>
+            <li><span class="filepath">memory/transactions-2026-03.md</span> -- March transaction ledger (persistent)</li>
+            <li><span class="filepath">templates/carousel-skill-creator-v2.pdf</span> -- Updated Skill Creator carousel</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What's Next -->
+  <div class="section" id="next">
+    <div class="section-header" onclick="toggleSection('next')">
+      <div class="section-icon" style="background: rgba(57, 210, 192, 0.15);">&#10148;</div>
+      <span class="section-title">What's Next</span>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="next-item">
+        <div class="next-bullet"></div>
+        <div class="next-text">Commit the expense manager skill and all pending untracked work from Day 1 and Day 2</div>
+      </div>
+      <div class="next-item">
+        <div class="next-bullet"></div>
+        <div class="next-text">Post one of the 5 LinkedIn drafts -- Claude Code Skills or Pixel Agents are ready</div>
+      </div>
+      <div class="next-item">
+        <div class="next-bullet"></div>
+        <div class="next-text">Continue WhatsApp agent -- connect it to Claude for AI responses</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="index.html">&larr; All Entries</a>
+    <a href="2026-03-06.html">&larr; March 6</a>
+  </div>
+
+</div>
+
+<script>
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>

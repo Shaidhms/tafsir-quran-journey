@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Favicon Options - Blended NS Monogram</title>
+<style>
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  h1 { font-size: 1.5rem; color: #E8652B; }
+  .subtitle { color: #8b949e; font-size: 0.85rem; margin-top: -1rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 960px;
+  }
+  .option {
+    background: #161b22;
+    border: 2px solid #30363d;
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .option:hover { border-color: #E8652B; }
+  .option h3 { margin: 1rem 0 0.25rem; font-size: 0.95rem; }
+  .option p { color: #8b949e; font-size: 0.78rem; margin: 0; }
+  .preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+  .size-label { color: #8b949e; font-size: 0.6rem; text-align: center; margin-top: 0.25rem; }
+  .tab-preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #21262d;
+    border-radius: 8px 8px 0 0;
+    padding: 6px 12px;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #8b949e;
+  }
+</style>
+</head>
+<body>
+
+<h1>Pick a Favicon - Blended NS Monogram</h1>
+<p class="subtitle">N and S overlap as one entity + agent elements. Shown at 128px, 48px, 16px + tab sim.</p>
+
+<div class="grid">
+
+  <!-- Option 1: Shared Spine NS + Agent Antenna -->
+  <div class="option">
+    <div class="preview">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+          <defs>
+            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="40%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <!-- N: left stroke + diagonal + shared right stroke -->
+          <path d="M16 48 L16 16 L34 48" fill="none" stroke="#e6edf3" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- S: curves sharing the right stroke of N as its spine -->
+          <path d="M46 20 Q46 14 38 14 Q30 14 30 22 Q30 28 38 30 Q46 32 46 40 Q46 48 38 48 Q30 48 30 42" fill="none" stroke="url(#g1)" stroke-width="4" stroke-linecap="round"/>
+          <!-- Agent antenna -->
+          <line x1="32" y1="8" x2="32" y2="2" stroke="#E8652B" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="32" cy="1" r="1.5" fill="#3fb950"/>
+          <!-- Small signal waves -->
+          <path d="M26 4 Q28 1 30 4" fill="none" stroke="#3fb950" stroke-width="0.8" opacity="0.5"/>
+          <path d="M34 4 Q36 1 38 4" fill="none" stroke="#3fb950" stroke-width="0.8" opacity="0.5"/>
+        </svg>
+        <div class="size-label">128px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
+          <defs><linearGradient id="g1b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="40%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <path d="M16 48 L16 16 L34 48" fill="none" stroke="#e6edf3" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M46 20 Q46 14 38 14 Q30 14 30 22 Q30 28 38 30 Q46 32 46 40 Q46 48 38 48 Q30 48 30 42" fill="none" stroke="url(#g1b)" stroke-width="4" stroke-linecap="round"/>
+          <line x1="32" y1="8" x2="32" y2="2" stroke="#E8652B" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="32" cy="1" r="1.5" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">48px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+          <defs><linearGradient id="g1c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="40%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <path d="M16 48 L16 16 L34 48" fill="none" stroke="#e6edf3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M46 20 Q46 14 38 14 Q30 14 30 22 Q30 28 38 30 Q46 32 46 40 Q46 48 38 48 Q30 48 30 42" fill="none" stroke="url(#g1c)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="32" cy="3" r="2" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">16px</div>
+      </div>
+    </div>
+    <div class="tab-preview">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+        <defs><linearGradient id="g1d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="40%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+        <rect width="64" height="64" rx="14" fill="#0d1117"/>
+        <path d="M16 48 L16 16 L34 48" fill="none" stroke="#e6edf3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M46 20 Q46 14 38 14 Q30 14 30 22 Q30 28 38 30 Q46 32 46 40 Q46 48 38 48 Q30 48 30 42" fill="none" stroke="url(#g1d)" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="32" cy="3" r="2" fill="#3fb950"/>
+      </svg>
+      Journal / March 8
+    </div>
+    <h3>1: Shared Spine + Antenna</h3>
+    <p>N diagonal meets S curves. Agent antenna on top.</p>
+  </div>
+
+  <!-- Option 2: Interlocked NS + Agent Eye -->
+  <div class="option">
+    <div class="preview">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+          <defs>
+            <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <rect width="64" height="64" rx="14" fill="none" stroke="#30363d" stroke-width="1.5"/>
+          <!-- Combined NS where they share the middle vertical -->
+          <text x="8" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="#e6edf3" letter-spacing="-8">N</text>
+          <text x="27" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="url(#g2)" letter-spacing="-8" opacity="0.85">S</text>
+          <!-- Agent eye in the overlap zone -->
+          <circle cx="32" cy="10" r="4" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+          <circle cx="32" cy="10" r="1.5" fill="#3fb950"/>
+          <!-- Connection lines from eye to letters -->
+          <line x1="32" y1="14" x2="28" y2="18" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
+          <line x1="32" y1="14" x2="36" y2="18" stroke="#3fb950" stroke-width="1" opacity="0.4"/>
+        </svg>
+        <div class="size-label">128px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
+          <defs><linearGradient id="g2b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <rect width="64" height="64" rx="14" fill="none" stroke="#30363d" stroke-width="1.5"/>
+          <text x="8" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="#e6edf3" letter-spacing="-8">N</text>
+          <text x="27" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="url(#g2b)" letter-spacing="-8" opacity="0.85">S</text>
+          <circle cx="32" cy="10" r="4" fill="none" stroke="#3fb950" stroke-width="1.5"/>
+          <circle cx="32" cy="10" r="1.5" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">48px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+          <defs><linearGradient id="g2c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <text x="8" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="#e6edf3" letter-spacing="-8">N</text>
+          <text x="27" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="url(#g2c)" letter-spacing="-8" opacity="0.85">S</text>
+          <circle cx="32" cy="10" r="2" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">16px</div>
+      </div>
+    </div>
+    <div class="tab-preview">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+        <defs><linearGradient id="g2d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+        <rect width="64" height="64" rx="14" fill="#0d1117"/>
+        <text x="8" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="#e6edf3" letter-spacing="-8">N</text>
+        <text x="27" y="50" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="url(#g2d)" letter-spacing="-8" opacity="0.85">S</text>
+        <circle cx="32" cy="10" r="2" fill="#3fb950"/>
+      </svg>
+      Journal / March 8
+    </div>
+    <h3>2: Tight Overlap + Eye</h3>
+    <p>N and S tight together, agent surveillance eye above.</p>
+  </div>
+
+  <!-- Option 3: Merged Strokes NS + Circuit -->
+  <div class="option">
+    <div class="preview">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+          <defs>
+            <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="45%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <!-- N left vertical -->
+          <line x1="14" y1="14" x2="14" y2="50" stroke="#e6edf3" stroke-width="5" stroke-linecap="round"/>
+          <!-- N diagonal going into S top curve - the blend point -->
+          <path d="M14 14 L36 50" stroke="#e6edf3" stroke-width="4" stroke-linecap="round"/>
+          <!-- S curves starting from where N's right stroke would be -->
+          <path d="M48 20 Q48 12 38 12 Q28 12 28 20 Q28 28 38 32 Q48 36 48 44 Q48 52 38 52 Q28 52 28 44" fill="none" stroke="url(#g3)" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- Circuit nodes -->
+          <circle cx="8" cy="8" r="2" fill="#3fb950" opacity="0.7"/>
+          <circle cx="56" cy="8" r="2" fill="#3fb950" opacity="0.7"/>
+          <line x1="8" y1="8" x2="14" y2="14" stroke="#3fb950" stroke-width="1" opacity="0.3"/>
+          <line x1="56" y1="8" x2="48" y2="12" stroke="#3fb950" stroke-width="1" opacity="0.3"/>
+        </svg>
+        <div class="size-label">128px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
+          <defs><linearGradient id="g3b" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="45%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <line x1="14" y1="14" x2="14" y2="50" stroke="#e6edf3" stroke-width="5" stroke-linecap="round"/>
+          <path d="M14 14 L36 50" stroke="#e6edf3" stroke-width="4" stroke-linecap="round"/>
+          <path d="M48 20 Q48 12 38 12 Q28 12 28 20 Q28 28 38 32 Q48 36 48 44 Q48 52 38 52 Q28 52 28 44" fill="none" stroke="url(#g3b)" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="8" cy="8" r="2" fill="#3fb950" opacity="0.7"/>
+          <circle cx="56" cy="8" r="2" fill="#3fb950" opacity="0.7"/>
+        </svg>
+        <div class="size-label">48px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+          <defs><linearGradient id="g3c" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="45%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <line x1="14" y1="14" x2="14" y2="50" stroke="#e6edf3" stroke-width="6" stroke-linecap="round"/>
+          <path d="M14 14 L36 50" stroke="#e6edf3" stroke-width="5" stroke-linecap="round"/>
+          <path d="M48 20 Q48 12 38 12 Q28 12 28 20 Q28 28 38 32 Q48 36 48 44 Q48 52 38 52 Q28 52 28 44" fill="none" stroke="url(#g3c)" stroke-width="5.5" stroke-linecap="round"/>
+        </svg>
+        <div class="size-label">16px</div>
+      </div>
+    </div>
+    <div class="tab-preview">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+        <defs><linearGradient id="g3d" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="45%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+        <rect width="64" height="64" rx="14" fill="#0d1117"/>
+        <line x1="14" y1="14" x2="14" y2="50" stroke="#e6edf3" stroke-width="6" stroke-linecap="round"/>
+        <path d="M14 14 L36 50" stroke="#e6edf3" stroke-width="5" stroke-linecap="round"/>
+        <path d="M48 20 Q48 12 38 12 Q28 12 28 20 Q28 28 38 32 Q48 36 48 44 Q48 52 38 52 Q28 52 28 44" fill="none" stroke="url(#g3d)" stroke-width="5.5" stroke-linecap="round"/>
+      </svg>
+      Journal / March 8
+    </div>
+    <h3>3: Merged Strokes + Nodes</h3>
+    <p>N diagonal flows into S curves. Circuit nodes glow.</p>
+  </div>
+
+  <!-- Option 4: Stacked Blend NS + Shield -->
+  <div class="option">
+    <div class="preview">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+          <defs>
+            <linearGradient id="g4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <!-- Shield outline -->
+          <path d="M32 4 L54 14 L54 34 Q54 52 32 60 Q10 52 10 34 L10 14 Z" fill="none" stroke="url(#g4)" stroke-width="1.5" opacity="0.3"/>
+          <!-- Overlapping NS monogram - centered, tight -->
+          <text x="6" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="#e6edf3" letter-spacing="-10">N</text>
+          <text x="28" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="url(#g4)" letter-spacing="-10" opacity="0.9">S</text>
+          <!-- Agent dot -->
+          <circle cx="32" cy="10" r="2.5" fill="#3fb950"/>
+          <circle cx="32" cy="10" r="5" fill="none" stroke="#3fb950" stroke-width="1" opacity="0.3"/>
+        </svg>
+        <div class="size-label">128px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
+          <defs><linearGradient id="g4b" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <path d="M32 4 L54 14 L54 34 Q54 52 32 60 Q10 52 10 34 L10 14 Z" fill="none" stroke="url(#g4b)" stroke-width="1.5" opacity="0.3"/>
+          <text x="6" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="#e6edf3" letter-spacing="-10">N</text>
+          <text x="28" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="url(#g4b)" letter-spacing="-10" opacity="0.9">S</text>
+          <circle cx="32" cy="10" r="2.5" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">48px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+          <defs><linearGradient id="g4c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <text x="6" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="#e6edf3" letter-spacing="-10">N</text>
+          <text x="28" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="url(#g4c)" letter-spacing="-10" opacity="0.9">S</text>
+          <circle cx="32" cy="10" r="3" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">16px</div>
+      </div>
+    </div>
+    <div class="tab-preview">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+        <defs><linearGradient id="g4d" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+        <rect width="64" height="64" rx="14" fill="#0d1117"/>
+        <text x="6" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="#e6edf3" letter-spacing="-10">N</text>
+        <text x="28" y="46" font-family="system-ui, sans-serif" font-size="36" font-weight="900" fill="url(#g4d)" letter-spacing="-10" opacity="0.9">S</text>
+        <circle cx="32" cy="10" r="3" fill="#3fb950"/>
+      </svg>
+      Journal / March 8
+    </div>
+    <h3>4: Tight Monogram + Shield</h3>
+    <p>NS overlap inside subtle shield. Green agent beacon.</p>
+  </div>
+
+  <!-- Option 5: Intertwined Paths NS + Pulse -->
+  <div class="option">
+    <div class="preview">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+          <defs>
+            <linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="50%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <!-- Pulse rings -->
+          <circle cx="32" cy="32" r="28" fill="none" stroke="#E8652B" stroke-width="0.8" opacity="0.12"/>
+          <circle cx="32" cy="32" r="24" fill="none" stroke="#E8652B" stroke-width="1" opacity="0.18"/>
+          <!-- N and S as one continuous flowing path -->
+          <!-- N: vertical up, diagonal down -->
+          <path d="M14 50 L14 14 L38 50" fill="none" stroke="#e6edf3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- S woven through, sharing middle space with N -->
+          <path d="M50 18 Q50 10 40 10 Q30 10 30 18 Q30 26 40 30 Q50 34 50 42 Q50 50 40 50 Q30 50 30 42" fill="none" stroke="url(#g5)" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Beacon dot -->
+          <circle cx="32" cy="5" r="2.5" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">128px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
+          <defs><linearGradient id="g5b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="50%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <circle cx="32" cy="32" r="24" fill="none" stroke="#E8652B" stroke-width="1" opacity="0.18"/>
+          <path d="M14 50 L14 14 L38 50" fill="none" stroke="#e6edf3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M50 18 Q50 10 40 10 Q30 10 30 18 Q30 26 40 30 Q50 34 50 42 Q50 50 40 50 Q30 50 30 42" fill="none" stroke="url(#g5b)" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="32" cy="5" r="2.5" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">48px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+          <defs><linearGradient id="g5c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="50%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <path d="M14 50 L14 14 L38 50" fill="none" stroke="#e6edf3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M50 18 Q50 10 40 10 Q30 10 30 18 Q30 26 40 30 Q50 34 50 42 Q50 50 40 50 Q30 50 30 42" fill="none" stroke="url(#g5c)" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="32" cy="5" r="3" fill="#3fb950"/>
+        </svg>
+        <div class="size-label">16px</div>
+      </div>
+    </div>
+    <div class="tab-preview">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+        <defs><linearGradient id="g5d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e6edf3"/><stop offset="50%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+        <rect width="64" height="64" rx="14" fill="#0d1117"/>
+        <path d="M14 50 L14 14 L38 50" fill="none" stroke="#e6edf3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M50 18 Q50 10 40 10 Q30 10 30 18 Q30 26 40 30 Q50 34 50 42 Q50 50 40 50 Q30 50 30 42" fill="none" stroke="url(#g5d)" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="32" cy="5" r="3" fill="#3fb950"/>
+      </svg>
+      Journal / March 8
+    </div>
+    <h3>5: Intertwined + Pulse</h3>
+    <p>N path weaves through S curves. Radar pulse behind.</p>
+  </div>
+
+  <!-- Option 6: Bold Monogram + Gear -->
+  <div class="option">
+    <div class="preview">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+          <defs>
+            <linearGradient id="g6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient>
+          </defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <rect width="64" height="64" rx="14" fill="none" stroke="#30363d" stroke-width="1.5"/>
+          <!-- Gear teeth around the icon -->
+          <rect x="29" y="2" width="6" height="4" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <rect x="29" y="58" width="6" height="4" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <rect x="2" y="29" width="4" height="6" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <rect x="58" y="29" width="4" height="6" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <!-- Overlapping NS - bold, centered -->
+          <text x="7" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="#e6edf3" letter-spacing="-9">N</text>
+          <text x="26" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="url(#g6)" letter-spacing="-9">S</text>
+          <!-- Green agent core -->
+          <circle cx="32" cy="12" r="3" fill="#3fb950" opacity="0.8"/>
+          <circle cx="32" cy="12" r="5.5" fill="none" stroke="#3fb950" stroke-width="1" opacity="0.3"/>
+        </svg>
+        <div class="size-label">128px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
+          <defs><linearGradient id="g6b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <rect width="64" height="64" rx="14" fill="none" stroke="#30363d" stroke-width="1.5"/>
+          <rect x="29" y="2" width="6" height="4" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <rect x="29" y="58" width="6" height="4" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <rect x="2" y="29" width="4" height="6" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <rect x="58" y="29" width="4" height="6" rx="1.5" fill="#E8652B" opacity="0.4"/>
+          <text x="7" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="#e6edf3" letter-spacing="-9">N</text>
+          <text x="26" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="url(#g6b)" letter-spacing="-9">S</text>
+          <circle cx="32" cy="12" r="3" fill="#3fb950" opacity="0.8"/>
+        </svg>
+        <div class="size-label">48px</div>
+      </div>
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+          <defs><linearGradient id="g6c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+          <rect width="64" height="64" rx="14" fill="#0d1117"/>
+          <text x="7" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="#e6edf3" letter-spacing="-9">N</text>
+          <text x="26" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="url(#g6c)" letter-spacing="-9">S</text>
+          <circle cx="32" cy="12" r="3" fill="#3fb950" opacity="0.8"/>
+        </svg>
+        <div class="size-label">16px</div>
+      </div>
+    </div>
+    <div class="tab-preview">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="16" height="16">
+        <defs><linearGradient id="g6d" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8652B"/><stop offset="100%" stop-color="#ff8c42"/></linearGradient></defs>
+        <rect width="64" height="64" rx="14" fill="#0d1117"/>
+        <text x="7" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="#e6edf3" letter-spacing="-9">N</text>
+        <text x="26" y="47" font-family="system-ui, sans-serif" font-size="34" font-weight="900" fill="url(#g6d)" letter-spacing="-9">S</text>
+        <circle cx="32" cy="12" r="3" fill="#3fb950" opacity="0.8"/>
+      </svg>
+      Journal / March 8
+    </div>
+    <h3>6: Bold Monogram + Gear</h3>
+    <p>Tight NS overlap with gear teeth. Green agent core.</p>
+  </div>
+
+</div>
+
+<p style="color: #8b949e; margin-top: 1rem; font-size: 0.9rem;">Pick a number (1-6) or tell me what to tweak.</p>
+
+</body>
+</html>
