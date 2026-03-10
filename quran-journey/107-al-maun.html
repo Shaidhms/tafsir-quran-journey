@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Ma'un - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 107 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْمَاعُونِ</div>
+        <h1>Surah Al-Ma'un</h1>
+        <p>The Small Kindnesses - 7 Verses - Makkan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 7</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">107</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">7</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">25</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Small Kindnesses</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Sincerity in Worship</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Surah Al-Ma'un is one of the most powerful short surahs in the Quran. It draws a direct connection between <span class="highlight">faith in the Day of Judgment</span> and <span class="highlight">how we treat other people</span>, especially the weak and vulnerable.</p>
+                <p>The surah begins by asking a question: have you seen the person who denies the Day of Recompense? Then it describes the <span class="highlight">signs of such denial</span>: mistreating orphans and refusing to feed the poor. These are not just bad habits. They are symptoms of a heart that does not truly believe in accountability before Allah.</p>
+                <div class="important">
+                    <p>The surah then shifts to a shocking warning: it addresses people who pray but are heedless of their prayer, who show off their deeds, and who refuse even the smallest acts of kindness. This shows that worship without sincerity and compassion is hollow and rejected.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>The word "Al-Ma'un" refers to <span class="highlight">small, everyday items</span> that people lend to each other: a pot, a bucket, salt, water. Withholding even these tiny acts of kindness is a sign of a spiritually dead heart. The surah teaches us that <span class="highlight">true faith must be reflected in both worship and kindness to others</span>.</p>
+                <p>Ibn Kathir explains that this surah was revealed about those hypocrites and disbelievers who <span class="highlight">combined denial of the afterlife with cruelty to the weak</span>. As-Sa'di notes that the surah pairs two types of failure: failure in one's relationship with Allah (insincere prayer) and failure in one's relationship with people (refusing kindness).</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ</div>
+                    <div class="verse-transliteration">Ara'aytal-ladhi yukadh-dhibu bid-din</div>
+                    <div class="verse-translation">Have you seen the one who denies the Recompense?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">أَرَأَيْتَ</span><span class="trans">ara'ayta</span><span class="meaning">Have you seen</span></div>
+                            <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The one who</span></div>
+                            <div class="word-chip"><span class="ar">يُكَذِّبُ</span><span class="trans">yukadh-dhibu</span><span class="meaning">Denies / rejects</span></div>
+                            <div class="word-chip"><span class="ar">بِالدِّينِ</span><span class="trans">bid-din</span><span class="meaning">The Recompense / Judgment</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah begins with a rhetorical question to the Prophet (peace be upon him) and to all of us: "Have you seen?" This grabs attention. "Ad-Din" here means the Day of Judgment and the system of reward and punishment. The person described does not believe they will ever be held accountable for their actions. This disbelief in accountability is the root cause of all the bad behaviors described next.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ</div>
+                    <div class="verse-transliteration">Fa-dhalikal-ladhi yadu'-ul-yatim</div>
+                    <div class="verse-translation">For that is the one who drives away the orphan.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَذَٰلِكَ</span><span class="trans">fa-dhalika</span><span class="meaning">For that is</span></div>
+                            <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The one who</span></div>
+                            <div class="word-chip"><span class="ar">يَدُعُّ</span><span class="trans">yadu'u</span><span class="meaning">Drives away / pushes</span></div>
+                            <div class="word-chip"><span class="ar">الْيَتِيمَ</span><span class="trans">al-yatim</span><span class="meaning">The orphan</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The word "yadu'u" means to push away harshly, to repel with force. An orphan is a child who has lost their father. Instead of showing compassion, this person drives the orphan away with cruelty. Ibn Kathir explains that this person does not give the orphan their rights, nor shows them any kindness. When someone truly believes in the Day of Judgment, they know that Allah will ask them about how they treated the vulnerable.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ</div>
+                    <div class="verse-transliteration">Wa la yahuddu 'ala ta'amil-miskin</div>
+                    <div class="verse-translation">And does not encourage the feeding of the poor.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And does not</span></div>
+                            <div class="word-chip"><span class="ar">يَحُضُّ</span><span class="trans">yahuddu</span><span class="meaning">Encourage / urge</span></div>
+                            <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">Upon / towards</span></div>
+                            <div class="word-chip"><span class="ar">طَعَامِ</span><span class="trans">ta'ami</span><span class="meaning">Feeding / food of</span></div>
+                            <div class="word-chip"><span class="ar">الْمِسْكِينِ</span><span class="trans">al-miskin</span><span class="meaning">The poor / needy</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Notice: it does not just say "does not feed the poor." It says "does not even encourage others to feed the poor." This is a deeper level of neglect. This person neither feeds the needy themselves nor motivates anyone else to do so. As-Sa'di explains that if someone does not even encourage feeding the poor, then certainly they themselves are even less likely to do it. A believer should be a catalyst for good in their community.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">فَوَيْلٌ لِّلْمُصَلِّينَ</div>
+                    <div class="verse-transliteration">Fa-waylul-lil-musallin</div>
+                    <div class="verse-translation">So woe to those who pray.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَوَيْلٌ</span><span class="trans">fa-waylun</span><span class="meaning">So woe (destruction)</span></div>
+                            <div class="word-chip"><span class="ar">لِّلْمُصَلِّينَ</span><span class="trans">lil-musallin</span><span class="meaning">To those who pray</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Wayl" is a word of severe warning, meaning destruction or a valley in Hellfire. This verse is shocking on purpose: woe to those who PRAY? But the next verse explains who is meant. It is not all who pray, but a specific type of person who prays. This verse must be read together with verse 5. Allah is warning against a particular kind of worshipper, not against prayer itself.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">الَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ</div>
+                    <div class="verse-transliteration">Alladhina hum 'an salatihim sahun</div>
+                    <div class="verse-translation">Those who are heedless of their prayer.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                            <div class="word-chip"><span class="ar">هُمْ</span><span class="trans">hum</span><span class="meaning">They</span></div>
+                            <div class="word-chip"><span class="ar">عَن</span><span class="trans">'an</span><span class="meaning">From / of</span></div>
+                            <div class="word-chip"><span class="ar">صَلَاتِهِمْ</span><span class="trans">salatihim</span><span class="meaning">Their prayer</span></div>
+                            <div class="word-chip"><span class="ar">سَاهُونَ</span><span class="trans">sahun</span><span class="meaning">Heedless / neglectful</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The key word is "'an" (from/of). Allah says they are heedless OF their prayer, not IN their prayer. Ibn Kathir and the companions (like Ibn Abbas and Mus'ab ibn Sa'd) explained: this means they delay their prayer beyond its proper time, pray lazily, or miss it altogether without care. If it said "fi salatihim" (in their prayer), it would mean occasional distraction, which happens to everyone. But "'an salatihim" means a complete disregard for the prayer itself.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">الَّذِينَ هُمْ يُرَاءُونَ</div>
+                    <div class="verse-transliteration">Alladhina hum yura'un</div>
+                    <div class="verse-translation">Those who make show of their deeds.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                            <div class="word-chip"><span class="ar">هُمْ</span><span class="trans">hum</span><span class="meaning">They</span></div>
+                            <div class="word-chip"><span class="ar">يُرَاءُونَ</span><span class="trans">yura'un</span><span class="meaning">Show off / do for display</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Yura'un" comes from "riya'" which means showing off or doing things to be seen by people rather than for Allah. The Prophet (peace be upon him) called riya' "the minor shirk" (associating partners with Allah). These people pray or do good deeds not for Allah's sake, but so people will praise them and think highly of them. Their worship is a performance, not a genuine connection with their Creator.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">وَيَمْنَعُونَ الْمَاعُونَ</div>
+                    <div class="verse-transliteration">Wa yamna'un al-ma'un</div>
+                    <div class="verse-translation">And withhold simple assistance.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَيَمْنَعُونَ</span><span class="trans">wa yamna'un</span><span class="meaning">And they withhold / refuse</span></div>
+                            <div class="word-chip"><span class="ar">الْمَاعُونَ</span><span class="trans">al-ma'un</span><span class="meaning">Simple assistance / small kindnesses</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Al-Ma'un" refers to small everyday items that people commonly lend to each other: a cooking pot, a bucket, salt, water, a needle, or even an axe. Ibn Abbas, Ibn Mas'ud, and others from the companions explained it this way. These are things that cost nothing significant to share. The person described is so stingy and hard-hearted that they will not even lend their neighbor a pot or a cup of sugar. If someone refuses even these tiny acts of kindness, imagine how far they are from giving charity or helping in bigger ways.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Ma'un</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Faith and kindness are inseparable.</strong><p style="color: #999; font-size: 0.95em;">True belief in the Day of Judgment naturally leads to compassion for others. If someone claims to believe but mistreats the weak, their faith is questionable.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Prayer without sincerity is worthless.</strong><p style="color: #999; font-size: 0.95em;">Going through the motions of prayer while being heedless of its purpose and timing is not real worship. Allah wants presence of heart, not empty rituals.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Showing off destroys good deeds.</strong><p style="color: #999; font-size: 0.95em;">Riya' (doing deeds for people's approval) is called "minor shirk" by the Prophet. Sincerity (ikhlas) is what makes any deed count before Allah.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Small kindnesses matter enormously.</strong><p style="color: #999; font-size: 0.95em;">Lending a neighbor a pot, sharing salt, offering water. These tiny acts reflect the state of your heart. Never underestimate the weight of small good deeds.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Encourage others to do good.</strong><p style="color: #999; font-size: 0.95em;">It is not enough to just do good yourself. A believer also encourages and motivates others to help the poor and needy. Be a catalyst for kindness.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. The distinction between "'an salatihim" and "fi salatihim" is reported from the companions including Ibn Abbas and Mus'ab ibn Sa'd. While care has been taken to ensure accuracy, this is a learning aid. Always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="106-quraysh.html">&larr; Prev: Surah Quraysh</a> &middot; <a href="108-al-kawthar.html">Next: Surah Al-Kawthar &rarr;</a>
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0623\u064E\u0631\u064E\u0623\u064E\u064A\u0652\u062A\u064E \u0627\u0644\u0651\u064E\u0630\u0650\u064A \u064A\u064F\u0643\u064E\u0630\u0651\u0650\u0628\u064F \u0628\u0650\u0627\u0644\u062F\u0651\u0650\u064A\u0646\u0650',
+                translit: "Ara'aytal-ladhi yukadh-dhibu bid-din",
+                explanation: "Have you seen the one who denies the Day of Judgment? When someone doesn't believe they'll answer to Allah, look at how they behave...",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u0641\u064E\u0630\u064E\u0670\u0644\u0650\u0643\u064E \u0627\u0644\u0651\u064E\u0630\u0650\u064A \u064A\u064E\u062F\u064F\u0639\u0651\u064F \u0627\u0644\u0652\u064A\u064E\u062A\u0650\u064A\u0645\u064E',
+                translit: "Fa-dhalikal-ladhi yadu'-ul-yatim",
+                explanation: "That's the one who pushes away the orphan! Instead of caring for a child who lost their father, they shove them aside with cruelty.",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u0648\u064E\u0644\u064E\u0627 \u064A\u064E\u062D\u064F\u0636\u0651\u064F \u0639\u064E\u0644\u064E\u0649\u0670 \u0637\u064E\u0639\u064E\u0627\u0645\u0650 \u0627\u0644\u0652\u0645\u0650\u0633\u0652\u0643\u0650\u064A\u0646\u0650',
+                translit: "Wa la yahuddu 'ala ta'amil-miskin",
+                explanation: "And doesn't even encourage feeding the poor! They won't feed the hungry themselves, and they won't even tell others to help either.",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u0641\u064E\u0648\u064E\u064A\u0652\u0644\u064C \u0644\u0651\u0650\u0644\u0652\u0645\u064F\u0635\u064E\u0644\u0651\u0650\u064A\u0646\u064E',
+                translit: "Fa-waylul-lil-musallin",
+                explanation: "So woe to those who pray! Wait, what? Woe to people who pray? Read the next verse to find out which type of praying person is meant...",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u0627\u0644\u0651\u064E\u0630\u0650\u064A\u0646\u064E \u0647\u064F\u0645\u0652 \u0639\u064E\u0646 \u0635\u064E\u0644\u064E\u0627\u062A\u0650\u0647\u0650\u0645\u0652 \u0633\u064E\u0627\u0647\u064F\u0648\u0646\u064E',
+                translit: "Alladhina hum 'an salatihim sahun",
+                explanation: "Those who are heedless OF their prayer - they delay it, skip it, or pray without any care. Their hearts are completely absent from their worship.",
+                build: buildVerse5
+            },
+            {
+                num: 6,
+                arabic: '\u0627\u0644\u0651\u064E\u0630\u0650\u064A\u0646\u064E \u0647\u064F\u0645\u0652 \u064A\u064F\u0631\u064E\u0627\u0621\u064F\u0648\u0646\u064E',
+                translit: "Alladhina hum yura'un",
+                explanation: "They only do good deeds to show off! They pray and act generous so people will praise them, not because they truly love Allah.",
+                build: buildVerse6
+            },
+            {
+                num: 7,
+                arabic: '\u0648\u064E\u064A\u064E\u0645\u0652\u0646\u064E\u0639\u064F\u0648\u0646\u064E \u0627\u0644\u0652\u0645\u064E\u0627\u0639\u064F\u0648\u0646\u064E',
+                translit: "Wa yamna'un al-ma'un",
+                explanation: "And they refuse to share even the smallest things - a cooking pot, a cup of salt, a bucket of water. If they won't share these tiny things, imagine their hearts!",
+                build: buildVerse7
+            }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            defs.appendChild(createLinearGrad('skyGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyDark', '0%','0%','0%','100%',
+                [['0%','#455A64'],['30%','#546E7A'],['60%','#78909C'],['100%','#B0BEC5']]));
+            defs.appendChild(createLinearGrad('skyWarm', '0%','0%','0%','100%',
+                [['0%','#FFCC80'],['40%','#FFE0B2'],['70%','#FFF9C4'],['100%','#FFF3E0']]));
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('sandGrad', '0%','0%','0%','100%',
+                [['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('robeGrad', '0%','0%','100%','100%',
+                [['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            defs.appendChild(createLinearGrad('darkRobeGrad', '0%','0%','100%','100%',
+                [['0%','#37474F'],['30%','#455A64'],['70%','#546E7A'],['100%','#37474F']]));
+            defs.appendChild(createLinearGrad('bowlGrad', '0%','0%','100%','0%',
+                [['0%','#795548'],['30%','#8D6E63'],['70%','#A1887F'],['100%','#6D4C41']]));
+            defs.appendChild(createLinearGrad('prayerMatGrad', '0%','0%','0%','100%',
+                [['0%','#1B5E20'],['30%','#2E7D32'],['60%','#388E3C'],['100%','#1B5E20']]));
+            defs.appendChild(createLinearGrad('lightGrad', '50%','0%','50%','100%',
+                [['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('wallGrad', '0%','0%','0%','100%',
+                [['0%','#EFEBE9'],['30%','#D7CCC8'],['70%','#BCAAA4'],['100%','#A1887F']]));
+            defs.appendChild(createLinearGrad('tableGrad', '0%','0%','0%','100%',
+                [['0%','#8D6E63'],['40%','#795548'],['100%','#5D4037']]));
+            defs.appendChild(createLinearGrad('floorGrad', '0%','0%','0%','100%',
+                [['0%','#D7CCC8'],['50%','#BCAAA4'],['100%','#A1887F']]));
+            defs.appendChild(createLinearGrad('stageGrad', '0%','0%','0%','100%',
+                [['0%','#5D4037'],['40%','#4E342E'],['100%','#3E2723']]));
+
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('skinGrad', '40%','35%','50%',
+                [['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createRadialGrad('redGlow', '50%','50%','50%',
+                [['0%','rgba(229,57,53,0.4)'],['40%','rgba(229,57,53,0.2)'],['100%','rgba(229,57,53,0)']]));
+            defs.appendChild(createRadialGrad('warningGlow', '50%','50%','50%',
+                [['0%','rgba(255,152,0,0.5)'],['40%','rgba(255,152,0,0.2)'],['100%','rgba(255,152,0,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // Helper: draw a generic silhouette person
+        function drawPerson(add, gi, cx, cy, scale, robeColor, robeStroke) {
+            const s = scale;
+            // Shadow
+            add(gi, el('ellipse', { cx, cy: cy + 25*s, rx: 12*s, ry: 4*s, fill: 'rgba(0,0,0,0.12)' }));
+            // Body/robe
+            add(gi, pathEl(
+                `M${cx-10*s},${cy-5*s} Q${cx-12*s},${cy+10*s} ${cx-14*s},${cy+22*s} L${cx+14*s},${cy+22*s} Q${cx+12*s},${cy+10*s} ${cx+10*s},${cy-5*s} Z`,
+                robeColor || 'url(#robeGrad)', robeStroke || '#90A4AE', 1.2*s, 'round'));
+            // Head
+            add(gi, el('circle', { cx, cy: cy - 12*s, r: 8*s, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.8*s }));
+            // Head covering
+            add(gi, pathEl(
+                `M${cx-8*s},${cy-12*s} Q${cx},${cy-22*s} ${cx+8*s},${cy-12*s}`,
+                robeColor || '#CFD8DC', robeStroke || '#90A4AE', 0.8*s, 'round'));
+        }
+
+        // Helper: draw a small child silhouette
+        function drawChild(add, gi, cx, cy, scale, color) {
+            const s = scale;
+            add(gi, el('ellipse', { cx, cy: cy + 15*s, rx: 8*s, ry: 3*s, fill: 'rgba(0,0,0,0.1)' }));
+            // Body
+            add(gi, pathEl(
+                `M${cx-6*s},${cy-2*s} Q${cx-7*s},${cy+5*s} ${cx-8*s},${cy+13*s} L${cx+8*s},${cy+13*s} Q${cx+7*s},${cy+5*s} ${cx+6*s},${cy-2*s} Z`,
+                color || '#BBDEFB', '#90CAF9', 1*s, 'round'));
+            // Head
+            add(gi, el('circle', { cx, cy: cy - 7*s, r: 5.5*s, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.6*s }));
+        }
+
+        // ===== VERSE 1: QUESTION MARK - DENYING THE RECOMPENSE =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark moody sky
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: Ground
+            add(1, pathEl('M0,300 L900,300 L900,506 L0,506 Z', 'url(#sandGrad)', '#C49A52', 2));
+            for (let i = 0; i < 25; i++) {
+                const sx = 20 + i * 36;
+                const sy = 310 + Math.random() * 180;
+                add(1, lineEl(sx, sy, sx + 6, sy, '#BCAAA4', 0.6));
+            }
+
+            // G2: Large question mark in the center
+            add(2, pathEl(
+                'M420,80 Q420,50 450,50 Q480,50 480,80 Q480,110 450,120 L450,145',
+                'none', '#E53935', 8, 'round'));
+            add(2, el('circle', { cx: 450, cy: 165, r: 6, fill: '#E53935' }));
+            // Glow behind question mark
+            add(2, el('circle', { cx: 450, cy: 110, r: 80, fill: 'url(#redGlow)' }));
+
+            // G3: Silhouette figure turning away (left side)
+            drawPerson(add, 3, 280, 320, 2.2, 'url(#darkRobeGrad)', '#37474F');
+            // Turned head - looking away
+            add(3, pathEl('M260,275 Q250,270 245,275', 'none', '#455A64', 2, 'round'));
+
+            // G4: Hand gesture pushing away (dismissive)
+            add(4, pathEl('M310,310 Q330,300 340,295', 'none', '#FFB74D', 3.5, 'round'));
+            add(4, pathEl('M340,295 L348,290', 'none', '#FFB74D', 3, 'round'));
+            add(4, pathEl('M340,295 L350,295', 'none', '#FFB74D', 3, 'round'));
+            add(4, pathEl('M340,295 L348,300', 'none', '#FFB74D', 3, 'round'));
+
+            // G5: Scales of Justice tilted/broken (symbol of denying judgment)
+            // Base
+            add(5, lineEl(620, 380, 620, 220, '#90A4AE', 4));
+            add(5, lineEl(600, 380, 640, 380, '#90A4AE', 5));
+            // Beam - tilted
+            add(5, lineEl(560, 240, 680, 260, '#78909C', 3));
+            // Left plate (higher - empty)
+            add(5, pathEl('M540,240 Q550,260 560,240', '#CFD8DC', '#90A4AE', 1.5, 'round'));
+            add(5, lineEl(550, 250, 550, 240, '#90A4AE', 1));
+            add(5, lineEl(540, 240, 560, 240, '#90A4AE', 1.5));
+            // Right plate (lower - with weight)
+            add(5, pathEl('M660,260 Q670,280 680,260', '#CFD8DC', '#90A4AE', 1.5, 'round'));
+            add(5, lineEl(670, 270, 670, 260, '#90A4AE', 1));
+            add(5, lineEl(660, 260, 680, 260, '#90A4AE', 1.5));
+            // X mark over scales
+            add(5, lineEl(595, 210, 645, 290, '#E53935', 3));
+            add(5, lineEl(645, 210, 595, 290, '#E53935', 3));
+
+            // G6: Dark clouds
+            add(6, cartoonCloud(150, 60, 0.8));
+            add(6, cartoonCloud(700, 50, 0.7));
+            add(6, cartoonCloud(450, 30, 0.6));
+
+            // G7: Warning sparkles
+            [[350,200],[550,180],[200,150],[700,170],[400,250],[500,230]].forEach(([x,y]) => {
+                add(7, el('circle', { cx: x, cy: y, r: 2 + Math.random()*2, fill: '#E53935', opacity: 0.6 }));
+            });
+
+            // G8: Cracks in ground (symbolizing denial)
+            add(8, pathEl('M200,350 Q220,360 210,380 Q230,400 220,420', 'none', '#795548', 1.5, 'round'));
+            add(8, pathEl('M700,340 Q680,355 690,375 Q675,395 685,410', 'none', '#795548', 1.5, 'round'));
+
+            // G9: Title text
+            add(9, textEl('"Have you seen the one who denies?"', 450, 475, { size: 22, color: '#E53935', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: ORPHAN BEING PUSHED AWAY =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Somber sky
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: Wall/building background
+            add(1, pathEl('M0,250 L900,250 L900,506 L0,506 Z', 'url(#floorGrad)', '#A1887F', 2));
+            add(1, pathEl('M50,100 L50,250 L400,250 L400,100 Z', 'url(#wallGrad)', '#A1887F', 2, 'round'));
+            add(1, pathEl('M500,120 L500,250 L850,250 L850,120 Z', 'url(#wallGrad)', '#A1887F', 2, 'round'));
+            // Door frame
+            add(1, pathEl('M180,140 L270,140 L270,250 L180,250 Z', '#795548', '#5D4037', 2, 'round'));
+
+            // G2: Harsh figure (the denier) - large, imposing
+            drawPerson(add, 2, 550, 300, 2.8, 'url(#darkRobeGrad)', '#37474F');
+
+            // G3: Harsh pushing arm extended
+            add(3, pathEl('M510,295 Q480,290 460,295', 'none', '#FFB74D', 4, 'round'));
+            add(3, pathEl('M460,295 L448,290', 'none', '#FFB74D', 3.5, 'round'));
+            add(3, pathEl('M460,295 L445,296', 'none', '#FFB74D', 3.5, 'round'));
+
+            // G4: Small orphan child being pushed (with tear)
+            drawChild(add, 4, 380, 340, 2.0, '#BBDEFB');
+            // Tear drop
+            add(4, pathEl('M375,328 Q373,334 375,338', '#4FC3F7', '#29B6F6', 0.8, 'round'));
+            // Motion lines showing being pushed
+            add(4, lineEl(400, 335, 415, 335, '#90A4AE', 1));
+            add(4, lineEl(398, 345, 418, 345, '#90A4AE', 1));
+            add(4, lineEl(402, 355, 420, 355, '#90A4AE', 1));
+
+            // G5: Orphan's torn/simple clothes detail
+            add(5, pathEl('M372,350 L370,355', 'none', '#90CAF9', 0.8, 'round'));
+            add(5, pathEl('M388,348 L390,354', 'none', '#90CAF9', 0.8, 'round'));
+            // Small empty bowl near orphan
+            add(5, pathEl('M340,375 Q350,390 360,375', '#A1887F', '#795548', 1.5, 'round'));
+
+            // G6: Dust/dirt particles from the push
+            [[420,330],[430,325],[425,340],[435,335],[415,320]].forEach(([x,y]) => {
+                add(6, el('circle', { cx: x, cy: y, r: 1.5 + Math.random()*1.5, fill: '#BCAAA4', opacity: 0.5 }));
+            });
+
+            // G7: Sad atmosphere lines
+            for (let i = 0; i < 8; i++) {
+                const rx = 100 + Math.random() * 700;
+                const ry = 50 + Math.random() * 150;
+                add(7, lineEl(rx, ry, rx + 15, ry + 3, 'rgba(120,144,156,0.3)', 1));
+            }
+
+            // G8: Heart symbol cracked (broken compassion)
+            add(8, pathEl('M450,80 Q450,60 435,60 Q415,60 415,80 Q415,100 450,120 Q485,100 485,80 Q485,60 465,60 Q450,60 450,80 Z',
+                '#EF9A9A', '#E53935', 2, 'round'));
+            // Crack through heart
+            add(8, pathEl('M440,70 L455,90 L445,105', 'none', '#B71C1C', 2.5, 'round'));
+
+            // G9: Title
+            add(9, textEl('"Drives away the orphan"', 450, 475, { size: 24, color: '#E53935', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: EMPTY BOWL - NOT FEEDING THE POOR =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Muted warm sky
+            add(0, pathEl('M0,0 L900,0 L900,220 L0,220 Z', 'url(#skyWarm)', 'none', 0));
+
+            // G1: Ground and simple setting
+            add(1, pathEl('M0,220 L900,220 L900,506 L0,506 Z', 'url(#floorGrad)', '#A1887F', 2));
+            // Simple wall
+            add(1, pathEl('M0,80 L900,80 L900,220 L0,220 Z', 'url(#wallGrad)', '#BCAAA4', 1.5));
+
+            // G2: Large empty bowl in center
+            add(2, pathEl(
+                'M350,280 Q350,340 400,350 L500,350 Q550,340 550,280 Q550,260 450,255 Q350,260 350,280 Z',
+                '#A1887F', '#795548', 2.5, 'round'));
+            // Inner bowl shadow
+            add(2, el('ellipse', { cx: 450, cy: 300, rx: 80, ry: 30, fill: '#8D6E63' }));
+            // Empty bowl highlight
+            add(2, pathEl('M380,280 Q400,275 420,278', 'none', 'rgba(255,255,255,0.4)', 2, 'round'));
+
+            // G3: Hungry person silhouette on the right, looking at bowl
+            drawPerson(add, 3, 700, 310, 2.0, '#BBDEFB', '#90CAF9');
+            // Thin arms reaching slightly
+            add(3, pathEl('M680,305 Q660,310 650,315', 'none', '#FFB74D', 2.5, 'round'));
+            // Sad eyes
+            add(3, pathEl('M695,293 Q700,296 705,293', 'none', '#5D4037', 1.2, 'round'));
+
+            // G4: Wealthy person turning away on the left
+            drawPerson(add, 4, 200, 300, 2.3, 'url(#darkRobeGrad)', '#37474F');
+            // Crossed arms (refusing)
+            add(4, pathEl('M175,300 Q190,295 210,300', 'none', '#FFB74D', 3, 'round'));
+            add(4, pathEl('M225,300 Q210,295 190,300', 'none', '#FFB74D', 3, 'round'));
+
+            // G5: Speech bubble with X (not encouraging)
+            add(5, pathEl(
+                'M140,230 Q130,200 160,195 L250,195 Q270,195 270,215 L270,240 Q270,260 250,260 L190,260 L175,275 L180,260 L160,260 Q130,260 140,230 Z',
+                '#FFF', '#CFD8DC', 1.5, 'round'));
+            // X inside speech bubble
+            add(5, lineEl(185, 215, 215, 245, '#E53935', 3));
+            add(5, lineEl(215, 215, 185, 245, '#E53935', 3));
+
+            // G6: Cobwebs on bowl (showing neglect)
+            add(6, pathEl('M370,270 Q390,260 380,250', 'none', '#CFD8DC', 0.8, 'round'));
+            add(6, pathEl('M370,270 Q360,255 375,250', 'none', '#CFD8DC', 0.8, 'round'));
+            add(6, pathEl('M530,275 Q515,260 525,250', 'none', '#CFD8DC', 0.8, 'round'));
+
+            // G7: Sad sparkle/dust motes
+            [[300,180],[600,170],[350,150],[550,160],[450,130],[250,200],[650,200]].forEach(([x,y]) => {
+                add(7, el('circle', { cx: x, cy: y, r: 1.5, fill: '#BCAAA4', opacity: 0.4 }));
+            });
+
+            // G8: Flies around the empty bowl
+            [[420,260],[460,255],[440,250],[480,265]].forEach(([fx,fy]) => {
+                add(8, el('circle', { cx: fx, cy: fy, r: 2, fill: '#424242' }));
+                add(8, pathEl(`M${fx-3},${fy-2} Q${fx-5},${fy-5} ${fx-2},${fy-5}`, 'none', '#757575', 0.5, 'round'));
+                add(8, pathEl(`M${fx+3},${fy-2} Q${fx+5},${fy-5} ${fx+2},${fy-5}`, 'none', '#757575', 0.5, 'round'));
+            });
+
+            // G9: Title
+            add(9, textEl('"Does not encourage feeding the poor"', 450, 475, { size: 22, color: '#795548', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: WOE TO THOSE WHO PRAY =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dramatic red-orange sky
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z',
+                'url(#skyDark)', 'none', 0));
+            // Red warning overlay
+            add(0, el('rect', { width: 900, height: 250, fill: 'rgba(229,57,53,0.15)' }));
+
+            // G1: Mosque floor / ground
+            add(1, pathEl('M0,250 L900,250 L900,506 L0,506 Z', 'url(#floorGrad)', '#A1887F', 2));
+            // Floor pattern (tiles)
+            for (let i = 0; i < 10; i++) {
+                add(1, lineEl(i * 90, 250, i * 90, 506, 'rgba(160,140,120,0.3)', 1));
+            }
+            for (let j = 0; j < 5; j++) {
+                add(1, lineEl(0, 290 + j * 55, 900, 290 + j * 55, 'rgba(160,140,120,0.3)', 1));
+            }
+
+            // G2: Prayer mat in center
+            add(2, pathEl('M370,310 L530,310 L540,430 L360,430 Z', 'url(#prayerMatGrad)', '#1B5E20', 2, 'round'));
+            // Mat border pattern
+            add(2, pathEl('M375,315 L525,315 L535,425 L365,425 Z', 'none', '#4CAF50', 1, 'round'));
+            // Mihrab design on mat
+            add(2, pathEl('M430,320 Q450,310 470,320 L470,370 Q450,380 430,370 Z', '#2E7D32', '#4CAF50', 1, 'round'));
+
+            // G3: Figure in prayer position (sujood silhouette)
+            // Prostrating figure
+            add(3, el('ellipse', { cx: 450, cy: 385, rx: 35, ry: 8, fill: 'rgba(0,0,0,0.1)' }));
+            add(3, pathEl(
+                'M420,365 Q430,350 450,348 Q470,350 480,365 L485,380 L415,380 Z',
+                'url(#robeGrad)', '#90A4AE', 1.5, 'round'));
+            // Head touching ground
+            add(3, el('circle', { cx: 450, cy: 368, r: 8, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.8 }));
+
+            // G4: Large "WAYL" warning text with fire effect
+            add(4, textEl('WAYL', 450, 130, { size: 60, color: '#E53935', weight: 700 }));
+            add(4, el('circle', { cx: 450, cy: 130, r: 80, fill: 'url(#redGlow)' }));
+            // Warning symbol - exclamation triangle
+            add(4, pathEl('M450,50 L490,120 L410,120 Z', 'none', '#FF9800', 3, 'round'));
+            add(4, lineEl(450, 70, 450, 100, '#FF9800', 3));
+            add(4, el('circle', { cx: 450, cy: 110, r: 3, fill: '#FF9800' }));
+
+            // G5: Fire/flame elements around the warning
+            [[380,90],[520,85],[350,130],[550,125],[400,60],[500,55]].forEach(([fx,fy]) => {
+                add(5, pathEl(
+                    `M${fx},${fy+15} Q${fx-5},${fy} ${fx},${fy-10} Q${fx+5},${fy} ${fx},${fy+15}`,
+                    '#FF9800', '#E65100', 1, 'round'));
+                add(5, pathEl(
+                    `M${fx},${fy+10} Q${fx-3},${fy+2} ${fx},${fy-5} Q${fx+3},${fy+2} ${fx},${fy+10}`,
+                    '#FDD835', '#FF9800', 0.8, 'round'));
+            });
+
+            // G6: Question marks floating (confusion/shock)
+            [[300,200],[600,190],[250,160],[650,170]].forEach(([qx,qy]) => {
+                add(6, textEl('?', qx, qy, { size: 28, color: '#FF9800', weight: 700 }));
+            });
+
+            // G7: Mihrab arches in background
+            add(7, pathEl('M100,100 Q100,60 130,60 L170,60 Q200,60 200,100 L200,250 L100,250 Z',
+                'rgba(200,180,160,0.3)', '#BCAAA4', 1.5, 'round'));
+            add(7, pathEl('M700,100 Q700,60 730,60 L770,60 Q800,60 800,100 L800,250 L700,250 Z',
+                'rgba(200,180,160,0.3)', '#BCAAA4', 1.5, 'round'));
+
+            // G8: Arrow pointing to next verse
+            add(8, pathEl('M750,400 L820,400', 'none', '#FF9800', 2.5, 'round'));
+            add(8, pathEl('M810,393 L822,400 L810,407', 'none', '#FF9800', 2, 'round'));
+            add(8, textEl('read on...', 785, 420, { size: 16, color: '#FF9800', weight: 600 }));
+
+            // G9: Title
+            add(9, textEl('"Woe to those who pray..."', 450, 475, { size: 24, color: '#E53935', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: HEEDLESS OF PRAYER =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dim sky showing late time
+            add(0, pathEl('M0,0 L900,0 L900,200 L0,200 Z', 'url(#skyDark)', 'none', 0));
+            // Few stars showing late night
+            [[100,40],[250,60],[700,35],[820,55],[500,30]].forEach(([sx,sy]) => {
+                add(0, cartoonStar(sx, sy, 4, 2, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G1: Room interior
+            add(1, pathEl('M50,200 L850,200 L850,506 L50,506 Z', 'url(#floorGrad)', '#A1887F', 2));
+            add(1, pathEl('M50,80 L850,80 L850,200 L50,200 Z', 'url(#wallGrad)', '#BCAAA4', 1.5));
+
+            // G2: Large clock on wall showing late time
+            add(2, el('circle', { cx: 450, cy: 140, r: 50, fill: '#FFF', stroke: '#795548', 'stroke-width': 3 }));
+            add(2, el('circle', { cx: 450, cy: 140, r: 45, fill: '#FAFAFA', stroke: '#A1887F', 'stroke-width': 1 }));
+            // Clock numbers (12, 3, 6, 9)
+            add(2, textEl('12', 450, 102, { size: 12, color: '#5D4037', weight: 700, family: 'Inter, sans-serif' }));
+            add(2, textEl('3', 487, 142, { size: 12, color: '#5D4037', weight: 700, family: 'Inter, sans-serif' }));
+            add(2, textEl('6', 450, 180, { size: 12, color: '#5D4037', weight: 700, family: 'Inter, sans-serif' }));
+            add(2, textEl('9', 413, 142, { size: 12, color: '#5D4037', weight: 700, family: 'Inter, sans-serif' }));
+            // Hour hand pointing to late position
+            add(2, lineEl(450, 140, 465, 118, '#333', 3));
+            // Minute hand
+            add(2, lineEl(450, 140, 475, 150, '#555', 2));
+            add(2, el('circle', { cx: 450, cy: 140, r: 3, fill: '#E53935' }));
+
+            // G3: Person yawning/distracted on prayer mat
+            // Prayer mat
+            add(3, pathEl('M280,360 L420,360 L430,460 L270,460 Z', 'url(#prayerMatGrad)', '#1B5E20', 2, 'round'));
+            // Sitting lazily
+            drawPerson(add, 3, 350, 370, 2.0, 'url(#robeGrad)', '#90A4AE');
+            // Yawning mouth
+            add(3, el('ellipse', { cx: 350, cy: 347, rx: 4, ry: 6, fill: '#5D4037' }));
+            // Hand covering yawn
+            add(3, pathEl('M360,340 Q365,345 362,350', 'none', '#FFB74D', 2.5, 'round'));
+
+            // G4: ZZZ floating (sleepiness)
+            add(4, textEl('Z', 380, 320, { size: 18, color: '#90A4AE', weight: 700 }));
+            add(4, textEl('Z', 395, 305, { size: 22, color: '#78909C', weight: 700 }));
+            add(4, textEl('Z', 415, 285, { size: 28, color: '#607D8B', weight: 700 }));
+
+            // G5: Phone/distraction on the side
+            add(5, pathEl('M580,350 L620,350 L620,400 L580,400 Z', '#333', '#222', 1.5, 'round'));
+            add(5, el('rect', { x: 583, y: 355, width: 34, height: 38, rx: 2, fill: '#4FC3F7' }));
+            // Notification bubbles
+            add(5, el('circle', { cx: 625, cy: 348, r: 8, fill: '#E53935' }));
+            add(5, textEl('5', 625, 349, { size: 10, color: '#FFF', weight: 700, family: 'Inter, sans-serif' }));
+
+            // G6: Cobwebs on unused prayer mat corner
+            add(6, pathEl('M285,365 Q275,355 270,360', 'none', '#CFD8DC', 0.8, 'round'));
+            add(6, pathEl('M285,365 Q280,360 278,365', 'none', '#CFD8DC', 0.8, 'round'));
+            // Dust particles
+            [[300,380],[320,370],[400,375],[310,390]].forEach(([dx,dy]) => {
+                add(6, el('circle', { cx: dx, cy: dy, r: 1, fill: '#BCAAA4', opacity: 0.5 }));
+            });
+
+            // G7: Arrow from clock showing time passing
+            add(7, pathEl('M500,140 Q540,140 560,160 Q580,180 580,220', 'none', '#E53935', 2, 'round'));
+            add(7, pathEl('M574,212 L580,224 L586,212', 'none', '#E53935', 2, 'round'));
+            add(7, textEl('time wasted', 610, 180, { size: 14, color: '#E53935', weight: 600 }));
+
+            // G8: Window showing sun setting (prayer time passing)
+            add(8, pathEl('M700,100 L780,100 L780,190 L700,190 Z', '#E1F5FE', '#795548', 2, 'round'));
+            add(8, lineEl(740, 100, 740, 190, '#795548', 1.5));
+            add(8, lineEl(700, 145, 780, 145, '#795548', 1.5));
+            // Sun setting in window
+            add(8, el('circle', { cx: 740, cy: 175, r: 12, fill: '#FF9800' }));
+            add(8, pathEl('M700,175 L780,175 L780,190 L700,190 Z', '#90A4AE', 'none', 0));
+
+            // G9: Title
+            add(9, textEl('"Heedless of their prayer"', 450, 475, { size: 24, color: '#607D8B', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 6: SHOWING OFF =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Bright showy sky
+            add(0, pathEl('M0,0 L900,0 L900,200 L0,200 Z', 'url(#skyWarm)', 'none', 0));
+
+            // G1: Stage/platform
+            add(1, pathEl('M200,300 L700,300 L750,350 L150,350 Z', 'url(#stageGrad)', '#3E2723', 2, 'round'));
+            add(1, pathEl('M150,350 L750,350 L750,506 L150,506 Z', '#4E342E', '#3E2723', 1.5));
+            // Stage lights
+            add(1, pathEl('M350,200 L300,300 L400,300 Z', 'rgba(255,249,196,0.15)', 'none', 0));
+            add(1, pathEl('M550,200 L500,300 L600,300 Z', 'rgba(255,249,196,0.15)', 'none', 0));
+
+            // G2: Show-off person in center with exaggerated pose
+            drawPerson(add, 2, 450, 240, 2.8, '#7B1FA2', '#4A148C');
+            // Arms spread wide (showing off)
+            add(2, pathEl('M410,240 Q370,220 340,230', 'none', '#FFB74D', 3.5, 'round'));
+            add(2, pathEl('M490,240 Q530,220 560,230', 'none', '#FFB74D', 3.5, 'round'));
+
+            // G3: Spotlight beams
+            add(3, pathEl('M450,0 L350,200 L550,200 Z', 'rgba(255,249,196,0.2)', 'none', 0));
+            add(3, el('circle', { cx: 450, cy: 230, r: 60, fill: 'url(#goldenGlow)' }));
+
+            // G4: Crowd of small spectator silhouettes
+            [[180,380],[220,375],[260,382],[300,378],[340,385],
+             [560,378],[600,382],[640,375],[680,380],[720,385]].forEach(([px,py]) => {
+                add(4, el('ellipse', { cx: px, cy: py + 15, rx: 8, ry: 3, fill: 'rgba(0,0,0,0.1)' }));
+                add(4, pathEl(
+                    `M${px-6},${py} Q${px-7},${py+6} ${px-7},${py+12} L${px+7},${py+12} Q${px+7},${py+6} ${px+6},${py} Z`,
+                    '#CFD8DC', '#B0BEC5', 0.8, 'round'));
+                add(4, el('circle', { cx: px, cy: py - 5, r: 4, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.4 }));
+            });
+
+            // G5: Eyes/looking symbols (being watched)
+            [[200,320],[300,310],[600,310],[700,320]].forEach(([ex,ey]) => {
+                add(5, el('ellipse', { cx: ex, cy: ey, rx: 10, ry: 6, fill: '#FFF', stroke: '#455A64', 'stroke-width': 1 }));
+                add(5, el('circle', { cx: ex, cy: ey, r: 3, fill: '#1B5E20' }));
+                add(5, el('circle', { cx: ex + 1, cy: ey - 1, r: 1, fill: '#FFF' }));
+            });
+
+            // G6: Peacock feather patterns (vanity symbol)
+            // Left feather
+            add(6, pathEl('M120,150 Q130,100 140,150', '#1B5E20', '#2E7D32', 1.5, 'round'));
+            add(6, el('ellipse', { cx: 130, cy: 110, rx: 12, ry: 18, fill: 'none', stroke: '#1B5E20', 'stroke-width': 1.5 }));
+            add(6, el('ellipse', { cx: 130, cy: 110, rx: 7, ry: 12, fill: 'none', stroke: '#0D47A1', 'stroke-width': 1 }));
+            add(6, el('circle', { cx: 130, cy: 110, r: 4, fill: '#0D47A1' }));
+            // Right feather
+            add(6, pathEl('M760,150 Q770,100 780,150', '#1B5E20', '#2E7D32', 1.5, 'round'));
+            add(6, el('ellipse', { cx: 770, cy: 110, rx: 12, ry: 18, fill: 'none', stroke: '#1B5E20', 'stroke-width': 1.5 }));
+            add(6, el('ellipse', { cx: 770, cy: 110, rx: 7, ry: 12, fill: 'none', stroke: '#0D47A1', 'stroke-width': 1 }));
+            add(6, el('circle', { cx: 770, cy: 110, r: 4, fill: '#0D47A1' }));
+
+            // G7: "LOOK AT ME" speech bubble
+            add(7, pathEl(
+                'M380,140 Q370,115 395,110 L505,110 Q530,110 525,135 L525,155 Q520,175 500,175 L470,175 L455,190 L460,175 L400,175 Q375,175 380,155 Z',
+                '#FFF', '#CFD8DC', 1.5, 'round'));
+            add(7, textEl('LOOK AT ME!', 450, 145, { size: 16, color: '#7B1FA2', weight: 700, family: 'Inter, sans-serif' }));
+
+            // G8: Fake halo/glow that is cracked
+            add(8, el('ellipse', { cx: 450, cy: 195, rx: 30, ry: 10, fill: 'none', stroke: '#FFD54F', 'stroke-width': 2, 'stroke-dasharray': '5,3' }));
+
+            // G9: Title
+            add(9, textEl('"Those who make show of their deeds"', 450, 475, { size: 22, color: '#7B1FA2', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 7: WITHHOLDING SMALL KINDNESSES =====
+        function buildVerse7() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Warm sky
+            add(0, pathEl('M0,0 L900,0 L900,200 L0,200 Z', 'url(#skyWarm)', 'none', 0));
+
+            // G1: Ground / neighborhood scene
+            add(1, pathEl('M0,200 L900,200 L900,506 L0,506 Z', 'url(#floorGrad)', '#A1887F', 2));
+            // Fence in background
+            for (let i = 0; i < 12; i++) {
+                const fx = 50 + i * 75;
+                add(1, lineEl(fx, 180, fx, 220, '#8D6E63', 3));
+                add(1, pathEl(`M${fx-3},180 L${fx},174 L${fx+3},180`, '#8D6E63', '#795548', 1, 'round'));
+            }
+            add(1, lineEl(50, 195, 875, 195, '#8D6E63', 2.5));
+            add(1, lineEl(50, 210, 875, 210, '#8D6E63', 2.5));
+
+            // G2: Left hand holding a bowl tightly (refusing to share)
+            // Arm from left
+            add(2, pathEl('M150,320 Q200,310 240,315', 'none', '#FFB74D', 5, 'round'));
+            // Hand gripping bowl
+            add(2, pathEl('M240,305 Q250,340 260,305', 'url(#bowlGrad)', '#5D4037', 2, 'round'));
+            // Bowl
+            add(2, pathEl('M220,290 Q230,320 250,325 L270,325 Q290,320 300,290 Q300,275 260,270 Q220,275 220,290 Z',
+                '#A1887F', '#795548', 2, 'round'));
+            // Water/content in bowl
+            add(2, el('ellipse', { cx: 260, cy: 295, rx: 30, ry: 12, fill: '#4FC3F7', opacity: 0.7 }));
+            // Fingers gripping
+            add(2, pathEl('M235,305 Q238,295 236,288', 'none', '#FFB74D', 2.5, 'round'));
+            add(2, pathEl('M285,305 Q282,295 284,288', 'none', '#FFB74D', 2.5, 'round'));
+
+            // G3: Right hand reaching for the bowl (needing help)
+            add(3, pathEl('M750,320 Q700,315 660,318', 'none', '#FFCC80', 4, 'round'));
+            // Open palm reaching
+            add(3, pathEl('M660,318 L648,310', 'none', '#FFCC80', 3, 'round'));
+            add(3, pathEl('M660,318 L645,318', 'none', '#FFCC80', 3, 'round'));
+            add(3, pathEl('M660,318 L648,325', 'none', '#FFCC80', 3, 'round'));
+            add(3, pathEl('M660,318 L652,330', 'none', '#FFCC80', 3, 'round'));
+
+            // G4: Gap/barrier between the hands (red X or wall)
+            add(4, lineEl(450, 260, 450, 370, '#E53935', 3));
+            add(4, lineEl(430, 260, 470, 260, '#E53935', 2));
+            add(4, lineEl(430, 370, 470, 370, '#E53935', 2));
+            // X symbol
+            add(4, lineEl(435, 300, 465, 340, '#E53935', 3));
+            add(4, lineEl(465, 300, 435, 340, '#E53935', 3));
+
+            // G5: Small household items scattered (the ma'un)
+            // Pot
+            add(5, pathEl('M350,400 Q355,420 370,425 L390,425 Q405,420 410,400 Q410,390 380,388 Q350,390 350,400 Z',
+                '#90A4AE', '#607D8B', 1.5, 'round'));
+            add(5, pathEl('M370,388 Q380,383 390,388', 'none', '#607D8B', 1.5, 'round'));
+            // Salt shaker
+            add(5, pathEl('M480,405 L490,405 L490,430 L480,430 Z', '#ECEFF1', '#B0BEC5', 1, 'round'));
+            add(5, pathEl('M478,405 L492,405 L491,400 L479,400 Z', '#CFD8DC', '#B0BEC5', 0.8, 'round'));
+            add(5, el('circle', { cx: 483, cy: 398, r: 1, fill: '#757575' }));
+            add(5, el('circle', { cx: 487, cy: 398, r: 1, fill: '#757575' }));
+            // Cup
+            add(5, pathEl('M530,400 L540,400 L538,430 L532,430 Z', '#BBDEFB', '#90CAF9', 1.2, 'round'));
+            add(5, pathEl('M540,410 Q546,412 544,420', 'none', '#90CAF9', 1.2, 'round'));
+            // Bucket
+            add(5, pathEl('M590,395 L610,395 L615,430 L585,430 Z', '#8D6E63', '#5D4037', 1.5, 'round'));
+            add(5, pathEl('M588,395 Q600,388 612,395', 'none', '#5D4037', 1.5, 'round'));
+
+            // G6: Labels for items
+            add(6, textEl('pot', 380, 445, { size: 14, color: '#795548', weight: 600 }));
+            add(6, textEl('salt', 485, 445, { size: 14, color: '#795548', weight: 600 }));
+            add(6, textEl('cup', 535, 445, { size: 14, color: '#795548', weight: 600 }));
+            add(6, textEl('bucket', 600, 445, { size: 14, color: '#795548', weight: 600 }));
+
+            // G7: Sad cloud
+            add(7, cartoonCloud(200, 60, 0.7));
+            add(7, cartoonCloud(700, 50, 0.6));
+            // Rain drops from left cloud (tears of sky)
+            [[180,95],[195,100],[210,92],[188,105]].forEach(([rx,ry]) => {
+                add(7, pathEl(`M${rx},${ry} L${rx-1},${ry+8}`, 'none', '#4FC3F7', 1.5, 'round'));
+            });
+
+            // G8: Broken heart between the hands
+            add(8, pathEl('M450,240 Q450,225 440,225 Q425,225 425,240 Q425,255 450,270 Q475,255 475,240 Q475,225 460,225 Q450,225 450,240 Z',
+                '#EF9A9A', '#E53935', 1.5, 'round'));
+            add(8, lineEl(450, 228, 450, 268, '#B71C1C', 2));
+
+            // G9: Title
+            add(9, textEl('"And withhold simple assistance"', 450, 475, { size: 24, color: '#795548', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>
