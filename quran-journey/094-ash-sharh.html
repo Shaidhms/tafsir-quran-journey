@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Ash-Sharh - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 94 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الشَّرْحِ</div>
+        <h1>Surah Ash-Sharh</h1>
+        <p>The Relief / The Expansion - 8 Verses - Makkan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 8</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">94</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">8</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">27</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Relief</div></div>
+                    <div class="fact-card"><div class="label">Connected To</div><div class="value" style="font-size:0.9em">Surah Ad-Duha</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Surah Ash-Sharh was revealed during a time of immense difficulty for the Prophet Muhammad (peace be upon him) in Makkah. He faced rejection from his own people, mockery, and the crushing weight of delivering Allah's message to a hostile audience.</p>
+                <p>This surah is considered a <span class="highlight">continuation of Surah Ad-Duha (93)</span>, where Allah reassured the Prophet that He had not abandoned him. Here, Allah reminds him of specific favors: <span class="highlight">expanding his chest with faith</span>, removing his burdens, and elevating his status.</p>
+                <div class="important">
+                    <p>The most powerful message comes in verses 5 and 6, repeated for emphasis: "With hardship comes ease." The scholars explain that the word "hardship" (al-'usr) appears with "al" (the definite article), meaning it is ONE specific hardship. But "ease" (yusr) appears without "al", meaning it is indefinite - so there are MULTIPLE eases. Ibn Mas'ud said: "One hardship can never overcome two eases."</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>The "expansion of the chest" (sharh as-sadr) refers to Allah <span class="highlight">opening the Prophet's heart to Islam, wisdom, and guidance</span>. Some scholars also reference the physical event where angels opened his chest and washed his heart with Zamzam water as a child and before the Isra' and Mi'raj.</p>
+                <p>The surah concludes with a profound life principle: <span class="highlight">when you finish your worldly work, devote yourself to worship</span>. Don't waste your free time. And direct all your hopes and desires toward Allah alone, for He is the ultimate source of relief.</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ</div>
+                    <div class="verse-transliteration">Alam nashrah laka sadrak</div>
+                    <div class="verse-translation">Did We not expand for you your breast?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">أَلَمْ</span><span class="trans">alam</span><span class="meaning">Did not (We)</span></div>
+                            <div class="word-chip"><span class="ar">نَشْرَحْ</span><span class="trans">nashrah</span><span class="meaning">We expand / open</span></div>
+                            <div class="word-chip"><span class="ar">لَكَ</span><span class="trans">laka</span><span class="meaning">For you</span></div>
+                            <div class="word-chip"><span class="ar">صَدْرَكَ</span><span class="trans">sadrak</span><span class="meaning">Your breast / chest</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah asks a rhetorical question: "Didn't We open your heart wide?" The "expansion of the chest" means Allah filled the Prophet's heart with light, faith, wisdom, and tranquility. When your chest feels "expanded," it means you feel at peace, you can handle difficulties, and your heart is receptive to truth. This is the opposite of a "tight chest" which means anxiety and distress.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">وَوَضَعْنَا عَنكَ وِزْرَكَ</div>
+                    <div class="verse-transliteration">Wa wada'na 'anka wizrak</div>
+                    <div class="verse-translation">And We removed from you your burden.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَوَضَعْنَا</span><span class="trans">wa wada'na</span><span class="meaning">And We removed / put down</span></div>
+                            <div class="word-chip"><span class="ar">عَنكَ</span><span class="trans">'anka</span><span class="meaning">From you</span></div>
+                            <div class="word-chip"><span class="ar">وِزْرَكَ</span><span class="trans">wizrak</span><span class="meaning">Your burden / load</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The word "wizr" means a heavy burden or load. This refers to the tremendous weight the Prophet felt from his mission - the responsibility of conveying Allah's message, the pain of seeing his people reject the truth, and the hardships of the early days of Islam. Allah assures him: "We took that weight off you." This is a reminder that Allah does not leave His servants to carry their burdens alone.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">الَّذِي أَنقَضَ ظَهْرَكَ</div>
+                    <div class="verse-transliteration">Alladhi anqada dhahrak</div>
+                    <div class="verse-translation">Which had weighed upon your back.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">Which / That which</span></div>
+                            <div class="word-chip"><span class="ar">أَنقَضَ</span><span class="trans">anqada</span><span class="meaning">Weighed down / almost broke</span></div>
+                            <div class="word-chip"><span class="ar">ظَهْرَكَ</span><span class="trans">dhahrak</span><span class="meaning">Your back</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The word "anqada" literally means "to make a cracking sound" - like the sound a back makes when it is about to break under an impossibly heavy load. This vivid imagery shows just how heavy the Prophet's burden was. It was so crushing that it nearly broke his back. Yet Allah removed it completely. This teaches us that no matter how overwhelming our difficulties feel, Allah can remove them in an instant.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">وَرَفَعْنَا لَكَ ذِكْرَكَ</div>
+                    <div class="verse-transliteration">Wa rafa'na laka dhikrak</div>
+                    <div class="verse-translation">And We raised high for you your repute.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَرَفَعْنَا</span><span class="trans">wa rafa'na</span><span class="meaning">And We raised</span></div>
+                            <div class="word-chip"><span class="ar">لَكَ</span><span class="trans">laka</span><span class="meaning">For you</span></div>
+                            <div class="word-chip"><span class="ar">ذِكْرَكَ</span><span class="trans">dhikrak</span><span class="meaning">Your mention / repute</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah elevated the Prophet's name and mention to the highest degree. Whenever Allah's name is mentioned, Muhammad's name is mentioned right alongside it: in the adhan (call to prayer), in the shahadah (declaration of faith), in the tashahhud during prayer. Mujahid said: "Whenever I (Allah) am mentioned, you (Muhammad) are mentioned with Me." No human being in history has their name mentioned as frequently across the globe as Prophet Muhammad (peace be upon him).</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">فَإِنَّ مَعَ الْعُسْرِ يُسْرًا</div>
+                    <div class="verse-transliteration">Fa inna ma'al 'usri yusra</div>
+                    <div class="verse-translation">For indeed, with hardship comes ease.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَإِنَّ</span><span class="trans">fa inna</span><span class="meaning">For indeed / surely</span></div>
+                            <div class="word-chip"><span class="ar">مَعَ</span><span class="trans">ma'a</span><span class="meaning">With / alongside</span></div>
+                            <div class="word-chip"><span class="ar">الْعُسْرِ</span><span class="trans">al-'usri</span><span class="meaning">The hardship</span></div>
+                            <div class="word-chip"><span class="ar">يُسْرًا</span><span class="trans">yusran</span><span class="meaning">Ease (an ease)</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is one of the most comforting verses in the entire Quran. Notice the word "ma'a" - it means "with," not "after." The ease is not waiting for you after the hardship ends. It is RIGHT THERE alongside the hardship. Even in your darkest moment, Allah has already placed ease within reach. The definite article "al" on "al-'usr" (THE hardship) means it is one specific difficulty, while "yusr" (ease) without "al" means it is unlimited and indefinite. Multiple doors of ease open with every single trial.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">إِنَّ مَعَ الْعُسْرِ يُسْرًا</div>
+                    <div class="verse-transliteration">Inna ma'al 'usri yusra</div>
+                    <div class="verse-translation">Indeed, with hardship comes ease.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed / surely</span></div>
+                            <div class="word-chip"><span class="ar">مَعَ</span><span class="trans">ma'a</span><span class="meaning">With / alongside</span></div>
+                            <div class="word-chip"><span class="ar">الْعُسْرِ</span><span class="trans">al-'usri</span><span class="meaning">The hardship</span></div>
+                            <div class="word-chip"><span class="ar">يُسْرًا</span><span class="trans">yusran</span><span class="meaning">Ease (an ease)</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah repeats this promise for absolute emphasis and certainty. In Arabic grammar, when "al-'usr" (the hardship) is repeated with the definite article, it refers to the SAME hardship. But "yusr" (ease) appears without the definite article both times, meaning each mention refers to a DIFFERENT ease. So one hardship brings two eases! This is why Ibn Mas'ud (may Allah be pleased with him) said: "If hardship were to enter a hole, ease would enter after it. One hardship can never overcome two eases."</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">فَإِذَا فَرَغْتَ فَانصَبْ</div>
+                    <div class="verse-transliteration">Fa idha faraghta fansab</div>
+                    <div class="verse-translation">So when you have finished [your duties], then stand up [for worship].</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَإِذَا</span><span class="trans">fa idha</span><span class="meaning">So when</span></div>
+                            <div class="word-chip"><span class="ar">فَرَغْتَ</span><span class="trans">faraghta</span><span class="meaning">You have finished</span></div>
+                            <div class="word-chip"><span class="ar">فَانصَبْ</span><span class="trans">fansab</span><span class="meaning">Then exert yourself (in worship)</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>When you complete your daily tasks and responsibilities, don't just relax or waste time. Instead, "fansab" - exert yourself in worship and du'a. The word "nasb" means to work hard, to tire oneself out. So even worship requires effort and dedication. Some scholars say this means: when you finish your obligatory prayers, engage in extra voluntary prayers and du'a. Others say: when you finish your worldly work during the day, devote your free time to worshipping Allah.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">8</div>
+                    <div class="verse-arabic">وَإِلَىٰ رَبِّكَ فَارْغَب</div>
+                    <div class="verse-transliteration">Wa ila rabbika farghab</div>
+                    <div class="verse-translation">And to your Lord direct [your] longing.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَإِلَىٰ</span><span class="trans">wa ila</span><span class="meaning">And to / toward</span></div>
+                            <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Your Lord</span></div>
+                            <div class="word-chip"><span class="ar">فَارْغَب</span><span class="trans">farghab</span><span class="meaning">Direct your longing / desire</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The word "raghba" means to earnestly desire and hope. Allah tells us to direct ALL our hopes, desires, and aspirations toward Him alone. Don't place your ultimate hopes in people, wealth, or status. When you need something, ask Allah. When you long for relief, turn to Allah. When you want success, depend on Allah. He is the only One who can truly grant you what you need. This is the ultimate conclusion of the surah: trust Allah completely, and He will take care of everything.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Ash-Sharh</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Hardship is never permanent.</strong><p style="color: #999; font-size: 0.95em;">Allah promises that ease comes WITH hardship, not just after it. No matter how dark things seem, relief is already built into your trial.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">One hardship, two eases.</strong><p style="color: #999; font-size: 0.95em;">The Arabic grammar proves it: "the hardship" is definite (one), while "ease" is indefinite (multiple). A single difficulty can never overpower the multiple forms of relief Allah sends.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah removes burdens you cannot carry.</strong><p style="color: #999; font-size: 0.95em;">Even the Prophet felt overwhelmed, and Allah lifted his burden. If you feel crushed by life, know that Allah sees your struggle and will lighten your load.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Don't waste your free time.</strong><p style="color: #999; font-size: 0.95em;">When your daily work is done, turn to worship and du'a. The most productive people are those who use every moment purposefully.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Direct all your hopes toward Allah.</strong><p style="color: #999; font-size: 0.95em;">People, wealth, and status will all disappoint you at some point. Only Allah never fails those who turn to Him with sincerity.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. The linguistic analysis of "al-'usr" vs "yusr" is discussed extensively by scholars of Arabic grammar and tafsir. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0623\u064E\u0644\u064E\u0645\u0652 \u0646\u064E\u0634\u0652\u0631\u064E\u062D\u0652 \u0644\u064E\u0643\u064E \u0635\u064E\u062F\u0652\u0631\u064E\u0643\u064E',
+                translit: "Alam nashrah laka sadrak",
+                explanation: "Did We not open your heart wide? Allah expanded the Prophet's chest with light, filling it with wisdom, faith, and peace!",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u0648\u064E\u0648\u064E\u0636\u064E\u0639\u0652\u0646\u064E\u0627 \u0639\u064E\u0646\u0643\u064E \u0648\u0650\u0632\u0652\u0631\u064E\u0643\u064E',
+                translit: "Wa wada'na 'anka wizrak",
+                explanation: "And We took away the heavy burden you were carrying. Allah removed the weight of worry and hardship from your shoulders!",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u0627\u0644\u0651\u064E\u0630\u0650\u064A \u0623\u064E\u0646\u0642\u064E\u0636\u064E \u0638\u064E\u0647\u0652\u0631\u064E\u0643\u064E',
+                translit: "Alladhi anqada dhahrak",
+                explanation: "That burden was so heavy it almost broke your back! But Allah never lets His beloved ones be crushed by hardship.",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u0648\u064E\u0631\u064E\u0641\u064E\u0639\u0652\u0646\u064E\u0627 \u0644\u064E\u0643\u064E \u0630\u0650\u0643\u0652\u0631\u064E\u0643\u064E',
+                translit: "Wa rafa'na laka dhikrak",
+                explanation: "And We raised your name high! Every time Allah's name is mentioned, Muhammad's name is mentioned right next to it.",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u0641\u064E\u0625\u0650\u0646\u0651\u064E \u0645\u064E\u0639\u064E \u0627\u0644\u0652\u0639\u064F\u0633\u0652\u0631\u0650 \u064A\u064F\u0633\u0652\u0631\u064B\u0627',
+                translit: "Fa inna ma'al 'usri yusra",
+                explanation: "So know this for certain: right alongside every hardship, there is ease! Not after it, but WITH it. Relief is already on its way!",
+                build: buildVerse5
+            },
+            {
+                num: 6,
+                arabic: '\u0625\u0650\u0646\u0651\u064E \u0645\u064E\u0639\u064E \u0627\u0644\u0652\u0639\u064F\u0633\u0652\u0631\u0650 \u064A\u064F\u0633\u0652\u0631\u064B\u0627',
+                translit: "Inna ma'al 'usri yusra",
+                explanation: "Allah repeats it to make you absolutely certain: with hardship comes ease. One hardship can never overcome two eases!",
+                build: buildVerse6
+            },
+            {
+                num: 7,
+                arabic: '\u0641\u064E\u0625\u0650\u0630\u064E\u0627 \u0641\u064E\u0631\u064E\u063A\u0652\u062A\u064E \u0641\u064E\u0627\u0646\u0635\u064E\u0628\u0652',
+                translit: "Fa idha faraghta fansab",
+                explanation: "When you finish your daily work, stand up for worship! Don't waste your free time - use it to connect with Allah.",
+                build: buildVerse7
+            },
+            {
+                num: 8,
+                arabic: '\u0648\u064E\u0625\u0650\u0644\u064E\u0649\u0670 \u0631\u064E\u0628\u0651\u0650\u0643\u064E \u0641\u064E\u0627\u0631\u0652\u063A\u064E\u0628',
+                translit: "Wa ila rabbika farghab",
+                explanation: "And direct all your hopes and longing toward your Lord alone. He is the source of all relief and comfort!",
+                build: buildVerse8
+            }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            defs.appendChild(createLinearGrad('skyGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyNight', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            defs.appendChild(createLinearGrad('skyDramatic', '0%','0%','0%','100%',
+                [['0%','#4A148C'],['30%','#6A1B9A'],['60%','#E65100'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('desertGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['30%','#FFCC80'],['60%','#FFB74D'],['100%','#F5D6A0']]));
+            defs.appendChild(createLinearGrad('sandGrad', '0%','0%','0%','100%',
+                [['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('lightGrad', '50%','0%','50%','100%',
+                [['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('robeGrad', '0%','0%','100%','100%',
+                [['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            defs.appendChild(createLinearGrad('stormGrad', '0%','0%','0%','100%',
+                [['0%','#263238'],['30%','#37474F'],['60%','#455A64'],['100%','#546E7A']]));
+            defs.appendChild(createLinearGrad('dawnGrad', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['25%','#2d1b4e'],['50%','#e65100'],['75%','#ff8f00'],['100%','#ffe082']]));
+            defs.appendChild(createLinearGrad('bannerGrad', '0%','0%','0%','100%',
+                [['0%','#C9A84C'],['30%','#FFD54F'],['60%','#FFC107'],['100%','#C9A84C']]));
+            defs.appendChild(createLinearGrad('prayerMatGrad', '0%','0%','0%','100%',
+                [['0%','#1B5E20'],['40%','#2E7D32'],['70%','#388E3C'],['100%','#1B5E20']]));
+            defs.appendChild(createLinearGrad('pathGold', '0%','0%','100%','0%',
+                [['0%','#FFD54F'],['50%','#FFF176'],['100%','#FFD54F']]));
+
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('skinGrad', '40%','35%','50%',
+                [['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createRadialGrad('heartGlow', '50%','50%','50%',
+                [['0%','rgba(255,183,77,0.6)'],['50%','rgba(255,183,77,0.2)'],['100%','rgba(255,183,77,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // ===== VERSE 1: HEART/CHEST OPENING WITH GOLDEN LIGHT =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Warm golden sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Soft background glow behind center
+            add(1, el('circle', { cx: 450, cy: 230, r: 200, fill: 'url(#heartGlow)' }));
+            add(1, el('circle', { cx: 450, cy: 230, r: 140, fill: 'url(#goldenGlow)' }));
+
+            // G2: Large heart shape in center (representing the chest/sadr)
+            add(2, pathEl(
+                'M450,320 C450,320 350,270 350,210 C350,170 390,150 450,190 C510,150 550,170 550,210 C550,270 450,320 450,320 Z',
+                '#E57373', '#C62828', 3, 'round'));
+            // Heart highlight
+            add(2, pathEl(
+                'M420,195 C420,195 400,210 400,220 C400,230 410,230 410,225',
+                'none', 'rgba(255,255,255,0.5)', 2, 'round'));
+
+            // G3: Heart opening - split effect with golden light streaming out
+            add(3, pathEl(
+                'M450,190 L450,315',
+                'none', '#FFD54F', 3, 'round'));
+            // Light rays streaming from center of heart
+            for (let i = 0; i < 12; i++) {
+                const angle = (i * 30) * Math.PI / 180;
+                const innerR = 30;
+                const outerR = 70 + Math.random() * 40;
+                add(3, lineEl(
+                    450 + innerR * Math.cos(angle), 240 + innerR * Math.sin(angle) * 0.7,
+                    450 + outerR * Math.cos(angle), 240 + outerR * Math.sin(angle) * 0.7,
+                    '#FFD54F', 2.5));
+            }
+
+            // G4: Golden light beams radiating outward
+            add(4, pathEl('M420,100 L370,230 L530,230 L480,100 Z', 'url(#lightGrad)', 'none', 0));
+            add(4, pathEl('M440,50 L400,230 L500,230 L460,50 Z', 'rgba(255,249,196,0.3)', 'none', 0));
+
+            // G5: Small sparkles around the heart
+            [[320,180],[580,175],[300,260],[600,255],[350,140],[550,145],
+             [280,300],[620,295],[400,130],[500,135]].forEach(([x,y]) => {
+                add(5, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+
+            // G6: Gentle clouds at top
+            add(6, cartoonCloud(150, 60, 0.6));
+            add(6, cartoonCloud(750, 50, 0.55));
+
+            // G7: Decorative stars
+            [[200,100],[700,110],[150,160],[750,170],[100,80],[800,90]].forEach(([x,y]) => {
+                add(7, cartoonStar(x, y, 6, 3, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G8: Ground with gentle hills
+            add(8, pathEl('M0,420 Q200,400 450,410 Q700,395 900,420 L900,506 L0,506 Z',
+                'url(#groundGrad)', '#388E3C', 2, 'round'));
+
+            // G9: Label
+            add(9, textEl('"Did We not expand your heart?"', 450, 475, { size: 24, color: '#2E7D32', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: HEAVY BOULDER LIFTED OFF SHOULDERS =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Relief sky - warm and hopeful
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Sun peeking through
+            add(1, el('circle', { cx: 750, cy: 80, r: 45, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            for (let i = 0; i < 8; i++) {
+                const rad = (i * 45) * Math.PI / 180;
+                add(1, lineEl(
+                    750 + 50*Math.cos(rad), 80 + 50*Math.sin(rad),
+                    750 + 70*Math.cos(rad), 80 + 70*Math.sin(rad),
+                    '#FDD835', 2.5));
+            }
+
+            // G2: Ground
+            add(2, pathEl('M0,380 L900,380 L900,506 L0,506 Z', 'url(#sandGrad)', '#C49A52', 2));
+
+            // G3: Person standing tall (relief posture) - simple figure
+            // Shadow
+            add(3, el('ellipse', { cx: 350, cy: 378, rx: 30, ry: 6, fill: 'rgba(0,0,0,0.12)' }));
+            // Body/robe
+            add(3, pathEl('M330,280 Q325,330 320,375 L380,375 Q375,330 370,280 Z',
+                'url(#robeGrad)', '#78909C', 2, 'round'));
+            // Head
+            add(3, el('circle', { cx: 350, cy: 260, r: 22, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 1.5 }));
+            // Head covering
+            add(3, pathEl('M328,258 Q350,240 372,258', '#ECEFF1', '#B0BEC5', 1.2, 'round'));
+            // Eyes (happy/relieved)
+            add(3, el('circle', { cx: 342, cy: 258, r: 2, fill: '#2C1810' }));
+            add(3, el('circle', { cx: 358, cy: 258, r: 2, fill: '#2C1810' }));
+            // Smile
+            add(3, pathEl('M342,268 Q350,275 358,268', 'none', '#2C1810', 1.5, 'round'));
+            // Arms raised up (free from burden)
+            add(3, pathEl('M335,290 Q310,260 300,240', 'none', '#B0BEC5', 5, 'round'));
+            add(3, pathEl('M365,290 Q390,260 400,240', 'none', '#B0BEC5', 5, 'round'));
+
+            // G4: Boulder floating away (being lifted)
+            add(4, el('ellipse', { cx: 550, cy: 200, rx: 70, ry: 50, fill: '#78909C', stroke: '#546E7A', 'stroke-width': 2 }));
+            add(4, el('ellipse', { cx: 540, cy: 190, rx: 30, ry: 20, fill: 'rgba(255,255,255,0.15)' }));
+            // Cracks in boulder
+            add(4, pathEl('M510,190 L530,210 L520,220', 'none', '#455A64', 1.5, 'round'));
+            add(4, pathEl('M560,180 L575,200', 'none', '#455A64', 1.5, 'round'));
+            // Upward arrows showing boulder lifting
+            add(4, pathEl('M530,140 L530,120', 'none', '#FFD54F', 2.5, 'round'));
+            add(4, pathEl('M523,127 L530,117 L537,127', 'none', '#FFD54F', 2, 'round'));
+            add(4, pathEl('M570,150 L570,130', 'none', '#FFD54F', 2.5, 'round'));
+            add(4, pathEl('M563,137 L570,127 L577,137', 'none', '#FFD54F', 2, 'round'));
+
+            // G5: Broken chains falling
+            [[420,300],[440,320],[460,310],[480,330]].forEach(([cx,cy], i) => {
+                add(5, el('ellipse', { cx, cy, rx: 8, ry: 5, fill: 'none', stroke: '#90A4AE', 'stroke-width': 2 }));
+            });
+            // Chain pieces scattered
+            add(5, lineEl(430, 340, 445, 355, '#90A4AE', 2));
+            add(5, lineEl(460, 345, 475, 360, '#90A4AE', 2));
+
+            // G6: Golden sparkles of relief
+            [[300,200],[400,180],[500,150],[600,170],[280,250],[420,150],
+             [550,120],[650,200]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G7: Clouds
+            add(7, cartoonCloud(130, 55, 0.6));
+            add(7, cartoonCloud(600, 45, 0.5));
+
+            // G8: Small birds (freedom)
+            [[200,120],[230,100],[260,115]].forEach(([bx,by]) => {
+                add(8, pathEl(`M${bx-8},${by} Q${bx},${by-8} ${bx+8},${by}`, 'none', '#546E7A', 1.5, 'round'));
+            });
+
+            // G9: Label
+            add(9, textEl('"And We removed your burden"', 450, 475, { size: 24, color: '#5D4037', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: PERSON BENT UNDER WEIGHT, CRACKS ON BURDEN =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Darker, heavier atmosphere
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#stormGrad)', 'none', 0));
+
+            // G1: Heavy atmosphere - dark clouds
+            add(1, pathEl('M0,0 Q200,40 450,20 Q700,40 900,0 L900,80 Q700,100 450,80 Q200,100 0,80 Z',
+                '#37474F', '#263238', 1.5, 'round'));
+            add(1, pathEl('M0,30 Q300,70 600,50 Q900,70 900,100 L0,100 Z',
+                '#455A64', '#37474F', 1, 'round'));
+
+            // G2: Ground
+            add(2, pathEl('M0,400 L900,400 L900,506 L0,506 Z', '#546E7A', '#455A64', 2));
+
+            // G3: Figure bent under heavy weight (before relief)
+            // Shadow
+            add(3, el('ellipse', { cx: 350, cy: 398, rx: 40, ry: 6, fill: 'rgba(0,0,0,0.2)' }));
+            // Bent body
+            add(3, pathEl('M340,310 Q330,350 325,395 L375,395 Q370,360 365,330 Z',
+                'url(#robeGrad)', '#78909C', 2, 'round'));
+            // Head (bent forward)
+            add(3, el('circle', { cx: 340, cy: 295, r: 18, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 1.5 }));
+            // Strained expression
+            add(3, el('circle', { cx: 334, cy: 293, r: 1.5, fill: '#2C1810' }));
+            add(3, el('circle', { cx: 346, cy: 293, r: 1.5, fill: '#2C1810' }));
+            add(3, pathEl('M336,302 Q340,298 344,302', 'none', '#2C1810', 1.2, 'round'));
+            // Arms pushing up (struggling)
+            add(3, pathEl('M345,315 Q360,300 370,280', 'none', '#B0BEC5', 4, 'round'));
+            add(3, pathEl('M335,315 Q320,305 315,285', 'none', '#B0BEC5', 4, 'round'));
+
+            // G4: Massive boulder on back
+            add(4, el('ellipse', { cx: 350, cy: 260, rx: 80, ry: 50, fill: '#616161', stroke: '#424242', 'stroke-width': 2.5 }));
+            add(4, el('ellipse', { cx: 340, cy: 248, rx: 35, ry: 22, fill: 'rgba(255,255,255,0.08)' }));
+
+            // G5: Cracks forming on the boulder
+            add(5, pathEl('M300,240 L320,260 L310,280', 'none', '#FF8F00', 2.5, 'round'));
+            add(5, pathEl('M370,230 L390,255 L385,275', 'none', '#FF8F00', 2.5, 'round'));
+            add(5, pathEl('M340,220 L350,245 L345,260', 'none', '#FFB74D', 2, 'round'));
+            add(5, pathEl('M360,245 L380,240', 'none', '#FF8F00', 2, 'round'));
+            add(5, pathEl('M315,255 L305,265', 'none', '#FFB74D', 1.5, 'round'));
+            // Small debris falling
+            [[290,290],[300,300],[400,285],[410,295]].forEach(([dx,dy]) => {
+                add(5, el('circle', { cx: dx, cy: dy, r: 3, fill: '#757575', stroke: '#616161', 'stroke-width': 0.8 }));
+            });
+
+            // G6: Strain lines around the figure
+            for (let i = 0; i < 6; i++) {
+                const angle = (i * 60 + 30) * Math.PI / 180;
+                const sx = 350 + 100 * Math.cos(angle);
+                const sy = 300 + 60 * Math.sin(angle);
+                add(6, lineEl(sx, sy, sx + 12*Math.cos(angle), sy + 12*Math.sin(angle), '#90A4AE', 1.5));
+            }
+
+            // G7: Small hopeful light breaking through (foreshadowing relief)
+            add(7, pathEl('M700,0 L680,150 L720,150 Z', 'url(#lightGrad)', 'none', 0));
+            add(7, cartoonSparkle(700, 160, 8));
+            add(7, cartoonSparkle(690, 180, 5));
+
+            // G8: Dark ground texture
+            for (let i = 0; i < 20; i++) {
+                const gx = 20 + i * 45;
+                add(8, lineEl(gx, 410 + Math.random()*80, gx + 10, 412 + Math.random()*80, '#455A64', 0.8));
+            }
+
+            // G9: Label
+            add(9, textEl('"Which had weighed upon your back"', 450, 475, { size: 22, color: '#B0BEC5', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: NAME RAISED HIGH WITH GOLDEN BANNER =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Majestic golden sky
+            add(0, pathEl('M0,0 L900,0 L900,350 L0,350 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Radiant sun behind
+            add(1, el('circle', { cx: 450, cy: 100, r: 55, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            add(1, el('circle', { cx: 450, cy: 100, r: 80, fill: 'url(#goldenGlow)' }));
+            for (let i = 0; i < 12; i++) {
+                const rad = (i * 30) * Math.PI / 180;
+                add(1, lineEl(
+                    450 + 60*Math.cos(rad), 100 + 60*Math.sin(rad),
+                    450 + 85*Math.cos(rad), 100 + 85*Math.sin(rad),
+                    '#FDD835', 2.5));
+            }
+
+            // G2: Ground
+            add(2, pathEl('M0,380 L900,380 L900,506 L0,506 Z', 'url(#groundGrad)', '#388E3C', 2));
+
+            // G3: Tall golden banner/flag being raised
+            // Flagpole
+            add(3, lineEl(450, 380, 450, 150, '#8D6E63', 6));
+            add(3, lineEl(450, 380, 450, 150, '#A1887F', 4));
+            // Pole top ornament
+            add(3, el('circle', { cx: 450, cy: 147, r: 8, fill: '#C9A84C', stroke: '#A68529', 'stroke-width': 1.5 }));
+
+            // G4: Banner/flag
+            add(4, pathEl(
+                'M450,160 Q520,175 550,185 Q530,200 550,215 Q520,210 450,220 Z',
+                'url(#bannerGrad)', '#A68529', 2, 'round'));
+            // Banner text representation (geometric pattern instead of actual text)
+            add(4, lineEl(465, 180, 535, 188, '#FFF9C4', 1.5));
+            add(4, lineEl(465, 193, 530, 198, '#FFF9C4', 1.5));
+            add(4, lineEl(465, 206, 525, 208, '#FFF9C4', 1.5));
+
+            // G5: Stars celebrating around the banner
+            [[300,140],[600,135],[250,200],[650,195],[350,100],[550,105],
+             [200,160],[700,155],[380,80],[520,75]].forEach(([x,y]) => {
+                add(5, cartoonStar(x, y, 8, 4, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G6: Golden sparkles rising
+            [[400,250],[500,240],[350,220],[550,230],[420,170],[480,165],
+             [300,280],[600,275]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 5 + Math.random()*6));
+            });
+
+            // G7: Small figures looking up at banner
+            [[250,360],[320,365],[580,365],[650,360]].forEach(([px,py]) => {
+                add(7, el('ellipse', { cx: px, cy: py+16, rx: 8, ry: 3, fill: 'rgba(0,0,0,0.1)' }));
+                add(7, pathEl(`M${px-6},${py} Q${px-7},${py+8} ${px-7},${py+14} L${px+7},${py+14} Q${px+7},${py+8} ${px+6},${py} Z`,
+                    '#ECEFF1', '#B0BEC5', 1, 'round'));
+                add(7, el('circle', { cx: px, cy: py-5, r: 5, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.8 }));
+            });
+
+            // G8: Clouds
+            add(8, cartoonCloud(100, 50, 0.55));
+            add(8, cartoonCloud(800, 55, 0.5));
+
+            // G9: Label
+            add(9, textEl('"And We raised high your repute"', 450, 475, { size: 24, color: '#2E7D32', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: DARK STORM SPLITTING TO REVEAL SUNSHINE =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Split scene - dark storm left transitioning to bright right
+            add(0, pathEl('M0,0 L450,0 L450,506 L0,506 Z', 'url(#stormGrad)', 'none', 0));
+            add(0, pathEl('M450,0 L900,0 L900,506 L450,506 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Storm clouds on left
+            add(1, pathEl('M0,50 Q80,30 160,55 Q240,25 320,50 Q380,35 420,60 L420,120 Q350,100 280,120 Q200,95 120,115 Q60,90 0,110 Z',
+                '#37474F', '#263238', 2, 'round'));
+            add(1, pathEl('M0,80 Q100,110 200,90 Q300,110 400,85 L400,130 Q300,150 200,130 Q100,150 0,130 Z',
+                '#455A64', '#37474F', 1.5, 'round'));
+            // Rain on left side
+            for (let i = 0; i < 15; i++) {
+                const rx = 30 + i * 28;
+                const ry = 140 + Math.random() * 200;
+                add(1, lineEl(rx, ry, rx-3, ry+15, '#78909C', 1.5));
+            }
+
+            // G2: Brilliant sun on right side
+            add(2, el('circle', { cx: 700, cy: 120, r: 55, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            add(2, el('circle', { cx: 700, cy: 120, r: 80, fill: 'url(#goldenGlow)' }));
+            for (let i = 0; i < 10; i++) {
+                const rad = (i * 36) * Math.PI / 180;
+                add(2, lineEl(
+                    700 + 60*Math.cos(rad), 120 + 60*Math.sin(rad),
+                    700 + 85*Math.cos(rad), 120 + 85*Math.sin(rad),
+                    '#FDD835', 2.5));
+            }
+
+            // G3: The dramatic crack/split where storm meets light
+            add(3, pathEl(
+                'M450,0 Q440,80 460,160 Q445,240 455,320 Q448,400 450,506',
+                'none', '#FFD54F', 4, 'round'));
+            // Light beams breaking through
+            for (let i = 0; i < 6; i++) {
+                const by = 50 + i * 75;
+                add(3, pathEl(`M450,${by} L${480 + Math.random()*30},${by-10} L${490 + Math.random()*20},${by+10} Z`,
+                    'rgba(255,249,196,0.4)', 'none', 0));
+            }
+
+            // G4: "HARDSHIP" text area on left
+            add(4, textEl('HARDSHIP', 220, 200, { size: 28, color: '#90A4AE', weight: 700 }));
+            add(4, textEl("( al-'usr )", 220, 230, { size: 16, color: '#78909C', weight: 600 }));
+
+            // G5: "EASE" text area on right
+            add(5, textEl('EASE', 680, 200, { size: 28, color: '#E65100', weight: 700 }));
+            add(5, textEl('( yusr )', 680, 230, { size: 16, color: '#FF8F00', weight: 600 }));
+
+            // G6: Dark ground left, green ground right
+            add(6, pathEl('M0,400 L450,400 L450,506 L0,506 Z', '#455A64', '#37474F', 1.5));
+            add(6, pathEl('M450,400 L900,400 L900,506 L450,506 Z', 'url(#groundGrad)', '#388E3C', 1.5));
+            // Withered plant left
+            add(6, pathEl('M150,400 Q148,370 155,350', 'none', '#616161', 2.5, 'round'));
+            add(6, pathEl('M155,370 Q140,365 145,355', 'none', '#757575', 1.5, 'round'));
+            // Blooming flower right
+            add(6, pathEl('M700,400 Q698,370 700,340', 'none', '#2E7D32', 2.5, 'round'));
+            add(6, el('circle', { cx: 700, cy: 335, r: 8, fill: '#FF7043', stroke: '#E64A19', 'stroke-width': 1 }));
+            add(6, el('circle', { cx: 700, cy: 335, r: 4, fill: '#FFEE58' }));
+            // Leaves
+            add(6, pathEl('M698,360 Q688,355 685,345', 'none', '#4CAF50', 1.5, 'round'));
+            add(6, pathEl('M702,355 Q712,350 715,340', 'none', '#4CAF50', 1.5, 'round'));
+
+            // G7: Sparkles on the bright side
+            [[500,150],[550,180],[600,140],[650,170],[750,160],[800,190],
+             [520,280],[580,300],[700,290],[780,310]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G8: Arrow showing transition from hardship to ease
+            add(8, pathEl('M350,350 Q400,340 440,350', 'none', '#FFD54F', 3, 'round'));
+            add(8, pathEl('M432,343 L445,350 L432,357', 'none', '#FFD54F', 2.5, 'round'));
+
+            // G9: Label
+            add(9, textEl('"With hardship comes ease"', 450, 475, { size: 24, color: '#5D4037', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 6: NIGHT SKY TRANSITIONING TO BRILLIANT DAWN =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dawn gradient - night to morning
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#dawnGrad)', 'none', 0));
+
+            // G1: Stars fading in the night portion (top)
+            [[100,40],[200,60],[300,35],[400,50],[500,45],[600,55],[700,40],[800,65],
+             [150,90],[350,80],[550,85],[750,75]].forEach(([sx,sy]) => {
+                add(1, cartoonStar(sx, sy, 4, 2, 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.3)'));
+            });
+
+            // G2: Crescent moon fading
+            add(2, pathEl(
+                'M120,70 Q145,50 150,80 Q135,95 120,70 Z',
+                'rgba(255,249,196,0.5)', 'rgba(255,215,0,0.4)', 1.5, 'round'));
+
+            // G3: Brilliant sunrise on horizon
+            add(3, el('circle', { cx: 450, cy: 300, r: 60, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            add(3, el('circle', { cx: 450, cy: 300, r: 90, fill: 'url(#goldenGlow)' }));
+            // Sun rays spreading across horizon
+            for (let i = 0; i < 14; i++) {
+                const angle = (Math.PI + (i * Math.PI / 13));
+                const innerR = 65;
+                const outerR = 120 + Math.random() * 40;
+                add(3, lineEl(
+                    450 + innerR * Math.cos(angle), 300 + innerR * Math.sin(angle),
+                    450 + outerR * Math.cos(angle), 300 + outerR * Math.sin(angle),
+                    '#FFD54F', 2.5));
+            }
+
+            // G4: Horizon line with silhouette hills
+            add(4, pathEl('M0,300 Q100,280 200,290 Q350,270 450,280 Q550,270 700,285 Q850,275 900,300 L900,506 L0,506 Z',
+                '#263238', '#1a1a2e', 2, 'round'));
+
+            // G5: "WITH HARDSHIP" above, "COMES EASE" below - emphasis
+            add(5, textEl('with hardship', 300, 200, { size: 22, color: '#90A4AE', weight: 600 }));
+            add(5, textEl('comes EASE', 600, 200, { size: 28, color: '#FFD54F', weight: 700 }));
+            // Connecting arrow
+            add(5, pathEl('M380,200 L520,200', 'none', '#FFB74D', 2, 'round'));
+            add(5, pathEl('M512,193 L525,200 L512,207', 'none', '#FFB74D', 2, 'round'));
+
+            // G6: Sparkles across the dawn
+            [[200,180],[300,160],[400,170],[500,165],[600,175],[700,180],
+             [250,230],[350,250],[550,240],[650,250]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+
+            // G7: Birds flying at dawn
+            [[300,130],[330,115],[360,125],[600,120],[630,110],[660,120]].forEach(([bx,by]) => {
+                add(7, pathEl(`M${bx-10},${by} Q${bx},${by-10} ${bx+10},${by}`, 'none', '#FFE0B2', 1.5, 'round'));
+            });
+
+            // G8: Repeating motif - two golden circles for "two eases"
+            add(8, el('circle', { cx: 400, cy: 380, r: 25, fill: 'none', stroke: '#FFD54F', 'stroke-width': 2.5 }));
+            add(8, el('circle', { cx: 500, cy: 380, r: 25, fill: 'none', stroke: '#FFD54F', 'stroke-width': 2.5 }));
+            add(8, textEl('2x', 450, 380, { size: 20, color: '#FFD54F', weight: 700 }));
+            add(8, textEl('ease', 400, 380, { size: 14, color: '#FFE082', weight: 600 }));
+            add(8, textEl('ease', 500, 380, { size: 14, color: '#FFE082', weight: 600 }));
+
+            // G9: Label
+            add(9, textEl('"Indeed, with hardship comes ease"', 450, 475, { size: 22, color: '#FFE082', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 7: PERSON STANDING IN PRAYER AFTER WORK =====
+        function buildVerse7() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Peaceful evening sky
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Setting sun - peaceful
+            add(1, el('circle', { cx: 750, cy: 150, r: 45, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            add(1, el('circle', { cx: 750, cy: 150, r: 65, fill: 'url(#goldenGlow)' }));
+
+            // G2: Ground with grass
+            add(2, pathEl('M0,360 Q200,350 450,355 Q700,345 900,360 L900,506 L0,506 Z',
+                'url(#groundGrad)', '#388E3C', 2, 'round'));
+            // Grass blades
+            for (let i = 0; i < 25; i++) {
+                const gx = 20 + i * 36;
+                const gy = 365 + Math.random() * 5;
+                add(2, pathEl(`M${gx},${gy} Q${gx-2},${gy-10} ${gx-4},${gy-15}`, 'none', '#4CAF50', 1.2, 'round'));
+                add(2, pathEl(`M${gx+3},${gy} Q${gx+5},${gy-12} ${gx+6},${gy-16}`, 'none', '#2E7D32', 1.2, 'round'));
+            }
+
+            // G3: Work tools set aside (left side - finished work)
+            // Desk/table
+            add(3, pathEl('M80,320 L250,320 L255,325 L250,325 L250,360 L80,360 L80,325 L75,325 Z',
+                '#795548', '#5D4037', 2, 'round'));
+            // Scroll/paper on desk
+            add(3, pathEl('M110,305 L200,305 L200,318 L110,318 Z', '#FFF9C4', '#E0D5C0', 1, 'round'));
+            add(3, lineEl(120, 309, 190, 309, '#BCAAA4', 0.8));
+            add(3, lineEl(120, 313, 180, 313, '#BCAAA4', 0.8));
+            // Ink pot
+            add(3, pathEl('M215,305 Q215,315 220,318 L230,318 Q235,315 235,305 Q235,300 225,300 Q215,300 215,305 Z',
+                '#1a1a1a', '#111', 1, 'round'));
+            // Quill/pen
+            add(3, lineEl(225, 300, 240, 280, '#795548', 2));
+
+            // G4: Prayer mat (right side)
+            add(4, pathEl('M500,340 L680,340 L690,355 L680,450 L500,450 L490,355 Z',
+                'url(#prayerMatGrad)', '#1B5E20', 2, 'round'));
+            // Mat pattern - mihrab arch
+            add(4, pathEl('M540,360 Q590,340 640,360 L640,430 L540,430 Z',
+                '#2E7D32', '#1B5E20', 1.5, 'round'));
+            // Pattern inside arch
+            add(4, pathEl('M560,380 Q590,365 620,380', 'none', '#4CAF50', 1, 'round'));
+            add(4, lineEl(590, 375, 590, 420, '#4CAF50', 1));
+
+            // G5: Person standing tall in prayer (qiyam)
+            // Shadow
+            add(5, el('ellipse', { cx: 590, cy: 442, rx: 20, ry: 4, fill: 'rgba(0,0,0,0.15)' }));
+            // Robe/body
+            add(5, pathEl('M575,310 Q572,370 570,440 L610,440 Q608,370 605,310 Z',
+                'url(#robeGrad)', '#78909C', 2, 'round'));
+            // Head
+            add(5, el('circle', { cx: 590, cy: 293, r: 18, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 1.5 }));
+            // Prayer cap
+            add(5, pathEl('M572,290 Q590,275 608,290', '#ECEFF1', '#B0BEC5', 1.2, 'round'));
+            // Peaceful eyes (closed in prayer)
+            add(5, pathEl('M582,292 Q585,295 588,292', 'none', '#2C1810', 1.2, 'round'));
+            add(5, pathEl('M592,292 Q595,295 598,292', 'none', '#2C1810', 1.2, 'round'));
+            // Arms folded (prayer position)
+            add(5, pathEl('M578,320 Q570,335 575,340', 'none', '#B0BEC5', 4, 'round'));
+            add(5, pathEl('M602,320 Q610,335 605,340', 'none', '#B0BEC5', 4, 'round'));
+            add(5, pathEl('M575,338 L605,338', 'none', '#90A4AE', 3, 'round'));
+
+            // G6: Arrow showing transition from work to prayer
+            add(6, pathEl('M270,330 Q380,300 480,330', 'none', '#C9A84C', 2.5, 'round'));
+            add(6, pathEl('M472,323 L485,330 L472,337', 'none', '#C9A84C', 2, 'round'));
+            add(6, textEl('finish work', 180, 290, { size: 16, color: '#795548', weight: 600 }));
+            add(6, textEl('stand for prayer', 590, 265, { size: 16, color: '#2E7D32', weight: 600 }));
+
+            // G7: Peaceful sparkles around prayer
+            [[520,280],[660,275],[550,250],[630,260],[580,230]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 5 + Math.random()*4));
+            });
+
+            // G8: Clouds
+            add(8, cartoonCloud(200, 50, 0.55));
+            add(8, cartoonCloud(600, 40, 0.5));
+
+            // G9: Label
+            add(9, textEl('"When you finish, stand up for worship"', 450, 480, { size: 22, color: '#2E7D32', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 8: HANDS RAISED IN DU'A TOWARD GOLDEN LIGHT =====
+        function buildVerse8() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Heavenly gradient sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Brilliant golden light from above (top center)
+            add(1, el('circle', { cx: 450, cy: 50, r: 60, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            add(1, el('circle', { cx: 450, cy: 50, r: 100, fill: 'url(#goldenGlow)' }));
+            // Cascading light beams downward
+            add(1, pathEl('M380,0 L350,300 L550,300 L520,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(1, pathEl('M410,0 L390,350 L510,350 L490,0 Z', 'rgba(255,249,196,0.25)', 'none', 0));
+
+            // G2: Ground
+            add(2, pathEl('M0,420 Q200,410 450,415 Q700,405 900,420 L900,506 L0,506 Z',
+                'url(#groundGrad)', '#388E3C', 2, 'round'));
+
+            // G3: Raised hands (du'a position) - larger, central
+            // Left hand
+            add(3, pathEl(
+                'M400,250 Q395,220 400,200 Q402,190 408,188 Q412,186 418,188 Q422,190 425,195 Q428,200 425,210 L420,250 Z',
+                'url(#skinGrad)', '#E65100', 2, 'round'));
+            // Left fingers
+            add(3, pathEl('M403,200 Q402,185 405,178', 'none', '#FFB74D', 2, 'round'));
+            add(3, pathEl('M410,195 Q410,180 412,172', 'none', '#FFB74D', 2, 'round'));
+            add(3, pathEl('M417,195 Q418,180 419,173', 'none', '#FFB74D', 2, 'round'));
+            add(3, pathEl('M423,198 Q425,185 425,180', 'none', '#FFB74D', 2, 'round'));
+
+            // Right hand
+            add(3, pathEl(
+                'M480,250 Q475,220 478,200 Q480,190 486,188 Q490,186 496,188 Q500,190 503,195 Q505,200 502,210 L497,250 Z',
+                'url(#skinGrad)', '#E65100', 2, 'round'));
+            // Right fingers
+            add(3, pathEl('M481,200 Q480,185 482,178', 'none', '#FFB74D', 2, 'round'));
+            add(3, pathEl('M488,195 Q488,180 490,172', 'none', '#FFB74D', 2, 'round'));
+            add(3, pathEl('M495,195 Q496,180 497,173', 'none', '#FFB74D', 2, 'round'));
+            add(3, pathEl('M501,198 Q503,185 503,180', 'none', '#FFB74D', 2, 'round'));
+
+            // G4: Forearms in white sleeves
+            add(4, pathEl('M395,250 Q390,290 385,340 L425,340 Q420,290 420,250 Z',
+                'url(#robeGrad)', '#78909C', 2, 'round'));
+            add(4, pathEl('M475,250 Q470,290 465,340 L505,340 Q500,290 497,250 Z',
+                'url(#robeGrad)', '#78909C', 2, 'round'));
+
+            // G5: Golden particles floating down toward hands
+            [[420,120],[440,100],[460,130],[480,110],[430,150],[470,140],
+             [410,160],[490,155],[400,130],[500,125]].forEach(([x,y]) => {
+                add(5, el('circle', { cx: x, cy: y, r: 2 + Math.random()*3, fill: '#FFD54F', opacity: 0.6 + Math.random()*0.4 }));
+            });
+
+            // G6: Sparkles around hands
+            [[350,200],[550,195],[370,160],[530,165],[340,240],[560,235],
+             [380,140],[520,135]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+
+            // G7: Decorative stars in sky
+            [[100,60],[200,80],[300,50],[600,55],[700,75],[800,45],
+             [150,120],[750,115]].forEach(([x,y]) => {
+                add(7, cartoonStar(x, y, 6, 3, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G8: Peaceful clouds
+            add(8, cartoonCloud(120, 60, 0.5));
+            add(8, cartoonCloud(780, 55, 0.5));
+
+            // G9: Label
+            add(9, textEl('"And to your Lord direct your longing"', 450, 475, { size: 22, color: '#2E7D32', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>

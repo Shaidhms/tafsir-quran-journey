@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Qadr - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 97 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْقَدْرِ</div>
+        <h1>Surah Al-Qadr</h1>
+        <p>The Night of Power - 5 Verses - Makkan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 5</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">97</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">5</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">30</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Night of Power</div></div>
+                    <div class="fact-card"><div class="label">Key Theme</div><div class="value" style="font-size:0.9em">Laylatul Qadr</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Surah Al-Qadr announces one of the most magnificent events in human history: the revelation of the Quran. Allah chose a specific night to begin sending down His final message to mankind, and that night is called <span class="highlight">Laylatul Qadr</span> (the Night of Power, Decree, or Destiny).</p>
+                <p>This night falls in the last ten nights of Ramadan. The Prophet (peace be upon him) said: <span class="highlight">"Search for Laylatul Qadr in the odd nights of the last ten nights of Ramadan."</span> (Sahih al-Bukhari). Many scholars consider the 27th night as the most likely, though it could be any of the odd nights.</p>
+                <div class="important">
+                    <p>Ibn Kathir narrates that the Prophet (peace be upon him) was shown the lifespans of previous nations, and he felt that the lifespan of his Ummah was too short to compete with them in good deeds. So Allah granted this Ummah Laylatul Qadr, a single night whose worship equals more than 1,000 months (83+ years). This was an exclusive gift to the Muslim Ummah.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>The word "Qadr" carries multiple meanings: <span class="highlight">power, decree, honor, and measurement</span>. On this night, the decrees for the coming year are handed over from the Preserved Tablet (Al-Lawh Al-Mahfuz) to the angels who will carry them out. It is a night of immense honor, where worship is multiplied beyond measure.</p>
+                <p>As-Sa'di explains that this surah highlights <span class="highlight">three extraordinary aspects</span> of Laylatul Qadr: its superiority over a thousand months, the descent of angels with mercy and blessings, and the complete peace that envelops the earth from sunset to dawn.</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">إِنَّا أَنزَلْنَاهُ فِي لَيْلَةِ الْقَدْرِ</div>
+                    <div class="verse-transliteration">Inna anzalnahu fi laylatil-qadr</div>
+                    <div class="verse-translation">Indeed, We sent it down during the Night of Power.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                            <div class="word-chip"><span class="ar">أَنزَلْنَاهُ</span><span class="trans">anzalnahu</span><span class="meaning">We sent it down</span></div>
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In / during</span></div>
+                            <div class="word-chip"><span class="ar">لَيْلَةِ</span><span class="trans">laylati</span><span class="meaning">Night of</span></div>
+                            <div class="word-chip"><span class="ar">الْقَدْرِ</span><span class="trans">al-qadr</span><span class="meaning">The Power / Decree</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah uses the royal "We" (inna) to emphasize the majesty of the event. "It" (hu) refers to the Quran, though the Quran is not mentioned by name, showing how well-known it already was. The Quran was sent down in its entirety from the Preserved Tablet (Al-Lawh Al-Mahfuz) to the lowest heaven (Bayt Al-'Izzah) on this night, and then revealed gradually to the Prophet over 23 years through Jibreel (peace be upon him). Ibn Kathir and Ibn Abbas both confirm this understanding.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا لَيْلَةُ الْقَدْرِ</div>
+                    <div class="verse-transliteration">Wa ma adraka ma laylatul-qadr</div>
+                    <div class="verse-translation">And what can make you know what the Night of Power is?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                            <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraka</span><span class="meaning">Can make you know</span></div>
+                            <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What</span></div>
+                            <div class="word-chip"><span class="ar">لَيْلَةُ</span><span class="trans">laylatu</span><span class="meaning">Night of</span></div>
+                            <div class="word-chip"><span class="ar">الْقَدْرِ</span><span class="trans">al-qadr</span><span class="meaning">The Power / Decree</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is a rhetorical question used in the Quran to build awe and anticipation. Whenever Allah says "wa ma adraka" (and what will make you know), it means the reality of this thing is beyond human comprehension. As-Sa'di says this phrase is used to magnify and exalt the subject, indicating that this night is so extraordinary that no human mind can fully grasp its greatness. Allah is about to answer His own question in the next verse.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">لَيْلَةُ الْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ</div>
+                    <div class="verse-transliteration">Laylatul-qadri khayrum min alfi shahr</div>
+                    <div class="verse-translation">The Night of Power is better than a thousand months.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">لَيْلَةُ</span><span class="trans">laylatu</span><span class="meaning">Night of</span></div>
+                            <div class="word-chip"><span class="ar">الْقَدْرِ</span><span class="trans">al-qadri</span><span class="meaning">The Power</span></div>
+                            <div class="word-chip"><span class="ar">خَيْرٌ</span><span class="trans">khayrun</span><span class="meaning">Better</span></div>
+                            <div class="word-chip"><span class="ar">مِّنْ</span><span class="trans">min</span><span class="meaning">Than</span></div>
+                            <div class="word-chip"><span class="ar">أَلْفِ</span><span class="trans">alfi</span><span class="meaning">A thousand</span></div>
+                            <div class="word-chip"><span class="ar">شَهْرٍ</span><span class="trans">shahr</span><span class="meaning">Months</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is the answer to the question in the previous verse. One thousand months equals approximately 83 years and 4 months. Worship on this single night is better than worshipping for an entire lifetime without it. Ibn Kathir says "better than" means it exceeds 1,000 months, not that it equals them. Mujahid (a student of Ibn Abbas) said this means the good deeds, fasting, and standing in prayer on this night are better than doing so for 1,000 months that do not contain Laylatul Qadr. This is an unimaginable gift from Allah to this Ummah.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">تَنَزَّلُ الْمَلَائِكَةُ وَالرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ</div>
+                    <div class="verse-transliteration">Tanazzalul-mala'ikatu war-ruhu fiha bi-idhni rabbihim min kulli amr</div>
+                    <div class="verse-translation">The angels and the Spirit descend therein by permission of their Lord for every matter.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">تَنَزَّلُ</span><span class="trans">tanazzalu</span><span class="meaning">Descend</span></div>
+                            <div class="word-chip"><span class="ar">الْمَلَائِكَةُ</span><span class="trans">al-mala'ikatu</span><span class="meaning">The angels</span></div>
+                            <div class="word-chip"><span class="ar">وَالرُّوحُ</span><span class="trans">war-ruhu</span><span class="meaning">And the Spirit (Jibreel)</span></div>
+                            <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Therein (in it)</span></div>
+                            <div class="word-chip"><span class="ar">بِإِذْنِ</span><span class="trans">bi-idhni</span><span class="meaning">By permission of</span></div>
+                            <div class="word-chip"><span class="ar">رَبِّهِم</span><span class="trans">rabbihim</span><span class="meaning">Their Lord</span></div>
+                            <div class="word-chip"><span class="ar">مِّن كُلِّ</span><span class="trans">min kulli</span><span class="meaning">For every</span></div>
+                            <div class="word-chip"><span class="ar">أَمْرٍ</span><span class="trans">amr</span><span class="meaning">Matter / affair</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Tanazzalu" uses the form that indicates continuous, repeated descending. On this night, the angels descend to the earth in great numbers. "Ar-Ruh" (the Spirit) refers to Jibreel (peace be upon him), who is mentioned separately to honor his high status. Ibn Kathir explains that they descend with goodness, mercy, and blessings. "Min kulli amr" means they come carrying the divine decrees for every matter that will occur in the coming year. As-Sa'di adds that the abundance of angels descending is itself a sign of the immense blessing and mercy of this night.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">سَلَامٌ هِيَ حَتَّىٰ مَطْلَعِ الْفَجْرِ</div>
+                    <div class="verse-transliteration">Salamun hiya hatta matla'il-fajr</div>
+                    <div class="verse-translation">Peace it is until the emergence of dawn.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">سَلَامٌ</span><span class="trans">salamun</span><span class="meaning">Peace</span></div>
+                            <div class="word-chip"><span class="ar">هِيَ</span><span class="trans">hiya</span><span class="meaning">It is</span></div>
+                            <div class="word-chip"><span class="ar">حَتَّىٰ</span><span class="trans">hatta</span><span class="meaning">Until</span></div>
+                            <div class="word-chip"><span class="ar">مَطْلَعِ</span><span class="trans">matla'i</span><span class="meaning">The emergence / rising of</span></div>
+                            <div class="word-chip"><span class="ar">الْفَجْرِ</span><span class="trans">al-fajr</span><span class="meaning">The dawn</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The entire night, from Maghrib (sunset) until Fajr (dawn), is completely enveloped in peace (salam). Mujahid said this means that Shaytan cannot do any evil or cause any harm on this night. As-Sa'di explains that "salam" encompasses safety from all harm and evil, and the angels greet the believers with peace. Ibn Kathir mentions that the angels who descend greet every believing man and woman with "salam." The night ends at the break of dawn, marking the completion of this blessed period.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Qadr</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The Quran is the greatest gift.</strong><p style="color: #999; font-size: 0.95em;">Allah chose the most honorable night of the year to send down His most honorable book. The Quran is not just any book; it is the speech of Allah, and the night it was revealed reflects its immense value.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">One night can change your entire destiny.</strong><p style="color: #999; font-size: 0.95em;">A single night of sincere worship on Laylatul Qadr is worth more than 83 years. This means even a short life dedicated to seeking this night can outweigh decades of worship.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Seek it in the last ten nights of Ramadan.</strong><p style="color: #999; font-size: 0.95em;">The Prophet (peace be upon him) would intensify his worship in the last ten nights, especially the odd nights (21st, 23rd, 25th, 27th, 29th). This is the time to push yourself in prayer, Quran, and du'a.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah's mercy is beyond imagination.</strong><p style="color: #999; font-size: 0.95em;">This night is a gift from Allah to compensate for our short lifespans. He made it easy for us to earn rewards that previous nations with longer lives could not match.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Peace and tranquility are signs of faith.</strong><p style="color: #999; font-size: 0.95em;">The entire night is described as "salam" (peace). When you worship sincerely, you experience an inner peace that nothing else can provide. This is a taste of what Laylatul Qadr feels like.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir, Tafsir As-Sa'di, and narrations from companions like Ibn Abbas and Mujahid. The hadith about searching for Laylatul Qadr in the odd nights is from Sahih al-Bukhari. While care has been taken to ensure accuracy, this is a learning aid. Always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="099-az-zalzalah.html">Next: Surah Az-Zalzalah &rarr;</a>
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0625\u0650\u0646\u0651\u064E\u0627 \u0623\u064E\u0646\u0632\u064E\u0644\u0652\u0646\u064E\u0627\u0647\u064F \u0641\u0650\u064A \u0644\u064E\u064A\u0652\u0644\u064E\u0629\u0650 \u0627\u0644\u0652\u0642\u064E\u062F\u0652\u0631\u0650',
+                translit: "Inna anzalnahu fi laylatil-qadr",
+                explanation: "We sent the Quran down on a very special night called Laylatul Qadr - the Night of Power! It's the most amazing night of the whole year.",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u0648\u064E\u0645\u064E\u0627 \u0623\u064E\u062F\u0652\u0631\u064E\u0627\u0643\u064E \u0645\u064E\u0627 \u0644\u064E\u064A\u0652\u0644\u064E\u0629\u064F \u0627\u0644\u0652\u0642\u064E\u062F\u0652\u0631\u0650',
+                translit: "Wa ma adraka ma laylatul-qadr",
+                explanation: "And do you even know how amazing this night is? It's SO special that words can barely describe it!",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u0644\u064E\u064A\u0652\u0644\u064E\u0629\u064F \u0627\u0644\u0652\u0642\u064E\u062F\u0652\u0631\u0650 \u062E\u064E\u064A\u0652\u0631\u0651 \u0645\u0651\u0650\u0646\u0652 \u0623\u064E\u0644\u0652\u0641\u0650 \u0634\u064E\u0647\u0652\u0631\u064D',
+                translit: "Laylatul-qadri khayrum min alfi shahr",
+                explanation: "This ONE night is better than 1,000 months! That's more than 83 years. Any good deed you do on this night gets multiplied beyond imagination!",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u062A\u064E\u0646\u064E\u0632\u0651\u064E\u0644\u064F \u0627\u0644\u0652\u0645\u064E\u0644\u064E\u0627\u0626\u0650\u0643\u064E\u0629\u064F \u0648\u064E\u0627\u0644\u0631\u0651\u064F\u0648\u062D\u064F \u0641\u0650\u064A\u0647\u064E\u0627 \u0628\u0650\u0625\u0650\u0630\u0652\u0646\u0650 \u0631\u064E\u0628\u0651\u0650\u0647\u0650\u0645 \u0645\u0651\u0650\u0646 \u0643\u064F\u0644\u0651\u0650 \u0623\u064E\u0645\u0652\u0631\u064D',
+                translit: "Tanazzalul-mala'ikatu war-ruhu fiha bi-idhni rabbihim min kulli amr",
+                explanation: "On this night, countless lights of mercy descend from the sky by Allah's permission, carrying blessings for every good matter!",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u0633\u064E\u0644\u064E\u0627\u0645\u0651 \u0647\u0650\u064A\u064E \u062D\u064E\u062A\u0651\u064E\u0649\u0670 \u0645\u064E\u0637\u0652\u0644\u064E\u0639\u0650 \u0627\u0644\u0652\u0641\u064E\u062C\u0652\u0631\u0650',
+                translit: "Salamun hiya hatta matla'il-fajr",
+                explanation: "It is all peace and tranquility, from sunset until the very first light of dawn. A whole night wrapped in Allah's peace!",
+                build: buildVerse5
+            }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            // Night sky gradients
+            defs.appendChild(createLinearGrad('nightSkyGrad', '0%','0%','0%','100%',
+                [['0%','#0a0a2e'],['30%','#111144'],['60%','#1a1a4e'],['100%','#162050']]));
+            defs.appendChild(createLinearGrad('deepNightGrad', '0%','0%','0%','100%',
+                [['0%','#050520'],['40%','#0d0d3a'],['70%','#151550'],['100%','#1a1a5a']]));
+            defs.appendChild(createLinearGrad('goldenBeamGrad', '0%','0%','0%','100%',
+                [['0%','#FFF9C4'],['30%','#FFD54F'],['60%','#FFC107'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createLinearGrad('dawnGrad', '0%','0%','0%','100%',
+                [['0%','#1a1a3e'],['20%','#2d1b69'],['40%','#6a3093'],['60%','#e67e22'],['80%','#f39c12'],['100%','#f1c40f']]));
+            defs.appendChild(createLinearGrad('groundNightGrad', '0%','0%','0%','100%',
+                [['0%','#1a2a1a'],['50%','#0d1a0d'],['100%','#0a150a']]));
+            defs.appendChild(createLinearGrad('quranGlowGrad', '0%','0%','0%','100%',
+                [['0%','#FFF9C4'],['50%','#FFD54F'],['100%','#C9A84C']]));
+            defs.appendChild(createLinearGrad('lightGrad', '50%','0%','50%','100%',
+                [['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('scaleGoldGrad', '0%','0%','0%','100%',
+                [['0%','#FFD54F'],['50%','#FFC107'],['100%','#C9A84C']]));
+            defs.appendChild(createLinearGrad('horizonGrad', '0%','0%','0%','100%',
+                [['0%','#0a0a2e'],['30%','#1a1040'],['50%','#3d1c6e'],['70%','#c0392b'],['85%','#e67e22'],['95%','#f39c12'],['100%','#f1c40f']]));
+            defs.appendChild(createLinearGrad('peaceGreenGrad', '0%','0%','0%','100%',
+                [['0%','#2E7D32'],['50%','#388E3C'],['100%','#1B5E20']]));
+
+            defs.appendChild(createRadialGrad('moonGlow', '50%','50%','50%',
+                [['0%','#FFFDE7'],['30%','#FFF9C4'],['60%','#FFF176'],['100%','rgba(255,241,118,0)']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createRadialGrad('starGlow', '50%','50%','50%',
+                [['0%','rgba(255,255,255,0.8)'],['40%','rgba(255,249,196,0.4)'],['100%','rgba(255,249,196,0)']]));
+            defs.appendChild(createRadialGrad('mercyGlow', '50%','50%','50%',
+                [['0%','rgba(255,183,77,0.6)'],['50%','rgba(255,183,77,0.2)'],['100%','rgba(255,183,77,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const softGlow = document.createElementNS(svgNS, 'filter');
+            softGlow.setAttribute('id', 'softGlow');
+            softGlow.innerHTML = '<feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(softGlow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // Helper: draw scattered stars
+        function drawStars(add, gi, count, yMin, yMax) {
+            for (let i = 0; i < count; i++) {
+                const sx = 20 + Math.random() * 860;
+                const sy = yMin + Math.random() * (yMax - yMin);
+                const sr = 1 + Math.random() * 2.5;
+                add(gi, el('circle', { cx: sx, cy: sy, r: sr, fill: '#FFF9C4', opacity: 0.4 + Math.random() * 0.6 }));
+            }
+        }
+
+        // Helper: draw crescent moon
+        function drawCrescent(add, gi, cx, cy, r) {
+            add(gi, el('circle', { cx, cy, r: r + 8, fill: 'url(#moonGlow)' }));
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            g.appendChild(el('circle', { cx, cy, r, fill: '#FFF9C4' }));
+            g.appendChild(el('circle', { cx: cx + r * 0.35, cy: cy - r * 0.1, r: r * 0.8, fill: '#0a0a2e' }));
+            add(gi, g);
+        }
+
+        // ===== VERSE 1: QURAN DESCENDING IN GOLDEN LIGHT =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep night sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#nightSkyGrad)', 'none', 0));
+
+            // G1: Stars scattered across the sky
+            drawStars(add, 1, 60, 10, 300);
+
+            // G2: Crescent moon
+            drawCrescent(add, 2, 120, 80, 30);
+
+            // G3: Golden beam of light from above
+            add(3, pathEl('M380,0 L520,0 L480,350 L420,350 Z', 'url(#goldenBeamGrad)', 'none', 0));
+            add(3, el('rect', { x: 390, y: 0, width: 120, height: 350, fill: 'url(#goldenGlow)', opacity: 0.4 }));
+            // Light rays spreading
+            add(3, pathEl('M450,0 L350,300', 'none', 'rgba(255,215,0,0.15)', 3, 'round'));
+            add(3, pathEl('M450,0 L550,300', 'none', 'rgba(255,215,0,0.15)', 3, 'round'));
+            add(3, pathEl('M450,0 L300,250', 'none', 'rgba(255,215,0,0.08)', 2, 'round'));
+            add(3, pathEl('M450,0 L600,250', 'none', 'rgba(255,215,0,0.08)', 2, 'round'));
+
+            // G4: Quran book in the golden light
+            // Book body
+            add(4, el('rect', { x: 410, y: 200, width: 80, height: 100, rx: 4, fill: '#2E7D32', stroke: '#1B5E20', 'stroke-width': 2 }));
+            // Book spine
+            add(4, pathEl('M410,200 L410,300', 'none', '#1B5E20', 3, 'round'));
+            // Golden border on cover
+            add(4, el('rect', { x: 418, y: 210, width: 64, height: 80, rx: 2, fill: 'none', stroke: '#C9A84C', 'stroke-width': 1.5 }));
+            // Inner decoration - geometric pattern
+            add(4, el('circle', { cx: 450, cy: 250, r: 18, fill: 'none', stroke: '#C9A84C', 'stroke-width': 1 }));
+            add(4, el('circle', { cx: 450, cy: 250, r: 12, fill: 'none', stroke: '#FFD54F', 'stroke-width': 0.8 }));
+            // Star in center of book
+            add(4, cartoonStar(450, 250, 8, 4, '#FFD54F', '#C9A84C'));
+            // Book glow
+            add(4, el('circle', { cx: 450, cy: 250, r: 70, fill: 'url(#goldenGlow)' }));
+
+            // G5: Ground - dark rolling hills
+            add(5, pathEl('M0,400 Q150,380 300,390 Q450,370 600,385 Q750,375 900,395 L900,506 L0,506 Z',
+                'url(#groundNightGrad)', '#0d1a0d', 1.5, 'round'));
+            // Silhouette of a mosque dome
+            add(5, pathEl('M350,410 Q370,370 390,380 Q410,350 430,380 Q450,370 470,410',
+                '#0d1a0d', '#0a150a', 1, 'round'));
+            // Minaret silhouette
+            add(5, pathEl('M490,410 L490,360 L495,355 L500,360 L500,410', '#0a150a', '#081008', 1, 'round'));
+
+            // G6: Small sparkles around the Quran
+            [[380,180],[520,190],[400,310],[500,320],[360,250],[540,240],
+             [430,170],[470,330],[350,210],[550,280]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 3 + Math.random()*4));
+            });
+
+            // G7: Bright twinkling stars
+            [[100,150],[200,50],[300,100],[600,60],[700,120],[800,40],[750,200],[150,220]].forEach(([x,y]) => {
+                add(7, cartoonStar(x, y, 5 + Math.random()*4, 2 + Math.random()*2, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G8: Title text
+            add(8, textEl('"We sent it down on the Night of Power"', 450, 470, { size: 20, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: COSMIC WONDER - GIANT QUESTION =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep cosmic night sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#deepNightGrad)', 'none', 0));
+
+            // G1: Stars
+            drawStars(add, 1, 80, 5, 400);
+
+            // G2: Cosmic nebula-like glow in the center
+            add(2, el('circle', { cx: 450, cy: 250, r: 180, fill: 'url(#mercyGlow)' }));
+            add(2, el('circle', { cx: 450, cy: 250, r: 120, fill: 'url(#goldenGlow)' }));
+
+            // G3: Giant question mark made of stars
+            // The curve of the question mark
+            add(3, pathEl('M380,120 Q380,80 420,80 Q480,80 480,120 Q480,160 450,180 L450,220',
+                'none', '#FFD54F', 5, 'round'));
+            // The dot of the question mark
+            add(3, el('circle', { cx: 450, cy: 250, r: 8, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 2 }));
+            // Glow around question mark
+            add(3, el('circle', { cx: 450, cy: 170, r: 100, fill: 'url(#starGlow)' }));
+
+            // G4: Sparkles scattered around the question mark
+            [[350,100],[550,100],[320,180],[580,180],[340,260],[560,260],
+             [380,300],[520,300],[400,60],[500,60]].forEach(([x,y]) => {
+                add(4, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G5: Surrounding bright stars expressing wonder
+            [[100,80],[200,150],[300,50],[600,80],[700,160],[800,50],
+             [80,300],[820,300],[150,400],[750,400]].forEach(([x,y]) => {
+                add(5, cartoonStar(x, y, 6 + Math.random()*5, 3 + Math.random()*2, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G6: Concentric rings of wonder emanating outward
+            [80, 130, 180, 230].forEach((r, i) => {
+                add(6, el('circle', { cx: 450, cy: 200, r, fill: 'none', stroke: `rgba(255,213,79,${0.3 - i*0.06})`, 'stroke-width': 1.5, 'stroke-dasharray': '8,8' }));
+            });
+
+            // G7: Ground
+            add(7, pathEl('M0,430 Q200,420 450,425 Q700,418 900,430 L900,506 L0,506 Z',
+                'url(#groundNightGrad)', '#0d1a0d', 1, 'round'));
+
+            // G8: Text
+            add(8, textEl('"What can make you know what Laylatul Qadr is?"', 450, 475, { size: 19, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: 1000 MONTHS VS ONE NIGHT - SCALE COMPARISON =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Night sky background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#nightSkyGrad)', 'none', 0));
+
+            // G1: Stars
+            drawStars(add, 1, 40, 5, 200);
+
+            // G2: Left side - stack of calendars representing 1000 months
+            add(2, textEl('1,000 Months', 225, 50, { size: 20, color: '#90A4AE', weight: 700 }));
+            add(2, textEl('(83+ years)', 225, 75, { size: 14, color: '#78909C', weight: 600 }));
+            // Calendar stack - many small calendar icons
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    const cx = 120 + col * 52;
+                    const cy = 110 + row * 60;
+                    // Calendar body
+                    add(2, el('rect', { x: cx, y: cy, width: 40, height: 35, rx: 3, fill: '#263238', stroke: '#455A64', 'stroke-width': 1 }));
+                    // Calendar top strip
+                    add(2, el('rect', { x: cx, y: cy, width: 40, height: 10, rx: 3, fill: '#455A64' }));
+                    // Calendar grid dots
+                    for (let dx = 0; dx < 3; dx++) {
+                        for (let dy = 0; dy < 2; dy++) {
+                            add(2, el('circle', { cx: cx + 10 + dx * 10, cy: cy + 18 + dy * 8, r: 1.5, fill: '#78909C' }));
+                        }
+                    }
+                }
+            }
+
+            // G3: "VS" in the center with glow
+            add(3, el('circle', { cx: 450, cy: 230, r: 35, fill: 'rgba(201,168,76,0.15)', stroke: '#C9A84C', 'stroke-width': 2 }));
+            add(3, textEl('VS', 450, 230, { size: 22, color: '#C9A84C', weight: 700 }));
+            // Vertical divider
+            add(3, lineEl(450, 40, 450, 180, 'rgba(201,168,76,0.3)', 1));
+            add(3, lineEl(450, 280, 450, 430, 'rgba(201,168,76,0.3)', 1));
+
+            // G4: Right side - one glowing night
+            add(4, textEl('ONE Night', 675, 50, { size: 22, color: '#FFD54F', weight: 700 }));
+            add(4, textEl('Laylatul Qadr', 675, 75, { size: 16, color: '#FFC107', weight: 600 }));
+
+            // G5: Glowing crescent moon representing the single night
+            add(5, el('circle', { cx: 675, cy: 220, r: 90, fill: 'url(#goldenGlow)' }));
+            add(5, el('circle', { cx: 675, cy: 220, r: 60, fill: 'url(#moonGlow)' }));
+            drawCrescent(add, 5, 675, 220, 45);
+            // Stars around the moon
+            [[610,150],[740,150],[600,280],[750,280],[660,130],[690,310]].forEach(([x,y]) => {
+                add(5, cartoonStar(x, y, 6, 3, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G6: "BETTER" arrow / ">" sign
+            add(6, textEl('<', 450, 400, { size: 50, color: '#FFD54F', weight: 700 }));
+            add(6, textEl('is BETTER than', 450, 440, { size: 16, color: '#C9A84C', weight: 600 }));
+
+            // G7: Sparkles on the right side
+            [[580,170],[770,170],[590,270],[760,270],[620,330],[730,340],
+             [650,380],[700,370]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 3 + Math.random()*4));
+            });
+
+            // G8: Ground
+            add(8, pathEl('M0,450 L900,450 L900,506 L0,506 Z', 'url(#groundNightGrad)', 'none', 0));
+
+            // G9: Bottom text
+            add(9, textEl('"Better than a thousand months"', 450, 485, { size: 18, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: LIGHT BEAMS DESCENDING (NO ANGEL DEPICTIONS) =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep night sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#deepNightGrad)', 'none', 0));
+
+            // G1: Stars
+            drawStars(add, 1, 50, 5, 150);
+
+            // G2: Multiple beams of golden light descending from the sky
+            const beamPositions = [120, 250, 380, 520, 650, 780];
+            beamPositions.forEach((bx, i) => {
+                const topW = 8 + i * 2;
+                const botW = 25 + i * 3;
+                add(2, pathEl(
+                    `M${bx-topW},0 L${bx+topW},0 L${bx+botW},506 L${bx-botW},506 Z`,
+                    `rgba(255,215,0,${0.06 + (i%3)*0.02})`, 'none', 0));
+            });
+
+            // G3: Central brilliant beam (wider, brighter)
+            add(3, pathEl('M400,0 L500,0 L530,506 L370,506 Z', 'rgba(255,249,196,0.12)', 'none', 0));
+            add(3, pathEl('M420,0 L480,0 L500,506 L400,506 Z', 'rgba(255,213,79,0.15)', 'none', 0));
+            add(3, el('circle', { cx: 450, cy: 60, r: 50, fill: 'url(#goldenGlow)' }));
+
+            // G4: Floating orbs of light descending (representing mercy, not figures)
+            [[150,120],[280,180],[400,100],[520,160],[650,130],[780,190],
+             [200,280],[350,250],[500,300],[650,270],[100,350],[800,320],
+             [300,380],[450,350],[600,390]].forEach(([ox,oy]) => {
+                const r = 4 + Math.random() * 6;
+                add(4, el('circle', { cx: ox, cy: oy, r: r + 8, fill: 'url(#starGlow)' }));
+                add(4, el('circle', { cx: ox, cy: oy, r, fill: '#FFF9C4', opacity: 0.7 + Math.random() * 0.3 }));
+            });
+
+            // G5: Sparkles throughout the scene
+            for (let i = 0; i < 20; i++) {
+                const sx = 50 + Math.random() * 800;
+                const sy = 50 + Math.random() * 400;
+                add(5, cartoonSparkle(sx, sy, 3 + Math.random() * 5));
+            }
+
+            // G6: Ground with gentle glow
+            add(6, pathEl('M0,420 Q200,410 450,415 Q700,405 900,420 L900,506 L0,506 Z',
+                'url(#groundNightGrad)', '#0d1a0d', 1, 'round'));
+            // Gentle golden glow on the ground from the light
+            add(6, el('ellipse', { cx: 450, cy: 450, rx: 300, ry: 40, fill: 'url(#goldenGlow)', opacity: 0.3 }));
+
+            // G7: Small crescent moon
+            drawCrescent(add, 7, 80, 50, 20);
+
+            // G8: Label text
+            add(8, textEl('"By permission of their Lord, for every matter"', 450, 480, { size: 18, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: PEACEFUL DAWN - NIGHT TO SUNRISE =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dawn horizon gradient - night at top merging to sunrise at bottom
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#horizonGrad)', 'none', 0));
+
+            // G1: Remaining stars in the upper sky (fading as dawn approaches)
+            for (let i = 0; i < 30; i++) {
+                const sx = 20 + Math.random() * 860;
+                const sy = 10 + Math.random() * 150;
+                const sr = 0.8 + Math.random() * 2;
+                add(1, el('circle', { cx: sx, cy: sy, r: sr, fill: '#FFF9C4', opacity: 0.2 + Math.random() * 0.4 }));
+            }
+
+            // G2: Sun rising at horizon
+            add(2, el('circle', { cx: 450, cy: 380, r: 60, fill: 'url(#goldenGlow)' }));
+            add(2, el('circle', { cx: 450, cy: 380, r: 40, fill: '#FFF9C4', opacity: 0.6 }));
+            add(2, el('circle', { cx: 450, cy: 385, r: 30, fill: '#FFD54F', opacity: 0.8 }));
+            // Sun rays
+            for (let i = 0; i < 12; i++) {
+                const rad = (i * 30 - 90) * Math.PI / 180;
+                if (Math.sin(rad) > 0.3) continue; // Only rays going upward
+                add(2, lineEl(
+                    450 + 40*Math.cos(rad), 380 + 40*Math.sin(rad),
+                    450 + 70*Math.cos(rad), 380 + 70*Math.sin(rad),
+                    'rgba(255,213,79,0.4)', 2));
+            }
+
+            // G3: Horizon line with gentle hills
+            add(3, pathEl('M0,385 Q100,370 200,378 Q350,365 450,375 Q550,365 700,378 Q800,370 900,385 L900,506 L0,506 Z',
+                '#1a2a1a', '#0d1a0d', 1.5, 'round'));
+
+            // G4: Olive branch of peace (left side)
+            // Branch
+            add(4, pathEl('M80,350 Q120,330 180,340 Q220,335 260,345', 'none', '#4E342E', 3, 'round'));
+            // Leaves
+            [[110,335],[140,330],[170,335],[200,332],[230,338]].forEach(([lx,ly], i) => {
+                const side = i % 2 === 0 ? -1 : 1;
+                add(4, pathEl(`M${lx},${ly} Q${lx+8},${ly+side*12} ${lx+18},${ly+side*3}`,
+                    '#2E7D32', '#1B5E20', 0.8, 'round'));
+            });
+            // Small olives
+            [[125,340],[155,335],[195,338]].forEach(([ox,oy]) => {
+                add(4, el('ellipse', { cx: ox, cy: oy, rx: 4, ry: 3, fill: '#388E3C', stroke: '#2E7D32', 'stroke-width': 0.6 }));
+            });
+
+            // G5: Another olive branch (right side)
+            add(5, pathEl('M820,355 Q780,335 720,342 Q680,330 640,340', 'none', '#4E342E', 3, 'round'));
+            [[790,340],[760,332],[730,337],[700,330],[670,335]].forEach(([lx,ly], i) => {
+                const side = i % 2 === 0 ? -1 : 1;
+                add(5, pathEl(`M${lx},${ly} Q${lx-8},${ly+side*12} ${lx-18},${ly+side*3}`,
+                    '#2E7D32', '#1B5E20', 0.8, 'round'));
+            });
+            [[780,345],[750,337],[710,340]].forEach(([ox,oy]) => {
+                add(5, el('ellipse', { cx: ox, cy: oy, rx: 4, ry: 3, fill: '#388E3C', stroke: '#2E7D32', 'stroke-width': 0.6 }));
+            });
+
+            // G6: "SALAM" text with golden glow
+            add(6, el('circle', { cx: 450, cy: 200, r: 100, fill: 'url(#goldenGlow)' }));
+            add(6, textEl('SALAM', 450, 180, { size: 40, color: '#FFD54F', weight: 700, family: 'Amiri, serif' }));
+            add(6, textEl('Peace', 450, 220, { size: 24, color: '#FFF9C4', weight: 600 }));
+
+            // G7: Gentle sparkles representing the peaceful atmosphere
+            [[200,150],[300,100],[350,200],[550,200],[600,100],[700,150],
+             [250,280],[400,300],[500,280],[650,300]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 3 + Math.random()*4));
+            });
+
+            // G8: Crescent moon fading in upper left
+            add(8, el('circle', { cx: 100, cy: 60, r: 18, fill: '#FFF9C4', opacity: 0.3 }));
+            add(8, el('circle', { cx: 107, cy: 57, r: 14, fill: '#0a0a2e', opacity: 0.3 }));
+
+            // G9: Bottom text
+            add(9, textEl('"Peace it is, until the emergence of dawn"', 450, 480, { size: 19, color: '#FFF9C4', weight: 700 }));
+
+            return { svg, groups };
+        }
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>

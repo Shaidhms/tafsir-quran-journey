@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah At-Tin - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 95 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ التِّينِ</div>
+        <h1>Surah At-Tin</h1>
+        <p>The Fig - 8 Verses - Makkan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 8</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">95</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">8</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">34</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Fig</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Human Dignity</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Surah At-Tin begins with a powerful oath. Allah swears by four sacred things: <span class="highlight">the fig, the olive, Mount Sinai, and the secure city of Makkah</span>. Each of these represents a place connected to a great prophet and revelation.</p>
+                <p>The fig and olive are associated with the land of <span class="highlight">Palestine and Syria (Ash-Sham)</span>, where Prophet Isa (Jesus) received his revelation. Mount Sinai is where <span class="highlight">Prophet Musa (Moses)</span> spoke directly to Allah. And Makkah is where <span class="highlight">Prophet Muhammad</span> received the Quran.</p>
+                <div class="important">
+                    <p>The core message: Allah created humans in the most beautiful, upright, and noble form. But when a person rejects faith and follows their base desires, they fall to the lowest of the low. The only way to remain elevated is through <strong>iman (belief) and righteous deeds</strong>.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>Ibn Kathir explains that "ahsani taqwim" (best of stature) refers to the <span class="highlight">physical beauty, upright posture, intellect, and spiritual potential</span> that Allah gave to humans. No other creation was given all of these together.</p>
+                <p>As-Sa'di adds that <span class="highlight">"asfala safilin" (lowest of the low)</span> refers to the state of those who waste their potential by turning away from their Creator. Despite being given the best form, they choose to sink lower than any creature by rejecting the truth.</p>
+                <p>The surah ends with a rhetorical question that demands reflection: <span class="highlight">"Is not Allah the most just of judges?"</span> Of course He is. He will reward the good and hold the wicked accountable with perfect justice.</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">وَالتِّينِ وَالزَّيْتُونِ</div>
+                    <div class="verse-transliteration">Wat-tini waz-zaytun</div>
+                    <div class="verse-translation">By the fig and the olive.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَالتِّينِ</span><span class="trans">wat-tini</span><span class="meaning">By the fig</span></div>
+                            <div class="word-chip"><span class="ar">وَالزَّيْتُونِ</span><span class="trans">waz-zaytun</span><span class="meaning">And the olive</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah begins this surah by swearing an oath by the fig and the olive. These are not just fruits - they represent the blessed lands where great prophets lived. The fig and olive grow abundantly in Palestine and Syria, the land of Prophet Isa (Jesus). When Allah swears by something, it shows its great importance. Some scholars also say these fruits themselves are a sign of Allah's blessings and perfect design in nature.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">وَطُورِ سِينِينَ</div>
+                    <div class="verse-transliteration">Waturi sinin</div>
+                    <div class="verse-translation">And by Mount Sinai.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَطُورِ</span><span class="trans">waturi</span><span class="meaning">And (by) Mount</span></div>
+                            <div class="word-chip"><span class="ar">سِينِينَ</span><span class="trans">sinin</span><span class="meaning">Sinai</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Tur Sinin" is Mount Sinai, located in the Sinai Peninsula of Egypt. This is the sacred mountain where Prophet Musa (Moses) spoke directly to Allah and received the Torah. It is one of the most blessed places on earth. By swearing by it, Allah is honoring the place where His direct revelation came down, and reminding us of the great legacy of prophethood.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">وَهَٰذَا الْبَلَدِ الْأَمِينِ</div>
+                    <div class="verse-transliteration">Wa hadhal-baladil-amin</div>
+                    <div class="verse-translation">And by this secure city (Makkah).</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَهَٰذَا</span><span class="trans">wa hadha</span><span class="meaning">And this</span></div>
+                            <div class="word-chip"><span class="ar">الْبَلَدِ</span><span class="trans">al-baladi</span><span class="meaning">The city</span></div>
+                            <div class="word-chip"><span class="ar">الْأَمِينِ</span><span class="trans">al-amin</span><span class="meaning">The secure / trustworthy</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Hadhal-baladil-amin" refers to Makkah, the city where the Kaaba stands and where Prophet Muhammad was born and received the Quran. Allah calls it "al-amin" meaning secure and safe. Even before Islam, the Arabs considered Makkah a sanctuary where fighting was forbidden. Through these three oaths (fig/olive, Sinai, Makkah), Allah has referenced the places of the three greatest prophets: Isa, Musa, and Muhammad (peace be upon them all).</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">لَقَدْ خَلَقْنَا الْإِنسَانَ فِي أَحْسَنِ تَقْوِيمٍ</div>
+                    <div class="verse-transliteration">Laqad khalaqnal-insana fi ahsani taqwim</div>
+                    <div class="verse-translation">We have certainly created man in the best of stature.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">لَقَدْ</span><span class="trans">laqad</span><span class="meaning">Certainly / Indeed</span></div>
+                            <div class="word-chip"><span class="ar">خَلَقْنَا</span><span class="trans">khalaqna</span><span class="meaning">We created</span></div>
+                            <div class="word-chip"><span class="ar">الْإِنسَانَ</span><span class="trans">al-insana</span><span class="meaning">The human being</span></div>
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                            <div class="word-chip"><span class="ar">أَحْسَنِ</span><span class="trans">ahsani</span><span class="meaning">The best of</span></div>
+                            <div class="word-chip"><span class="ar">تَقْوِيمٍ</span><span class="trans">taqwim</span><span class="meaning">Stature / form</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is the answer to the oath. After swearing by those blessed places, Allah declares the point: He created human beings in "ahsani taqwim" - the best and most beautiful form. This includes our upright posture (no other creature walks upright like us), our beautiful physical appearance, our intellect, our ability to speak, and our spiritual capacity to know Allah. Ibn Kathir says this means the best shape, the most beautiful form, with all limbs and faculties in perfect proportion.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">ثُمَّ رَدَدْنَاهُ أَسْفَلَ سَافِلِينَ</div>
+                    <div class="verse-transliteration">Thumma radadnahu asfala safilin</div>
+                    <div class="verse-translation">Then We return him to the lowest of the low.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                            <div class="word-chip"><span class="ar">رَدَدْنَاهُ</span><span class="trans">radadnahu</span><span class="meaning">We returned him</span></div>
+                            <div class="word-chip"><span class="ar">أَسْفَلَ</span><span class="trans">asfala</span><span class="meaning">The lowest of</span></div>
+                            <div class="word-chip"><span class="ar">سَافِلِينَ</span><span class="trans">safilin</span><span class="meaning">The low ones</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Despite being created in the best form, those who reject faith and follow their evil desires are brought down to "asfala safilin" - the absolute lowest state. Some scholars like Mujahid say this means old age and weakness, while others (including Ibn Kathir's preferred view) say it means the lowest depths of the Hellfire for the disbelievers. As-Sa'di explains that a person who was given the best form but chose to disobey becomes worse than animals, because animals follow their nature while humans have a choice and chose wrong.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ فَلَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍ</div>
+                    <div class="verse-transliteration">Illal-ladhina amanu wa 'amilus-salihati falahum ajrun ghayru mamnun</div>
+                    <div class="verse-translation">Except for those who believe and do righteous deeds, for they will have a never-ending reward.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                            <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                            <div class="word-chip"><span class="ar">آمَنُوا</span><span class="trans">amanu</span><span class="meaning">Believed</span></div>
+                            <div class="word-chip"><span class="ar">وَعَمِلُوا</span><span class="trans">wa 'amilu</span><span class="meaning">And did</span></div>
+                            <div class="word-chip"><span class="ar">الصَّالِحَاتِ</span><span class="trans">as-salihati</span><span class="meaning">Righteous deeds</span></div>
+                            <div class="word-chip"><span class="ar">فَلَهُمْ</span><span class="trans">falahum</span><span class="meaning">Then for them</span></div>
+                            <div class="word-chip"><span class="ar">أَجْرٌ</span><span class="trans">ajrun</span><span class="meaning">A reward</span></div>
+                            <div class="word-chip"><span class="ar">غَيْرُ</span><span class="trans">ghayru</span><span class="meaning">Without / never</span></div>
+                            <div class="word-chip"><span class="ar">مَمْنُونٍ</span><span class="trans">mamnun</span><span class="meaning">Ending / cut off</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Here comes the beautiful exception! Not everyone falls to the lowest level. Those who combine two things - <strong>belief in Allah (iman)</strong> and <strong>righteous deeds (amal salih)</strong> - are saved. They get "ajrun ghayru mamnun" which means a reward that is never cut off, never interrupted, and never ends. Ibn Kathir says this means their reward in Paradise will continue forever without any reduction. Notice how Allah pairs belief WITH action - faith alone without deeds, or deeds without faith, is not enough.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">فَمَا يُكَذِّبُكَ بَعْدُ بِالدِّينِ</div>
+                    <div class="verse-transliteration">Fama yukadhdhibuka ba'du bid-din</div>
+                    <div class="verse-translation">So what yet causes you to deny the Recompense?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَمَا</span><span class="trans">fama</span><span class="meaning">So what</span></div>
+                            <div class="word-chip"><span class="ar">يُكَذِّبُكَ</span><span class="trans">yukadhdhibuka</span><span class="meaning">Causes you to deny</span></div>
+                            <div class="word-chip"><span class="ar">بَعْدُ</span><span class="trans">ba'du</span><span class="meaning">After (this)</span></div>
+                            <div class="word-chip"><span class="ar">بِالدِّينِ</span><span class="trans">bid-din</span><span class="meaning">The Recompense / Judgment</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>After presenting all these clear arguments - the blessed places, human creation in the best form, the fall of the ungrateful, and the reward of the faithful - Allah asks a powerful rhetorical question: "What possible reason could you still have to deny the Day of Judgment?" "Ad-Din" here means the Recompense and the Day of Judgment. The evidence is overwhelming. The One who created you in the best form can certainly resurrect you and judge you.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">8</div>
+                    <div class="verse-arabic">أَلَيْسَ اللَّهُ بِأَحْكَمِ الْحَاكِمِينَ</div>
+                    <div class="verse-transliteration">Alaysal-lahu bi-ahkamil-hakimin</div>
+                    <div class="verse-translation">Is not Allah the most just of judges?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">أَلَيْسَ</span><span class="trans">alaysa</span><span class="meaning">Is not</span></div>
+                            <div class="word-chip"><span class="ar">اللَّهُ</span><span class="trans">Allahu</span><span class="meaning">Allah</span></div>
+                            <div class="word-chip"><span class="ar">بِأَحْكَمِ</span><span class="trans">bi-ahkami</span><span class="meaning">The most just / wisest</span></div>
+                            <div class="word-chip"><span class="ar">الْحَاكِمِينَ</span><span class="trans">al-hakimin</span><span class="meaning">Of the judges</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The surah concludes with this magnificent rhetorical question. The answer is an absolute YES - Allah IS the most just, the most wise, and the most perfect of all judges. "Ahkam" comes from "hukm" (judgment/wisdom). Allah's justice is perfect - He never wrongs anyone, not even by the weight of an atom. The Prophet Muhammad (peace be upon him) said: "When one of you recites 'Is not Allah the most just of judges?', let him say: 'Bala, wa ana 'ala dhalika minash-shahidin' (Yes indeed, and I am a witness to that)." (Reported by Abu Dawud and At-Tirmidhi)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah At-Tin</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Humans are honored by Allah.</strong><p style="color: #999; font-size: 0.95em;">Allah created us in the best form with intelligence, beauty, and spiritual capacity. This is a trust and a responsibility, not just a privilege.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Potential can be wasted.</strong><p style="color: #999; font-size: 0.95em;">Being created in the best form does not guarantee staying elevated. Without faith and good deeds, a person can fall to the lowest of the low.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Faith and action go together.</strong><p style="color: #999; font-size: 0.95em;">Allah pairs iman (belief) with amal salih (righteous deeds). You cannot have one without the other. True faith always produces good actions.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah's reward is eternal.</strong><p style="color: #999; font-size: 0.95em;">"Ajrun ghayru mamnun" - a reward that never ends. Unlike worldly rewards that run out, Allah's reward in the Hereafter is infinite and uninterrupted.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah is the perfect judge.</strong><p style="color: #999; font-size: 0.95em;">No human judge is free from bias or error. But Allah is "ahkamul-hakimin" - the most just of all judges. Every deed will be accounted for with perfect fairness.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. The hadith about responding to the last verse is reported by Abu Dawud and At-Tirmidhi. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="099-az-zalzalah.html">Next: Surah Az-Zalzalah &rarr;</a>
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0648\u064E\u0627\u0644\u062A\u0651\u0650\u064A\u0646\u0650 \u0648\u064E\u0627\u0644\u0632\u0651\u064E\u064A\u0652\u062A\u064F\u0648\u0646\u0650',
+                translit: "Wat-tini waz-zaytun",
+                explanation: "Allah swears by the fig and the olive - two blessed fruits from blessed lands where great prophets lived and taught!",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u0648\u064E\u0637\u064F\u0648\u0631\u0650 \u0633\u0650\u064A\u0646\u0650\u064A\u0646\u064E',
+                translit: "Waturi sinin",
+                explanation: "And by Mount Sinai - the mountain where Prophet Musa (Moses) spoke directly to Allah and received guidance!",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u0648\u064E\u0647\u064E\u0670\u0630\u064E\u0627 \u0627\u0644\u0652\u0628\u064E\u0644\u064E\u062F\u0650 \u0627\u0644\u0652\u0623\u064E\u0645\u0650\u064A\u0646\u0650',
+                translit: "Wa hadhal-baladil-amin",
+                explanation: "And by this secure city - Makkah! The safest, most sacred place on earth where Prophet Muhammad received the Quran.",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u0644\u064E\u0642\u064E\u062F\u0652 \u062E\u064E\u0644\u064E\u0642\u0652\u0646\u064E\u0627 \u0627\u0644\u0652\u0625\u0650\u0646\u0633\u064E\u0627\u0646\u064E \u0641\u0650\u064A \u0623\u064E\u062D\u0652\u0633\u064E\u0646\u0650 \u062A\u064E\u0642\u0652\u0648\u0650\u064A\u0645\u064D',
+                translit: "Laqad khalaqnal-insana fi ahsani taqwim",
+                explanation: "We created humans in the best form - beautiful, upright, intelligent! Allah made us the best of all creation.",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u062B\u064F\u0645\u0651\u064E \u0631\u064E\u062F\u064E\u062F\u0652\u0646\u064E\u0627\u0647\u064F \u0623\u064E\u0633\u0652\u0641\u064E\u0644\u064E \u0633\u064E\u0627\u0641\u0650\u0644\u0650\u064A\u0646\u064E',
+                translit: "Thumma radadnahu asfala safilin",
+                explanation: "But when people turn away from Allah and follow evil, they fall to the lowest of the low - worse than any creature!",
+                build: buildVerse5
+            },
+            {
+                num: 6,
+                arabic: '\u0625\u0650\u0644\u0651\u064E\u0627 \u0627\u0644\u0651\u064E\u0630\u0650\u064A\u0646\u064E \u0622\u0645\u064E\u0646\u064F\u0648\u0627 \u0648\u064E\u0639\u064E\u0645\u0650\u0644\u064F\u0648\u0627 \u0627\u0644\u0635\u0651\u064E\u0627\u0644\u0650\u062D\u064E\u0627\u062A\u0650 \u0641\u064E\u0644\u064E\u0647\u064F\u0645\u0652 \u0623\u064E\u062C\u0652\u0631\u064C \u063A\u064E\u064A\u0652\u0631\u064F \u0645\u064E\u0645\u0652\u0646\u064F\u0648\u0646\u064D',
+                translit: "Illal-ladhina amanu wa 'amilus-salihati falahum ajrun ghayru mamnun",
+                explanation: "Except those who believe and do good deeds - they will get a reward that never ever ends! Allah's promise is forever!",
+                build: buildVerse6
+            },
+            {
+                num: 7,
+                arabic: '\u0641\u064E\u0645\u064E\u0627 \u064A\u064F\u0643\u064E\u0630\u0651\u0650\u0628\u064F\u0643\u064E \u0628\u064E\u0639\u0652\u062F\u064F \u0628\u0650\u0627\u0644\u062F\u0651\u0650\u064A\u0646\u0650',
+                translit: "Fama yukadhdhibuka ba'du bid-din",
+                explanation: "So what makes you deny the Day of Judgment after all these clear signs? Think about it!",
+                build: buildVerse7
+            },
+            {
+                num: 8,
+                arabic: '\u0623\u064E\u0644\u064E\u064A\u0652\u0633\u064E \u0627\u0644\u0644\u0651\u064E\u0647\u064F \u0628\u0650\u0623\u064E\u062D\u0652\u0643\u064E\u0645\u0650 \u0627\u0644\u0652\u062D\u064E\u0627\u0643\u0650\u0645\u0650\u064A\u0646\u064E',
+                translit: "Alaysal-lahu bi-ahkamil-hakimin",
+                explanation: "Is not Allah the most just of all judges? Of course He is! He will judge everyone perfectly and fairly!",
+                build: buildVerse8
+            }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            defs.appendChild(createLinearGrad('skyGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyNight', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            defs.appendChild(createLinearGrad('skyDramatic', '0%','0%','0%','100%',
+                [['0%','#4A148C'],['30%','#6A1B9A'],['60%','#E65100'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('trunkGrad', '0%','0%','100%','0%',
+                [['0%','#5D4037'],['30%','#8D6E63'],['60%','#A1887F'],['80%','#8D6E63'],['100%','#4E342E']]));
+            defs.appendChild(createLinearGrad('robeGrad', '0%','0%','100%','100%',
+                [['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            defs.appendChild(createLinearGrad('doorGrad', '0%','0%','100%','0%',
+                [['0%','#5D4037'],['30%','#795548'],['70%','#8D6E63'],['100%','#4E342E']]));
+            defs.appendChild(createLinearGrad('lightGrad', '50%','0%','50%','100%',
+                [['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('pathGold', '0%','0%','100%','0%',
+                [['0%','#FFD54F'],['50%','#FFF176'],['100%','#FFD54F']]));
+            defs.appendChild(createLinearGrad('waterGrad', '0%','0%','0%','100%',
+                [['0%','#4FC3F7'],['50%','#29B6F6'],['100%','#0288D1']]));
+            // At-Tin specific gradients
+            defs.appendChild(createLinearGrad('gardenGrad', '0%','0%','0%','100%',
+                [['0%','#C8E6C9'],['50%','#A5D6A7'],['100%','#66BB6A']]));
+            defs.appendChild(createLinearGrad('sandGrad', '0%','0%','0%','100%',
+                [['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('kaabaGrad', '0%','0%','100%','0%',
+                [['0%','#212121'],['30%','#333333'],['70%','#2a2a2a'],['100%','#1a1a1a']]));
+            defs.appendChild(createLinearGrad('kaabaClothGrad', '0%','0%','0%','100%',
+                [['0%','#1a1a1a'],['50%','#2c2c2c'],['100%','#1a1a1a']]));
+            defs.appendChild(createLinearGrad('mountainGrad', '0%','0%','0%','100%',
+                [['0%','#8D6E63'],['30%','#795548'],['60%','#6D4C41'],['100%','#5D4037']]));
+            defs.appendChild(createLinearGrad('mountainSnow', '0%','0%','0%','100%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createLinearGrad('figGrad', '0%','0%','0%','100%',
+                [['0%','#7B1FA2'],['40%','#6A1B9A'],['100%','#4A148C']]));
+            defs.appendChild(createLinearGrad('oliveGrad', '0%','0%','0%','100%',
+                [['0%','#558B2F'],['40%','#33691E'],['100%','#1B5E20']]));
+            defs.appendChild(createLinearGrad('goldenBodyGrad', '0%','0%','0%','100%',
+                [['0%','#FFF9C4'],['30%','#FFD54F'],['60%','#FFC107'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('darkFallGrad', '0%','0%','0%','100%',
+                [['0%','#37474F'],['50%','#263238'],['100%','#1a1a1a']]));
+            defs.appendChild(createLinearGrad('rewardGrad', '0%','0%','0%','100%',
+                [['0%','#FFF9C4'],['30%','#FFE082'],['60%','#FFD54F'],['100%','#FFC107']]));
+            defs.appendChild(createLinearGrad('shieldGrad', '0%','0%','0%','100%',
+                [['0%','#C9A84C'],['30%','#FFD54F'],['60%','#FFC107'],['100%','#C9A84C']]));
+            defs.appendChild(createLinearGrad('scaleGrad', '0%','0%','0%','100%',
+                [['0%','#FFD54F'],['50%','#FFC107'],['100%','#FF8F00']]));
+
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('skinGrad', '40%','35%','50%',
+                [['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('leafGrad', '40%','30%','50%',
+                [['0%','#81C784'],['40%','#4CAF50'],['80%','#2E7D32'],['100%','#1B5E20']]));
+            defs.appendChild(createRadialGrad('mercyGlow', '50%','50%','50%',
+                [['0%','rgba(255,183,77,0.6)'],['50%','rgba(255,183,77,0.2)'],['100%','rgba(255,183,77,0)']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // Helper: draw a fig tree
+        function drawFigTree(add, gi, cx, groundY, scale) {
+            const s = scale;
+            // Trunk
+            add(gi, pathEl(`M${cx-8*s},${groundY} Q${cx-5*s},${groundY-40*s} ${cx-3*s},${groundY-70*s}`, 'none', '#5D4037', 10*s, 'round'));
+            add(gi, pathEl(`M${cx+8*s},${groundY} Q${cx+5*s},${groundY-40*s} ${cx+3*s},${groundY-70*s}`, 'none', '#4E342E', 8*s, 'round'));
+            // Branches
+            add(gi, pathEl(`M${cx},${groundY-65*s} Q${cx-30*s},${groundY-90*s} ${cx-50*s},${groundY-100*s}`, 'none', '#5D4037', 5*s, 'round'));
+            add(gi, pathEl(`M${cx},${groundY-65*s} Q${cx+25*s},${groundY-95*s} ${cx+45*s},${groundY-105*s}`, 'none', '#5D4037', 5*s, 'round'));
+            add(gi, pathEl(`M${cx},${groundY-70*s} Q${cx},${groundY-110*s} ${cx+5*s},${groundY-120*s}`, 'none', '#5D4037', 4*s, 'round'));
+            // Canopy - large fig leaves (lobed shape)
+            const leafPositions = [
+                [cx-50*s, groundY-110*s, 35*s], [cx+45*s, groundY-115*s, 33*s],
+                [cx, groundY-130*s, 38*s], [cx-25*s, groundY-120*s, 30*s],
+                [cx+25*s, groundY-125*s, 32*s], [cx-35*s, groundY-95*s, 28*s],
+                [cx+35*s, groundY-100*s, 28*s]
+            ];
+            leafPositions.forEach(([lx, ly, lr]) => {
+                add(gi+1, el('ellipse', { cx: lx, cy: ly, rx: lr, ry: lr*0.8, fill: 'url(#leafGrad)', stroke: '#2E7D32', 'stroke-width': 1*s }));
+            });
+            // Figs (purple fruits)
+            [[cx-40*s, groundY-90*s], [cx+30*s, groundY-95*s], [cx-15*s, groundY-105*s],
+             [cx+10*s, groundY-110*s], [cx-5*s, groundY-85*s]].forEach(([fx, fy]) => {
+                add(gi+1, el('ellipse', { cx: fx, cy: fy, rx: 6*s, ry: 8*s, fill: 'url(#figGrad)', stroke: '#4A148C', 'stroke-width': 1*s }));
+                add(gi+1, el('circle', { cx: fx, cy: fy-8*s, r: 2*s, fill: '#4CAF50' }));
+            });
+        }
+
+        // Helper: draw an olive tree
+        function drawOliveTree(add, gi, cx, groundY, scale) {
+            const s = scale;
+            // Trunk - gnarled olive tree trunk
+            add(gi, pathEl(`M${cx-6*s},${groundY} Q${cx-10*s},${groundY-30*s} ${cx-4*s},${groundY-55*s}`, 'none', '#6D4C41', 9*s, 'round'));
+            add(gi, pathEl(`M${cx+6*s},${groundY} Q${cx+8*s},${groundY-35*s} ${cx+2*s},${groundY-55*s}`, 'none', '#5D4037', 7*s, 'round'));
+            // Bark texture
+            for (let i = 1; i < 5; i++) {
+                const ty = groundY - i * 12 * s;
+                add(gi, lineEl(cx-5*s, ty, cx+5*s, ty, '#4E342E', 1*s));
+            }
+            // Branches
+            add(gi, pathEl(`M${cx},${groundY-50*s} Q${cx-35*s},${groundY-75*s} ${cx-55*s},${groundY-80*s}`, 'none', '#5D4037', 4*s, 'round'));
+            add(gi, pathEl(`M${cx},${groundY-50*s} Q${cx+30*s},${groundY-80*s} ${cx+50*s},${groundY-85*s}`, 'none', '#5D4037', 4*s, 'round'));
+            add(gi, pathEl(`M${cx},${groundY-55*s} Q${cx+5*s},${groundY-90*s} ${cx},${groundY-100*s}`, 'none', '#5D4037', 3*s, 'round'));
+            // Silvery-green foliage (olive trees have distinctive silver-green leaves)
+            const foliage = [
+                [cx-55*s, groundY-90*s, 28*s], [cx+50*s, groundY-95*s, 26*s],
+                [cx, groundY-110*s, 32*s], [cx-30*s, groundY-100*s, 25*s],
+                [cx+25*s, groundY-105*s, 27*s], [cx-40*s, groundY-80*s, 22*s],
+                [cx+40*s, groundY-82*s, 22*s]
+            ];
+            foliage.forEach(([lx, ly, lr]) => {
+                add(gi+1, el('ellipse', { cx: lx, cy: ly, rx: lr, ry: lr*0.7, fill: '#689F38', stroke: '#33691E', 'stroke-width': 1*s, opacity: 0.9 }));
+                add(gi+1, el('ellipse', { cx: lx+3*s, cy: ly-3*s, rx: lr*0.6, ry: lr*0.4, fill: 'rgba(200,230,201,0.4)' }));
+            });
+            // Olives (green/dark green fruits)
+            [[cx-45*s, groundY-78*s], [cx+35*s, groundY-80*s], [cx-20*s, groundY-92*s],
+             [cx+15*s, groundY-98*s], [cx+5*s, groundY-75*s]].forEach(([ox, oy]) => {
+                add(gi+1, el('ellipse', { cx: ox, cy: oy, rx: 4*s, ry: 5*s, fill: 'url(#oliveGrad)', stroke: '#1B5E20', 'stroke-width': 0.8*s }));
+            });
+        }
+
+        // ===== VERSE 1: FIG AND OLIVE TREES =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Beautiful garden sky
+            add(0, pathEl('M0,0 L900,0 L900,220 L0,220 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Sun with warm glow
+            add(1, el('circle', { cx: 450, cy: 70, r: 45, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            add(1, el('circle', { cx: 450, cy: 70, r: 60, fill: 'url(#goldenGlow)' }));
+            for (let i = 0; i < 10; i++) {
+                const rad = (i * 36) * Math.PI / 180;
+                add(1, lineEl(450 + 50*Math.cos(rad), 70 + 50*Math.sin(rad),
+                    450 + 68*Math.cos(rad), 70 + 68*Math.sin(rad), '#FDD835', 2.5));
+            }
+
+            // G2: Rolling green hills
+            add(2, pathEl('M0,200 Q150,170 300,190 Q450,160 600,185 Q750,155 900,180 L900,260 L0,260 Z',
+                '#A5D6A7', '#66BB6A', 2, 'round'));
+            add(2, pathEl('M0,240 Q200,220 400,235 Q600,215 900,240 L900,260 L0,260 Z',
+                '#81C784', '#4CAF50', 1.5, 'round'));
+
+            // G3: Lush green ground
+            add(3, pathEl('M0,260 L900,260 L900,506 L0,506 Z', 'url(#gardenGrad)', '#388E3C', 2));
+            // Grass tufts
+            for (let i = 0; i < 35; i++) {
+                const gx = 15 + i * 26;
+                const gy = 270 + Math.random() * 220;
+                add(3, pathEl(`M${gx},${gy} Q${gx-2},${gy-8} ${gx-4},${gy-12}`, 'none', '#2E7D32', 1.2, 'round'));
+                add(3, pathEl(`M${gx},${gy} Q${gx+1},${gy-9} ${gx+3},${gy-11}`, 'none', '#388E3C', 1, 'round'));
+            }
+
+            // G4-5: Fig tree on the left
+            drawFigTree(add, 4, 280, 400, 1.3);
+
+            // G6-7: Olive tree on the right
+            drawOliveTree(add, 6, 620, 400, 1.3);
+
+            // G8: Small flowers and butterflies between the trees
+            [[380,420],[420,430],[460,415],[500,425],[540,418]].forEach(([fx,fy]) => {
+                add(8, el('circle', { cx: fx, cy: fy, r: 3, fill: '#E91E63', stroke: '#C2185B', 'stroke-width': 0.5 }));
+                add(8, el('circle', { cx: fx, cy: fy, r: 1.5, fill: '#FFF9C4' }));
+            });
+            // Butterflies
+            add(8, pathEl('M400,350 Q395,340 390,345 Q395,340 400,345', '#FF8A80', '#E53935', 0.8, 'round'));
+            add(8, pathEl('M500,340 Q495,330 490,335 Q495,330 500,335', '#CE93D8', '#7B1FA2', 0.8, 'round'));
+
+            // G9: Labels and title
+            add(9, textEl('Fig', 280, 480, { size: 22, color: '#7B1FA2', weight: 700 }));
+            add(9, textEl('Olive', 620, 480, { size: 22, color: '#33691E', weight: 700 }));
+            add(9, textEl('"By the fig and the olive"', 450, 490, { size: 20, color: '#5D4037', weight: 600 }));
+
+            // G10: Clouds
+            add(10, cartoonCloud(130, 45, 0.6));
+            add(10, cartoonCloud(770, 40, 0.55));
+
+            // G11: Sparkles
+            [[350,280],[550,275],[300,320],[600,310],[450,300]].forEach(([x,y]) => {
+                add(11, cartoonSparkle(x, y, 4 + Math.random()*4));
+            });
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: MOUNT SINAI =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dramatic sky with golden-purple gradient
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyDramatic)', 'none', 0));
+
+            // G1: Clouds at the mountain peak
+            add(1, cartoonCloud(450, 60, 0.9));
+            add(1, cartoonCloud(300, 80, 0.7));
+            add(1, cartoonCloud(600, 75, 0.65));
+
+            // G2: Distant mountain range
+            add(2, pathEl('M0,280 Q100,230 200,260 Q350,200 500,240 Q650,190 800,230 Q900,210 900,280 L900,320 L0,320 Z',
+                '#795548', '#5D4037', 2, 'round'));
+
+            // G3: Main Mount Sinai - majestic central peak
+            add(3, pathEl('M250,380 L450,100 L650,380 Z', 'url(#mountainGrad)', '#4E342E', 3, 'round'));
+            // Right face shadow
+            add(3, pathEl('M450,100 L650,380 L550,380 L450,180 Z', 'rgba(0,0,0,0.15)', 'none', 0));
+            // Snow/light cap at the peak
+            add(3, pathEl('M410,160 L450,100 L490,160 Q465,140 440,145 Z', 'url(#mountainSnow)', '#E0E0E0', 1, 'round'));
+            // Rock texture lines
+            add(3, pathEl('M350,300 Q380,280 410,290', 'none', '#4E342E', 1.5, 'round'));
+            add(3, pathEl('M500,280 Q530,270 560,285', 'none', '#4E342E', 1.5, 'round'));
+            add(3, pathEl('M380,340 Q420,325 460,335', 'none', '#4E342E', 1.2, 'round'));
+
+            // G4: Golden divine light from above the peak
+            add(4, pathEl('M420,0 L380,100 L520,100 L480,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(4, pathEl('M440,0 L410,100 L490,100 L460,0 Z', 'rgba(255,249,196,0.4)', 'none', 0));
+            // Light rays radiating from the peak
+            for (let i = 0; i < 7; i++) {
+                const angle = -60 + i * 20;
+                const rad = angle * Math.PI / 180;
+                add(4, lineEl(450, 100, 450 + 120*Math.sin(rad), 100 - 80*Math.cos(rad),
+                    'rgba(255,215,0,0.3)', 3));
+            }
+
+            // G5: Ground at base of mountain
+            add(5, pathEl('M0,380 L900,380 L900,506 L0,506 Z', 'url(#sandGrad)', '#C49A52', 2));
+            // Rocky ground texture
+            for (let i = 0; i < 20; i++) {
+                const rx = 30 + i * 45;
+                const ry = 390 + Math.random() * 100;
+                add(5, el('ellipse', { cx: rx, cy: ry, rx: 5+Math.random()*8, ry: 3+Math.random()*4, fill: '#BCAAA4', stroke: '#A1887F', 'stroke-width': 0.5 }));
+            }
+
+            // G6: Small bushes at base
+            [[150,380],[350,385],[550,382],[750,388]].forEach(([bx,by]) => {
+                add(6, el('ellipse', { cx: bx, cy: by, rx: 15, ry: 10, fill: '#558B2F', stroke: '#33691E', 'stroke-width': 1 }));
+                add(6, el('ellipse', { cx: bx+5, cy: by-3, rx: 10, ry: 6, fill: '#689F38' }));
+            });
+
+            // G7: Golden sparkles around the peak
+            [[400,130],[500,125],[380,180],[520,175],[450,50],[350,150],[550,145]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 5 + Math.random()*6));
+            });
+
+            // G8: Stars visible in dramatic sky
+            [[100,40],[200,60],[700,45],[800,70],[150,90],[750,30]].forEach(([sx,sy]) => {
+                add(8, cartoonStar(sx, sy, 5, 2.5, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G9: Title
+            add(9, textEl('"And by Mount Sinai"', 450, 475, { size: 24, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: THE SECURE CITY (MAKKAH) =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Warm golden sky
+            add(0, pathEl('M0,0 L900,0 L900,200 L0,200 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Mountains surrounding Makkah
+            add(1, pathEl('M0,180 Q80,130 160,160 Q240,100 320,145 L320,230 L0,230 Z',
+                '#D7CCC8', '#BCAAA4', 2, 'round'));
+            add(1, pathEl('M580,230 Q660,100 740,140 Q820,110 900,160 L900,230 Z',
+                '#D7CCC8', '#BCAAA4', 2, 'round'));
+            // Mountain details
+            add(1, pathEl('M60,145 Q80,130 100,140', '#FFF', '#E0E0E0', 1, 'round'));
+            add(1, pathEl('M680,125 Q700,110 720,120', '#FFF', '#E0E0E0', 1, 'round'));
+
+            // G2: Sandy ground of Makkah
+            add(2, pathEl('M0,230 L900,230 L900,506 L0,506 Z', 'url(#sandGrad)', '#C49A52', 2));
+            for (let i = 0; i < 25; i++) {
+                const sx = 20 + i * 36;
+                const sy = 240 + Math.random() * 250;
+                add(2, lineEl(sx, sy, sx + 6, sy, '#BCAAA4', 0.6));
+            }
+
+            // G3: The Kaaba - central
+            add(3, pathEl('M380,200 L520,200 L520,340 L380,340 Z', 'url(#kaabaGrad)', '#111', 3, 'round'));
+            add(3, pathEl('M520,200 L570,175 L570,315 L520,340 Z', '#2a2a2a', '#111', 2, 'round'));
+            add(3, pathEl('M380,200 L430,175 L570,175 L520,200 Z', '#3a3a3a', '#111', 2, 'round'));
+            // Gold band
+            add(3, pathEl('M380,260 L520,260', 'none', '#C9A84C', 3, 'round'));
+            add(3, pathEl('M520,260 L570,235', 'none', '#C9A84C', 2.5, 'round'));
+            // Gold embroidery
+            for (let i = 0; i < 5; i++) {
+                const ex = 395 + i * 28;
+                add(3, pathEl(`M${ex},255 Q${ex+7},250 ${ex+14},255`, 'none', '#FFD54F', 1, 'round'));
+                add(3, pathEl(`M${ex},265 Q${ex+7},270 ${ex+14},265`, 'none', '#FFD54F', 1, 'round'));
+            }
+            // Door
+            add(3, pathEl('M435,270 L485,270 L485,335 L435,335 Z', '#C9A84C', '#A68529', 2, 'round'));
+            add(3, pathEl('M435,270 Q460,258 485,270', '#FFD54F', '#C9A84C', 1.5, 'round'));
+            add(3, el('circle', { cx: 475, cy: 305, r: 3, fill: '#FFD54F', stroke: '#A68529', 'stroke-width': 1 }));
+
+            // G4: Shield/safety aura around the city
+            add(4, el('circle', { cx: 450, cy: 280, r: 150, fill: 'none', stroke: 'rgba(201,168,76,0.2)', 'stroke-width': 3, 'stroke-dasharray': '8,4' }));
+            add(4, el('circle', { cx: 450, cy: 280, r: 180, fill: 'none', stroke: 'rgba(201,168,76,0.1)', 'stroke-width': 2, 'stroke-dasharray': '10,6' }));
+            // Light from above
+            add(4, pathEl('M420,0 L370,200 L530,200 L480,0 Z', 'url(#lightGrad)', 'none', 0));
+
+            // G5: Small figures around Kaaba
+            const tawafAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+            tawafAngles.forEach((deg, i) => {
+                const rad = deg * Math.PI / 180;
+                const rx = 100 + i * 5;
+                const ry = 60 + i * 3;
+                const px = 450 + rx * Math.cos(rad);
+                const py = 290 + ry * Math.sin(rad) * 0.5;
+                add(5, el('ellipse', { cx: px, cy: py + 8, rx: 5, ry: 2, fill: 'rgba(0,0,0,0.1)' }));
+                add(5, pathEl(`M${px-4},${py} Q${px-5},${py+5} ${px-5},${py+10} L${px+5},${py+10} Q${px+5},${py+5} ${px+4},${py} Z`,
+                    i % 2 === 0 ? '#ECEFF1' : '#CFD8DC', '#90A4AE', 0.8, 'round'));
+                add(5, el('circle', { cx: px, cy: py - 4, r: 3.5, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.6 }));
+            });
+
+            // G6: "SAFE" text/icons around the border
+            // Lock icons at compass points
+            [[200,300],[700,300],[450,420]].forEach(([lx,ly]) => {
+                add(6, pathEl(`M${lx-8},${ly} L${lx+8},${ly} L${lx+8},${ly+12} L${lx-8},${ly+12} Z`,
+                    '#C9A84C', '#A68529', 1.5, 'round'));
+                add(6, pathEl(`M${lx-4},${ly} Q${lx-4},${ly-8} ${lx},${ly-8} Q${lx+4},${ly-8} ${lx+4},${ly}`,
+                    'none', '#C9A84C', 2, 'round'));
+            });
+
+            // G7: Sparkles
+            [[300,180],[600,170],[250,250],[650,240],[350,350],[550,345]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G8: Clouds
+            add(8, cartoonCloud(130, 50, 0.6));
+            add(8, cartoonCloud(770, 45, 0.55));
+
+            // G9: Title
+            add(9, textEl('"And by this secure city"', 450, 475, { size: 24, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: BEST OF CREATION =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Radiant golden sky
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z',
+                'url(#skyGrad)', 'none', 0));
+
+            // G1: Radiant light from behind the figure
+            add(1, el('circle', { cx: 450, cy: 250, r: 180, fill: 'url(#goldenGlow)' }));
+            add(1, el('circle', { cx: 450, cy: 250, r: 120, fill: 'url(#mercyGlow)' }));
+            // Light rays
+            for (let i = 0; i < 12; i++) {
+                const angle = i * 30;
+                const rad = angle * Math.PI / 180;
+                add(1, lineEl(450 + 80*Math.cos(rad), 250 + 80*Math.sin(rad),
+                    450 + 180*Math.cos(rad), 250 + 180*Math.sin(rad),
+                    'rgba(255,215,0,0.15)', 4));
+            }
+
+            // G2: Ground
+            add(2, pathEl('M0,400 L900,400 L900,506 L0,506 Z', 'url(#gardenGrad)', '#388E3C', 2));
+
+            // G3: Human silhouette standing tall and upright
+            // Shadow on ground
+            add(3, el('ellipse', { cx: 450, cy: 398, rx: 40, ry: 8, fill: 'rgba(0,0,0,0.15)' }));
+            // Legs
+            add(3, pathEl('M435,360 L432,395', 'none', '#FFB74D', 8, 'round'));
+            add(3, pathEl('M465,360 L468,395', 'none', '#FFB74D', 8, 'round'));
+            // Body (golden/luminous)
+            add(3, pathEl('M430,230 L425,360 L475,360 L470,230 Z',
+                'url(#goldenBodyGrad)', '#FFC107', 2, 'round'));
+            // Arms raised upward (triumphant pose)
+            add(3, pathEl('M430,250 Q400,220 380,180', 'none', '#FFB74D', 7, 'round'));
+            add(3, pathEl('M470,250 Q500,220 520,180', 'none', '#FFB74D', 7, 'round'));
+            // Hands
+            add(3, el('circle', { cx: 375, cy: 175, r: 8, fill: '#FFCC80', stroke: '#FFB74D', 'stroke-width': 1 }));
+            add(3, el('circle', { cx: 525, cy: 175, r: 8, fill: '#FFCC80', stroke: '#FFB74D', 'stroke-width': 1 }));
+            // Head
+            add(3, el('circle', { cx: 450, cy: 210, r: 22, fill: '#FFCC80', stroke: '#FFB74D', 'stroke-width': 1.5 }));
+            // Face - simple happy features
+            add(3, el('circle', { cx: 443, cy: 206, r: 2.5, fill: '#5D4037' }));
+            add(3, el('circle', { cx: 457, cy: 206, r: 2.5, fill: '#5D4037' }));
+            add(3, pathEl('M443,216 Q450,222 457,216', 'none', '#5D4037', 1.5, 'round'));
+
+            // G4: Golden proportions / measurement lines (DaVinci-style)
+            add(4, el('circle', { cx: 450, cy: 280, r: 100, fill: 'none', stroke: 'rgba(201,168,76,0.3)', 'stroke-width': 1.5, 'stroke-dasharray': '5,3' }));
+            add(4, el('rect', { x: 380, y: 180, width: 140, height: 220, fill: 'none', stroke: 'rgba(201,168,76,0.2)', 'stroke-width': 1, 'stroke-dasharray': '4,4' }));
+
+            // G5: Text labels showing perfection
+            add(5, textEl('Intelligence', 200, 200, { size: 16, color: '#C9A84C', weight: 600 }));
+            add(5, textEl('Beauty', 150, 280, { size: 16, color: '#C9A84C', weight: 600 }));
+            add(5, textEl('Upright', 750, 200, { size: 16, color: '#C9A84C', weight: 600 }));
+            add(5, textEl('Purpose', 700, 280, { size: 16, color: '#C9A84C', weight: 600 }));
+            // Connecting lines
+            add(5, pathEl('M240,200 Q300,210 370,210', 'none', 'rgba(201,168,76,0.3)', 1, 'round'));
+            add(5, pathEl('M195,280 Q280,290 380,290', 'none', 'rgba(201,168,76,0.3)', 1, 'round'));
+            add(5, pathEl('M710,200 Q660,210 530,210', 'none', 'rgba(201,168,76,0.3)', 1, 'round'));
+            add(5, pathEl('M660,280 Q600,290 520,290', 'none', 'rgba(201,168,76,0.3)', 1, 'round'));
+
+            // G6: Sparkles around the figure
+            [[350,170],[550,165],[320,250],[580,245],[380,320],[520,315],
+             [300,350],[600,340],[400,140],[500,135]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+
+            // G7: Clouds
+            add(7, cartoonCloud(100, 50, 0.6));
+            add(7, cartoonCloud(800, 45, 0.55));
+
+            // G8: Title
+            add(8, textEl('"Created in the best of stature"', 450, 475, { size: 24, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: LOWEST OF THE LOW =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark, foreboding sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#darkFallGrad)', 'none', 0));
+
+            // G1: Cracked/broken ground at bottom
+            add(1, pathEl('M0,400 L900,400 L900,506 L0,506 Z', '#1a1a1a', '#111', 2));
+            // Cracks
+            for (let i = 0; i < 8; i++) {
+                const cx = 50 + i * 110;
+                add(1, pathEl(`M${cx},400 L${cx+10},430 L${cx+5},460 L${cx+15},490`,
+                    'none', '#333', 1.5, 'round'));
+            }
+
+            // G2: Downward arrow / falling path
+            add(2, pathEl('M450,80 L450,350', 'none', 'rgba(244,67,54,0.4)', 4, 'round'));
+            add(2, pathEl('M430,330 L450,360 L470,330', 'none', 'rgba(244,67,54,0.5)', 3, 'round'));
+
+            // G3: Figure at top (was upright) - now crumbling
+            // Fading golden figure at top
+            add(3, el('circle', { cx: 450, cy: 100, r: 15, fill: 'rgba(255,204,128,0.3)', stroke: 'rgba(255,183,77,0.3)', 'stroke-width': 1 }));
+            add(3, pathEl('M440,115 L438,160 L462,160 L460,115 Z', 'rgba(255,215,0,0.2)', 'rgba(255,193,7,0.2)', 1, 'round'));
+
+            // G4: Falling/crumbling figure in the middle
+            // Broken pieces falling
+            [[420,180,12],[470,200,10],[400,230,8],[480,250,11],[430,270,9],[460,290,7],
+             [410,310,6],[490,320,8],[440,340,10],[470,350,6]].forEach(([px,py,size]) => {
+                add(4, el('rect', { x: px, y: py, width: size, height: size,
+                    fill: 'rgba(120,120,120,0.5)', stroke: 'rgba(80,80,80,0.3)',
+                    'stroke-width': 0.5,
+                    transform: `rotate(${Math.random()*60-30}, ${px+size/2}, ${py+size/2})` }));
+            });
+
+            // G5: Dark figure at the bottom (lowest)
+            add(5, el('ellipse', { cx: 450, cy: 395, rx: 35, ry: 8, fill: 'rgba(0,0,0,0.3)' }));
+            // Collapsed silhouette
+            add(5, pathEl('M420,380 Q430,370 440,380 Q450,365 460,380 Q470,370 480,380',
+                'none', '#555', 3, 'round'));
+            add(5, el('circle', { cx: 430, cy: 375, r: 10, fill: '#444', stroke: '#333', 'stroke-width': 1 }));
+
+            // G6: Contrast text/labels
+            add(6, textEl('HIGHEST', 450, 60, { size: 18, color: 'rgba(255,215,0,0.5)', weight: 700 }));
+            add(6, textEl('lowest', 450, 420, { size: 22, color: '#E53935', weight: 700 }));
+            // Down arrows on sides
+            for (let i = 0; i < 3; i++) {
+                const ay = 150 + i * 80;
+                add(6, pathEl(`M200,${ay} L200,${ay+30}`, 'none', 'rgba(244,67,54,0.3)', 2, 'round'));
+                add(6, pathEl(`M195,${ay+25} L200,${ay+35} L205,${ay+25}`, 'none', 'rgba(244,67,54,0.3)', 1.5, 'round'));
+                add(6, pathEl(`M700,${ay} L700,${ay+30}`, 'none', 'rgba(244,67,54,0.3)', 2, 'round'));
+                add(6, pathEl(`M695,${ay+25} L700,${ay+35} L705,${ay+25}`, 'none', 'rgba(244,67,54,0.3)', 1.5, 'round'));
+            }
+
+            // G7: Scattered chains/weights (representing sin weighing down)
+            [[300,300],[600,310],[350,350],[550,340]].forEach(([cx,cy]) => {
+                add(7, el('circle', { cx, cy, r: 12, fill: '#424242', stroke: '#333', 'stroke-width': 2 }));
+                add(7, pathEl(`M${cx},${cy+12} L${cx},${cy+25}`, 'none', '#555', 2, 'round'));
+            });
+
+            // G8: Dim stars (fading away)
+            [[100,50],[200,80],[700,60],[800,90],[150,120],[750,40]].forEach(([sx,sy]) => {
+                add(8, el('circle', { cx: sx, cy: sy, r: 2, fill: 'rgba(255,255,255,0.2)' }));
+            });
+
+            // G9: Title
+            add(9, textEl('"Then returned to the lowest of the low"', 450, 475, { size: 22, color: '#E53935', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 6: EXCEPT THOSE WHO BELIEVE =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Beautiful sunrise sky - hope and reward
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Bright sun of hope
+            add(1, el('circle', { cx: 450, cy: 80, r: 50, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            add(1, el('circle', { cx: 450, cy: 80, r: 70, fill: 'url(#goldenGlow)' }));
+            for (let i = 0; i < 12; i++) {
+                const rad = (i * 30) * Math.PI / 180;
+                add(1, lineEl(450 + 55*Math.cos(rad), 80 + 55*Math.sin(rad),
+                    450 + 80*Math.cos(rad), 80 + 80*Math.sin(rad), '#FDD835', 2));
+            }
+
+            // G2: Lush green paradise-like ground
+            add(2, pathEl('M0,350 L900,350 L900,506 L0,506 Z', 'url(#gardenGrad)', '#388E3C', 2));
+            // Flowers
+            for (let i = 0; i < 12; i++) {
+                const fx = 40 + i * 75;
+                const fy = 360 + Math.random() * 130;
+                add(2, el('circle', { cx: fx, cy: fy, r: 3, fill: ['#E91E63','#FF9800','#9C27B0','#2196F3'][i%4] }));
+                add(2, pathEl(`M${fx},${fy+3} L${fx},${fy+12}`, 'none', '#388E3C', 1, 'round'));
+            }
+
+            // G3: Group of figures rising upward
+            const figurePositions = [[250,300],[350,290],[450,280],[550,290],[650,300]];
+            figurePositions.forEach(([fx,fy], i) => {
+                // Shadow
+                add(3, el('ellipse', { cx: fx, cy: fy+50, rx: 15, ry: 4, fill: 'rgba(0,0,0,0.1)' }));
+                // Body with white/light robes
+                add(3, pathEl(`M${fx-10},${fy-10} Q${fx-12},${fy+15} ${fx-12},${fy+45} L${fx+12},${fy+45} Q${fx+12},${fy+15} ${fx+10},${fy-10} Z`,
+                    'url(#robeGrad)', '#90A4AE', 1, 'round'));
+                // Head
+                add(3, el('circle', { cx: fx, cy: fy-18, r: 10, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.6 }));
+                // Arms in prayer/good deed poses
+                if (i % 2 === 0) {
+                    // Prayer hands
+                    add(3, pathEl(`M${fx-8},${fy} L${fx-15},${fy-10}`, 'none', '#FFB74D', 3, 'round'));
+                    add(3, pathEl(`M${fx+8},${fy} L${fx+15},${fy-10}`, 'none', '#FFB74D', 3, 'round'));
+                } else {
+                    // Giving/charity gesture
+                    add(3, pathEl(`M${fx-8},${fy} L${fx-18},${fy+5}`, 'none', '#FFB74D', 3, 'round'));
+                    add(3, pathEl(`M${fx+8},${fy} L${fx+18},${fy+5}`, 'none', '#FFB74D', 3, 'round'));
+                }
+            });
+
+            // G4: Good deed icons floating above the figures
+            // Prayer mat
+            add(4, pathEl('M230,230 L270,230 L270,250 L230,250 Z', '#4CAF50', '#2E7D32', 1.5, 'round'));
+            add(4, pathEl('M240,232 L260,232 L260,235 L240,235 Z', '#81C784', 'none', 0));
+            // Heart (love/charity)
+            add(4, pathEl('M440,220 Q445,210 450,218 Q455,210 460,220 Q460,230 450,240 Q440,230 440,220 Z',
+                '#E53935', '#C62828', 1, 'round'));
+            // Book (knowledge)
+            add(4, pathEl('M630,225 L660,225 L660,250 L630,250 Z', '#1565C0', '#0D47A1', 1.2, 'round'));
+            add(4, lineEl(645, 228, 645, 247, '#42A5F5', 1));
+            // Coin (charity)
+            add(4, el('circle', { cx: 350, cy: 235, r: 10, fill: '#FFC107', stroke: '#FF8F00', 'stroke-width': 1.5 }));
+            add(4, textEl('$', 350, 236, { size: 12, color: '#5D4037', weight: 700 }));
+            // Helping hand
+            add(4, pathEl('M540,230 Q545,225 550,228 L555,235 Q550,240 545,237 Z', '#FFB74D', '#F57C00', 1, 'round'));
+
+            // G5: "NEVER-ENDING REWARD" banner
+            add(5, pathEl('M250,170 L650,170 L660,190 L650,210 L250,210 L240,190 Z',
+                'rgba(201,168,76,0.2)', '#C9A84C', 1.5, 'round'));
+            add(5, textEl('Never-Ending Reward', 450, 191, { size: 18, color: '#C9A84C', weight: 700 }));
+
+            // G6: Upward arrows (rising back up)
+            for (let i = 0; i < 5; i++) {
+                const ax = 250 + i * 100;
+                add(6, pathEl(`M${ax},${310-i*3} L${ax},${270-i*3}`, 'none', 'rgba(76,175,80,0.4)', 2, 'round'));
+                add(6, pathEl(`M${ax-5},${275-i*3} L${ax},${265-i*3} L${ax+5},${275-i*3}`, 'none', 'rgba(76,175,80,0.4)', 1.5, 'round'));
+            }
+
+            // G7: Sparkles of blessings
+            [[200,180],[300,200],[400,175],[500,185],[600,195],[700,180],
+             [250,260],[450,250],[650,255]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G8: Clouds
+            add(8, cartoonCloud(100, 40, 0.55));
+            add(8, cartoonCloud(800, 35, 0.5));
+
+            // G9: Title
+            add(9, textEl('"Except those who believe and do good deeds"', 450, 475, { size: 20, color: '#2E7D32', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 7: WHAT CAUSES YOU TO DENY =====
+        function buildVerse7() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dramatic sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyDramatic)', 'none', 0));
+
+            // G1: Giant question mark in the center
+            add(1, pathEl('M400,100 Q400,60 450,60 Q500,60 500,100 Q500,140 450,160',
+                'none', '#FFD54F', 8, 'round'));
+            add(1, el('circle', { cx: 450, cy: 190, r: 6, fill: '#FFD54F' }));
+            // Glow around question mark
+            add(1, el('circle', { cx: 450, cy: 130, r: 100, fill: 'url(#goldenGlow)' }));
+
+            // G2: Scale of justice on the left
+            // Pillar
+            add(2, pathEl('M200,220 L200,400', 'none', '#C9A84C', 5, 'round'));
+            // Base
+            add(2, pathEl('M170,400 L230,400', 'none', '#C9A84C', 4, 'round'));
+            // Beam
+            add(2, pathEl('M130,230 L270,220', 'none', '#FFD54F', 4, 'round'));
+            // Left pan
+            add(2, pathEl('M110,230 Q120,260 150,260 Q130,260 130,230', 'none', '#C9A84C', 1.5, 'round'));
+            add(2, el('ellipse', { cx: 130, cy: 260, rx: 25, ry: 8, fill: '#C9A84C', stroke: '#A68529', 'stroke-width': 1 }));
+            // Chains
+            add(2, pathEl('M130,230 L110,255', 'none', '#C9A84C', 1, 'round'));
+            add(2, pathEl('M130,230 L150,255', 'none', '#C9A84C', 1, 'round'));
+            // Right pan
+            add(2, pathEl('M250,220 Q260,250 290,250 Q270,250 270,220', 'none', '#C9A84C', 1.5, 'round'));
+            add(2, el('ellipse', { cx: 270, cy: 250, rx: 25, ry: 8, fill: '#C9A84C', stroke: '#A68529', 'stroke-width': 1 }));
+            add(2, pathEl('M270,220 L250,245', 'none', '#C9A84C', 1, 'round'));
+            add(2, pathEl('M270,220 L290,245', 'none', '#C9A84C', 1, 'round'));
+
+            // G3: Dramatic figure silhouette posing the question
+            add(3, el('ellipse', { cx: 700, cy: 395, rx: 25, ry: 5, fill: 'rgba(0,0,0,0.2)' }));
+            add(3, pathEl('M688,280 L685,390 L715,390 L712,280 Z',
+                'url(#robeGrad)', '#78909C', 1.5, 'round'));
+            add(3, el('circle', { cx: 700, cy: 265, r: 16, fill: 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.8 }));
+            // Arms spread in questioning gesture
+            add(3, pathEl('M688,300 L650,280', 'none', '#FFB74D', 5, 'round'));
+            add(3, pathEl('M712,300 L750,280', 'none', '#FFB74D', 5, 'round'));
+            // Palms up
+            add(3, el('circle', { cx: 645, cy: 277, r: 6, fill: '#FFCC80' }));
+            add(3, el('circle', { cx: 755, cy: 277, r: 6, fill: '#FFCC80' }));
+
+            // G4: Signs/evidence floating around
+            // Scroll/book
+            add(4, pathEl('M340,300 L380,300 L380,350 L340,350 Z', '#ECEFF1', '#90A4AE', 1.5, 'round'));
+            add(4, lineEl(348, 310, 372, 310, '#546E7A', 1));
+            add(4, lineEl(348, 318, 372, 318, '#546E7A', 1));
+            add(4, lineEl(348, 326, 368, 326, '#546E7A', 1));
+            // Eye (seeing the truth)
+            add(4, pathEl('M500,310 Q520,295 540,310 Q520,325 500,310 Z', '#FFF', '#546E7A', 1.5, 'round'));
+            add(4, el('circle', { cx: 520, cy: 310, r: 6, fill: '#1565C0' }));
+            add(4, el('circle', { cx: 520, cy: 310, r: 3, fill: '#0D47A1' }));
+
+            // G5: Text emphasis
+            add(5, textEl('?', 350, 150, { size: 40, color: 'rgba(255,213,79,0.3)', weight: 700 }));
+            add(5, textEl('?', 550, 180, { size: 30, color: 'rgba(255,213,79,0.2)', weight: 700 }));
+            add(5, textEl('?', 300, 200, { size: 25, color: 'rgba(255,213,79,0.15)', weight: 700 }));
+
+            // G6: Sparkles
+            [[150,150],[250,180],[550,150],[650,170],[400,250],[500,240]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 4 + Math.random()*4));
+            });
+
+            // G7: Stars
+            [[100,60],[200,40],[700,50],[800,80],[450,30]].forEach(([sx,sy]) => {
+                add(7, cartoonStar(sx, sy, 5, 2.5, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G8: Title
+            add(8, textEl('"What causes you to deny the Recompense?"', 450, 460, { size: 22, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 8: MOST JUST OF JUDGES =====
+        function buildVerse8() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Majestic golden sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z',
+                'url(#skyGrad)', 'none', 0));
+            // Golden glow filling the scene
+            add(0, el('circle', { cx: 450, cy: 200, r: 250, fill: 'url(#goldenGlow)' }));
+
+            // G1: Grand golden light from above
+            add(1, pathEl('M350,0 L300,200 L600,200 L550,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(1, pathEl('M400,0 L370,200 L530,200 L500,0 Z', 'rgba(255,249,196,0.3)', 'none', 0));
+
+            // G2: Grand scale of justice - central and large
+            // Central pillar
+            add(2, pathEl('M445,150 L445,380', 'none', '#C9A84C', 8, 'round'));
+            add(2, pathEl('M455,150 L455,380', 'none', '#A68529', 6, 'round'));
+            // Ornate base
+            add(2, pathEl('M380,380 L520,380 L530,395 L370,395 Z', 'url(#scaleGrad)', '#A68529', 2, 'round'));
+            add(2, pathEl('M400,395 L500,395 L510,410 L390,410 Z', '#C9A84C', '#A68529', 1.5, 'round'));
+            // Top ornament
+            add(2, el('circle', { cx: 450, cy: 145, r: 12, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 2 }));
+            add(2, el('circle', { cx: 450, cy: 145, r: 6, fill: '#FFF9C4' }));
+
+            // G3: Balance beam - perfectly level (perfect justice)
+            add(3, pathEl('M280,180 L620,180', 'none', '#FFD54F', 5, 'round'));
+            // Left chains
+            add(3, pathEl('M300,180 L290,220', 'none', '#C9A84C', 1.5, 'round'));
+            add(3, pathEl('M300,180 L310,220', 'none', '#C9A84C', 1.5, 'round'));
+            add(3, pathEl('M280,180 L280,225', 'none', '#C9A84C', 1.5, 'round'));
+            add(3, pathEl('M320,180 L320,225', 'none', '#C9A84C', 1.5, 'round'));
+            // Left pan
+            add(3, el('ellipse', { cx: 300, cy: 230, rx: 40, ry: 12, fill: 'url(#scaleGrad)', stroke: '#A68529', 'stroke-width': 2 }));
+            add(3, el('ellipse', { cx: 300, cy: 228, rx: 35, ry: 8, fill: 'rgba(255,249,196,0.3)' }));
+            // Right chains
+            add(3, pathEl('M600,180 L590,220', 'none', '#C9A84C', 1.5, 'round'));
+            add(3, pathEl('M600,180 L610,220', 'none', '#C9A84C', 1.5, 'round'));
+            add(3, pathEl('M580,180 L580,225', 'none', '#C9A84C', 1.5, 'round'));
+            add(3, pathEl('M620,180 L620,225', 'none', '#C9A84C', 1.5, 'round'));
+            // Right pan
+            add(3, el('ellipse', { cx: 600, cy: 230, rx: 40, ry: 12, fill: 'url(#scaleGrad)', stroke: '#A68529', 'stroke-width': 2 }));
+            add(3, el('ellipse', { cx: 600, cy: 228, rx: 35, ry: 8, fill: 'rgba(255,249,196,0.3)' }));
+
+            // G4: Items in the pans (good deeds and accountability)
+            // Left pan - good deeds (light/glowing)
+            add(4, cartoonStar(285, 220, 8, 4, '#FFF9C4', '#FFD54F'));
+            add(4, cartoonStar(310, 218, 7, 3.5, '#FFF9C4', '#FFD54F'));
+            add(4, el('circle', { cx: 300, cy: 222, r: 5, fill: '#FFF9C4', filter: 'url(#glow)' }));
+            // Right pan - also balanced (perfect justice)
+            add(4, cartoonStar(585, 220, 8, 4, '#FFF9C4', '#FFD54F'));
+            add(4, cartoonStar(610, 218, 7, 3.5, '#FFF9C4', '#FFD54F'));
+            add(4, el('circle', { cx: 600, cy: 222, r: 5, fill: '#FFF9C4', filter: 'url(#glow)' }));
+
+            // G5: "PERFECT BALANCE" label
+            add(5, lineEl(300, 180, 300, 165, 'rgba(201,168,76,0.5)', 1));
+            add(5, lineEl(600, 180, 600, 165, 'rgba(201,168,76,0.5)', 1));
+            add(5, pathEl('M300,165 L600,165', 'none', 'rgba(201,168,76,0.3)', 1, 'round'));
+            add(5, textEl('Perfect Balance', 450, 158, { size: 14, color: '#C9A84C', weight: 600 }));
+
+            // G6: Ground
+            add(6, pathEl('M0,410 L900,410 L900,506 L0,506 Z', 'url(#sandGrad)', '#C49A52', 1.5));
+
+            // G7: Abundant golden sparkles
+            [[200,100],[300,130],[400,90],[500,100],[600,120],[700,90],
+             [150,200],[250,250],[650,240],[750,200],[350,300],[550,310],
+             [450,80],[180,300],[720,280]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 5 + Math.random()*6));
+            });
+
+            // G8: Clouds
+            add(8, cartoonCloud(80, 50, 0.55));
+            add(8, cartoonCloud(820, 45, 0.5));
+
+            // G9: Title
+            add(9, textEl('"Is not Allah the most just of judges?"', 450, 460, { size: 24, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>
