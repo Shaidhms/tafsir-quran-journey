@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Qari'ah - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 101 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْقَارِعَةِ</div>
+        <h1>Surah Al-Qari'ah</h1>
+        <p>The Striking Calamity - 11 Verses - Makkan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 11</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">101</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">11</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">36</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Striking Calamity</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Day of Judgment</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Surah Al-Qari'ah is one of the most powerful short surahs in the Quran. The word <span class="highlight">"Al-Qari'ah"</span> comes from the Arabic root meaning "to strike" or "to knock." It refers to the Day of Judgment, which will strike the hearts and ears of all creation with terror.</p>
+                <p>Allah opens by naming the event, then immediately asks: <span class="highlight">"What is it? And what can make you understand what it is?"</span> This rhetorical technique is used in the Quran to show that something is so immense it cannot be fully grasped by the human mind.</p>
+                <div class="important">
+                    <p>The surah then gives two vivid images: people will scatter like moths drawn helplessly to a flame, and the mighty mountains will crumble into fluffy, colored wool. If the strongest things on Earth cannot withstand this Day, how can any human be arrogant before Allah?</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>The second half introduces the <span class="highlight">Meezan (the Scale)</span>. Every person's deeds will be weighed. Those whose good deeds are heavy will enter a life of bliss in Jannah. Those whose scales are light will fall into the <span class="highlight">Hawiyah</span>, a name for the deepest part of Hellfire, described as an intensely hot fire.</p>
+                <p>Ibn Kathir explains that <span class="highlight">"his mother is Hawiyah"</span> means just as a child returns to its mother for comfort, the disbeliever's only destination is the abyss. As-Sa'di adds that the lightness of the scale means a person's faith and good deeds were insufficient, either due to disbelief or persistent neglect of what Allah commanded.</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">الْقَارِعَةُ</div>
+                    <div class="verse-transliteration">Al-Qari'ah</div>
+                    <div class="verse-translation">The Striking Calamity.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الْقَارِعَةُ</span><span class="trans">al-qari'ah</span><span class="meaning">The Striking Calamity</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The surah opens with just one word: Al-Qari'ah. It comes from "qar'a" meaning to strike or knock violently. It refers to the Day of Judgment, which will strike everything in existence with a force beyond imagination. Allah uses this dramatic opening to immediately capture attention and create a sense of awe.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">مَا الْقَارِعَةُ</div>
+                    <div class="verse-transliteration">Mal-Qari'ah</div>
+                    <div class="verse-translation">What is the Striking Calamity?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What</span></div>
+                            <div class="word-chip"><span class="ar">الْقَارِعَةُ</span><span class="trans">al-qari'ah</span><span class="meaning">The Striking Calamity</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah asks a rhetorical question to build suspense and magnify the event. "What is this Qari'ah?" The question is not seeking an answer; it is meant to make us pause and reflect on how enormous this event truly is. This technique of questioning appears throughout the Quran for events of extreme significance.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا الْقَارِعَةُ</div>
+                    <div class="verse-transliteration">Wa ma adraka mal-Qari'ah</div>
+                    <div class="verse-translation">And what can make you know what the Striking Calamity is?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                            <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraka</span><span class="meaning">Can make you know</span></div>
+                            <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What</span></div>
+                            <div class="word-chip"><span class="ar">الْقَارِعَةُ</span><span class="trans">al-qari'ah</span><span class="meaning">The Striking Calamity</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Wa ma adraka" is a special Quranic phrase that indicates something is beyond human comprehension. Ibn Kathir notes that every time this phrase appears in the Quran, Allah follows it with an explanation, because the matter is so great that humans need divine clarification. It emphasizes that no amount of human imagination can truly capture the reality of the Day of Judgment.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">يَوْمَ يَكُونُ النَّاسُ كَالْفَرَاشِ الْمَبْثُوثِ</div>
+                    <div class="verse-transliteration">Yawma yakunun-nasu kal-farashil-mabthuth</div>
+                    <div class="verse-translation">It is the Day when people will be like moths, dispersed.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">يَوْمَ</span><span class="trans">yawma</span><span class="meaning">The Day</span></div>
+                            <div class="word-chip"><span class="ar">يَكُونُ</span><span class="trans">yakunu</span><span class="meaning">Will be</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسُ</span><span class="trans">an-nasu</span><span class="meaning">The people</span></div>
+                            <div class="word-chip"><span class="ar">كَالْفَرَاشِ</span><span class="trans">kal-farashi</span><span class="meaning">Like moths</span></div>
+                            <div class="word-chip"><span class="ar">الْمَبْثُوثِ</span><span class="trans">al-mabthuth</span><span class="meaning">Scattered / dispersed</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Farash" refers to moths or small insects that fly erratically around a light source. "Mabthuth" means scattered and spread out everywhere. The image is of people in utter confusion, running in all directions without purpose, just as moths chaotically swarm toward a flame. They are overwhelmed, disoriented, and helpless. As-Sa'di explains this shows how people will lose all sense of control and direction on that Day.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">وَتَكُونُ الْجِبَالُ كَالْعِهْنِ الْمَنفُوشِ</div>
+                    <div class="verse-transliteration">Wa takunul-jibalu kal-'ihnil-manfush</div>
+                    <div class="verse-translation">And the mountains will be like wool, fluffed up.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَتَكُونُ</span><span class="trans">wa takunu</span><span class="meaning">And will be</span></div>
+                            <div class="word-chip"><span class="ar">الْجِبَالُ</span><span class="trans">al-jibalu</span><span class="meaning">The mountains</span></div>
+                            <div class="word-chip"><span class="ar">كَالْعِهْنِ</span><span class="trans">kal-'ihni</span><span class="meaning">Like (dyed) wool</span></div>
+                            <div class="word-chip"><span class="ar">الْمَنفُوشِ</span><span class="trans">al-manfush</span><span class="meaning">Fluffed up / carded</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Al-'ihn" specifically means dyed wool, not plain white. "Al-manfush" means carded or fluffed, like when wool is pulled apart into airy pieces. Ibn Kathir says the mountains, despite being the most solid and massive structures on Earth, will be reduced to weightless, colorful fibers floating in the air. The use of "dyed" wool may refer to the different colors of mountains (white, red, black) mentioned elsewhere in the Quran. This imagery shows that nothing in this world is permanent except Allah.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">فَأَمَّا مَن ثَقُلَتْ مَوَازِينُهُ</div>
+                    <div class="verse-transliteration">Fa-amma man thaqulat mawazeenuh</div>
+                    <div class="verse-translation">Then as for one whose scales are heavy [with good deeds].</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَأَمَّا</span><span class="trans">fa-amma</span><span class="meaning">Then as for</span></div>
+                            <div class="word-chip"><span class="ar">مَن</span><span class="trans">man</span><span class="meaning">The one who</span></div>
+                            <div class="word-chip"><span class="ar">ثَقُلَتْ</span><span class="trans">thaqulat</span><span class="meaning">Are heavy</span></div>
+                            <div class="word-chip"><span class="ar">مَوَازِينُهُ</span><span class="trans">mawazeenuh</span><span class="meaning">His scales / balances</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Mawazeen" is the plural of "meezan" (scale/balance). On the Day of Judgment, every person's deeds will be placed on a real scale. The heaviest thing that can be placed on the scale is "La ilaha illallah" (there is no god but Allah). Good deeds done with sincerity and correct faith will have weight. Ibn Kathir explains that both the deeds and the records of deeds will be weighed, and Allah will judge with perfect justice.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">فَهُوَ فِي عِيشَةٍ رَّاضِيَةٍ</div>
+                    <div class="verse-transliteration">Fa-huwa fi 'eeshatin radiyah</div>
+                    <div class="verse-translation">He will be in a pleasant life.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَهُوَ</span><span class="trans">fa-huwa</span><span class="meaning">Then he (will be)</span></div>
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                            <div class="word-chip"><span class="ar">عِيشَةٍ</span><span class="trans">'eeshatin</span><span class="meaning">A life</span></div>
+                            <div class="word-chip"><span class="ar">رَّاضِيَةٍ</span><span class="trans">radiyah</span><span class="meaning">Pleasant / satisfying</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"'Eeshatin radiyah" means a life that is completely satisfying, where the person is fully content. As-Sa'di explains this refers to Paradise (Jannah), where there is no sadness, no fatigue, no worry, and no end. Everything the soul desires will be there. The word "radiyah" implies not just that the life is pleasant, but that the person living it is pleased and content. It is the ultimate reward for a life spent in faith and good deeds.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">8</div>
+                    <div class="verse-arabic">وَأَمَّا مَنْ خَفَّتْ مَوَازِينُهُ</div>
+                    <div class="verse-transliteration">Wa amma man khaffat mawazeenuh</div>
+                    <div class="verse-translation">But as for one whose scales are light.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَأَمَّا</span><span class="trans">wa amma</span><span class="meaning">But as for</span></div>
+                            <div class="word-chip"><span class="ar">مَنْ</span><span class="trans">man</span><span class="meaning">The one who</span></div>
+                            <div class="word-chip"><span class="ar">خَفَّتْ</span><span class="trans">khaffat</span><span class="meaning">Are light</span></div>
+                            <div class="word-chip"><span class="ar">مَوَازِينُهُ</span><span class="trans">mawazeenuh</span><span class="meaning">His scales / balances</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Khaffat" means light, as in having little weight. This person's good deeds were not enough to outweigh their sins. Ibn Kathir explains that this could be due to disbelief (which nullifies all good deeds) or due to persistent sin and negligence. The contrast between "thaqulat" (heavy) and "khaffat" (light) shows that the Day of Judgment is about real, tangible results. Every prayer, every act of charity, every moment of patience adds weight to the scale.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">9</div>
+                    <div class="verse-arabic">فَأُمُّهُ هَاوِيَةٌ</div>
+                    <div class="verse-transliteration">Fa-ummahu hawiyah</div>
+                    <div class="verse-translation">His refuge will be an abyss (Hawiyah).</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَأُمُّهُ</span><span class="trans">fa-ummahu</span><span class="meaning">Then his mother</span></div>
+                            <div class="word-chip"><span class="ar">هَاوِيَةٌ</span><span class="trans">hawiyah</span><span class="meaning">The Abyss (Hawiyah)</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is one of the most striking verses. "Umm" literally means "mother." Ibn Kathir and other scholars explain this in two ways: (1) Just as a child falls into the arms of its mother, this person will fall headfirst into the Hawiyah, which becomes their "home" or final destination. (2) The word "umm" can also mean "head" in Arabic, as in "umm ar-ra's" (top of the head), meaning they will fall into the pit head-first. "Hawiyah" comes from "hawa" meaning to fall from a great height. It is a name for the deepest part of the Hellfire.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">10</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا هِيَهْ</div>
+                    <div class="verse-transliteration">Wa ma adraka ma hiyah</div>
+                    <div class="verse-translation">And what can make you know what that is?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                            <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraka</span><span class="meaning">Can make you know</span></div>
+                            <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What</span></div>
+                            <div class="word-chip"><span class="ar">هِيَهْ</span><span class="trans">hiyah</span><span class="meaning">It is</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Again Allah uses the phrase "wa ma adraka" to emphasize how incomprehensible the Hawiyah is. This is the second time this phrase appears in this surah. The first time (verse 3) it was about the Day of Judgment itself; now it is about the punishment that awaits. The repetition builds a crescendo of warning. Allah is about to reveal the final, terrifying truth.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">11</div>
+                    <div class="verse-arabic">نَارٌ حَامِيَةٌ</div>
+                    <div class="verse-transliteration">Narun hamiyah</div>
+                    <div class="verse-translation">It is a Fire, intensely hot.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">نَارٌ</span><span class="trans">narun</span><span class="meaning">A fire</span></div>
+                            <div class="word-chip"><span class="ar">حَامِيَةٌ</span><span class="trans">hamiyah</span><span class="meaning">Intensely hot / blazing</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The surah ends with two devastating words: "Narun hamiyah." "Nar" means fire, and "hamiyah" means intensely hot, having reached the extreme of heat. Ibn Kathir mentions that Abu Hurayrah (may Allah be pleased with him) narrated that the fire of this world is only one-seventieth of the fire of the Hereafter. This fire has been burning since its creation and its heat is beyond anything in human experience. The brevity of this ending, just two words, makes it even more impactful.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Qari'ah</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The Day of Judgment is real and terrifying.</strong><p style="color: #999; font-size: 0.95em;">Allah uses vivid imagery to help us understand that this Day is beyond anything we can imagine. Preparation through faith and good deeds is not optional.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Nothing in this world is permanent.</strong><p style="color: #999; font-size: 0.95em;">If mountains, the most solid structures on Earth, will become like fluffy wool, then our wealth, status, and power mean nothing on that Day. Only deeds matter.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Every deed is weighed with perfect justice.</strong><p style="color: #999; font-size: 0.95em;">Allah does not wrong anyone. The Scale is precise. Even a mustard seed's weight of good will be seen. This should motivate us to never belittle any good deed.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The outcome is binary: eternal bliss or eternal fire.</strong><p style="color: #999; font-size: 0.95em;">There is no middle ground. Either the scale is heavy and you enter Jannah, or it is light and the Hawiyah awaits. This clarity should drive urgency in our worship.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Sincere faith is the heaviest thing on the Scale.</strong><p style="color: #999; font-size: 0.95em;">The testimony of faith (La ilaha illallah) and sincere belief in Allah are what give weight to all other deeds. Without faith, good deeds have no weight in the Hereafter.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. The hadith about the fire being one-seventieth is reported by Al-Bukhari and Muslim. While care has been taken to ensure accuracy, this is a learning aid. Always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="106-quraysh.html">Next: Surah Quraysh &rarr;</a>
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            { num: 1, arabic: '\u0627\u0644\u0652\u0642\u064E\u0627\u0631\u0650\u0639\u064E\u0629\u064F', translit: "Al-Qari'ah", explanation: "The Striking Calamity! Allah begins with a powerful word that shakes the heart. Al-Qari'ah means something that strikes and knocks with terrifying force.", build: buildVerse1 },
+            { num: 2, arabic: '\u0645\u064E\u0627 \u0627\u0644\u0652\u0642\u064E\u0627\u0631\u0650\u0639\u064E\u0629\u064F', translit: "Mal-Qari'ah", explanation: "What IS the Striking Calamity? Allah asks this question to make us stop and think. It's so enormous that words can barely describe it!", build: buildVerse2 },
+            { num: 3, arabic: '\u0648\u064E\u0645\u064E\u0627 \u0623\u064E\u062F\u0652\u0631\u064E\u0627\u0643\u064E \u0645\u064E\u0627 \u0627\u0644\u0652\u0642\u064E\u0627\u0631\u0650\u0639\u064E\u0629\u064F', translit: "Wa ma adraka mal-Qari'ah", explanation: "And what can make you truly understand what it is? Even if you tried, you cannot fully grasp how immense and terrifying this Day will be!", build: buildVerse3 },
+            { num: 4, arabic: '\u064A\u064E\u0648\u0652\u0645\u064E \u064A\u064E\u0643\u064F\u0648\u0646\u064F \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u064F \u0643\u064E\u0627\u0644\u0652\u0641\u064E\u0631\u064E\u0627\u0634\u064E \u0627\u0644\u0652\u0645\u064E\u0628\u0652\u062B\u064F\u0648\u062B\u0650', translit: "Yawma yakunun-nasu kal-farashil-mabthuth", explanation: "On that Day, people will scatter around like tiny moths flying wildly around a flame, confused and helpless, not knowing where to go!", build: buildVerse4 },
+            { num: 5, arabic: '\u0648\u064E\u062A\u064E\u0643\u064F\u0648\u0646\u064F \u0627\u0644\u0652\u062C\u0650\u0628\u064E\u0627\u0644\u064F \u0643\u064E\u0627\u0644\u0652\u0639\u0650\u0647\u0652\u0646\u064F \u0627\u0644\u0652\u0645\u064E\u0646\u0641\u064F\u0648\u0634\u064F', translit: "Wa takunul-jibalu kal-'ihnil-manfush", explanation: "And the mighty mountains? They will become like fluffy, colored wool blown apart by the wind. If mountains can't survive, imagine how serious this Day is!", build: buildVerse5 },
+            { num: 6, arabic: '\u0641\u064E\u0623\u064E\u0645\u0651\u064E\u0627 \u0645\u064E\u0646 \u062B\u064E\u0642\u064F\u0644\u064E\u062A\u0652 \u0645\u064E\u0648\u064E\u0627\u0632\u0650\u064A\u0646\u064F\u0647\u064F', translit: "Fa-amma man thaqulat mawazeenuh", explanation: "Now comes the weighing! If someone's scale of good deeds is heavy, full of faith, prayers, and kindness, then great news awaits them!", build: buildVerse6 },
+            { num: 7, arabic: '\u0641\u064E\u0647\u064F\u0648\u064E \u0641\u0650\u064A \u0639\u0650\u064A\u0634\u064E\u0629\u064D \u0631\u0651\u064E\u0627\u0636\u0650\u064A\u064E\u0629\u064D', translit: "Fa-huwa fi 'eeshatin radiyah", explanation: "They will live in a beautiful, pleasant life in Jannah! Gardens, rivers, peace, and happiness forever. This is the reward for those who lived with faith and good deeds.", build: buildVerse7 },
+            { num: 8, arabic: '\u0648\u064E\u0623\u064E\u0645\u0651\u064E\u0627 \u0645\u064E\u0646\u0652 \u062E\u064E\u0641\u0651\u064E\u062A\u0652 \u0645\u064E\u0648\u064E\u0627\u0632\u0650\u064A\u0646\u064F\u0647\u064F', translit: "Wa amma man khaffat mawazeenuh", explanation: "But if someone's scale is light, meaning they didn't do enough good or refused to believe, then a very different outcome awaits...", build: buildVerse8 },
+            { num: 9, arabic: '\u0641\u064E\u0623\u064F\u0645\u0651\u064F\u0647\u064F \u0647\u064E\u0627\u0648\u0650\u064A\u064E\u0629\u064C', translit: "Fa-ummahu hawiyah", explanation: "Their 'mother' will be the Hawiyah, the bottomless pit! Just as a child runs to their mother for comfort, the only place they will fall into is the abyss.", build: buildVerse9 },
+            { num: 10, arabic: '\u0648\u064E\u0645\u064E\u0627 \u0623\u064E\u062F\u0652\u0631\u064E\u0627\u0643\u064E \u0645\u064E\u0627 \u0647\u0650\u064A\u064E\u0647\u0652', translit: "Wa ma adraka ma hiyah", explanation: "And what can make you know what the Hawiyah really is? Again, Allah asks this to build suspense. It's beyond anything we can imagine!", build: buildVerse10 },
+            { num: 11, arabic: '\u0646\u064E\u0627\u0631\u064C \u062D\u064E\u0627\u0645\u0650\u064A\u064E\u0629\u064C', translit: "Narun hamiyah", explanation: "It is a Fire, blazing and intensely hot! Not like any fire we know. This is a fire whose heat is beyond anything in this world. May Allah protect us all!", build: buildVerse11 }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            // Sky gradients
+            defs.appendChild(createLinearGrad('skyDramatic', '0%','0%','0%','100%',
+                [['0%','#4A148C'],['30%','#6A1B9A'],['60%','#E65100'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('skyDark', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['40%','#16213e'],['70%','#0f3460'],['100%','#1a1a3e']]));
+            defs.appendChild(createLinearGrad('skyStorm', '0%','0%','0%','100%',
+                [['0%','#263238'],['30%','#37474F'],['60%','#455A64'],['100%','#546E7A']]));
+            defs.appendChild(createLinearGrad('skyGolden', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyFire', '0%','0%','0%','100%',
+                [['0%','#B71C1C'],['30%','#D32F2F'],['60%','#E65100'],['100%','#FF6F00']]));
+            defs.appendChild(createLinearGrad('skyParadise', '0%','0%','0%','100%',
+                [['0%','#E8F5E9'],['30%','#C8E6C9'],['60%','#A5D6A7'],['100%','#81C784']]));
+
+            // Ground/object gradients
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('sandGrad', '0%','0%','0%','100%',
+                [['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('mountainGrad', '0%','0%','0%','100%',
+                [['0%','#78909C'],['30%','#607D8B'],['70%','#546E7A'],['100%','#455A64']]));
+            defs.appendChild(createLinearGrad('scaleGrad', '0%','0%','100%','0%',
+                [['0%','#C9A84C'],['30%','#FFD54F'],['60%','#FFC107'],['100%','#C9A84C']]));
+            defs.appendChild(createLinearGrad('gardenGrad', '0%','0%','0%','100%',
+                [['0%','#C8E6C9'],['50%','#A5D6A7'],['100%','#66BB6A']]));
+            defs.appendChild(createLinearGrad('fireGrad', '0%','100%','0%','0%',
+                [['0%','#FF6F00'],['30%','#FF8F00'],['60%','#F44336'],['100%','#B71C1C']]));
+            defs.appendChild(createLinearGrad('woolGrad', '0%','0%','100%','0%',
+                [['0%','#E1BEE7'],['25%','#FFCCBC'],['50%','#FFF9C4'],['75%','#B2EBF2'],['100%','#C8E6C9']]));
+
+            // Radial gradients
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('darkCloudGrad', '40%','30%','55%',
+                [['0%','#616161'],['50%','#424242'],['100%','#212121']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createRadialGrad('fireGlow', '50%','50%','50%',
+                [['0%','rgba(255,87,34,0.6)'],['40%','rgba(244,67,54,0.3)'],['100%','rgba(244,67,54,0)']]));
+
+            // Filters
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // Helper: draw a moth/butterfly
+        function drawMoth(add, gi, cx, cy, scale, angle) {
+            const s = scale;
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('transform', `rotate(${angle || 0}, ${cx}, ${cy})`);
+            // Wings
+            g.appendChild(pathEl(`M${cx},${cy} Q${cx-12*s},${cy-10*s} ${cx-8*s},${cy-18*s} Q${cx-2*s},${cy-12*s} ${cx},${cy}`, '#BCAAA4', '#8D6E63', 0.8*s, 'round'));
+            g.appendChild(pathEl(`M${cx},${cy} Q${cx+12*s},${cy-10*s} ${cx+8*s},${cy-18*s} Q${cx+2*s},${cy-12*s} ${cx},${cy}`, '#D7CCC8', '#8D6E63', 0.8*s, 'round'));
+            // Lower wings
+            g.appendChild(pathEl(`M${cx},${cy} Q${cx-10*s},${cy+5*s} ${cx-7*s},${cy+12*s} Q${cx-2*s},${cy+6*s} ${cx},${cy}`, '#A1887F', '#795548', 0.6*s, 'round'));
+            g.appendChild(pathEl(`M${cx},${cy} Q${cx+10*s},${cy+5*s} ${cx+7*s},${cy+12*s} Q${cx+2*s},${cy+6*s} ${cx},${cy}`, '#BCAAA4', '#795548', 0.6*s, 'round'));
+            // Body
+            g.appendChild(el('ellipse', { cx, cy, rx: 1.5*s, ry: 5*s, fill: '#5D4037', stroke: '#3E2723', 'stroke-width': 0.5*s }));
+            // Antennae
+            g.appendChild(pathEl(`M${cx},${cy-5*s} Q${cx-4*s},${cy-12*s} ${cx-6*s},${cy-14*s}`, 'none', '#5D4037', 0.5*s, 'round'));
+            g.appendChild(pathEl(`M${cx},${cy-5*s} Q${cx+4*s},${cy-12*s} ${cx+6*s},${cy-14*s}`, 'none', '#5D4037', 0.5*s, 'round'));
+            add(gi, g);
+        }
+
+        // Helper: draw a mountain
+        function drawMountain(add, gi, cx, baseY, height, width, color, strokeColor) {
+            const topY = baseY - height;
+            add(gi, pathEl(
+                `M${cx-width/2},${baseY} L${cx-width*0.1},${topY} L${cx+width*0.05},${topY+height*0.05} L${cx+width*0.1},${topY} L${cx+width/2},${baseY} Z`,
+                color, strokeColor || '#455A64', 2, 'round'));
+            // Snow cap
+            add(gi, pathEl(
+                `M${cx-width*0.1},${topY} Q${cx},${topY-height*0.08} ${cx+width*0.1},${topY} L${cx+width*0.05},${topY+height*0.12} L${cx-width*0.05},${topY+height*0.1} Z`,
+                '#FFF', '#E0E0E0', 1, 'round'));
+        }
+
+        // ===== VERSE 1: THE STRIKING CALAMITY =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dramatic dark sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyDramatic)', 'none', 0));
+
+            // G1: Lightning bolts across the sky
+            add(1, pathEl('M200,0 L220,80 L200,85 L230,160 L210,165 L250,260', 'none', '#FFF9C4', 3, 'round'));
+            add(1, pathEl('M700,10 L680,90 L700,95 L670,180', 'none', '#FFEE58', 2.5, 'round'));
+            add(1, pathEl('M450,0 L440,60 L460,65 L430,140', 'none', '#FFF176', 2, 'round'));
+
+            // G2: Dark storm clouds
+            for (let i = 0; i < 5; i++) {
+                const cx = 80 + i * 200;
+                const g = document.createElementNS(svgNS, 'g');
+                [[cx-25,45,30,18],[cx,35,35,22],[cx+25,42,28,16],[cx-8,50,32,15],[cx+12,48,30,17]].forEach(([x,y,rx,ry]) => {
+                    g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#darkCloudGrad)' }));
+                });
+                add(2, g);
+            }
+
+            // G3: Cracking ground
+            add(3, pathEl('M0,350 Q200,340 450,345 Q700,340 900,350 L900,506 L0,506 Z', '#546E7A', '#37474F', 2, 'round'));
+            // Cracks in the ground
+            add(3, pathEl('M300,370 L310,400 L290,430 L310,460 L295,506', 'none', '#263238', 2, 'round'));
+            add(3, pathEl('M600,360 L590,395 L610,425 L595,460 L610,506', 'none', '#263238', 2, 'round'));
+            add(3, pathEl('M450,350 L445,380 L455,410 L440,445 L460,480 L445,506', 'none', '#263238', 2.5, 'round'));
+
+            // G4: Large dramatic text "AL-QARI'AH" carved in the scene
+            add(4, textEl("AL-QARI'AH", 450, 200, { size: 60, color: '#FFD54F', weight: 700 }));
+            add(4, textEl('The Striking Calamity', 450, 250, { size: 28, color: '#FFF9C4', weight: 600 }));
+
+            // G5: Shaking effect lines around text
+            [[320,170],[580,170],[310,240],[590,240],[350,280],[550,280]].forEach(([x,y]) => {
+                add(5, lineEl(x-15, y, x-25, y, '#FFD54F', 2));
+                add(5, lineEl(x+15, y, x+25, y, '#FFD54F', 2));
+            });
+
+            // G6: Falling stars / debris
+            for (let i = 0; i < 12; i++) {
+                const sx = 50 + Math.random() * 800;
+                const sy = 80 + Math.random() * 200;
+                add(6, cartoonStar(sx, sy, 4 + Math.random()*4, 2 + Math.random()*2, '#FFD54F', '#FF8F00'));
+            }
+
+            // G7: Fire-like glow at the bottom
+            add(7, pathEl('M0,440 Q150,410 300,430 Q450,400 600,420 Q750,400 900,430 L900,506 L0,506 Z',
+                'rgba(255,87,34,0.4)', 'none', 0));
+            add(7, pathEl('M0,470 Q200,450 450,460 Q700,445 900,465 L900,506 L0,506 Z',
+                'rgba(244,67,54,0.3)', 'none', 0));
+
+            // G8: Sparkles of intensity
+            [[100,120],[250,150],[650,130],[800,160],[400,100],[550,90]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+
+            // G9: Bottom label
+            add(9, textEl('"The Striking Calamity!"', 450, 480, { size: 24, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: WHAT IS THE STRIKING CALAMITY? =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark mysterious sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: Giant question mark in the center
+            add(1, pathEl('M400,100 Q400,60 450,60 Q500,60 500,100 Q500,140 450,160 L450,190', 'none', '#FFD54F', 8, 'round'));
+            add(1, el('circle', { cx: 450, cy: 215, r: 6, fill: '#FFD54F' }));
+            // Glow around question mark
+            add(1, el('circle', { cx: 450, cy: 140, r: 80, fill: 'url(#goldenGlow)' }));
+
+            // G2: Concentric rings of shock/awe
+            [100, 140, 180, 220].forEach((r, i) => {
+                add(2, el('circle', { cx: 450, cy: 160, r, fill: 'none', stroke: `rgba(255,213,79,${0.4 - i*0.08})`, 'stroke-width': 2 }));
+            });
+
+            // G3: Small confused figures scattered around
+            [[150,350],[300,380],[600,370],[750,360],[200,420],[500,400],[700,430]].forEach(([px,py], i) => {
+                // Tiny person silhouette
+                add(3, el('ellipse', { cx: px, cy: py + 12, rx: 6, ry: 2, fill: 'rgba(0,0,0,0.2)' }));
+                add(3, pathEl(`M${px-5},${py} Q${px-6},${py+5} ${px-6},${py+10} L${px+6},${py+10} Q${px+6},${py+5} ${px+5},${py} Z`,
+                    i % 2 === 0 ? '#ECEFF1' : '#B0BEC5', '#78909C', 0.8, 'round'));
+                add(3, el('circle', { cx: px, cy: py - 5, r: 4, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.6 }));
+                // Question marks above heads
+                add(3, textEl('?', px + 8, py - 18, { size: 12, color: '#FFD54F', weight: 700 }));
+            });
+
+            // G4: Stars in dark sky
+            for (let i = 0; i < 20; i++) {
+                const sx = Math.random() * 900;
+                const sy = Math.random() * 250;
+                add(4, el('circle', { cx: sx, cy: sy, r: 1 + Math.random()*1.5, fill: '#FFF', opacity: 0.5 + Math.random()*0.5 }));
+            }
+
+            // G5: Dramatic lines radiating from question mark
+            for (let i = 0; i < 12; i++) {
+                const angle = (i * 30) * Math.PI / 180;
+                const inner = 90;
+                const outer = 120 + Math.random() * 30;
+                add(5, lineEl(
+                    450 + inner*Math.cos(angle), 160 + inner*Math.sin(angle),
+                    450 + outer*Math.cos(angle), 160 + outer*Math.sin(angle),
+                    'rgba(255,213,79,0.5)', 1.5));
+            }
+
+            // G6: Ground
+            add(6, pathEl('M0,450 Q200,440 450,445 Q700,438 900,448 L900,506 L0,506 Z',
+                '#1a1a2e', '#0f3460', 1.5, 'round'));
+
+            // G7: Bottom label
+            add(7, textEl('"What is the Striking Calamity?"', 450, 480, { size: 24, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: WHAT CAN MAKE YOU KNOW? =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Even darker, more intense sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyDramatic)', 'none', 0));
+
+            // G1: Multiple question marks of increasing size
+            [[200,120,20],[350,100,30],[450,80,45],[550,100,30],[700,120,20]].forEach(([x,y,s]) => {
+                add(1, pathEl(`M${x-s*0.5},${y} Q${x-s*0.5},${y-s*0.8} ${x},${y-s*0.8} Q${x+s*0.5},${y-s*0.8} ${x+s*0.5},${y} Q${x+s*0.5},${y+s*0.5} ${x},${y+s*0.6} L${x},${y+s*0.8}`,
+                    'none', '#FFD54F', s*0.12, 'round'));
+                add(1, el('circle', { cx: x, cy: y + s, r: s*0.08, fill: '#FFD54F' }));
+            });
+
+            // G2: Massive glow effect behind center
+            add(2, el('circle', { cx: 450, cy: 200, r: 150, fill: 'url(#goldenGlow)' }));
+            add(2, el('circle', { cx: 450, cy: 200, r: 100, fill: 'url(#goldenGlow)' }));
+
+            // G3: Earthquake lines / ground shaking
+            add(3, pathEl('M0,350 Q50,340 100,350 Q150,360 200,345 Q250,335 300,350 Q350,365 400,345 Q450,330 500,350 Q550,365 600,345 Q650,330 700,350 Q750,360 800,345 Q850,335 900,350 L900,506 L0,506 Z',
+                '#37474F', '#263238', 2, 'round'));
+
+            // G4: Zigzag crack patterns
+            add(4, pathEl('M100,355 L120,380 L105,410 L125,440 L110,470 L130,506', 'none', '#E65100', 2, 'round'));
+            add(4, pathEl('M400,340 L415,370 L395,400 L420,430 L400,465 L420,506', 'none', '#E65100', 2.5, 'round'));
+            add(4, pathEl('M700,348 L715,375 L695,405 L720,435 L700,470 L720,506', 'none', '#E65100', 2, 'round'));
+
+            // G5: Text emphasis
+            add(5, textEl('What can make you KNOW', 450, 220, { size: 32, color: '#FFF', weight: 700 }));
+            add(5, textEl('what it truly is?', 450, 260, { size: 28, color: '#FFD54F', weight: 700 }));
+
+            // G6: Shaking lines around text
+            [[310,210],[590,210],[300,250],[600,250],[350,280],[550,280]].forEach(([x,y]) => {
+                add(6, lineEl(x-12, y-3, x-22, y-5, '#FFD54F', 1.5));
+                add(6, lineEl(x+12, y-3, x+22, y-5, '#FFD54F', 1.5));
+            });
+
+            // G7: Lightning
+            add(7, pathEl('M150,0 L165,60 L145,65 L175,140', 'none', '#FFF9C4', 2.5, 'round'));
+            add(7, pathEl('M750,0 L735,55 L755,60 L725,130', 'none', '#FFF9C4', 2.5, 'round'));
+
+            // G8: Fire glow at bottom
+            add(8, pathEl('M0,460 Q200,440 450,450 Q700,435 900,455 L900,506 L0,506 Z',
+                'rgba(255,87,34,0.5)', 'none', 0));
+
+            // G9: Bottom label
+            add(9, textEl('"Beyond human comprehension"', 450, 485, { size: 22, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: PEOPLE LIKE SCATTERED MOTHS =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Fiery dramatic sky
+            add(0, pathEl('M0,0 L900,0 L900,350 L0,350 Z', 'url(#skyDramatic)', 'none', 0));
+
+            // G1: A giant flame/light source in center that moths fly toward
+            add(1, pathEl('M420,100 Q430,40 450,30 Q470,40 480,100 Q485,150 450,180 Q415,150 420,100 Z',
+                '#FFF9C4', '#FFD54F', 2, 'round'));
+            add(1, pathEl('M430,120 Q440,60 450,50 Q460,60 470,120 Q475,160 450,170 Q425,160 430,120 Z',
+                '#FFF', '#FFF9C4', 1, 'round'));
+            add(1, el('circle', { cx: 450, cy: 110, r: 60, fill: 'url(#goldenGlow)' }));
+
+            // G2: Ground - broken, chaotic
+            add(2, pathEl('M0,350 Q100,340 200,355 Q300,365 400,345 Q500,360 600,350 Q700,365 800,345 Q900,355 900,350 L900,506 L0,506 Z',
+                '#546E7A', '#37474F', 2, 'round'));
+
+            // G3: Scattered moths flying in all directions (lots of them)
+            [[120,130,1.2,15],[200,200,1.0,-20],[80,250,0.9,45],[300,150,1.1,-30],
+             [180,300,0.8,60],[350,230,1.0,10],[500,180,1.1,-45],[600,140,0.9,25],
+             [700,200,1.2,-15],[750,270,0.8,40],[650,300,1.0,-55],[550,250,0.9,30],
+             [820,180,1.0,-10],[400,280,0.7,50],[250,100,1.1,-40],[150,180,0.8,35]].forEach(([x,y,s,a]) => {
+                drawMoth(add, 3, x, y, s, a);
+            });
+
+            // G4: More moths, smaller, in background
+            for (let i = 0; i < 15; i++) {
+                const mx = 50 + Math.random() * 800;
+                const my = 80 + Math.random() * 250;
+                drawMoth(add, 4, mx, my, 0.5 + Math.random()*0.4, Math.random()*360 - 180);
+            }
+
+            // G5: Motion lines showing chaotic movement
+            for (let i = 0; i < 10; i++) {
+                const lx = 50 + Math.random() * 800;
+                const ly = 100 + Math.random() * 230;
+                const angle = Math.random() * Math.PI * 2;
+                add(5, lineEl(lx, ly, lx + 20*Math.cos(angle), ly + 20*Math.sin(angle),
+                    'rgba(255,213,79,0.4)', 1));
+            }
+
+            // G6: Small figures on the ground looking up in confusion
+            [[100,370],[250,365],[400,360],[550,365],[700,370],[850,365]].forEach(([px,py]) => {
+                add(6, el('ellipse', { cx: px, cy: py + 15, rx: 6, ry: 2, fill: 'rgba(0,0,0,0.15)' }));
+                add(6, pathEl(`M${px-5},${py} Q${px-6},${py+5} ${px-6},${py+12} L${px+6},${py+12} Q${px+6},${py+5} ${px+5},${py} Z`,
+                    '#B0BEC5', '#78909C', 0.8, 'round'));
+                add(6, el('circle', { cx: px, cy: py - 5, r: 4, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.6 }));
+            });
+
+            // G7: Sparkles around the flame
+            [[380,80],[520,85],[400,160],[500,155],[350,120],[550,115]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*4));
+            });
+
+            // G8: Bottom label
+            add(8, textEl('"People like scattered moths"', 450, 480, { size: 24, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: MOUNTAINS LIKE WOOL =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Stormy sky
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#skyStorm)', 'none', 0));
+
+            // G1: Mountains on the left (solid, before transformation)
+            drawMountain(add, 1, 150, 300, 180, 200, 'url(#mountainGrad)', '#455A64');
+            drawMountain(add, 1, 300, 300, 140, 160, '#607D8B', '#455A64');
+            add(1, textEl('BEFORE', 200, 130, { size: 16, color: '#CFD8DC', weight: 700 }));
+
+            // G2: Arrow showing transformation
+            add(2, pathEl('M420,200 L480,200', 'none', '#FFD54F', 3, 'round'));
+            add(2, pathEl('M470,190 L485,200 L470,210', 'none', '#FFD54F', 2.5, 'round'));
+            add(2, textEl('becomes', 450, 180, { size: 14, color: '#FFD54F', weight: 600 }));
+
+            // G3: Fluffy colorful wool on the right (after transformation)
+            // Big fluffy wool clusters in different colors
+            const woolColors = [
+                ['#E1BEE7','#CE93D8'], ['#FFCCBC','#FF8A65'], ['#FFF9C4','#FDD835'],
+                ['#B2EBF2','#4DD0E1'], ['#C8E6C9','#81C784'], ['#F8BBD0','#F48FB1']
+            ];
+            [[600,180,30],[680,200,25],[740,170,28],[620,220,22],[700,240,20],[660,160,24],
+             [580,240,18],[750,220,22],[630,260,16],[710,260,18]].forEach(([wx,wy,wr], i) => {
+                const [fill, stroke] = woolColors[i % woolColors.length];
+                const g = document.createElementNS(svgNS, 'g');
+                // Fluffy cloud-like wool pieces
+                g.appendChild(el('ellipse', { cx: wx, cy: wy, rx: wr, ry: wr*0.7, fill, stroke, 'stroke-width': 1 }));
+                g.appendChild(el('ellipse', { cx: wx-wr*0.3, cy: wy-wr*0.2, rx: wr*0.6, ry: wr*0.4, fill: 'rgba(255,255,255,0.3)' }));
+                // Wispy strands
+                g.appendChild(pathEl(`M${wx+wr*0.5},${wy} Q${wx+wr*0.8},${wy-wr*0.3} ${wx+wr},${wy-wr*0.1}`, 'none', stroke, 0.8, 'round'));
+                g.appendChild(pathEl(`M${wx-wr*0.3},${wy+wr*0.4} Q${wx-wr*0.5},${wy+wr*0.7} ${wx-wr*0.2},${wy+wr*0.8}`, 'none', stroke, 0.6, 'round'));
+                add(3, g);
+            });
+            add(3, textEl('AFTER', 670, 130, { size: 16, color: '#FFD54F', weight: 700 }));
+
+            // G4: Wind lines showing wool being blown apart
+            for (let i = 0; i < 8; i++) {
+                const wx = 550 + Math.random() * 250;
+                const wy = 150 + Math.random() * 130;
+                add(4, pathEl(`M${wx},${wy} Q${wx+20},${wy-5} ${wx+40},${wy}`, 'none', 'rgba(255,255,255,0.3)', 1.5, 'round'));
+            }
+
+            // G5: Small wool fibers floating
+            for (let i = 0; i < 15; i++) {
+                const fx = 500 + Math.random() * 350;
+                const fy = 120 + Math.random() * 180;
+                const fc = woolColors[Math.floor(Math.random() * woolColors.length)][0];
+                add(5, el('circle', { cx: fx, cy: fy, r: 2 + Math.random()*3, fill: fc, opacity: 0.6 + Math.random()*0.4 }));
+            }
+
+            // G6: Ground
+            add(6, pathEl('M0,300 L900,300 L900,506 L0,506 Z', '#546E7A', '#37474F', 1.5));
+            // Debris on ground
+            for (let i = 0; i < 20; i++) {
+                const dx = 20 + Math.random() * 860;
+                const dy = 310 + Math.random() * 60;
+                add(6, el('circle', { cx: dx, cy: dy, r: 1 + Math.random()*2, fill: '#78909C' }));
+            }
+
+            // G7: Storm clouds
+            const g1 = document.createElementNS(svgNS, 'g');
+            [[80,40,25,15],[110,30,30,18],[140,38,22,14],[100,48,28,12]].forEach(([x,y,rx,ry]) => {
+                g1.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#darkCloudGrad)' }));
+            });
+            add(7, g1);
+            const g2 = document.createElementNS(svgNS, 'g');
+            [[780,35,28,16],[810,25,32,20],[840,33,24,14],[800,45,30,13]].forEach(([x,y,rx,ry]) => {
+                g2.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#darkCloudGrad)' }));
+            });
+            add(7, g2);
+
+            // G8: Bottom label
+            add(8, textEl('"Mountains like fluffy wool"', 450, 480, { size: 24, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 6: HEAVY SCALES =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Warm golden sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyGolden)', 'none', 0));
+
+            // G1: Large balance scale in center
+            // Pillar
+            add(1, pathEl('M445,380 L445,120 L455,120 L455,380 Z', '#8D6E63', '#5D4037', 2, 'round'));
+            // Base
+            add(1, pathEl('M390,380 L510,380 L520,395 L380,395 Z', '#795548', '#5D4037', 2, 'round'));
+            // Beam
+            add(1, pathEl('M200,130 L700,170', 'none', '#C9A84C', 5, 'round'));
+            // Pivot
+            add(1, el('circle', { cx: 450, cy: 120, r: 12, fill: 'url(#scaleGrad)', stroke: '#A68529', 'stroke-width': 2 }));
+
+            // G2: Left pan (heavy, lower) - good deeds
+            add(2, pathEl('M120,250 Q110,280 130,280 L270,280 Q290,280 280,250 Z',
+                '#C9A84C', '#A68529', 2, 'round'));
+            // Chains
+            add(2, lineEl(200, 130, 150, 250, '#A68529', 2));
+            add(2, lineEl(200, 130, 250, 250, '#A68529', 2));
+
+            // G3: Good deeds symbols in heavy pan
+            // Prayer mat
+            add(3, pathEl('M145,240 L185,240 L185,260 L145,260 Z', '#2E7D32', '#1B5E20', 1, 'round'));
+            add(3, pathEl('M155,240 L175,240 L165,232 Z', '#4CAF50', '#2E7D32', 0.8, 'round'));
+            // Heart (charity)
+            add(3, pathEl('M210,240 Q210,230 220,230 Q230,230 230,240 Q230,250 220,260 Q210,250 210,240 Z',
+                '#E53935', '#C62828', 1, 'round'));
+            // Book (Quran)
+            add(3, pathEl('M240,235 L265,235 L265,265 L240,265 Z', '#1565C0', '#0D47A1', 1, 'round'));
+            add(3, lineEl(252, 238, 252, 262, '#42A5F5', 1));
+            // Star (good deeds)
+            add(3, cartoonStar(195, 250, 8, 4, '#FFD54F', '#FFA000'));
+
+            // G4: Right pan (light, higher) - empty/light
+            add(4, pathEl('M620,190 Q610,220 630,220 L770,220 Q790,220 780,190 Z',
+                '#BDBDBD', '#9E9E9E', 2, 'round'));
+            // Chains
+            add(4, lineEl(700, 170, 650, 190, '#9E9E9E', 2));
+            add(4, lineEl(700, 170, 750, 190, '#9E9E9E', 2));
+
+            // G5: Heavy arrow pointing down on left side
+            add(5, pathEl('M200,290 L200,330', 'none', '#2E7D32', 3, 'round'));
+            add(5, pathEl('M190,320 L200,335 L210,320', 'none', '#2E7D32', 2.5, 'round'));
+            add(5, textEl('HEAVY', 200, 355, { size: 18, color: '#2E7D32', weight: 700 }));
+
+            // G6: Golden sparkles around heavy pan
+            [[130,220],[270,225],[180,210],[220,215],[160,270],[240,275]].forEach(([x,y]) => {
+                add(6, cartoonSparkle(x, y, 4 + Math.random()*4));
+            });
+
+            // G7: Light glow over the scene
+            add(7, el('circle', { cx: 200, cy: 260, r: 80, fill: 'url(#goldenGlow)' }));
+
+            // G8: Clouds
+            add(8, cartoonCloud(100, 50, 0.5));
+            add(8, cartoonCloud(800, 45, 0.55));
+
+            // G9: Bottom label
+            add(9, textEl('"One whose scales are heavy"', 450, 480, { size: 24, color: '#5D4037', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 7: PLEASANT LIFE (JANNAH) =====
+        function buildVerse7() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Paradise sky
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#skyParadise)', 'none', 0));
+
+            // G1: Golden sun with warm rays
+            add(1, el('circle', { cx: 450, cy: 60, r: 45, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            for (let i = 0; i < 12; i++) {
+                const rad = (i * 30) * Math.PI / 180;
+                add(1, lineEl(
+                    450 + 50*Math.cos(rad), 60 + 50*Math.sin(rad),
+                    450 + 70*Math.cos(rad), 60 + 70*Math.sin(rad),
+                    '#FDD835', 2));
+            }
+
+            // G2: Beautiful garden ground
+            add(2, pathEl('M0,300 Q200,280 450,290 Q700,275 900,295 L900,506 L0,506 Z',
+                'url(#gardenGrad)', '#2E7D32', 2, 'round'));
+            // Grass tufts
+            for (let i = 0; i < 25; i++) {
+                const gx = 20 + i * 36;
+                const gy = 300 + Math.random() * 15;
+                add(2, pathEl(`M${gx},${gy} Q${gx-2},${gy-10} ${gx-4},${gy-15}`, 'none', '#388E3C', 1.5, 'round'));
+                add(2, pathEl(`M${gx},${gy} Q${gx+2},${gy-12} ${gx+5},${gy-16}`, 'none', '#43A047', 1.5, 'round'));
+            }
+
+            // G3: Rivers flowing through the garden
+            add(3, pathEl('M0,380 Q150,370 300,375 Q450,365 600,370 Q750,360 900,365',
+                'none', '#29B6F6', 4, 'round'));
+            add(3, pathEl('M0,385 Q150,375 300,380 Q450,370 600,375 Q750,365 900,370',
+                'none', '#4FC3F7', 2, 'round'));
+            // Water sparkles
+            for (let i = 0; i < 10; i++) {
+                const wx = 50 + i * 85;
+                add(3, el('circle', { cx: wx, cy: 375 - Math.sin(wx/100)*5, r: 1.5, fill: '#FFF', opacity: 0.7 }));
+            }
+
+            // G4: Beautiful trees and flowers
+            // Tree 1
+            add(4, pathEl('M120,300 L120,220 L125,220 L125,300', 'none', '#5D4037', 8, 'round'));
+            add(4, el('circle', { cx: 122, cy: 200, r: 35, fill: '#66BB6A', stroke: '#388E3C', 'stroke-width': 2 }));
+            add(4, el('circle', { cx: 110, cy: 190, r: 15, fill: 'rgba(255,255,255,0.2)' }));
+            // Tree 2
+            add(4, pathEl('M780,295 L780,210 L785,210 L785,295', 'none', '#5D4037', 8, 'round'));
+            add(4, el('circle', { cx: 782, cy: 190, r: 38, fill: '#81C784', stroke: '#43A047', 'stroke-width': 2 }));
+            // Fruits on trees
+            [[105,210],[135,195],[140,215]].forEach(([fx,fy]) => {
+                add(4, el('circle', { cx: fx, cy: fy, r: 4, fill: '#E53935', stroke: '#C62828', 'stroke-width': 0.8 }));
+            });
+            [[770,200],[795,185],[800,205]].forEach(([fx,fy]) => {
+                add(4, el('circle', { cx: fx, cy: fy, r: 4, fill: '#FF8F00', stroke: '#E65100', 'stroke-width': 0.8 }));
+            });
+
+            // G5: Flowers scattered
+            [[200,320],[350,310],[500,315],[650,308],[300,340],[450,335],[600,330],[750,325]].forEach(([fx,fy], i) => {
+                const colors = ['#E53935','#AB47BC','#FDD835','#FF7043','#EC407A','#7E57C2'];
+                const c = colors[i % colors.length];
+                // Simple flower
+                for (let p = 0; p < 5; p++) {
+                    const pa = (p * 72) * Math.PI / 180;
+                    add(5, el('ellipse', { cx: fx + 5*Math.cos(pa), cy: fy + 5*Math.sin(pa), rx: 4, ry: 2.5, fill: c,
+                        transform: `rotate(${p*72}, ${fx + 5*Math.cos(pa)}, ${fy + 5*Math.sin(pa)})` }));
+                }
+                add(5, el('circle', { cx: fx, cy: fy, r: 2.5, fill: '#FDD835' }));
+            });
+
+            // G6: Peaceful clouds
+            add(6, cartoonCloud(200, 50, 0.6));
+            add(6, cartoonCloud(700, 40, 0.55));
+
+            // G7: Golden sparkles everywhere
+            [[150,150],[300,130],[450,140],[600,120],[750,150],[250,250],[400,240],[550,260],[700,245]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G8: Jannah label
+            add(8, textEl('JANNAH', 450, 180, { size: 36, color: '#2E7D32', weight: 700 }));
+            add(8, textEl('A Pleasant Life', 450, 215, { size: 22, color: '#388E3C', weight: 600 }));
+
+            // G9: Bottom label
+            add(9, textEl('"A pleasant, satisfying life"', 450, 480, { size: 24, color: '#2E7D32', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 8: LIGHT SCALES =====
+        function buildVerse8() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark ominous sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: Balance scale - right side heavy (bad), left side light
+            // Pillar
+            add(1, pathEl('M445,380 L445,120 L455,120 L455,380 Z', '#5D4037', '#3E2723', 2, 'round'));
+            // Base
+            add(1, pathEl('M390,380 L510,380 L520,395 L380,395 Z', '#4E342E', '#3E2723', 2, 'round'));
+            // Beam (tilted right side down)
+            add(1, pathEl('M200,170 L700,130', 'none', '#9E9E9E', 5, 'round'));
+            // Pivot
+            add(1, el('circle', { cx: 450, cy: 120, r: 12, fill: '#9E9E9E', stroke: '#757575', 'stroke-width': 2 }));
+
+            // G2: Left pan (light, higher) - few good deeds
+            add(2, pathEl('M120,190 Q110,220 130,220 L270,220 Q290,220 280,190 Z',
+                '#BDBDBD', '#9E9E9E', 2, 'round'));
+            // Chains
+            add(2, lineEl(200, 170, 150, 190, '#9E9E9E', 2));
+            add(2, lineEl(200, 170, 250, 190, '#9E9E9E', 2));
+            // Almost empty - just a few tiny specs
+            add(2, el('circle', { cx: 190, cy: 205, r: 3, fill: '#E0E0E0' }));
+            add(2, el('circle', { cx: 210, cy: 208, r: 2, fill: '#BDBDBD' }));
+
+            // G3: Right pan (heavy, lower) - sins
+            add(3, pathEl('M620,250 Q610,280 630,280 L770,280 Q790,280 780,250 Z',
+                '#424242', '#212121', 2, 'round'));
+            // Chains
+            add(3, lineEl(700, 130, 650, 250, '#757575', 2));
+            add(3, lineEl(700, 130, 750, 250, '#757575', 2));
+            // Dark heavy objects representing sins
+            add(3, el('circle', { cx: 680, cy: 260, r: 10, fill: '#212121', stroke: '#111', 'stroke-width': 1 }));
+            add(3, el('circle', { cx: 710, cy: 265, r: 8, fill: '#1a1a1a', stroke: '#111', 'stroke-width': 1 }));
+            add(3, el('circle', { cx: 740, cy: 258, r: 9, fill: '#263238', stroke: '#111', 'stroke-width': 1 }));
+
+            // G4: "LIGHT" arrow pointing up on left
+            add(4, pathEl('M200,170 L200,140', 'none', '#E53935', 3, 'round'));
+            add(4, pathEl('M190,148 L200,135 L210,148', 'none', '#E53935', 2.5, 'round'));
+            add(4, textEl('LIGHT', 200, 125, { size: 18, color: '#E53935', weight: 700 }));
+
+            // G5: Warning signs
+            // Downward arrow on right
+            add(5, pathEl('M700,290 L700,330', 'none', '#B71C1C', 3, 'round'));
+            add(5, pathEl('M690,320 L700,335 L710,320', 'none', '#B71C1C', 2.5, 'round'));
+            add(5, textEl('HEAVY', 700, 355, { size: 18, color: '#B71C1C', weight: 700 }));
+
+            // G6: Dark aura around the light pan
+            add(6, el('circle', { cx: 200, cy: 200, r: 70, fill: 'rgba(244,67,54,0.1)' }));
+            // Red glow around heavy pan
+            add(6, el('circle', { cx: 700, cy: 260, r: 80, fill: 'url(#fireGlow)' }));
+
+            // G7: Sad face elements (subtle)
+            add(7, textEl('...', 200, 240, { size: 24, color: '#E0E0E0', weight: 700 }));
+
+            // G8: Dark ground
+            add(8, pathEl('M0,420 Q200,410 450,415 Q700,405 900,418 L900,506 L0,506 Z',
+                '#1a1a2e', '#0f3460', 1.5, 'round'));
+
+            // G9: Bottom label
+            add(9, textEl('"One whose scales are light..."', 450, 480, { size: 24, color: '#E53935', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 9: HIS REFUGE IS THE ABYSS =====
+        function buildVerse9() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Very dark sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: A massive pit/abyss in the center
+            add(1, el('ellipse', { cx: 450, cy: 320, rx: 200, ry: 60, fill: '#111', stroke: '#1a1a1a', 'stroke-width': 3 }));
+            // Depth rings inside the pit
+            add(1, el('ellipse', { cx: 450, cy: 330, rx: 160, ry: 45, fill: 'none', stroke: '#1a1a2e', 'stroke-width': 2 }));
+            add(1, el('ellipse', { cx: 450, cy: 340, rx: 120, ry: 30, fill: 'none', stroke: '#0f3460', 'stroke-width': 1.5 }));
+            add(1, el('ellipse', { cx: 450, cy: 350, rx: 80, ry: 18, fill: 'none', stroke: '#263238', 'stroke-width': 1 }));
+
+            // G2: Red glow from deep inside the pit
+            add(2, el('ellipse', { cx: 450, cy: 360, rx: 100, ry: 25, fill: 'rgba(244,67,54,0.4)' }));
+            add(2, el('ellipse', { cx: 450, cy: 365, rx: 60, ry: 15, fill: 'rgba(255,87,34,0.5)' }));
+            add(2, el('ellipse', { cx: 450, cy: 370, rx: 30, ry: 8, fill: 'rgba(255,111,0,0.6)' }));
+
+            // G3: Crumbling edges of the pit
+            add(3, pathEl('M250,310 Q280,300 310,315 Q340,305 370,320', 'none', '#37474F', 3, 'round'));
+            add(3, pathEl('M530,315 Q560,305 590,320 Q620,300 650,310', 'none', '#37474F', 3, 'round'));
+            // Falling rocks
+            [[380,340],[420,350],[480,345],[520,340],[400,360],[460,355]].forEach(([rx,ry]) => {
+                add(3, el('circle', { cx: rx, cy: ry, r: 2 + Math.random()*3, fill: '#455A64' }));
+            });
+
+            // G4: The word "HAWIYAH" rising from the pit
+            add(4, textEl('HAWIYAH', 450, 250, { size: 40, color: '#E53935', weight: 700 }));
+            add(4, textEl('The Bottomless Pit', 450, 285, { size: 20, color: '#FF8A65', weight: 600 }));
+
+            // G5: Dark smoke/vapor rising
+            for (let i = 0; i < 6; i++) {
+                const sx = 380 + Math.random() * 140;
+                add(5, pathEl(`M${sx},320 Q${sx-10},${280-i*15} ${sx+5},${250-i*20}`,
+                    'none', `rgba(66,66,66,${0.3 - i*0.04})`, 2, 'round'));
+            }
+
+            // G6: Ground around the pit
+            add(6, pathEl('M0,300 Q100,310 250,305 L250,320', 'none', '#37474F', 0));
+            add(6, pathEl('M0,300 Q100,310 250,305 L250,320 Q200,330 150,325 Q80,330 0,320 Z', '#37474F', '#263238', 1.5, 'round'));
+            add(6, pathEl('M650,305 Q750,310 900,300 L900,320 Q800,330 700,325 Q660,330 650,320 Z', '#37474F', '#263238', 1.5, 'round'));
+
+            // G7: Stars in the dark sky
+            for (let i = 0; i < 15; i++) {
+                const sx = Math.random() * 900;
+                const sy = Math.random() * 200;
+                add(7, el('circle', { cx: sx, cy: sy, r: 0.8 + Math.random()*1.2, fill: '#FFF', opacity: 0.3 + Math.random()*0.4 }));
+            }
+
+            // G8: Bottom label
+            add(8, textEl('"His refuge is the abyss"', 450, 480, { size: 24, color: '#E53935', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 10: WHAT CAN MAKE YOU KNOW WHAT IT IS? =====
+        function buildVerse10() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep dark background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#0a0a0a', 'none', 0));
+
+            // G1: Central burning question mark
+            add(1, pathEl('M400,140 Q400,80 450,80 Q500,80 500,140 Q500,190 450,210 L450,240', 'none', '#E53935', 8, 'round'));
+            add(1, el('circle', { cx: 450, cy: 265, r: 7, fill: '#E53935' }));
+            // Fire glow behind it
+            add(1, el('circle', { cx: 450, cy: 170, r: 100, fill: 'url(#fireGlow)' }));
+            add(1, el('circle', { cx: 450, cy: 170, r: 60, fill: 'rgba(255,87,34,0.2)' }));
+
+            // G2: Concentric fire rings
+            [80, 120, 160, 200].forEach((r, i) => {
+                add(2, el('circle', { cx: 450, cy: 200, r, fill: 'none', stroke: `rgba(244,67,54,${0.4 - i*0.08})`, 'stroke-width': 2 }));
+            });
+
+            // G3: Suspense text
+            add(3, textEl('And what can', 450, 330, { size: 28, color: '#FF8A65', weight: 600 }));
+            add(3, textEl('make you KNOW?', 450, 365, { size: 32, color: '#E53935', weight: 700 }));
+
+            // G4: Dramatic lines radiating outward
+            for (let i = 0; i < 16; i++) {
+                const angle = (i * 22.5) * Math.PI / 180;
+                add(4, lineEl(
+                    450 + 110*Math.cos(angle), 200 + 110*Math.sin(angle),
+                    450 + 140*Math.cos(angle), 200 + 140*Math.sin(angle),
+                    'rgba(244,67,54,0.4)', 1.5));
+            }
+
+            // G5: Ember particles floating
+            for (let i = 0; i < 20; i++) {
+                const ex = 300 + Math.random() * 300;
+                const ey = 100 + Math.random() * 250;
+                add(5, el('circle', { cx: ex, cy: ey, r: 1 + Math.random()*2,
+                    fill: Math.random() > 0.5 ? '#FF6F00' : '#E53935', opacity: 0.4 + Math.random()*0.5 }));
+            }
+
+            // G6: Dark ground with cracks
+            add(6, pathEl('M0,420 L900,420 L900,506 L0,506 Z', '#1a1a1a', '#111', 1));
+            add(6, pathEl('M200,420 L210,450 L195,480 L215,506', 'none', '#E53935', 1.5, 'round'));
+            add(6, pathEl('M700,420 L690,455 L710,485 L695,506', 'none', '#E53935', 1.5, 'round'));
+
+            // G7: Bottom label
+            add(7, textEl('"What can make you know what it is?"', 450, 480, { size: 22, color: '#E53935', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 11: A FIRE, INTENSELY HOT =====
+        function buildVerse11() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Fiery sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyFire)', 'none', 0));
+
+            // G1: Massive flames rising from the bottom
+            // Large central flame
+            add(1, pathEl('M350,506 Q340,400 380,340 Q400,280 420,250 Q440,200 450,160 Q460,200 480,250 Q500,280 520,340 Q560,400 550,506 Z',
+                'url(#fireGrad)', '#E65100', 2, 'round'));
+            // Inner bright flame
+            add(1, pathEl('M400,506 Q395,420 420,370 Q435,320 445,280 Q450,260 455,280 Q465,320 480,370 Q505,420 500,506 Z',
+                '#FF8F00', '#FF6F00', 1.5, 'round'));
+            // Brightest core
+            add(1, pathEl('M430,506 Q428,440 440,400 Q445,370 450,340 Q455,370 460,400 Q472,440 470,506 Z',
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+
+            // G2: Side flames
+            // Left flames
+            add(2, pathEl('M100,506 Q90,430 120,380 Q140,330 150,290 Q160,330 180,380 Q210,430 200,506 Z',
+                '#E53935', '#B71C1C', 1.5, 'round'));
+            add(2, pathEl('M130,506 Q125,450 140,410 Q148,380 150,350 Q155,380 162,410 Q175,450 170,506 Z',
+                '#FF8F00', '#E65100', 1, 'round'));
+            // Right flames
+            add(2, pathEl('M700,506 Q690,430 720,380 Q740,330 750,290 Q760,330 780,380 Q810,430 800,506 Z',
+                '#E53935', '#B71C1C', 1.5, 'round'));
+            add(2, pathEl('M730,506 Q725,450 740,410 Q748,380 750,350 Q755,380 762,410 Q775,450 770,506 Z',
+                '#FF8F00', '#E65100', 1, 'round'));
+
+            // G3: More flame columns
+            [[250,506,200,340],[600,506,200,320]].forEach(([bx,by,bh,ty]) => {
+                add(3, pathEl(`M${bx-40},${by} Q${bx-45},${by-bh*0.5} ${bx-20},${ty+40} Q${bx},${ty} ${bx+20},${ty+40} Q${bx+45},${by-bh*0.5} ${bx+40},${by} Z`,
+                    '#D32F2F', '#B71C1C', 1.5, 'round'));
+            });
+
+            // G4: Heat shimmer / distortion lines
+            for (let i = 0; i < 12; i++) {
+                const hx = 50 + i * 75;
+                const hy = 100 + Math.random() * 100;
+                add(4, pathEl(`M${hx},${hy} Q${hx+8},${hy-8} ${hx+16},${hy} Q${hx+24},${hy+8} ${hx+32},${hy}`,
+                    'none', 'rgba(255,255,255,0.15)', 1.5, 'round'));
+            }
+
+            // G5: Floating embers and sparks
+            for (let i = 0; i < 25; i++) {
+                const ex = 50 + Math.random() * 800;
+                const ey = 50 + Math.random() * 350;
+                const er = 1 + Math.random() * 3;
+                const colors = ['#FF6F00','#FFD54F','#E53935','#FF8F00','#FFF9C4'];
+                add(5, el('circle', { cx: ex, cy: ey, r: er, fill: colors[Math.floor(Math.random()*colors.length)],
+                    opacity: 0.4 + Math.random()*0.6 }));
+            }
+
+            // G6: "NAR HAMIYAH" text
+            add(6, textEl('NAR HAMIYAH', 450, 100, { size: 42, color: '#FFF', weight: 700 }));
+            add(6, textEl('A Fire, Intensely Hot', 450, 140, { size: 24, color: '#FFF9C4', weight: 600 }));
+
+            // G7: Glow effects
+            add(7, el('circle', { cx: 450, cy: 400, r: 120, fill: 'url(#fireGlow)' }));
+            add(7, el('circle', { cx: 150, cy: 420, r: 80, fill: 'url(#fireGlow)' }));
+            add(7, el('circle', { cx: 750, cy: 420, r: 80, fill: 'url(#fireGlow)' }));
+
+            // G8: Bottom label
+            add(8, textEl('"It is a Fire, intensely hot!"', 450, 480, { size: 24, color: '#FFF9C4', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>

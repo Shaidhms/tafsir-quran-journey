@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah At-Takathur - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 102 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ التَّكَاثُرِ</div>
+        <h1>Surah At-Takathur</h1>
+        <p>Competition / Rivalry in Worldly Increase - 8 Verses - Makkan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 8</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">102</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">8</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">28</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">Competition / Rivalry</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Worldly Distraction</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>At-Takathur means <span class="highlight">"competition in increase"</span> or "mutual rivalry." It refers to the human tendency to compete with one another in accumulating worldly things: wealth, children, status, possessions, and anything that boosts one's ego.</p>
+                <p>The Arabs of Makkah would boast about their numbers, their wealth, and even the number of graves belonging to their ancestors. Two clans of the Ansar (Banu Haritha and Banu al-Harith) once boasted about who had more members, <span class="highlight">even counting their dead in the graveyards</span> to win the argument.</p>
+                <div class="important">
+                    <p>This surah is a wake-up call from Allah. It says: you are so busy competing over worldly things that you have forgotten the purpose of life. You will keep chasing more and more until you end up in your graves. Then you will realize the truth, but by then it will be too late. You will be questioned about every blessing you were given.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>The Prophet (peace be upon him) said: <span class="highlight">"If the son of Adam had two valleys of gold, he would wish for a third. Nothing fills the belly of the son of Adam except dust (i.e., death)."</span> (Sahih al-Bukhari, Sahih Muslim). This hadith captures the exact spirit of Surah At-Takathur.</p>
+                <p>Ibn Kathir explains that "takathur" covers all forms of worldly competition: boasting about wealth, children, followers, status, and material possessions. As-Sa'di adds that this distraction <span class="highlight">prevents people from obeying Allah and preparing for the Hereafter</span>, which is the real loss.</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">أَلْهَاكُمُ التَّكَاثُرُ</div>
+                    <div class="verse-transliteration">Alhakumu at-takathur</div>
+                    <div class="verse-translation">Competition in [worldly] increase diverts you.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">أَلْهَاكُمُ</span><span class="trans">alhakumu</span><span class="meaning">Diverts you / distracts you</span></div>
+                            <div class="word-chip"><span class="ar">التَّكَاثُرُ</span><span class="trans">at-takathur</span><span class="meaning">The mutual competition for more</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Alhakum" comes from "lahw" which means distraction or amusement. Allah is saying that the race to accumulate more wealth, more children, more status, and more possessions has diverted people from worshipping Allah and preparing for the Hereafter. "Takathur" means trying to outdo each other in worldly accumulation. Ibn Kathir says this includes boasting about wealth, children, followers, and even ancestors.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">حَتَّىٰ زُرْتُمُ الْمَقَابِرَ</div>
+                    <div class="verse-transliteration">Hatta zurtumul-maqabir</div>
+                    <div class="verse-translation">Until you visit the graveyards.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">حَتَّىٰ</span><span class="trans">hatta</span><span class="meaning">Until</span></div>
+                            <div class="word-chip"><span class="ar">زُرْتُمُ</span><span class="trans">zurtumu</span><span class="meaning">You visit</span></div>
+                            <div class="word-chip"><span class="ar">الْمَقَابِرَ</span><span class="trans">al-maqabir</span><span class="meaning">The graveyards</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Allah uses the word "zurtum" (you visited) rather than "you entered" or "you were buried." This is significant because a visit is temporary. As-Sa'di explains that your stay in the grave is just a visit before your final destination (either Paradise or Hellfire). Some scholars say this also refers to people who went to graveyards to count their dead ancestors to boast about having more. Either way, the message is: you will not stop chasing the world until death catches up with you.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">كَلَّا سَوْفَ تَعْلَمُونَ</div>
+                    <div class="verse-transliteration">Kalla sawfa ta'lamun</div>
+                    <div class="verse-translation">No! You are going to know.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Nay! (strong rebuke)</span></div>
+                            <div class="word-chip"><span class="ar">سَوْفَ</span><span class="trans">sawfa</span><span class="meaning">Soon / You will</span></div>
+                            <div class="word-chip"><span class="ar">تَعْلَمُونَ</span><span class="trans">ta'lamun</span><span class="meaning">You will know</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Kalla" is one of the strongest words of rebuke in Arabic. It means "No! Stop! Desist!" Allah is firmly telling people to stop their heedless behavior. "Sawfa ta'lamun" means "you will come to know" - this is a warning about what awaits in the grave and the Hereafter. Ibn Kathir says this first warning refers to the punishment of the grave, where the reality of your choices will begin to unfold.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ</div>
+                    <div class="verse-transliteration">Thumma kalla sawfa ta'lamun</div>
+                    <div class="verse-translation">Then no! You are going to know.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then / Moreover</span></div>
+                            <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! (strong rebuke)</span></div>
+                            <div class="word-chip"><span class="ar">سَوْفَ</span><span class="trans">sawfa</span><span class="meaning">Soon / You will</span></div>
+                            <div class="word-chip"><span class="ar">تَعْلَمُونَ</span><span class="trans">ta'lamun</span><span class="meaning">You will know</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The warning is repeated with "thumma" (then/moreover) to emphasize its severity. Repetition in the Quran always carries extra weight. Ibn Kathir says the first warning refers to the torment of the grave, while the second refers to the Day of Judgment. As-Sa'di explains that this repetition is meant to shake the heedless awake: the matter is so serious that Allah warns twice. When someone warns you twice, you know it is not something to take lightly.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">كَلَّا لَوْ تَعْلَمُونَ عِلْمَ الْيَقِينِ</div>
+                    <div class="verse-transliteration">Kalla law ta'lamuna 'ilmal-yaqin</div>
+                    <div class="verse-translation">No! If you only knew with knowledge of certainty...</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Nay!</span></div>
+                            <div class="word-chip"><span class="ar">لَوْ</span><span class="trans">law</span><span class="meaning">If</span></div>
+                            <div class="word-chip"><span class="ar">تَعْلَمُونَ</span><span class="trans">ta'lamuna</span><span class="meaning">You knew</span></div>
+                            <div class="word-chip"><span class="ar">عِلْمَ</span><span class="trans">'ilma</span><span class="meaning">Knowledge of</span></div>
+                            <div class="word-chip"><span class="ar">الْيَقِينِ</span><span class="trans">al-yaqin</span><span class="meaning">Certainty</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Ilm al-yaqin" (knowledge of certainty) is the first level of certainty. Scholars explain three levels: (1) 'Ilm al-yaqin - knowing something through reliable information (like knowing fire burns because you were told), (2) 'Ayn al-yaqin - seeing it yourself (verse 7), (3) Haqq al-yaqin - experiencing it directly. Allah is saying: if you truly understood what lies ahead with even the first level of certainty, you would abandon this worldly competition immediately.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">لَتَرَوُنَّ الْجَحِيمَ</div>
+                    <div class="verse-transliteration">Latarawunnal-jahim</div>
+                    <div class="verse-translation">You will surely see the Hellfire.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">لَتَرَوُنَّ</span><span class="trans">latarawunna</span><span class="meaning">You will surely see</span></div>
+                            <div class="word-chip"><span class="ar">الْجَحِيمَ</span><span class="trans">al-jahim</span><span class="meaning">The Hellfire / Blazing Fire</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Latarawunna" contains a "lam" of oath and a "nun" of emphasis, making this one of the strongest statements of certainty in the Quran. It is not "maybe" or "perhaps" - you WILL see it. "Al-Jahim" is one of the names of Hellfire, referring to its intense, blazing heat. Ibn Kathir explains that everyone will see the Hellfire on the Day of Judgment, as Allah says in another verse: "There is none of you except he will come to it" (Maryam 19:71). The believers will pass over it safely, but the disbelievers will fall in.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">ثُمَّ لَتَرَوُنَّهَا عَيْنَ الْيَقِينِ</div>
+                    <div class="verse-transliteration">Thumma latarawunnaha 'aynal-yaqin</div>
+                    <div class="verse-translation">Then you will surely see it with the eye of certainty.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                            <div class="word-chip"><span class="ar">لَتَرَوُنَّهَا</span><span class="trans">latarawunnaha</span><span class="meaning">You will surely see it</span></div>
+                            <div class="word-chip"><span class="ar">عَيْنَ</span><span class="trans">'ayna</span><span class="meaning">Eye of / With the eye</span></div>
+                            <div class="word-chip"><span class="ar">الْيَقِينِ</span><span class="trans">al-yaqin</span><span class="meaning">Certainty</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Ayn al-yaqin" means seeing something with your own eyes, which is the second level of certainty. First you heard about it (verse 5), now you will see it yourself. There will be no room for denial. As-Sa'di explains that this repetition emphasizes that seeing the Hellfire is absolutely unavoidable. The first mention is a general statement, the second confirms it will be witnessed directly and personally. At that point, all the worldly things you competed over will seem completely meaningless.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">8</div>
+                    <div class="verse-arabic">ثُمَّ لَتُسْأَلُنَّ يَوْمَئِذٍ عَنِ النَّعِيمِ</div>
+                    <div class="verse-transliteration">Thumma latus'alunna yawma'idhin 'anin-na'im</div>
+                    <div class="verse-translation">Then you will surely be asked that Day about pleasure.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                            <div class="word-chip"><span class="ar">لَتُسْأَلُنَّ</span><span class="trans">latus'alunna</span><span class="meaning">You will surely be asked</span></div>
+                            <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                            <div class="word-chip"><span class="ar">عَنِ</span><span class="trans">'anin</span><span class="meaning">About</span></div>
+                            <div class="word-chip"><span class="ar">النَّعِيمِ</span><span class="trans">an-na'im</span><span class="meaning">The pleasures / blessings</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"An-Na'im" covers every blessing Allah gave you: your health, your eyesight, your hearing, cold water on a hot day, food when you were hungry, safety when you were afraid, free time, family, and even the air you breathe. The Prophet (peace be upon him) said: "The first blessing a servant will be asked about on the Day of Judgment is: 'Did We not give you a healthy body and give you cool water to drink?'" (Tirmidhi). Ibn Kathir explains that this question covers two things: (1) Did you show gratitude for these blessings? (2) Did you use them in obedience to Allah or in disobedience?</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah At-Takathur</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Worldly competition is a trap.</strong><p style="color: #999; font-size: 0.95em;">The endless race for more wealth, status, and possessions distracts you from the real purpose of life: worshipping Allah and preparing for the Hereafter.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Death is the ultimate reality check.</strong><p style="color: #999; font-size: 0.95em;">No matter how much you accumulate, you will end up in the graveyard. Nothing you collected will come with you except your deeds.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Warnings repeated are warnings to take seriously.</strong><p style="color: #999; font-size: 0.95em;">Allah repeats the warning "you will know" twice, showing how urgent and important this message is. When Allah warns twice, we should pay full attention.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">There are levels of certainty.</strong><p style="color: #999; font-size: 0.95em;">'Ilm al-yaqin (hearing about it), 'Ayn al-yaqin (seeing it), and Haqq al-yaqin (experiencing it). The wise person acts on the first level without needing to reach the others.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Every blessing will be questioned.</strong><p style="color: #999; font-size: 0.95em;">On the Day of Judgment, you will be asked about every single blessing: your health, food, safety, free time, family. Were you grateful? Did you use them to obey Allah?</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Gratitude is the antidote.</strong><p style="color: #999; font-size: 0.95em;">The cure for takathur (competing for more) is shukr (gratitude). When you are grateful for what you have, you stop chasing what you do not need and focus on what truly matters.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. The hadith about "two valleys of gold" is from Sahih al-Bukhari and Sahih Muslim. The hadith about being asked about blessings is from Jami' at-Tirmidhi. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="106-quraysh.html">Next: Surah Quraysh &rarr;</a>
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0623\u064E\u0644\u0652\u0647\u064E\u0627\u0643\u064F\u0645\u064F \u0627\u0644\u062A\u0651\u064E\u0643\u064E\u0627\u062B\u064F\u0631\u064F',
+                translit: "Alhakumu at-takathur",
+                explanation: "Competing for more and more worldly stuff has distracted you from what really matters! You keep wanting more money, more things, more fame...",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u062D\u064E\u062A\u0651\u064E\u0649\u0670 \u0632\u064F\u0631\u0652\u062A\u064F\u0645\u064F \u0627\u0644\u0652\u0645\u064E\u0642\u064E\u0627\u0628\u0650\u0631\u064E',
+                translit: "Hatta zurtumul-maqabir",
+                explanation: "You keep chasing more and more until you end up in the graveyard! That is when all the competing finally stops.",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u0643\u064E\u0644\u0651\u064E\u0627 \u0633\u064E\u0648\u0652\u0641\u064E \u062A\u064E\u0639\u0652\u0644\u064E\u0645\u064F\u0648\u0646\u064E',
+                translit: "Kalla sawfa ta'lamun",
+                explanation: "No, stop! You will soon find out the truth. This is Allah warning us firmly, like a parent saying 'You will see!'",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u062B\u064F\u0645\u0651\u064E \u0643\u064E\u0644\u0651\u064E\u0627 \u0633\u064E\u0648\u0652\u0641\u064E \u062A\u064E\u0639\u0652\u0644\u064E\u0645\u064F\u0648\u0646\u064E',
+                translit: "Thumma kalla sawfa ta'lamun",
+                explanation: "Then again, NO! You will surely come to know! Allah repeats the warning to make it even stronger. This is serious!",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u0643\u064E\u0644\u0651\u064E\u0627 \u0644\u064E\u0648\u0652 \u062A\u064E\u0639\u0652\u0644\u064E\u0645\u064F\u0648\u0646\u064E \u0639\u0650\u0644\u0652\u0645\u064E \u0627\u0644\u0652\u064A\u064E\u0642\u0650\u064A\u0646\u0650',
+                translit: "Kalla law ta'lamuna 'ilmal-yaqin",
+                explanation: "If only you knew with true certainty what lies ahead, you would never waste your life chasing worldly things!",
+                build: buildVerse5
+            },
+            {
+                num: 6,
+                arabic: '\u0644\u064E\u062A\u064E\u0631\u064E\u0648\u064F\u0646\u0651\u064E \u0627\u0644\u0652\u062C\u064E\u062D\u0650\u064A\u0645\u064E',
+                translit: "Latarawunnal-jahim",
+                explanation: "You will absolutely see the Hellfire! This is not a maybe, it is a certainty. Everyone will witness it on the Day of Judgment.",
+                build: buildVerse6
+            },
+            {
+                num: 7,
+                arabic: '\u062B\u064F\u0645\u0651\u064E \u0644\u064E\u062A\u064E\u0631\u064E\u0648\u064F\u0646\u0651\u064E\u0647\u064E\u0627 \u0639\u064E\u064A\u0652\u0646\u064E \u0627\u0644\u0652\u064A\u064E\u0642\u0650\u064A\u0646\u0650',
+                translit: "Thumma latarawunnaha 'aynal-yaqin",
+                explanation: "Then you will see it with absolute certainty, with your own eyes! There will be no doubt left at all.",
+                build: buildVerse7
+            },
+            {
+                num: 8,
+                arabic: '\u062B\u064F\u0645\u0651\u064E \u0644\u064E\u062A\u064F\u0633\u0652\u0623\u064E\u0644\u064F\u0646\u0651\u064E \u064A\u064E\u0648\u0652\u0645\u064E\u0626\u0650\u0630\u064D \u0639\u064E\u0646\u0650 \u0627\u0644\u0646\u0651\u064E\u0639\u0650\u064A\u0645\u0650',
+                translit: "Thumma latus'alunna yawma'idhin 'anin-na'im",
+                explanation: "Then on that Day, you will be asked about every single blessing: your health, your food, your safety, your free time. How did you use them?",
+                build: buildVerse8
+            }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            defs.appendChild(createLinearGrad('skyGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyDark', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            defs.appendChild(createLinearGrad('skyDramatic', '0%','0%','0%','100%',
+                [['0%','#4A148C'],['30%','#6A1B9A'],['60%','#E65100'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('sandGrad', '0%','0%','0%','100%',
+                [['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('desertGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['30%','#FFCC80'],['60%','#FFB74D'],['100%','#F5D6A0']]));
+            defs.appendChild(createLinearGrad('lightGrad', '50%','0%','50%','100%',
+                [['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('fireGrad', '0%','0%','0%','100%',
+                [['0%','#FF6F00'],['30%','#E65100'],['60%','#BF360C'],['100%','#B71C1C']]));
+            defs.appendChild(createLinearGrad('fireGlowGrad', '0%','100%','0%','0%',
+                [['0%','#FF6F00'],['40%','#FF8F00'],['70%','#FFA726'],['100%','#FFE0B2']]));
+            defs.appendChild(createLinearGrad('graveGrad', '0%','0%','0%','100%',
+                [['0%','#78909C'],['50%','#607D8B'],['100%','#455A64']]));
+            defs.appendChild(createLinearGrad('warningGrad', '0%','0%','0%','100%',
+                [['0%','#F44336'],['50%','#D32F2F'],['100%','#B71C1C']]));
+            defs.appendChild(createLinearGrad('goldPileGrad', '0%','0%','0%','100%',
+                [['0%','#FFD54F'],['40%','#FFC107'],['70%','#FF8F00'],['100%','#E65100']]));
+            defs.appendChild(createLinearGrad('scaleGrad', '0%','0%','0%','100%',
+                [['0%','#C9A84C'],['50%','#A68529'],['100%','#8D6E63']]));
+            defs.appendChild(createLinearGrad('eyeGlowGrad', '0%','0%','0%','100%',
+                [['0%','#E1F5FE'],['50%','#81D4FA'],['100%','#4FC3F7']]));
+
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createRadialGrad('fireRadial', '50%','80%','60%',
+                [['0%','#FFAB00'],['30%','#FF6D00'],['60%','#DD2C00'],['100%','rgba(183,28,28,0)']]));
+            defs.appendChild(createRadialGrad('darkGlow', '50%','50%','50%',
+                [['0%','rgba(0,0,0,0.4)'],['60%','rgba(0,0,0,0.15)'],['100%','rgba(0,0,0,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // ===== VERSE 1: COMPETITION IN WORLDLY INCREASE =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Busy marketplace sky
+            add(0, pathEl('M0,0 L900,0 L900,200 L0,200 Z', 'url(#desertGrad)', 'none', 0));
+
+            // G1: Sun
+            add(1, el('circle', { cx: 780, cy: 70, r: 45, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            for (let i = 0; i < 8; i++) {
+                const rad = (i * 45) * Math.PI / 180;
+                add(1, lineEl(780 + 50*Math.cos(rad), 70 + 50*Math.sin(rad),
+                    780 + 68*Math.cos(rad), 70 + 68*Math.sin(rad), '#FDD835', 2.5));
+            }
+
+            // G2: Ground
+            add(2, pathEl('M0,350 L900,350 L900,506 L0,506 Z', 'url(#sandGrad)', '#C49A52', 2));
+            for (let i = 0; i < 20; i++) {
+                const sx = 20 + i * 45;
+                const sy = 370 + Math.random() * 120;
+                add(2, lineEl(sx, sy, sx + 8, sy + 1, '#BCAAA4', 0.8));
+            }
+
+            // G3: Gold piles - people competing for wealth
+            // Left pile of gold coins
+            for (let i = 0; i < 8; i++) {
+                const cx = 150 + Math.random() * 60;
+                const cy = 320 + Math.random() * 30;
+                add(3, el('ellipse', { cx, cy, rx: 12, ry: 5, fill: '#FFD54F', stroke: '#FFA000', 'stroke-width': 1.2 }));
+                add(3, el('ellipse', { cx, cy: cy-3, rx: 10, ry: 4, fill: '#FFECB3' }));
+            }
+            // Right pile
+            for (let i = 0; i < 8; i++) {
+                const cx = 680 + Math.random() * 60;
+                const cy = 315 + Math.random() * 35;
+                add(3, el('ellipse', { cx, cy, rx: 12, ry: 5, fill: '#FFD54F', stroke: '#FFA000', 'stroke-width': 1.2 }));
+                add(3, el('ellipse', { cx, cy: cy-3, rx: 10, ry: 4, fill: '#FFECB3' }));
+            }
+
+            // G4: Two groups of figures competing (silhouettes with robes)
+            // Left group - 3 figures reaching toward center
+            [[100,300],[160,290],[220,295]].forEach(([fx,fy]) => {
+                add(4, el('ellipse', { cx: fx, cy: fy+15, rx: 8, ry: 3, fill: 'rgba(0,0,0,0.1)' }));
+                add(4, pathEl(`M${fx-8},${fy-10} Q${fx-10},${fy} ${fx-10},${fy+12} L${fx+10},${fy+12} Q${fx+10},${fy} ${fx+8},${fy-10} Z`,
+                    '#ECEFF1', '#90A4AE', 1, 'round'));
+                add(4, el('circle', { cx: fx, cy: fy-16, r: 7, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.8 }));
+                // Arms reaching toward gold
+                add(4, pathEl(`M${fx+8},${fy-5} Q${fx+25},${fy-15} ${fx+35},${fy-10}`, 'none', '#FFCC80', 2.5, 'round'));
+            });
+            // Right group - 3 figures
+            [[680,295],[740,285],[800,300]].forEach(([fx,fy]) => {
+                add(4, el('ellipse', { cx: fx, cy: fy+15, rx: 8, ry: 3, fill: 'rgba(0,0,0,0.1)' }));
+                add(4, pathEl(`M${fx-8},${fy-10} Q${fx-10},${fy} ${fx-10},${fy+12} L${fx+10},${fy+12} Q${fx+10},${fy} ${fx+8},${fy-10} Z`,
+                    '#CFD8DC', '#78909C', 1, 'round'));
+                add(4, el('circle', { cx: fx, cy: fy-16, r: 7, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.8 }));
+                add(4, pathEl(`M${fx-8},${fy-5} Q${fx-25},${fy-15} ${fx-35},${fy-10}`, 'none', '#FFCC80', 2.5, 'round'));
+            });
+
+            // G5: Large VS symbol in center
+            add(5, textEl('VS', 450, 260, { size: 48, color: '#E65100', weight: 700 }));
+            // Competition arrows pointing inward
+            add(5, pathEl('M300,270 L380,270', 'none', '#E65100', 3, 'round'));
+            add(5, pathEl('M370,263 L383,270 L370,277', 'none', '#E65100', 2.5, 'round'));
+            add(5, pathEl('M600,270 L520,270', 'none', '#E65100', 3, 'round'));
+            add(5, pathEl('M530,263 L517,270 L530,277', 'none', '#E65100', 2.5, 'round'));
+
+            // G6: Treasure chests, bags of wealth scattered
+            // Chest left
+            add(6, pathEl('M340,330 L400,330 L400,355 L340,355 Z', '#8D6E63', '#5D4037', 1.5, 'round'));
+            add(6, pathEl('M338,330 L402,330 L400,320 L340,320 Z', '#A1887F', '#6D4C41', 1.2, 'round'));
+            add(6, lineEl(370, 335, 370, 345, '#FFD54F', 2));
+            add(6, el('circle', { cx: 370, cy: 340, r: 3, fill: '#FFD54F', stroke: '#FFA000', 'stroke-width': 0.8 }));
+            // Chest right
+            add(6, pathEl('M500,325 L560,325 L560,350 L500,350 Z', '#8D6E63', '#5D4037', 1.5, 'round'));
+            add(6, pathEl('M498,325 L562,325 L560,315 L500,315 Z', '#A1887F', '#6D4C41', 1.2, 'round'));
+            add(6, lineEl(530, 330, 530, 340, '#FFD54F', 2));
+            add(6, el('circle', { cx: 530, cy: 335, r: 3, fill: '#FFD54F', stroke: '#FFA000', 'stroke-width': 0.8 }));
+
+            // G7: "MORE MORE MORE" text scattered in sky
+            add(7, textEl('MORE!', 200, 100, { size: 20, color: '#E65100', weight: 700 }));
+            add(7, textEl('MORE!', 450, 80, { size: 26, color: '#BF360C', weight: 700 }));
+            add(7, textEl('MORE!', 700, 110, { size: 22, color: '#E65100', weight: 700 }));
+            add(7, textEl('MINE!', 320, 140, { size: 18, color: '#D84315', weight: 600 }));
+            add(7, textEl('MINE!', 580, 130, { size: 18, color: '#D84315', weight: 600 }));
+
+            // G8: Clouds
+            add(8, cartoonCloud(100, 50, 0.5));
+            add(8, cartoonCloud(600, 40, 0.45));
+
+            // G9: Title
+            add(9, textEl('"Competing for more has distracted you"', 450, 480, { size: 22, color: '#795548', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: UNTIL YOU VISIT THE GRAVEYARDS =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Somber twilight sky
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: Crescent moon and stars
+            add(1, pathEl('M780,60 A30,30 0 1,1 760,90 A22,22 0 1,0 780,60',
+                '#FFF9C4', '#FFD54F', 1.5, 'round'));
+            [[720,50],[700,80],[830,70],[750,110],[680,40],[820,100]].forEach(([sx,sy]) => {
+                add(1, cartoonStar(sx, sy, 3, 1.5, '#FFF9C4', '#FFD54F'));
+            });
+
+            // G2: Dark ground - graveyard terrain
+            add(2, pathEl('M0,280 Q200,270 450,275 Q700,265 900,280 L900,506 L0,506 Z',
+                '#455A64', '#37474F', 2, 'round'));
+            add(2, pathEl('M0,300 Q200,290 450,295 Q700,285 900,300 L900,506 L0,506 Z',
+                '#37474F', '#263238', 1.5, 'round'));
+
+            // G3: Gravestones - row of tombstones
+            [[100,250],[200,245],[310,248],[420,242],[530,246],[640,240],[750,244],[850,248]].forEach(([gx,gy]) => {
+                // Shadow
+                add(3, el('ellipse', { cx: gx, cy: gy+40, rx: 18, ry: 4, fill: 'rgba(0,0,0,0.2)' }));
+                // Tombstone
+                add(3, pathEl(`M${gx-12},${gy+35} L${gx-12},${gy} Q${gx-12},${gy-18} ${gx},${gy-18} Q${gx+12},${gy-18} ${gx+12},${gy} L${gx+12},${gy+35} Z`,
+                    'url(#graveGrad)', '#37474F', 1.5, 'round'));
+                // Cross-bar decoration (Islamic style - no cross, just horizontal line)
+                add(3, lineEl(gx-8, gy+5, gx+8, gy+5, '#546E7A', 1));
+                // Small crack details
+                add(3, pathEl(`M${gx-3},${gy+10} L${gx-1},${gy+20} L${gx+2},${gy+15}`, 'none', '#546E7A', 0.8, 'round'));
+            });
+
+            // G4: Withered plants near graves
+            [[150,270],[350,265],[550,268],[750,264]].forEach(([px,py]) => {
+                add(4, pathEl(`M${px},${py+10} Q${px-3},${py} ${px-6},${py-8}`, 'none', '#4E342E', 1.5, 'round'));
+                add(4, pathEl(`M${px},${py+10} Q${px+2},${py-2} ${px+5},${py-10}`, 'none', '#5D4037', 1.5, 'round'));
+                add(4, pathEl(`M${px},${py+10} Q${px+5},${py+2} ${px+8},${py-5}`, 'none', '#4E342E', 1, 'round'));
+            });
+
+            // G5: A path leading to the graveyard
+            add(5, pathEl('M450,506 Q440,400 430,350 Q420,300 450,280',
+                'none', '#546E7A', 3, 'round'));
+            add(5, pathEl('M470,506 Q460,400 455,350 Q448,300 460,280',
+                'none', '#546E7A', 3, 'round'));
+            // Footprints on path
+            for (let i = 0; i < 6; i++) {
+                const fy = 480 - i * 35;
+                const fx = 455 - i * 2;
+                add(5, el('ellipse', { cx: fx - 5, cy: fy, rx: 3, ry: 5, fill: '#37474F', opacity: 0.5 }));
+                add(5, el('ellipse', { cx: fx + 5, cy: fy - 8, rx: 3, ry: 5, fill: '#37474F', opacity: 0.5 }));
+            }
+
+            // G6: Fog/mist around the graveyard
+            add(6, el('ellipse', { cx: 200, cy: 300, rx: 120, ry: 20, fill: 'rgba(176,190,197,0.2)' }));
+            add(6, el('ellipse', { cx: 500, cy: 290, rx: 150, ry: 25, fill: 'rgba(176,190,197,0.15)' }));
+            add(6, el('ellipse', { cx: 750, cy: 295, rx: 100, ry: 18, fill: 'rgba(176,190,197,0.2)' }));
+
+            // G7: Fading gold coins trail (showing worldly wealth left behind)
+            [[80,370],[160,380],[250,375],[340,385],[560,380],[650,375],[740,385],[830,370]].forEach(([cx,cy], i) => {
+                const op = 0.3 - i * 0.03;
+                add(7, el('ellipse', { cx, cy, rx: 8, ry: 3, fill: '#FFD54F', opacity: Math.max(op, 0.08) }));
+            });
+
+            // G8: Dark clouds
+            add(8, cartoonCloud(150, 60, 0.6));
+            add(8, cartoonCloud(650, 50, 0.55));
+
+            // G9: Title
+            add(9, textEl('"Until you visit the graveyards"', 450, 480, { size: 24, color: '#90A4AE', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: YOU ARE GOING TO KNOW =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Warning red-orange sky
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#skyDramatic)', 'none', 0));
+
+            // G1: Large warning exclamation mark
+            add(1, pathEl('M420,60 L440,60 L435,180 L425,180 Z', '#FFD54F', '#FFA000', 2, 'round'));
+            add(1, el('circle', { cx: 430, cy: 200, r: 10, fill: '#FFD54F', stroke: '#FFA000', 'stroke-width': 2 }));
+            // Glow around warning
+            add(1, el('circle', { cx: 430, cy: 130, r: 80, fill: 'url(#goldenGlow)' }));
+
+            // G2: Radiating warning lines
+            for (let i = 0; i < 12; i++) {
+                const rad = (i * 30) * Math.PI / 180;
+                add(2, lineEl(
+                    430 + 90*Math.cos(rad), 130 + 90*Math.sin(rad),
+                    430 + 120*Math.cos(rad), 130 + 120*Math.sin(rad),
+                    '#FFD54F', 2));
+            }
+
+            // G3: Ground with cracks (earthquake-like warning)
+            add(3, pathEl('M0,300 L900,300 L900,506 L0,506 Z', '#455A64', '#37474F', 2));
+            // Cracks in ground
+            add(3, pathEl('M200,300 L210,340 L195,380 L215,420 L200,460', 'none', '#263238', 2, 'round'));
+            add(3, pathEl('M500,300 L510,350 L495,400 L520,450 L505,506', 'none', '#263238', 2, 'round'));
+            add(3, pathEl('M700,300 L715,330 L695,370 L720,410 L700,450', 'none', '#263238', 2, 'round'));
+
+            // G4: "KALLA!" (NO!) text - large and bold
+            add(4, textEl('KALLA!', 450, 260, { size: 56, color: '#FF6F00', weight: 700 }));
+            add(4, textEl('(No! Stop!)', 450, 300, { size: 20, color: '#FFB74D', weight: 600 }));
+
+            // G5: Broken worldly items falling
+            // Broken gold coin
+            add(5, pathEl('M150,340 L165,335 L170,350 L155,355 Z', '#FFD54F', '#FFA000', 1, 'round'));
+            add(5, pathEl('M155,355 L160,370', 'none', '#FFA000', 1, 'round'));
+            // Broken trophy
+            add(5, pathEl('M750,320 L770,320 L775,350 L745,350 Z', '#C9A84C', '#A68529', 1.2, 'round'));
+            add(5, pathEl('M755,320 Q760,305 765,320', '#C9A84C', '#A68529', 1, 'round'));
+            add(5, lineEl(760, 350, 760, 365, '#A68529', 2));
+            add(5, lineEl(750, 365, 770, 365, '#A68529', 2));
+            // Crack through trophy
+            add(5, pathEl('M752,325 L768,345', 'none', '#5D4037', 1.5, 'round'));
+
+            // G6: Small figures looking up in shock
+            [[300,380],[450,390],[600,385]].forEach(([fx,fy]) => {
+                add(6, el('ellipse', { cx: fx, cy: fy+12, rx: 8, ry: 3, fill: 'rgba(0,0,0,0.1)' }));
+                add(6, pathEl(`M${fx-7},${fy-8} Q${fx-9},${fy} ${fx-9},${fy+10} L${fx+9},${fy+10} Q${fx+9},${fy} ${fx+7},${fy-8} Z`,
+                    '#ECEFF1', '#90A4AE', 1, 'round'));
+                add(6, el('circle', { cx: fx, cy: fy-14, r: 6, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.7 }));
+                // Shocked expression - open mouth
+                add(6, el('ellipse', { cx: fx, cy: fy-12, rx: 2, ry: 2.5, fill: '#5D4037' }));
+                // Wide eyes
+                add(6, el('circle', { cx: fx-3, cy: fy-16, r: 1.5, fill: '#2C1810' }));
+                add(6, el('circle', { cx: fx+3, cy: fy-16, r: 1.5, fill: '#2C1810' }));
+            });
+
+            // G7: Lightning bolts (emphasis)
+            add(7, pathEl('M180,100 L200,150 L190,150 L210,200', 'none', '#FFD54F', 3, 'round'));
+            add(7, pathEl('M700,80 L720,130 L710,130 L730,180', 'none', '#FFD54F', 3, 'round'));
+
+            // G8: Sparks flying
+            [[250,200],[350,180],[550,190],[650,210],[300,250],[600,240]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 3 + Math.random()*4));
+            });
+
+            // G9: Title
+            add(9, textEl('"No! You are going to know!"', 450, 480, { size: 24, color: '#FFB74D', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: THEN NO! YOU ARE GOING TO KNOW =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Even more intense dramatic sky
+            add(0, pathEl('M0,0 L900,0 L900,300 L0,300 Z', 'url(#warningGrad)', 'none', 0));
+
+            // G1: Double exclamation marks
+            [[380,130],[480,130]].forEach(([ex,ey]) => {
+                add(1, pathEl(`M${ex-10},${ey-70} L${ex+10},${ey-70} L${ex+5},${ey} L${ex-5},${ey} Z`,
+                    '#FFD54F', '#FFA000', 2, 'round'));
+                add(1, el('circle', { cx: ex, cy: ey+18, r: 10, fill: '#FFD54F', stroke: '#FFA000', 'stroke-width': 2 }));
+            });
+            // Intense glow
+            add(1, el('circle', { cx: 430, cy: 110, r: 100, fill: 'url(#goldenGlow)' }));
+
+            // G2: More radiating lines (stronger warning)
+            for (let i = 0; i < 16; i++) {
+                const rad = (i * 22.5) * Math.PI / 180;
+                add(2, lineEl(
+                    430 + 110*Math.cos(rad), 110 + 110*Math.sin(rad),
+                    430 + 145*Math.cos(rad), 110 + 145*Math.sin(rad),
+                    '#FFD54F', 2.5));
+            }
+
+            // G3: Ground shaking more intensely
+            add(3, pathEl('M0,300 L900,300 L900,506 L0,506 Z', '#37474F', '#263238', 2));
+            // More cracks
+            for (let i = 0; i < 8; i++) {
+                const cx = 50 + i * 110;
+                add(3, pathEl(`M${cx},300 L${cx+10},340 L${cx-5},380 L${cx+15},420 L${cx},460 L${cx+8},506`,
+                    'none', '#1a1a1a', 1.5, 'round'));
+            }
+
+            // G4: "THUMMA KALLA!" text - even larger
+            add(4, textEl('THUMMA', 430, 240, { size: 36, color: '#FFE082', weight: 700 }));
+            add(4, textEl('KALLA!', 430, 280, { size: 60, color: '#FFD54F', weight: 700 }));
+
+            // G5: Worldly things crumbling and falling
+            // Falling coins
+            [[150,320],[200,350],[250,330],[650,340],[700,320],[750,355]].forEach(([cx,cy]) => {
+                add(5, el('ellipse', { cx, cy, rx: 8, ry: 3, fill: '#FFD54F', opacity: 0.6,
+                    transform: `rotate(${Math.random()*45}, ${cx}, ${cy})` }));
+            });
+            // Falling building blocks
+            [[300,360],[350,340],[550,350],[600,370]].forEach(([bx,by]) => {
+                add(5, pathEl(`M${bx},${by} L${bx+15},${by} L${bx+15},${by+12} L${bx},${by+12} Z`,
+                    '#795548', '#5D4037', 1, 'round'));
+            });
+
+            // G6: More shocked figures, hands on heads
+            [[200,400],[350,410],[500,405],[650,400],[800,410]].forEach(([fx,fy]) => {
+                add(6, el('ellipse', { cx: fx, cy: fy+12, rx: 7, ry: 2.5, fill: 'rgba(0,0,0,0.1)' }));
+                add(6, pathEl(`M${fx-6},${fy-6} Q${fx-8},${fy+2} ${fx-8},${fy+10} L${fx+8},${fy+10} Q${fx+8},${fy+2} ${fx+6},${fy-6} Z`,
+                    '#CFD8DC', '#78909C', 0.8, 'round'));
+                add(6, el('circle', { cx: fx, cy: fy-12, r: 5.5, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.6 }));
+                // Hands on head (shock)
+                add(6, pathEl(`M${fx-5},${fy-15} Q${fx-8},${fy-20} ${fx-4},${fy-20}`, 'none', '#FFCC80', 2, 'round'));
+                add(6, pathEl(`M${fx+5},${fy-15} Q${fx+8},${fy-20} ${fx+4},${fy-20}`, 'none', '#FFCC80', 2, 'round'));
+            });
+
+            // G7: More lightning bolts
+            add(7, pathEl('M100,50 L120,100 L110,100 L130,150', 'none', '#FFD54F', 3.5, 'round'));
+            add(7, pathEl('M300,30 L315,80 L305,80 L320,130', 'none', '#FFD54F', 3, 'round'));
+            add(7, pathEl('M600,40 L615,90 L605,90 L625,140', 'none', '#FFD54F', 3, 'round'));
+            add(7, pathEl('M800,60 L815,110 L805,110 L825,160', 'none', '#FFD54F', 3.5, 'round'));
+
+            // G8: Explosive sparks
+            [[150,180],[250,150],[350,200],[550,170],[650,200],[750,160]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G9: Title
+            add(9, textEl('"Then no! You will surely come to know!"', 450, 480, { size: 22, color: '#FFE082', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: IF YOU ONLY KNEW WITH CERTAINTY =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep contemplative blue-purple sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: Stars scattered across sky
+            for (let i = 0; i < 30; i++) {
+                const sx = 20 + Math.random() * 860;
+                const sy = 20 + Math.random() * 200;
+                add(1, cartoonStar(sx, sy, 2 + Math.random()*2, 1, '#FFF9C4', '#FFD54F'));
+            }
+
+            // G2: Large open eye symbol (representing knowledge/certainty)
+            // Eye outline
+            add(2, pathEl('M300,200 Q450,100 600,200 Q450,300 300,200 Z',
+                'rgba(225,245,254,0.1)', '#81D4FA', 3, 'round'));
+            // Iris
+            add(2, el('circle', { cx: 450, cy: 200, r: 40, fill: 'url(#eyeGlowGrad)', stroke: '#4FC3F7', 'stroke-width': 2 }));
+            // Pupil
+            add(2, el('circle', { cx: 450, cy: 200, r: 18, fill: '#0D47A1', stroke: '#1565C0', 'stroke-width': 1.5 }));
+            // Light reflection
+            add(2, el('circle', { cx: 440, cy: 192, r: 6, fill: 'rgba(255,255,255,0.7)' }));
+            add(2, el('circle', { cx: 455, cy: 195, r: 3, fill: 'rgba(255,255,255,0.5)' }));
+
+            // G3: Radiating light from the eye (knowledge illuminating)
+            for (let i = 0; i < 16; i++) {
+                const rad = (i * 22.5) * Math.PI / 180;
+                add(3, lineEl(
+                    450 + 55*Math.cos(rad), 200 + 55*Math.sin(rad),
+                    450 + 85*Math.cos(rad), 200 + 85*Math.sin(rad),
+                    '#4FC3F7', 1.5));
+            }
+            add(3, el('circle', { cx: 450, cy: 200, r: 70, fill: 'rgba(79,195,247,0.08)' }));
+
+            // G4: "ILM AL-YAQIN" text (Knowledge of Certainty)
+            add(4, textEl("'ILM AL-YAQIN", 450, 330, { size: 32, color: '#81D4FA', weight: 700 }));
+            add(4, textEl('Knowledge of Certainty', 450, 360, { size: 18, color: '#4FC3F7', weight: 600 }));
+
+            // G5: Scales of truth / open book symbol
+            // Open book
+            add(5, pathEl('M350,380 Q400,400 450,380 Q500,400 550,380 L550,440 Q500,420 450,440 Q400,420 350,440 Z',
+                '#1a1a2e', '#4FC3F7', 1.5, 'round'));
+            // Pages
+            add(5, lineEl(450, 380, 450, 440, '#4FC3F7', 1));
+            // Text lines on book
+            [[370,400],[390,410],[410,405],[490,400],[510,410],[530,405]].forEach(([lx,ly]) => {
+                add(5, lineEl(lx, ly, lx+20, ly, 'rgba(79,195,247,0.4)', 1));
+            });
+
+            // G6: Fading worldly symbols vs clear truth
+            // Faded gold (worldly) on left
+            add(6, el('ellipse', { cx: 150, cy: 250, rx: 15, ry: 6, fill: '#FFD54F', opacity: 0.15 }));
+            add(6, el('ellipse', { cx: 180, cy: 270, rx: 12, ry: 5, fill: '#FFD54F', opacity: 0.1 }));
+            add(6, el('ellipse', { cx: 130, cy: 280, rx: 10, ry: 4, fill: '#FFD54F', opacity: 0.08 }));
+            // Bright truth symbols on right
+            add(6, cartoonSparkle(750, 250, 8));
+            add(6, cartoonSparkle(780, 280, 6));
+            add(6, cartoonSparkle(720, 270, 7));
+
+            // G7: Contemplative figure sitting
+            add(7, el('ellipse', { cx: 150, cy: 430, rx: 12, ry: 4, fill: 'rgba(0,0,0,0.15)' }));
+            add(7, pathEl('M140,400 Q138,415 138,425 L162,425 Q162,415 160,400 Z',
+                '#ECEFF1', '#78909C', 1, 'round'));
+            add(7, el('circle', { cx: 150, cy: 392, r: 8, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.8 }));
+            // Hand on chin (thinking)
+            add(7, pathEl('M155,400 Q160,395 158,390', 'none', '#FFCC80', 2, 'round'));
+
+            // G8: Thought bubbles leading to eye
+            [[180,370],[210,340],[250,310],[300,270]].forEach(([bx,by], i) => {
+                add(8, el('circle', { cx: bx, cy: by, r: 4 + i*2, fill: 'rgba(79,195,247,0.15)', stroke: '#4FC3F7', 'stroke-width': 0.5 }));
+            });
+
+            // G9: Title
+            add(9, textEl('"If only you knew with certainty"', 450, 480, { size: 24, color: '#81D4FA', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 6: YOU WILL SURELY SEE THE HELLFIRE =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark fiery background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#1a0a0a', 'none', 0));
+            add(0, pathEl('M0,300 L900,300 L900,506 L0,506 Z', 'url(#fireGrad)', 'none', 0));
+
+            // G1: Massive fire rising from below
+            // Large flame shapes
+            add(1, pathEl('M300,506 Q280,380 350,300 Q380,250 400,280 Q420,200 450,250 Q480,180 500,250 Q520,200 550,280 Q580,250 600,300 Q650,380 630,506 Z',
+                'url(#fireGlowGrad)', '#FF6D00', 2, 'round'));
+            // Inner flame
+            add(1, pathEl('M380,506 Q370,400 400,340 Q420,290 450,320 Q480,270 500,320 Q520,290 540,340 Q560,400 550,506 Z',
+                '#FFAB00', '#FF8F00', 1.5, 'round'));
+            // Core flame
+            add(1, pathEl('M420,506 Q415,420 440,370 Q450,340 460,370 Q480,420 475,506 Z',
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+
+            // G2: Fire glow and embers
+            add(2, el('circle', { cx: 450, cy: 350, r: 150, fill: 'url(#fireRadial)' }));
+            // Embers floating up
+            [[200,200],[300,150],[350,180],[450,120],[550,160],[600,140],[700,200],[250,250],[650,230]].forEach(([ex,ey]) => {
+                add(2, el('circle', { cx: ex, cy: ey, r: 2 + Math.random()*3, fill: '#FF6D00', opacity: 0.5 + Math.random()*0.3 }));
+            });
+
+            // G3: "AL-JAHIM" text
+            add(3, textEl('AL-JAHIM', 450, 80, { size: 48, color: '#FF6F00', weight: 700 }));
+            add(3, textEl('The Blazing Fire', 450, 115, { size: 20, color: '#FFB74D', weight: 600 }));
+
+            // G4: Dark smoke rising
+            add(4, pathEl('M150,300 Q130,200 160,120 Q170,80 140,40', 'none', 'rgba(50,50,50,0.4)', 8, 'round'));
+            add(4, pathEl('M750,280 Q770,180 740,100 Q730,60 760,20', 'none', 'rgba(50,50,50,0.4)', 8, 'round'));
+            add(4, pathEl('M350,320 Q330,230 360,150', 'none', 'rgba(50,50,50,0.25)', 6, 'round'));
+            add(4, pathEl('M550,310 Q570,220 540,140', 'none', 'rgba(50,50,50,0.25)', 6, 'round'));
+
+            // G5: Frightened figures at the edges
+            [[80,350],[170,360],[730,355],[820,345]].forEach(([fx,fy]) => {
+                add(5, pathEl(`M${fx-6},${fy-5} Q${fx-8},${fy+3} ${fx-8},${fy+10} L${fx+8},${fy+10} Q${fx+8},${fy+3} ${fx+6},${fy-5} Z`,
+                    '#ECEFF1', '#90A4AE', 0.8, 'round'));
+                add(5, el('circle', { cx: fx, cy: fy-11, r: 5, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.6 }));
+                // Arms up in fear
+                add(5, pathEl(`M${fx-6},${fy-3} L${fx-14},${fy-15}`, 'none', '#FFCC80', 2, 'round'));
+                add(5, pathEl(`M${fx+6},${fy-3} L${fx+14},${fy-15}`, 'none', '#FFCC80', 2, 'round'));
+            });
+
+            // G6: Side flames
+            add(6, pathEl('M0,506 Q20,400 50,350 Q70,300 40,250 Q60,200 30,150',
+                'none', '#E65100', 4, 'round'));
+            add(6, pathEl('M900,506 Q880,400 850,350 Q830,300 860,250 Q840,200 870,150',
+                'none', '#E65100', 4, 'round'));
+
+            // G7: Sparks
+            [[100,250],[200,200],[300,180],[450,150],[600,190],[700,210],[800,240]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 3 + Math.random()*3));
+            });
+
+            // G8: Dark overlay at top
+            add(8, pathEl('M0,0 L900,0 L900,60 L0,60 Z', 'rgba(0,0,0,0.3)', 'none', 0));
+
+            // G9: Title
+            add(9, textEl('"You will surely see the Hellfire"', 450, 480, { size: 24, color: '#FF8F00', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 7: SEE IT WITH THE EYE OF CERTAINTY =====
+        function buildVerse7() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Intense dark red background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#1a0505', 'none', 0));
+
+            // G1: Even larger fire - filling more of screen
+            add(1, pathEl('M100,506 Q80,350 200,280 Q250,220 300,260 Q340,180 400,230 Q440,150 500,220 Q540,150 600,230 Q650,180 700,260 Q750,220 800,280 Q900,350 880,506 Z',
+                'url(#fireGlowGrad)', '#FF6D00', 2.5, 'round'));
+            add(1, pathEl('M250,506 Q240,380 320,310 Q360,260 400,290 Q440,220 480,270 Q520,220 560,290 Q600,260 640,310 Q700,380 690,506 Z',
+                '#FFAB00', '#FF8F00', 2, 'round'));
+            add(1, pathEl('M350,506 Q345,400 400,350 Q430,310 460,340 Q490,310 520,350 Q560,400 555,506 Z',
+                '#FFF9C4', '#FFD54F', 1.5, 'round'));
+
+            // G2: Giant open eye overlaid (seeing with certainty)
+            add(2, pathEl('M250,150 Q450,50 650,150 Q450,250 250,150 Z',
+                'rgba(255,111,0,0.15)', '#FF8F00', 2, 'round'));
+            add(2, el('circle', { cx: 450, cy: 150, r: 35, fill: '#FF6F00', stroke: '#E65100', 'stroke-width': 2 }));
+            add(2, el('circle', { cx: 450, cy: 150, r: 15, fill: '#1a0505', stroke: '#BF360C', 'stroke-width': 1.5 }));
+            add(2, el('circle', { cx: 443, cy: 144, r: 5, fill: 'rgba(255,255,255,0.5)' }));
+
+            // G3: "'AYN AL-YAQIN" text
+            add(3, textEl("'AYN AL-YAQIN", 450, 80, { size: 36, color: '#FFB74D', weight: 700 }));
+            add(3, textEl('Eye of Certainty', 450, 110, { size: 18, color: '#FF8F00', weight: 600 }));
+
+            // G4: Fire glow
+            add(4, el('circle', { cx: 450, cy: 400, r: 180, fill: 'url(#fireRadial)' }));
+            // More embers
+            for (let i = 0; i < 15; i++) {
+                add(4, el('circle', { cx: 100+Math.random()*700, cy: 100+Math.random()*300,
+                    r: 1.5+Math.random()*2.5, fill: '#FF6D00', opacity: 0.4+Math.random()*0.4 }));
+            }
+
+            // G5: Heavy smoke
+            add(5, pathEl('M100,350 Q80,250 120,150 Q130,80 90,20', 'none', 'rgba(60,60,60,0.5)', 12, 'round'));
+            add(5, pathEl('M800,340 Q820,240 780,140 Q770,70 810,10', 'none', 'rgba(60,60,60,0.5)', 12, 'round'));
+
+            // G6: Figures witnessing - cannot look away
+            [[100,300],[200,310],[700,305],[800,310]].forEach(([fx,fy]) => {
+                add(6, pathEl(`M${fx-5},${fy-4} Q${fx-7},${fy+2} ${fx-7},${fy+9} L${fx+7},${fy+9} Q${fx+7},${fy+2} ${fx+5},${fy-4} Z`,
+                    '#CFD8DC', '#78909C', 0.8, 'round'));
+                add(6, el('circle', { cx: fx, cy: fy-10, r: 5, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.6 }));
+                // Wide open eyes staring
+                add(6, el('circle', { cx: fx-2, cy: fy-11, r: 2, fill: '#FFF', stroke: '#333', 'stroke-width': 0.5 }));
+                add(6, el('circle', { cx: fx+2, cy: fy-11, r: 2, fill: '#FFF', stroke: '#333', 'stroke-width': 0.5 }));
+                add(6, el('circle', { cx: fx-2, cy: fy-11, r: 1, fill: '#1a0505' }));
+                add(6, el('circle', { cx: fx+2, cy: fy-11, r: 1, fill: '#1a0505' }));
+            });
+
+            // G7: Radiating heat lines
+            for (let i = 0; i < 20; i++) {
+                const hx = 100 + i * 40;
+                add(7, pathEl(`M${hx},280 Q${hx+5},270 ${hx+10},280 Q${hx+15},290 ${hx+20},280`,
+                    'none', 'rgba(255,111,0,0.25)', 1.5, 'round'));
+            }
+
+            // G8: Sparks and embers
+            [[150,250],[250,200],[350,230],[550,220],[650,240],[750,200]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 3 + Math.random()*4));
+            });
+
+            // G9: Title
+            add(9, textEl('"You will see it with the eye of certainty"', 450, 480, { size: 22, color: '#FFB74D', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 8: ASKED ABOUT EVERY BLESSING =====
+        function buildVerse8() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Soft golden light - day of accounting
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#FFF9F0', 'none', 0));
+            add(0, pathEl('M0,0 L900,0 L900,200 L0,200 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Heavenly light from above center
+            add(1, pathEl('M380,0 L320,200 L580,200 L520,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(1, pathEl('M410,0 L370,200 L530,200 L490,0 Z', 'rgba(255,249,196,0.4)', 'none', 0));
+            add(1, el('circle', { cx: 450, cy: 50, r: 60, fill: 'url(#goldenGlow)' }));
+
+            // G2: Large scale / balance (Day of Judgment)
+            // Center pillar
+            add(2, pathEl('M445,150 L455,150 L455,350 L445,350 Z', 'url(#scaleGrad)', '#A68529', 1.5, 'round'));
+            // Top beam
+            add(2, pathEl('M300,150 L600,150', 'none', '#C9A84C', 4, 'round'));
+            // Top triangle
+            add(2, pathEl('M430,130 L450,110 L470,130', '#C9A84C', '#A68529', 1.5, 'round'));
+            // Left pan (blessings)
+            add(2, pathEl('M300,150 L280,250', 'none', '#A68529', 1.5, 'round'));
+            add(2, pathEl('M300,150 L320,250', 'none', '#A68529', 1.5, 'round'));
+            add(2, pathEl('M260,250 Q300,260 340,250', '#FFE082', '#C9A84C', 1.5, 'round'));
+            // Right pan (deeds)
+            add(2, pathEl('M600,150 L580,230', 'none', '#A68529', 1.5, 'round'));
+            add(2, pathEl('M600,150 L620,230', 'none', '#A68529', 1.5, 'round'));
+            add(2, pathEl('M560,230 Q600,240 640,230', '#FFE082', '#C9A84C', 1.5, 'round'));
+
+            // G3: Blessings on left pan (icons)
+            // Food
+            add(3, el('circle', { cx: 280, cy: 240, r: 8, fill: '#E53935', stroke: '#C62828', 'stroke-width': 0.8 }));
+            add(3, el('circle', { cx: 280, cy: 237, r: 2, fill: '#4CAF50' }));
+            // Water drop
+            add(3, pathEl('M300,235 Q305,225 310,235 Q305,245 300,235 Z', '#4FC3F7', '#0288D1', 1, 'round'));
+            // Heart (health)
+            add(3, pathEl('M318,238 Q318,230 325,230 Q332,230 332,238 L325,248 L318,238 Z',
+                '#E91E63', '#C2185B', 1, 'round'));
+            // Small house (shelter)
+            add(3, pathEl('M280,248 L295,248 L295,260 L280,260 Z', '#8D6E63', '#5D4037', 0.8, 'round'));
+            add(3, pathEl('M277,248 L287.5,238 L298,248', 'none', '#6D4C41', 1.2, 'round'));
+
+            // G4: Question marks floating around
+            [[150,180],[250,120],[400,200],[500,190],[650,130],[750,180],[350,280],[550,290]].forEach(([qx,qy]) => {
+                add(4, textEl('?', qx, qy, { size: 24 + Math.random()*16, color: '#C9A84C', weight: 700 }));
+            });
+
+            // G5: "AN-NA'IM" text
+            add(5, textEl("AN-NA'IM", 450, 380, { size: 36, color: '#C9A84C', weight: 700 }));
+            add(5, textEl('The Blessings / Pleasures', 450, 410, { size: 18, color: '#A68529', weight: 600 }));
+
+            // G6: Blessing icons scattered around bottom
+            // Clock (time)
+            add(6, el('circle', { cx: 120, cy: 400, r: 18, fill: '#FFF9F0', stroke: '#C9A84C', 'stroke-width': 2 }));
+            add(6, lineEl(120, 400, 120, 388, '#333', 1.5));
+            add(6, lineEl(120, 400, 130, 400, '#333', 1.5));
+            // Eye (sight)
+            add(6, pathEl('M700,390 Q720,375 740,390 Q720,405 700,390 Z', '#FFF', '#C9A84C', 1.5, 'round'));
+            add(6, el('circle', { cx: 720, cy: 390, r: 5, fill: '#5D4037' }));
+            // Family (children)
+            add(6, el('circle', { cx: 810, cy: 388, r: 6, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.6 }));
+            add(6, el('circle', { cx: 800, cy: 400, r: 4, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.5 }));
+            add(6, el('circle', { cx: 820, cy: 400, r: 4, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.5 }));
+
+            // G7: Sparkles
+            [[200,300],[350,320],[550,310],[700,300],[150,350],[750,340]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*4));
+            });
+
+            // G8: Clouds
+            add(8, cartoonCloud(130, 50, 0.5));
+            add(8, cartoonCloud(770, 45, 0.45));
+
+            // G9: Title
+            add(9, textEl('"You will be asked about every blessing"', 450, 475, { size: 22, color: '#795548', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>

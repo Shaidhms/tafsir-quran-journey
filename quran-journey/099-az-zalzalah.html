@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Az-Zalzalah - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 99 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الزَّلْزَلَةِ</div>
+        <h1>Surah Az-Zalzalah</h1>
+        <p>The Earthquake - 8 Verses - Madinan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 8</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">99</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">8</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">36</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Madinah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Earthquake</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Day of Judgment</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>Surah Az-Zalzalah paints one of the most vivid pictures of the <span class="highlight">Day of Judgment</span> in the entire Quran. In just 8 short verses, it describes the terrifying earthquake that will mark the end of this world and the beginning of the next.</p>
+                <p>The earth, which we walk upon every day thinking it is stable, will be <span class="highlight">violently shaken</span>. It will throw out everything hidden within it: the dead bodies, the treasures, and all the secrets buried inside it.</p>
+                <div class="important">
+                    <p>The most powerful message of this surah comes in the last two verses: even an atom's weight of good or evil will be shown to you on that Day. Nothing is too small to matter. Every deed counts, no matter how tiny it seems.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>Ibn Kathir narrates that when this surah was revealed, Abu Bakr (may Allah be pleased with him) wept and said, <span class="highlight">"This verse will destroy me!"</span> referring to the verse about an atom's weight of evil. The Prophet (peace be upon him) reassured him. This shows how seriously the companions took the weight of every single deed.</p>
+                <p>As-Sa'di explains that this surah teaches us that the <span class="highlight">earth itself will be a witness</span> on the Day of Judgment. It will speak and testify about everything that happened on its surface. Every prayer, every act of charity, every sin, every moment of kindness or cruelty, the earth recorded it all.</p>
+            </section>
+
+            <!-- Verse by Verse -->
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">إِذَا زُلْزِلَتِ الْأَرْضُ زِلْزَالَهَا</div>
+                    <div class="verse-transliteration">Idha zulzilat-il ardu zilzalaha</div>
+                    <div class="verse-translation">When the earth is shaken with its final earthquake.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                            <div class="word-chip"><span class="ar">زُلْزِلَتِ</span><span class="trans">zulzilat</span><span class="meaning">Is shaken</span></div>
+                            <div class="word-chip"><span class="ar">الْأَرْضُ</span><span class="trans">al-ardu</span><span class="meaning">The earth</span></div>
+                            <div class="word-chip"><span class="ar">زِلْزَالَهَا</span><span class="trans">zilzalaha</span><span class="meaning">Its (final) earthquake</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The word "zalzalah" means a violent shaking or earthquake. But this is not just any earthquake. The addition of "zilzalaha" (its earthquake) means the ultimate, final earthquake that belongs to the earth itself. It is the earthquake that will end all of creation. Ibn Kathir says this is the earthquake of the Hour (Day of Judgment) that will level every mountain and flatten every structure.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">وَأَخْرَجَتِ الْأَرْضُ أَثْقَالَهَا</div>
+                    <div class="verse-transliteration">Wa akhrajat-il ardu athqalaha</div>
+                    <div class="verse-translation">And the earth discharges its burdens.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَأَخْرَجَتِ</span><span class="trans">wa akhrajat</span><span class="meaning">And throws out</span></div>
+                            <div class="word-chip"><span class="ar">الْأَرْضُ</span><span class="trans">al-ardu</span><span class="meaning">The earth</span></div>
+                            <div class="word-chip"><span class="ar">أَثْقَالَهَا</span><span class="trans">athqalaha</span><span class="meaning">Its burdens / heavy loads</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Athqal" means heavy loads or burdens. The earth will throw out everything hidden inside it: the dead who were buried, the treasures that were hoarded, and the secrets that were concealed. Ibn Kathir explains this includes the dead bodies that will be resurrected, and also the treasures of gold and silver. As-Sa'di adds that the earth will expel everything within it as a sign that this world is truly over.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">وَقَالَ الْإِنسَانُ مَا لَهَا</div>
+                    <div class="verse-transliteration">Wa qal-al insanu ma laha</div>
+                    <div class="verse-translation">And man says, "What is wrong with it?"</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَقَالَ</span><span class="trans">wa qala</span><span class="meaning">And says</span></div>
+                            <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human being</span></div>
+                            <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What</span></div>
+                            <div class="word-chip"><span class="ar">لَهَا</span><span class="trans">laha</span><span class="meaning">Is wrong with it</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>When this massive earthquake happens, humans will be in total shock and confusion. They will cry out, "What is happening to the earth?!" This shows the sheer terror and bewilderment of that moment. People had lived their entire lives on this earth thinking it was permanent and stable, but now it is shaking apart beneath them. As-Sa'di notes that this question reflects the utter helplessness of mankind on that Day.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">يَوْمَئِذٍ تُحَدِّثُ أَخْبَارَهَا</div>
+                    <div class="verse-transliteration">Yawma-idhin tuhaddithu akhbaraha</div>
+                    <div class="verse-translation">That Day, it will report its news.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma-idhin</span><span class="meaning">That Day</span></div>
+                            <div class="word-chip"><span class="ar">تُحَدِّثُ</span><span class="trans">tuhaddithu</span><span class="meaning">It will report / tell</span></div>
+                            <div class="word-chip"><span class="ar">أَخْبَارَهَا</span><span class="trans">akhbaraha</span><span class="meaning">Its news / stories</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The earth itself will speak on the Day of Judgment! It will testify about everything that happened on its surface. The Prophet (peace be upon him) asked his companions, "Do you know what its news is?" They said, "Allah and His Messenger know best." He said, "Its news is that it will testify about every servant, male and female, about what they did on its surface." (Reported by At-Tirmidhi) Every spot of ground you prayed on, or sinned on, will speak as a witness.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">بِأَنَّ رَبَّكَ أَوْحَىٰ لَهَا</div>
+                    <div class="verse-transliteration">Bi-anna rabbaka awha laha</div>
+                    <div class="verse-translation">Because your Lord has commanded it.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">بِأَنَّ</span><span class="trans">bi-anna</span><span class="meaning">Because</span></div>
+                            <div class="word-chip"><span class="ar">رَبَّكَ</span><span class="trans">rabbaka</span><span class="meaning">Your Lord</span></div>
+                            <div class="word-chip"><span class="ar">أَوْحَىٰ</span><span class="trans">awha</span><span class="meaning">Has inspired / commanded</span></div>
+                            <div class="word-chip"><span class="ar">لَهَا</span><span class="trans">laha</span><span class="meaning">To it (the earth)</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>Why will the earth speak? Because Allah commanded it to. The word "awha" means to inspire or command. Allah has absolute control over all of creation, even the earth beneath our feet obeys Him. When He commands it to speak, it will speak. As-Sa'di explains that this shows Allah's complete dominion over everything. Nothing in the universe can disobey His command.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">يَوْمَئِذٍ يَصْدُرُ النَّاسُ أَشْتَاتًا لِّيُرَوْا أَعْمَالَهُمْ</div>
+                    <div class="verse-transliteration">Yawma-idhin yasdur-un nasu ashtatan li-yuraw a'malahum</div>
+                    <div class="verse-translation">That Day, people will depart separated to be shown their deeds.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma-idhin</span><span class="meaning">That Day</span></div>
+                            <div class="word-chip"><span class="ar">يَصْدُرُ</span><span class="trans">yasduru</span><span class="meaning">Will depart / come forth</span></div>
+                            <div class="word-chip"><span class="ar">النَّاسُ</span><span class="trans">an-nasu</span><span class="meaning">The people</span></div>
+                            <div class="word-chip"><span class="ar">أَشْتَاتًا</span><span class="trans">ashtatan</span><span class="meaning">Separated / in groups</span></div>
+                            <div class="word-chip"><span class="ar">لِّيُرَوْا</span><span class="trans">li-yuraw</span><span class="meaning">To be shown</span></div>
+                            <div class="word-chip"><span class="ar">أَعْمَالَهُمْ</span><span class="trans">a'malahum</span><span class="meaning">Their deeds</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>On that Day, people will emerge from their graves and go forth in different groups. Some will be heading toward Paradise, others toward the Hellfire. The word "ashtatan" means scattered and separated. Families, friends, nations will all be split apart based on their deeds. The purpose? To be shown exactly what they did in their lives. Ibn Kathir explains that each person will see their complete record, nothing hidden, nothing forgotten.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">فَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ</div>
+                    <div class="verse-transliteration">Faman ya'mal mithqala dharratin khayran yarah</div>
+                    <div class="verse-translation">Whoever does an atom's weight of good will see it.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فَمَن</span><span class="trans">faman</span><span class="meaning">So whoever</span></div>
+                            <div class="word-chip"><span class="ar">يَعْمَلْ</span><span class="trans">ya'mal</span><span class="meaning">Does</span></div>
+                            <div class="word-chip"><span class="ar">مِثْقَالَ</span><span class="trans">mithqala</span><span class="meaning">Weight of</span></div>
+                            <div class="word-chip"><span class="ar">ذَرَّةٍ</span><span class="trans">dharratin</span><span class="meaning">An atom / a speck</span></div>
+                            <div class="word-chip"><span class="ar">خَيْرًا</span><span class="trans">khayran</span><span class="meaning">Good</span></div>
+                            <div class="word-chip"><span class="ar">يَرَهُ</span><span class="trans">yarah</span><span class="meaning">Will see it</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This is one of the most famous verses in the Quran. "Dharrah" originally meant the smallest ant or a tiny speck of dust visible in a ray of sunlight. Allah is saying: even the tiniest good deed will be recorded and shown to you. A smile, a kind word, removing a stone from someone's path, giving even half a date in charity. Nothing is too small. Ibn Kathir says this verse is a source of great hope for the believers: no good deed is ever wasted.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">8</div>
+                    <div class="verse-arabic">وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ شَرًّا يَرَهُ</div>
+                    <div class="verse-transliteration">Wa man ya'mal mithqala dharratin sharran yarah</div>
+                    <div class="verse-translation">And whoever does an atom's weight of evil will see it.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَمَن</span><span class="trans">wa man</span><span class="meaning">And whoever</span></div>
+                            <div class="word-chip"><span class="ar">يَعْمَلْ</span><span class="trans">ya'mal</span><span class="meaning">Does</span></div>
+                            <div class="word-chip"><span class="ar">مِثْقَالَ</span><span class="trans">mithqala</span><span class="meaning">Weight of</span></div>
+                            <div class="word-chip"><span class="ar">ذَرَّةٍ</span><span class="trans">dharratin</span><span class="meaning">An atom / a speck</span></div>
+                            <div class="word-chip"><span class="ar">شَرًّا</span><span class="trans">sharran</span><span class="meaning">Evil</span></div>
+                            <div class="word-chip"><span class="ar">يَرَهُ</span><span class="trans">yarah</span><span class="meaning">Will see it</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The mirror image of the previous verse. Just as no good deed is too small to count, no evil deed is too small to be recorded either. A lie, a hurtful glance, a moment of arrogance, backbiting about someone - it all adds up. This verse is a warning: do not dismiss any sin as "small." As-Sa'di explains that this should make a believer cautious about every action, because Allah's accounting is precise and complete. The solution? Repentance (tawbah) can erase sins before that Day comes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Az-Zalzalah</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Every deed matters, no matter how small.</strong><p style="color: #999; font-size: 0.95em;">An atom's weight of good or evil will be shown to you. Never belittle a good deed and never dismiss a sin as insignificant.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The earth is a witness over us.</strong><p style="color: #999; font-size: 0.95em;">Every spot of ground you walk on records what you do. The earth will testify on the Day of Judgment about everything that happened on its surface.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The Day of Judgment is real and terrifying.</strong><p style="color: #999; font-size: 0.95em;">The earthquake that ends this world will be unlike anything humanity has ever experienced. Preparation for that Day should be our top priority.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah's command is absolute.</strong><p style="color: #999; font-size: 0.95em;">When Allah commands the earth to speak, it speaks. Nothing in creation can disobey Him. This should fill us with awe and motivate us to obey Him.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">People will be separated by their deeds.</strong><p style="color: #999; font-size: 0.95em;">On that Day, no wealth, family name, or status will matter. People will be grouped solely based on what they did in this life.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. The hadith about the earth testifying is reported by At-Tirmidhi and classified as hasan. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0625\u0650\u0630\u064E\u0627 \u0632\u064F\u0644\u0652\u0632\u0650\u0644\u064E\u062A\u0650 \u0627\u0644\u0652\u0623\u064E\u0631\u0652\u0636\u064F \u0632\u0650\u0644\u0652\u0632\u064E\u0627\u0644\u064E\u0647\u064E\u0627',
+                translit: "Idha zulzilat-il ardu zilzalaha",
+                explanation: "When the earth shakes with a massive earthquake on the Last Day - the ground beneath us will crack and tremble like never before!",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u0648\u064E\u0623\u064E\u062E\u0652\u0631\u064E\u062C\u064E\u062A\u0650 \u0627\u0644\u0652\u0623\u064E\u0631\u0652\u0636\u064F \u0623\u064E\u062B\u0652\u0642\u064E\u0627\u0644\u064E\u0647\u064E\u0627',
+                translit: "Wa akhrajat-il ardu athqalaha",
+                explanation: "The earth throws out everything buried inside it - the dead, the treasures, all the heavy secrets hidden underground come bursting out!",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u0648\u064E\u0642\u064E\u0627\u0644\u064E \u0627\u0644\u0652\u0625\u0650\u0646\u0633\u064E\u0627\u0646\u064F \u0645\u064E\u0627 \u0644\u064E\u0647\u064E\u0627',
+                translit: "Wa qal-al insanu ma laha",
+                explanation: "People cry out in shock: 'What is happening to the earth?!' They can't believe what they are seeing - total confusion and fear!",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u064A\u064E\u0648\u0652\u0645\u064E\u0626\u0650\u0630\u064D \u062A\u064F\u062D\u064E\u062F\u0651\u0650\u062B\u064F \u0623\u064E\u062E\u0652\u0628\u064E\u0627\u0631\u064E\u0647\u064E\u0627',
+                translit: "Yawma-idhin tuhaddithu akhbaraha",
+                explanation: "On that Day, the earth will actually SPEAK! It will tell stories about everything that happened on it - every deed, every step, every prayer.",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u0628\u0650\u0623\u064E\u0646\u0651\u064E \u0631\u064E\u0628\u0651\u064E\u0643\u064E \u0623\u064E\u0648\u0652\u062D\u064E\u0649\u0670 \u0644\u064E\u0647\u064E\u0627',
+                translit: "Bi-anna rabbaka awha laha",
+                explanation: "Why will the earth speak? Because Allah commanded it to! When Allah gives an order, everything in creation obeys - even the ground!",
+                build: buildVerse5
+            },
+            {
+                num: 6,
+                arabic: '\u064A\u064E\u0648\u0652\u0645\u064E\u0626\u0650\u0630\u064D \u064A\u064E\u0635\u0652\u062F\u064F\u0631\u064F \u0627\u0644\u0646\u0651\u064E\u0627\u0633\u064F \u0623\u064E\u0634\u0652\u062A\u064E\u0627\u062A\u064B\u0627 \u0644\u0651\u0650\u064A\u064F\u0631\u064E\u0648\u0652\u0627 \u0623\u064E\u0639\u0652\u0645\u064E\u0627\u0644\u064E\u0647\u064F\u0645\u0652',
+                translit: "Yawma-idhin yasdur-un nasu ashtatan li-yuraw a'malahum",
+                explanation: "People will come out of their graves in scattered groups - some heading to Paradise, others to punishment - all to see their deeds!",
+                build: buildVerse6
+            },
+            {
+                num: 7,
+                arabic: '\u0641\u064E\u0645\u064E\u0646 \u064A\u064E\u0639\u0652\u0645\u064E\u0644\u0652 \u0645\u0650\u062B\u0652\u0642\u064E\u0627\u0644\u064E \u0630\u064E\u0631\u0651\u064E\u0629\u064D \u062E\u064E\u064A\u0652\u0631\u064B\u0627 \u064A\u064E\u0631\u064E\u0647\u064F',
+                translit: "Faman ya'mal mithqala dharratin khayran yarah",
+                explanation: "Even the tiniest good deed - like a smile or a kind word - will be shown to you. Nothing good is ever wasted!",
+                build: buildVerse7
+            },
+            {
+                num: 8,
+                arabic: '\u0648\u064E\u0645\u064E\u0646 \u064A\u064E\u0639\u0652\u0645\u064E\u0644\u0652 \u0645\u0650\u062B\u0652\u0642\u064E\u0627\u0644\u064E \u0630\u064E\u0631\u0651\u064E\u0629\u064D \u0634\u064E\u0631\u0651\u064B\u0627 \u064A\u064E\u0631\u064E\u0647\u064F',
+                translit: "Wa man ya'mal mithqala dharratin sharran yarah",
+                explanation: "And even the tiniest bad deed will be shown too. No sin is too small to be recorded. But there's hope - repentance can erase it!",
+                build: buildVerse8
+            }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            defs.appendChild(createLinearGrad('skyGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyDramatic', '0%','0%','0%','100%',
+                [['0%','#4A148C'],['30%','#6A1B9A'],['60%','#E65100'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('skyApocalypse', '0%','0%','0%','100%',
+                [['0%','#1a0a0a'],['25%','#4A0E0E'],['50%','#8B2500'],['75%','#CC5500'],['100%','#FF6F00']]));
+            defs.appendChild(createLinearGrad('skyDark', '0%','0%','0%','100%',
+                [['0%','#0d0d1a'],['30%','#1a1a2e'],['60%','#2d1b3d'],['100%','#3d1f1f']]));
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('groundCracked', '0%','0%','0%','100%',
+                [['0%','#795548'],['30%','#6D4C41'],['60%','#5D4037'],['100%','#3E2723']]));
+            defs.appendChild(createLinearGrad('lavaGrad', '0%','0%','0%','100%',
+                [['0%','#FF6F00'],['30%','#FF3D00'],['60%','#DD2C00'],['100%','#BF360C']]));
+            defs.appendChild(createLinearGrad('sandGrad', '0%','0%','0%','100%',
+                [['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('lightGrad', '50%','0%','50%','100%',
+                [['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('scaleGold', '0%','0%','100%','0%',
+                [['0%','#C9A84C'],['30%','#FFD54F'],['60%','#FFC107'],['100%','#C9A84C']]));
+            defs.appendChild(createLinearGrad('greenGlow', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['50%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('redGlow', '0%','0%','0%','100%',
+                [['0%','#EF9A9A'],['50%','#EF5350'],['100%','#C62828']]));
+
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('darkCloudGrad', '40%','30%','55%',
+                [['0%','#616161'],['50%','#424242'],['100%','#212121']]));
+            defs.appendChild(createRadialGrad('fireGlow', '50%','50%','50%',
+                [['0%','rgba(255,111,0,0.6)'],['50%','rgba(255,61,0,0.3)'],['100%','rgba(255,61,0,0)']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createRadialGrad('holyLight', '50%','30%','60%',
+                [['0%','rgba(255,249,196,0.8)'],['30%','rgba(255,238,88,0.4)'],['60%','rgba(255,215,0,0.15)'],['100%','rgba(255,215,0,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // ===== VERSE 1: EARTH SHAKING - EARTHQUAKE =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dramatic apocalyptic sky
+            add(0, pathEl('M0,0 L900,0 L900,200 L0,200 Z', 'url(#skyApocalypse)', 'none', 0));
+
+            // G1: Dark storm clouds
+            add(1, el('ellipse', { cx: 150, cy: 60, rx: 120, ry: 45, fill: 'url(#darkCloudGrad)' }));
+            add(1, el('ellipse', { cx: 400, cy: 40, rx: 140, ry: 50, fill: 'url(#darkCloudGrad)' }));
+            add(1, el('ellipse', { cx: 700, cy: 55, rx: 130, ry: 42, fill: 'url(#darkCloudGrad)' }));
+            // Lightning bolts
+            add(1, pathEl('M250,90 L260,120 L245,125 L260,170', 'none', '#FFF9C4', 3, 'round'));
+            add(1, pathEl('M650,80 L640,115 L655,118 L638,160', 'none', '#FFEE58', 2.5, 'round'));
+
+            // G2: Cracked ground
+            add(2, pathEl('M0,300 L900,300 L900,506 L0,506 Z', 'url(#groundCracked)', '#3E2723', 2));
+            // Zigzag crack pattern across ground
+            add(2, pathEl('M0,350 L80,340 L120,370 L200,335 L280,365 L360,330 L440,360 L520,325 L600,355 L680,320 L760,350 L840,315 L900,345',
+                'none', '#1a0a0a', 3, 'round'));
+            add(2, pathEl('M100,400 L180,390 L220,420 L300,385 L380,415 L460,380 L540,410 L620,375 L700,405 L780,370 L860,400 L900,390',
+                'none', '#1a0a0a', 2.5, 'round'));
+
+            // G3: Large central crack with lava/fire glow
+            add(3, pathEl('M400,200 L420,250 L380,300 L430,350 L390,400 L440,450 L400,506',
+                'none', '#FF3D00', 5, 'round'));
+            add(3, pathEl('M500,200 L480,250 L520,300 L470,350 L510,400 L460,450 L500,506',
+                'none', '#FF3D00', 5, 'round'));
+            // Lava glow between cracks
+            add(3, el('ellipse', { cx: 450, cy: 350, rx: 40, ry: 80, fill: 'url(#fireGlow)' }));
+
+            // G4: Mountains crumbling on sides
+            // Left mountain breaking apart
+            add(4, pathEl('M0,200 Q40,120 80,160 Q120,100 160,150 Q200,80 240,180 L240,300 L0,300 Z',
+                '#5D4037', '#4E342E', 2, 'round'));
+            // Falling rocks from left mountain
+            add(4, el('circle', { cx: 180, cy: 240, r: 12, fill: '#6D4C41', stroke: '#4E342E', 'stroke-width': 1.5 }));
+            add(4, el('circle', { cx: 210, cy: 270, r: 8, fill: '#795548', stroke: '#5D4037', 'stroke-width': 1 }));
+            add(4, el('circle', { cx: 150, cy: 260, r: 10, fill: '#6D4C41', stroke: '#4E342E', 'stroke-width': 1 }));
+            // Right mountain breaking apart
+            add(4, pathEl('M660,200 Q700,90 740,160 Q780,110 820,150 Q860,80 900,180 L900,300 L660,300 Z',
+                '#5D4037', '#4E342E', 2, 'round'));
+            add(4, el('circle', { cx: 720, cy: 250, r: 10, fill: '#795548', stroke: '#5D4037', 'stroke-width': 1 }));
+            add(4, el('circle', { cx: 690, cy: 270, r: 14, fill: '#6D4C41', stroke: '#4E342E', 'stroke-width': 1.5 }));
+            add(4, el('circle', { cx: 750, cy: 280, r: 9, fill: '#8D6E63', stroke: '#6D4C41', 'stroke-width': 1 }));
+
+            // G5: Shaking buildings / structures tilting
+            // Left building tilting
+            add(5, pathEl('M280,210 L310,200 L325,260 L295,270 Z', '#BCAAA4', '#8D6E63', 2, 'round'));
+            add(5, pathEl('M285,230 L305,224 L305,245 L285,250 Z', '#795548', '#5D4037', 1, 'round'));
+            // Center tower tilting
+            add(5, pathEl('M440,180 L470,175 L478,280 L448,285 Z', '#A1887F', '#795548', 2, 'round'));
+            add(5, pathEl('M440,180 L455,155 L470,175', '#C9A84C', '#A68529', 1.5, 'round'));
+            // Right building tilting
+            add(5, pathEl('M590,215 L625,205 L618,275 L583,285 Z', '#BCAAA4', '#8D6E63', 2, 'round'));
+            add(5, pathEl('M595,235 L615,228 L612,255 L592,262 Z', '#795548', '#5D4037', 1, 'round'));
+
+            // G6: Dust and debris clouds
+            add(6, el('ellipse', { cx: 200, cy: 300, rx: 60, ry: 25, fill: 'rgba(141,110,99,0.4)' }));
+            add(6, el('ellipse', { cx: 450, cy: 290, rx: 80, ry: 30, fill: 'rgba(141,110,99,0.3)' }));
+            add(6, el('ellipse', { cx: 700, cy: 305, rx: 65, ry: 22, fill: 'rgba(141,110,99,0.35)' }));
+            // Small debris particles
+            for (let i = 0; i < 20; i++) {
+                const dx = 100 + Math.random() * 700;
+                const dy = 200 + Math.random() * 200;
+                const dr = 2 + Math.random() * 4;
+                add(6, el('circle', { cx: dx, cy: dy, r: dr, fill: `rgba(121,85,72,${0.3 + Math.random()*0.4})` }));
+            }
+
+            // G7: Zigzag motion lines showing shaking
+            for (let i = 0; i < 6; i++) {
+                const mx = 50 + i * 150;
+                const my = 180 + Math.random() * 30;
+                add(7, pathEl(`M${mx},${my} L${mx+10},${my-8} L${mx+20},${my+8} L${mx+30},${my-8} L${mx+40},${my+8}`,
+                    'none', '#FF8F00', 2.5, 'round'));
+            }
+
+            // G8: Fire embers rising
+            for (let i = 0; i < 12; i++) {
+                const fx = 350 + Math.random() * 200;
+                const fy = 250 + Math.random() * 200;
+                add(8, el('circle', { cx: fx, cy: fy, r: 2 + Math.random()*3, fill: '#FF6F00', filter: 'url(#glow)' }));
+            }
+
+            // G9: Title text
+            add(9, textEl('"The earth shakes with its final earthquake"', 450, 480, { size: 22, color: '#FF8F00', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: EARTH DISCHARGES BURDENS =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark dramatic sky
+            add(0, pathEl('M0,0 L900,0 L900,180 L0,180 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: Broken cracked ground with large opening
+            add(1, pathEl('M0,250 L300,260 L350,200 L400,300 L450,180 L500,290 L550,210 L600,270 L900,250 L900,506 L0,506 Z',
+                'url(#groundCracked)', '#3E2723', 2, 'round'));
+            // Glowing edges of the crack
+            add(1, pathEl('M350,200 L400,300 L450,180 L500,290 L550,210',
+                'none', '#FF6F00', 4, 'round'));
+
+            // G2: Objects being thrown out of the earth - treasures
+            // Gold coins flying up
+            [[380,150],[420,120],[460,140],[500,110],[540,160]].forEach(([cx,cy]) => {
+                add(2, el('circle', { cx, cy, r: 10, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 2 }));
+                add(2, el('circle', { cx: cx-2, cy: cy-1, r: 3, fill: '#FFF9C4' }));
+            });
+            // Gems
+            add(2, pathEl('M340,130 L350,115 L360,130 L350,140 Z', '#E53935', '#C62828', 1.5, 'round'));
+            add(2, pathEl('M560,125 L570,110 L580,125 L570,135 Z', '#42A5F5', '#1565C0', 1.5, 'round'));
+
+            // G3: Chests and buried objects emerging
+            // Treasure chest
+            add(3, pathEl('M200,200 L260,200 L260,230 L200,230 Z', '#8D6E63', '#5D4037', 2, 'round'));
+            add(3, pathEl('M198,200 Q230,185 262,200', '#A1887F', '#795548', 2, 'round'));
+            add(3, el('circle', { cx: 230, cy: 215, r: 4, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 1 }));
+            // Another chest on right
+            add(3, pathEl('M640,210 L700,210 L700,240 L640,240 Z', '#795548', '#4E342E', 2, 'round'));
+            add(3, pathEl('M638,210 Q670,195 702,210', '#8D6E63', '#6D4C41', 2, 'round'));
+            add(3, el('circle', { cx: 670, cy: 225, r: 4, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 1 }));
+
+            // G4: Upward arrows showing things being expelled
+            for (let i = 0; i < 7; i++) {
+                const ax = 300 + i * 50;
+                const ay = 170 - Math.random() * 40;
+                add(4, pathEl(`M${ax},${ay+50} L${ax},${ay}`, 'none', '#FF8F00', 2.5, 'round'));
+                add(4, pathEl(`M${ax-6},${ay+8} L${ax},${ay} L${ax+6},${ay+8}`, 'none', '#FF8F00', 2, 'round'));
+            }
+
+            // G5: Dust and smoke rising
+            add(5, el('ellipse', { cx: 300, cy: 170, rx: 50, ry: 30, fill: 'rgba(141,110,99,0.3)' }));
+            add(5, el('ellipse', { cx: 450, cy: 140, rx: 70, ry: 35, fill: 'rgba(141,110,99,0.25)' }));
+            add(5, el('ellipse', { cx: 600, cy: 160, rx: 55, ry: 28, fill: 'rgba(141,110,99,0.3)' }));
+
+            // G6: Glowing lava from below
+            add(6, el('ellipse', { cx: 450, cy: 280, rx: 100, ry: 40, fill: 'url(#fireGlow)' }));
+            // Fire tongues
+            for (let i = 0; i < 5; i++) {
+                const fx = 380 + i * 35;
+                add(6, pathEl(`M${fx},260 Q${fx+5},240 ${fx+10},250 Q${fx+15},235 ${fx+20},255`,
+                    'none', '#FF6F00', 2, 'round'));
+            }
+
+            // G7: Small rocks and pebbles scattered
+            for (let i = 0; i < 15; i++) {
+                const rx = 150 + Math.random() * 600;
+                const ry = 100 + Math.random() * 150;
+                add(7, el('circle', { cx: rx, cy: ry, r: 3 + Math.random()*5, fill: '#6D4C41', stroke: '#4E342E', 'stroke-width': 1 }));
+            }
+
+            // G8: Sparkle effects
+            [[250,100],[400,80],[550,90],[350,160],[500,150]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 5 + Math.random()*4));
+            });
+
+            // G9: Title
+            add(9, textEl('"The earth throws out its burdens"', 450, 480, { size: 22, color: '#FF8F00', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: MANKIND ASKS WHAT IS WRONG =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Chaotic sky
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyApocalypse)', 'none', 0));
+
+            // G1: Cracked tilting ground
+            add(1, pathEl('M0,320 Q200,300 450,330 Q700,310 900,325 L900,506 L0,506 Z',
+                'url(#groundCracked)', '#3E2723', 2, 'round'));
+            // Cracks in ground
+            for (let i = 0; i < 8; i++) {
+                const cx = 50 + i * 110;
+                add(1, pathEl(`M${cx},340 L${cx+15},380 L${cx+5},420 L${cx+20},460`,
+                    'none', '#1a0a0a', 2, 'round'));
+            }
+
+            // G2: Small figure silhouettes in panic - people running
+            // Person 1 - looking up in shock
+            add(2, el('ellipse', { cx: 200, cy: 315, rx: 8, ry: 3, fill: 'rgba(0,0,0,0.15)' }));
+            add(2, pathEl('M192,280 Q188,295 190,310 L210,310 Q212,295 208,280 Z', '#ECEFF1', '#90A4AE', 1, 'round'));
+            add(2, el('circle', { cx: 200, cy: 272, r: 9, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.8 }));
+            // Arms raised in shock
+            add(2, pathEl('M190,290 L175,268', 'none', '#FFCC80', 3, 'round'));
+            add(2, pathEl('M210,290 L225,268', 'none', '#FFCC80', 3, 'round'));
+
+            // Person 2 - running
+            add(2, el('ellipse', { cx: 400, cy: 320, rx: 8, ry: 3, fill: 'rgba(0,0,0,0.15)' }));
+            add(2, pathEl('M392,285 Q388,300 390,315 L410,315 Q412,300 408,285 Z', '#CFD8DC', '#90A4AE', 1, 'round'));
+            add(2, el('circle', { cx: 400, cy: 277, r: 9, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.8 }));
+            // Running arms
+            add(2, pathEl('M392,295 L378,285', 'none', '#FFCC80', 3, 'round'));
+            add(2, pathEl('M408,295 L422,285', 'none', '#FFCC80', 3, 'round'));
+
+            // Person 3 - on knees
+            add(2, el('ellipse', { cx: 620, cy: 318, rx: 10, ry: 3, fill: 'rgba(0,0,0,0.15)' }));
+            add(2, pathEl('M610,295 Q608,305 612,315 L628,315 Q632,305 630,295 Z', '#B0BEC5', '#78909C', 1, 'round'));
+            add(2, el('circle', { cx: 620, cy: 287, r: 9, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.8 }));
+            // Hands on head
+            add(2, pathEl('M612,293 L615,280', 'none', '#FFCC80', 3, 'round'));
+            add(2, pathEl('M628,293 L625,280', 'none', '#FFCC80', 3, 'round'));
+
+            // G3: Large speech/thought bubble - "What is wrong with it?!"
+            add(3, pathEl('M300,120 Q300,70 450,70 Q600,70 600,120 Q600,170 450,170 Q380,170 370,190 Q365,170 300,170 Q300,120 300,120 Z',
+                '#FFF', '#333', 3, 'round'));
+            add(3, textEl('?!  \u0645\u064E\u0627 \u0644\u064E\u0647\u064E\u0627  ?!', 450, 110, { size: 30, color: '#C62828', weight: 700, family: 'Amiri, serif' }));
+            add(3, textEl('"What is wrong with it?!"', 450, 145, { size: 18, color: '#5D4037', weight: 600 }));
+
+            // G4: Question marks floating around
+            [[150,100],[250,80],[550,90],[700,110],[780,85],[100,150],[800,140]].forEach(([qx,qy]) => {
+                add(4, textEl('?', qx, qy, { size: 28 + Math.random()*20, color: `rgba(255,111,0,${0.4+Math.random()*0.4})`, weight: 700 }));
+            });
+
+            // G5: Shaking motion lines around the ground
+            for (let i = 0; i < 8; i++) {
+                const mx = 30 + i * 110;
+                const my = 310 + Math.random() * 20;
+                add(5, pathEl(`M${mx},${my} L${mx+8},${my-6} L${mx+16},${my+6} L${mx+24},${my-6} L${mx+32},${my+6}`,
+                    'none', '#FF8F00', 2, 'round'));
+            }
+
+            // G6: Dust particles
+            for (let i = 0; i < 15; i++) {
+                const px = 50 + Math.random() * 800;
+                const py = 200 + Math.random() * 150;
+                add(6, el('circle', { cx: px, cy: py, r: 1.5 + Math.random()*3, fill: `rgba(141,110,99,${0.2+Math.random()*0.3})` }));
+            }
+
+            // G7: Lightning in background
+            add(7, pathEl('M150,30 L165,70 L150,75 L170,120', 'none', '#FFF9C4', 3, 'round'));
+            add(7, pathEl('M750,25 L735,65 L750,70 L730,110', 'none', '#FFEE58', 2.5, 'round'));
+
+            // G8: Dark clouds overhead
+            add(8, el('ellipse', { cx: 200, cy: 30, rx: 100, ry: 35, fill: 'url(#darkCloudGrad)' }));
+            add(8, el('ellipse', { cx: 500, cy: 25, rx: 120, ry: 38, fill: 'url(#darkCloudGrad)' }));
+            add(8, el('ellipse', { cx: 780, cy: 35, rx: 95, ry: 30, fill: 'url(#darkCloudGrad)' }));
+
+            // G9: Title
+            add(9, textEl('"What is wrong with it?!"', 450, 480, { size: 24, color: '#C62828', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: EARTH REPORTS ITS NEWS =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Mystical dark sky
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyDark)', 'none', 0));
+
+            // G1: The earth as a globe/sphere in center
+            add(1, el('circle', { cx: 450, cy: 280, r: 150, fill: '#4E342E', stroke: '#3E2723', 'stroke-width': 3 }));
+            // Land masses on earth (simple shapes)
+            add(1, pathEl('M380,180 Q400,160 430,170 Q460,155 480,175 Q490,190 470,200 Q440,210 410,195 Q385,195 380,180 Z',
+                '#388E3C', '#2E7D32', 1.5, 'round'));
+            add(1, pathEl('M490,250 Q520,230 550,245 Q560,260 540,275 Q510,280 490,265 Z',
+                '#43A047', '#2E7D32', 1.5, 'round'));
+            add(1, pathEl('M350,270 Q365,250 390,260 Q400,275 385,290 Q360,295 350,280 Z',
+                '#66BB6A', '#388E3C', 1.5, 'round'));
+            // Water areas
+            add(1, pathEl('M420,240 Q450,230 470,240 Q475,255 455,260 Q430,258 420,245 Z',
+                '#42A5F5', '#1565C0', 1, 'round'));
+
+            // G2: Sound waves / speech lines emanating from earth
+            for (let r = 170; r <= 230; r += 20) {
+                add(2, pathEl(`M${450-r*0.7},${280-r*0.3} Q${450},${280-r*0.5} ${450+r*0.7},${280-r*0.3}`,
+                    'none', `rgba(255,213,79,${0.6 - (r-170)*0.006})`, 2.5, 'round'));
+            }
+            // Speech bubbles with icons
+            // Left speech bubble
+            add(2, pathEl('M120,100 Q120,60 200,60 Q280,60 280,100 Q280,140 200,140 Q170,140 160,160 Q155,140 120,140 Q120,100 120,100 Z',
+                'rgba(255,255,255,0.9)', '#C9A84C', 2, 'round'));
+            add(2, textEl('Every deed...', 200, 100, { size: 16, color: '#5D4037', weight: 600 }));
+
+            // Right speech bubble
+            add(2, pathEl('M620,100 Q620,60 700,60 Q780,60 780,100 Q780,140 700,140 Q730,140 740,160 Q745,140 780,140 Q780,100 780,100 Z',
+                'rgba(255,255,255,0.9)', '#C9A84C', 2, 'round'));
+            add(2, textEl('Every step...', 700, 100, { size: 16, color: '#5D4037', weight: 600 }));
+
+            // G3: A mouth/speaking symbol on the earth
+            // Simple open mouth shape on the globe
+            add(3, pathEl('M420,310 Q450,340 480,310', 'none', '#FF6F00', 3, 'round'));
+            add(3, pathEl('M425,310 Q450,330 475,310', 'rgba(255,111,0,0.3)', '#FF8F00', 1.5, 'round'));
+            // Eyes on the earth
+            add(3, el('ellipse', { cx: 425, cy: 275, rx: 8, ry: 10, fill: '#FFF', stroke: '#3E2723', 'stroke-width': 1.5 }));
+            add(3, el('circle', { cx: 425, cy: 277, r: 4, fill: '#1a0a0a' }));
+            add(3, el('ellipse', { cx: 475, cy: 275, rx: 8, ry: 10, fill: '#FFF', stroke: '#3E2723', 'stroke-width': 1.5 }));
+            add(3, el('circle', { cx: 475, cy: 277, r: 4, fill: '#1a0a0a' }));
+
+            // G4: Scroll/record symbols floating around
+            // Left scroll
+            add(4, pathEl('M80,220 L130,220 L130,290 L80,290 Z', '#FFF9C4', '#C9A84C', 1.5, 'round'));
+            add(4, pathEl('M80,220 Q75,255 80,290', '#FFF9C4', '#C9A84C', 1, 'round'));
+            add(4, lineEl(90, 235, 120, 235, '#8D6E63', 1));
+            add(4, lineEl(90, 248, 120, 248, '#8D6E63', 1));
+            add(4, lineEl(90, 261, 115, 261, '#8D6E63', 1));
+            // Right scroll
+            add(4, pathEl('M770,220 L820,220 L820,290 L770,290 Z', '#FFF9C4', '#C9A84C', 1.5, 'round'));
+            add(4, pathEl('M820,220 Q825,255 820,290', '#FFF9C4', '#C9A84C', 1, 'round'));
+            add(4, lineEl(778, 235, 810, 235, '#8D6E63', 1));
+            add(4, lineEl(778, 248, 810, 248, '#8D6E63', 1));
+            add(4, lineEl(778, 261, 805, 261, '#8D6E63', 1));
+
+            // G5: Golden light beams from above
+            add(5, pathEl('M400,0 L350,200 L550,200 L500,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(5, el('circle', { cx: 450, cy: 280, r: 160, fill: 'url(#holyLight)' }));
+
+            // G6: Stars in the dark sky
+            for (let i = 0; i < 20; i++) {
+                const sx = 30 + Math.random() * 840;
+                const sy = 10 + Math.random() * 100;
+                add(6, cartoonStar(sx, sy, 3, 1.5, '#FFF9C4', '#FFD54F'));
+            }
+
+            // G7: Sparkles around the earth
+            [[320,200],[580,190],[300,350],[600,340],[350,150],[550,160]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 5 + Math.random()*5));
+            });
+
+            // G8: More speech wave arcs
+            for (let i = 0; i < 3; i++) {
+                const a = 240 + i * 25;
+                add(8, pathEl(`M${450-a*0.5},${280+a*0.2} Q${450},${280+a*0.4} ${450+a*0.5},${280+a*0.2}`,
+                    'none', `rgba(201,168,76,${0.4 - i*0.1})`, 2, 'round'));
+            }
+
+            // G9: Title
+            add(9, textEl('"That Day, the earth will tell its stories"', 450, 480, { size: 22, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: ALLAH COMMANDS THE EARTH =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Majestic dark sky with golden horizon
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyDark)', 'none', 0));
+            // Golden horizon line
+            add(0, pathEl('M0,200 L900,200 L900,250 L0,250 Z',
+                'rgba(201,168,76,0.15)', 'none', 0));
+
+            // G1: Massive golden light beam from top center (representing divine command)
+            add(1, pathEl('M380,0 L300,250 L600,250 L520,0 Z', 'url(#lightGrad)', 'none', 0));
+            add(1, pathEl('M410,0 L350,250 L550,250 L490,0 Z', 'rgba(255,249,196,0.4)', 'none', 0));
+            // Concentric light circles at source
+            add(1, el('circle', { cx: 450, cy: 30, r: 60, fill: 'url(#goldenGlow)' }));
+            add(1, el('circle', { cx: 450, cy: 30, r: 35, fill: 'url(#holyLight)' }));
+
+            // G2: Earth below receiving the command
+            add(2, el('circle', { cx: 450, cy: 380, r: 100, fill: '#4E342E', stroke: '#3E2723', 'stroke-width': 3 }));
+            // Simple land/water
+            add(2, pathEl('M400,320 Q420,310 450,315 Q470,305 490,320 Q495,340 475,350 Q445,355 415,345 Q395,338 400,320 Z',
+                '#388E3C', '#2E7D32', 1.5, 'round'));
+            add(2, pathEl('M460,370 Q480,360 500,370 Q505,385 490,395 Q470,398 460,385 Z',
+                '#42A5F5', '#1565C0', 1, 'round'));
+
+            // G3: Downward arrows from light to earth - divine command flowing down
+            for (let i = 0; i < 5; i++) {
+                const ax = 380 + i * 35;
+                const ay1 = 100 + i * 15;
+                const ay2 = ay1 + 80;
+                add(3, pathEl(`M${ax},${ay1} L${ax},${ay2}`, 'none', '#FFD54F', 2.5, 'round'));
+                add(3, pathEl(`M${ax-6},${ay2-8} L${ax},${ay2} L${ax+6},${ay2-8}`, 'none', '#FFD54F', 2, 'round'));
+            }
+
+            // G4: Arabic calligraphy-style "Awha" (commanded) text
+            add(4, pathEl('M350,240 Q400,220 450,240 Q500,220 550,240',
+                'none', '#C9A84C', 3, 'round'));
+            add(4, textEl('\u0623\u064E\u0648\u0652\u062D\u064E\u0649\u0670', 450, 240, { size: 36, color: '#FFD54F', weight: 700, family: 'Amiri, serif' }));
+
+            // G5: Glowing aura around the earth
+            add(5, el('circle', { cx: 450, cy: 380, r: 120, fill: 'url(#goldenGlow)' }));
+            add(5, el('circle', { cx: 450, cy: 380, r: 140, fill: 'url(#holyLight)' }));
+            // Sound/obedience waves from earth
+            for (let r = 110; r <= 160; r += 15) {
+                add(5, pathEl(`M${450-r},${380} Q${450},${380-r*0.3} ${450+r},${380}`,
+                    'none', `rgba(201,168,76,${0.5 - (r-110)*0.008})`, 2, 'round'));
+            }
+
+            // G6: Stars in the sky
+            for (let i = 0; i < 25; i++) {
+                const sx = 20 + Math.random() * 860;
+                const sy = 5 + Math.random() * 150;
+                add(6, cartoonStar(sx, sy, 2.5 + Math.random()*2, 1.2, '#FFF9C4', '#FFD54F'));
+            }
+
+            // G7: Sparkles around the light beam
+            [[300,100],[600,110],[350,180],[550,170],[250,200],[650,190],
+             [380,300],[520,310],[330,350],[570,340]].forEach(([x,y]) => {
+                add(7, cartoonSparkle(x, y, 4 + Math.random()*6));
+            });
+
+            // G8: Small emanating circles from earth center
+            [110,125,140].forEach(r => {
+                add(8, el('circle', { cx: 450, cy: 380, r, fill: 'none', stroke: `rgba(255,213,79,${0.4-r*0.002})`, 'stroke-width': 1.5 }));
+            });
+
+            // G9: Title
+            add(9, textEl('"Because your Lord commanded it"', 450, 480, { size: 24, color: '#FFD54F', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 6: PEOPLE DEPART IN GROUPS =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Split sky - light left (Paradise), dark right (punishment)
+            add(0, pathEl('M0,0 L450,0 L450,250 L0,250 Z',
+                'url(#skyGrad)', 'none', 0));
+            add(0, pathEl('M450,0 L900,0 L900,250 L450,250 Z',
+                'url(#skyApocalypse)', 'none', 0));
+            // Blend in center
+            add(0, pathEl('M430,0 L470,0 L470,250 L430,250 Z', 'rgba(200,200,200,0.2)', 'none', 0));
+
+            // G1: Ground
+            add(1, pathEl('M0,350 L900,350 L900,506 L0,506 Z', 'url(#groundCracked)', '#3E2723', 1.5));
+            // Left side ground lighter (green hints)
+            add(1, pathEl('M0,350 L400,350 L400,506 L0,506 Z', 'url(#groundGrad)', 'none', 0));
+
+            // G2: Left side - group heading toward light (Paradise direction)
+            // Multiple small figures walking left
+            [[100,320],[140,325],[180,318],[220,322],[260,315]].forEach(([px,py]) => {
+                add(2, el('ellipse', { cx: px, cy: py+12, rx: 6, ry: 2, fill: 'rgba(0,0,0,0.1)' }));
+                add(2, pathEl(`M${px-4},${py} Q${px-5},${py+5} ${px-4},${py+10} L${px+4},${py+10} Q${px+5},${py+5} ${px+4},${py} Z`,
+                    '#ECEFF1', '#90A4AE', 0.8, 'round'));
+                add(2, el('circle', { cx: px, cy: py-5, r: 4, fill: '#FFCC80', stroke: '#E65100', 'stroke-width': 0.6 }));
+            });
+            // Glow of happiness around them
+            add(2, el('ellipse', { cx: 180, cy: 310, rx: 100, ry: 40, fill: 'url(#goldenGlow)' }));
+
+            // G3: Right side - group heading toward darkness
+            [[640,325],[680,320],[720,328],[760,322],[800,318]].forEach(([px,py]) => {
+                add(3, el('ellipse', { cx: px, cy: py+12, rx: 6, ry: 2, fill: 'rgba(0,0,0,0.15)' }));
+                add(3, pathEl(`M${px-4},${py} Q${px-5},${py+5} ${px-4},${py+10} L${px+4},${py+10} Q${px+5},${py+5} ${px+4},${py} Z`,
+                    '#78909C', '#546E7A', 0.8, 'round'));
+                add(3, el('circle', { cx: px, cy: py-5, r: 4, fill: '#FFCC80', stroke: '#BF360C', 'stroke-width': 0.6 }));
+            });
+            // Dark shadow around them
+            add(3, el('ellipse', { cx: 720, cy: 315, rx: 100, ry: 40, fill: 'rgba(0,0,0,0.2)' }));
+
+            // G4: Arrows showing separation
+            // Left arrow
+            add(4, pathEl('M350,280 L250,280', 'none', '#66BB6A', 3, 'round'));
+            add(4, pathEl('M260,273 L250,280 L260,287', 'none', '#66BB6A', 2.5, 'round'));
+            add(4, textEl('Paradise', 300, 265, { size: 16, color: '#2E7D32', weight: 700 }));
+            // Right arrow
+            add(4, pathEl('M550,280 L650,280', 'none', '#EF5350', 3, 'round'));
+            add(4, pathEl('M640,273 L650,280 L640,287', 'none', '#EF5350', 2.5, 'round'));
+            add(4, textEl('Punishment', 600, 265, { size: 16, color: '#C62828', weight: 700 }));
+
+            // G5: Central dividing line with scroll/book
+            add(5, lineEl(450, 200, 450, 350, 'rgba(201,168,76,0.5)', 2));
+            // Open book in center
+            add(5, pathEl('M425,220 L425,260 Q450,270 475,260 L475,220 Q450,230 425,220 Z',
+                '#FFF9C4', '#C9A84C', 2, 'round'));
+            add(5, lineEl(450, 225, 450, 265, '#C9A84C', 1));
+            // Text lines on book
+            add(5, lineEl(432, 235, 445, 235, '#8D6E63', 0.8));
+            add(5, lineEl(432, 242, 443, 242, '#8D6E63', 0.8));
+            add(5, lineEl(455, 235, 468, 235, '#8D6E63', 0.8));
+            add(5, lineEl(455, 242, 466, 242, '#8D6E63', 0.8));
+
+            // G6: Paradise side - light beams and garden hints
+            add(6, el('circle', { cx: 100, cy: 100, r: 40, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            // Small tree
+            add(6, pathEl('M60,300 L60,260', 'none', '#5D4037', 5, 'round'));
+            add(6, el('circle', { cx: 60, cy: 250, r: 18, fill: '#66BB6A', stroke: '#388E3C', 'stroke-width': 1.5 }));
+            // Flowers
+            [[30,340],[80,345],[130,338]].forEach(([fx,fy]) => {
+                add(6, el('circle', { cx: fx, cy: fy, r: 4, fill: '#F48FB1', stroke: '#EC407A', 'stroke-width': 0.8 }));
+                add(6, el('circle', { cx: fx, cy: fy, r: 1.5, fill: '#FFF9C4' }));
+            });
+
+            // G7: Punishment side - fire hints
+            add(7, el('circle', { cx: 800, cy: 100, r: 30, fill: 'url(#fireGlow)' }));
+            // Fire tongues
+            for (let i = 0; i < 4; i++) {
+                const fx = 820 + i * 20;
+                add(7, pathEl(`M${fx},340 Q${fx+4},320 ${fx+8},330 Q${fx+12},310 ${fx+16},335`,
+                    'none', '#FF6F00', 2, 'round'));
+            }
+
+            // G8: Sparkles on paradise side
+            [[50,150],[150,130],[200,180],[100,200],[250,150]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 4 + Math.random()*4));
+            });
+
+            // G9: Title
+            add(9, textEl('"People will depart in separate groups"', 450, 480, { size: 22, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 7: ATOM'S WEIGHT OF GOOD =====
+        function buildVerse7() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Beautiful golden-green sky
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z',
+                'url(#skyGrad)', 'none', 0));
+
+            // G1: Warm green ground
+            add(1, pathEl('M0,350 L900,350 L900,506 L0,506 Z', 'url(#groundGrad)', '#388E3C', 1.5));
+
+            // G2: Large golden scale in center
+            // Scale pillar
+            add(2, pathEl('M445,180 L455,180 L455,380 L445,380 Z', '#C9A84C', '#A68529', 2, 'round'));
+            // Base
+            add(2, pathEl('M400,380 L500,380 L510,395 L390,395 Z', '#C9A84C', '#A68529', 2, 'round'));
+            // Top ornament
+            add(2, el('circle', { cx: 450, cy: 175, r: 8, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 2 }));
+            // Scale beam
+            add(2, pathEl('M280,200 L620,200', 'none', '#C9A84C', 4, 'round'));
+            // Left chain
+            add(2, pathEl('M290,200 L290,260', 'none', '#FFD54F', 2, 'round'));
+            add(2, pathEl('M310,200 L310,260', 'none', '#FFD54F', 2, 'round'));
+            // Right chain
+            add(2, pathEl('M590,200 L590,260', 'none', '#FFD54F', 2, 'round'));
+            add(2, pathEl('M610,200 L610,260', 'none', '#FFD54F', 2, 'round'));
+            // Left plate (good deeds - lower/heavier)
+            add(2, pathEl('M250,265 Q300,280 350,265', '#FFD54F', '#C9A84C', 2, 'round'));
+            // Right plate (empty/lighter)
+            add(2, pathEl('M560,255 Q600,270 650,255', '#FFD54F', '#C9A84C', 2, 'round'));
+
+            // G3: Tiny golden atom/speck on the good deeds plate
+            add(3, el('circle', { cx: 300, cy: 262, r: 6, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 1.5, filter: 'url(#glow)' }));
+            // Label
+            add(3, textEl('atom of good', 300, 300, { size: 14, color: '#2E7D32', weight: 600 }));
+            // Sparkle around the atom
+            add(3, cartoonSparkle(300, 262, 12));
+
+            // G4: Good deed icons floating around left side
+            // Smile icon
+            add(4, el('circle', { cx: 120, cy: 150, r: 20, fill: '#FFF9C4', stroke: '#FFD54F', 'stroke-width': 2 }));
+            add(4, pathEl('M110,155 Q120,165 130,155', 'none', '#F9A825', 2, 'round'));
+            add(4, el('circle', { cx: 114, cy: 147, r: 2, fill: '#5D4037' }));
+            add(4, el('circle', { cx: 126, cy: 147, r: 2, fill: '#5D4037' }));
+            // Heart icon
+            add(4, pathEl('M180,120 Q180,105 195,105 Q210,105 210,120 Q210,140 195,150 Q180,140 180,120 Z',
+                '#EF5350', '#C62828', 1.5, 'round'));
+            // Coin/charity icon
+            add(4, el('circle', { cx: 80, cy: 220, r: 15, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 1.5 }));
+            add(4, textEl('$', 80, 222, { size: 16, color: '#5D4037', weight: 700 }));
+
+            // G5: Upward arrows showing good deeds rising
+            [[150,280],[200,270],[250,285]].forEach(([ax,ay]) => {
+                add(5, pathEl(`M${ax},${ay} L${ax},${ay-40}`, 'none', '#66BB6A', 2, 'round'));
+                add(5, pathEl(`M${ax-5},${ay-33} L${ax},${ay-40} L${ax+5},${ay-33}`, 'none', '#66BB6A', 1.5, 'round'));
+            });
+
+            // G6: Green glow of reward
+            add(6, el('circle', { cx: 300, cy: 260, r: 60, fill: 'url(#goldenGlow)' }));
+            // Sun
+            add(6, el('circle', { cx: 750, cy: 70, r: 40, fill: 'url(#sunGlow)', filter: 'url(#glow)' }));
+            for (let i = 0; i < 8; i++) {
+                const rad = (i * 45) * Math.PI / 180;
+                add(6, lineEl(
+                    750 + 45*Math.cos(rad), 70 + 45*Math.sin(rad),
+                    750 + 60*Math.cos(rad), 70 + 60*Math.sin(rad),
+                    '#FDD835', 2));
+            }
+
+            // G7: Clouds
+            add(7, cartoonCloud(200, 50, 0.6));
+            add(7, cartoonCloud(550, 40, 0.5));
+
+            // G8: Golden sparkles everywhere
+            [[100,100],[250,80],[400,100],[550,120],[700,90],[150,200],[650,200],
+             [350,320],[500,330],[200,340]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 4 + Math.random()*5));
+            });
+
+            // G9: Title
+            add(9, textEl('"An atom\'s weight of good will be seen"', 450, 480, { size: 22, color: '#2E7D32', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 8: ATOM'S WEIGHT OF EVIL =====
+        function buildVerse8() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Split scene - warning dark sky
+            add(0, pathEl('M0,0 L900,0 L900,250 L0,250 Z', 'url(#skyApocalypse)', 'none', 0));
+
+            // G1: Dark ground
+            add(1, pathEl('M0,350 L900,350 L900,506 L0,506 Z', 'url(#groundCracked)', '#3E2723', 1.5));
+
+            // G2: Large golden scale in center (mirror of verse 7)
+            // Scale pillar
+            add(2, pathEl('M445,180 L455,180 L455,380 L445,380 Z', '#C9A84C', '#A68529', 2, 'round'));
+            // Base
+            add(2, pathEl('M400,380 L500,380 L510,395 L390,395 Z', '#C9A84C', '#A68529', 2, 'round'));
+            // Top ornament
+            add(2, el('circle', { cx: 450, cy: 175, r: 8, fill: '#FFD54F', stroke: '#C9A84C', 'stroke-width': 2 }));
+            // Scale beam (tilted other way)
+            add(2, pathEl('M280,200 L620,200', 'none', '#C9A84C', 4, 'round'));
+            // Left chain
+            add(2, pathEl('M290,200 L290,255', 'none', '#FFD54F', 2, 'round'));
+            add(2, pathEl('M310,200 L310,255', 'none', '#FFD54F', 2, 'round'));
+            // Right chain
+            add(2, pathEl('M590,200 L590,265', 'none', '#FFD54F', 2, 'round'));
+            add(2, pathEl('M610,200 L610,265', 'none', '#FFD54F', 2, 'round'));
+            // Left plate (lighter now)
+            add(2, pathEl('M250,258 Q300,273 350,258', '#FFD54F', '#C9A84C', 2, 'round'));
+            // Right plate (evil deeds - heavier)
+            add(2, pathEl('M560,268 Q600,283 650,268', '#FFD54F', '#C9A84C', 2, 'round'));
+
+            // G3: Dark atom/speck on the evil deeds plate
+            add(3, el('circle', { cx: 600, cy: 265, r: 6, fill: '#424242', stroke: '#212121', 'stroke-width': 1.5 }));
+            // Dark glow around it
+            add(3, el('circle', { cx: 600, cy: 265, r: 15, fill: 'rgba(198,40,40,0.3)' }));
+            add(3, textEl('atom of evil', 600, 305, { size: 14, color: '#C62828', weight: 600 }));
+
+            // G4: Warning signs and icons
+            // Warning triangle
+            add(4, pathEl('M700,120 L730,170 L670,170 Z', '#FF8F00', '#E65100', 2, 'round'));
+            add(4, textEl('!', 700, 152, { size: 22, color: '#FFF', weight: 700 }));
+            // Broken heart
+            add(4, pathEl('M780,130 Q780,115 795,115 Q810,115 810,130 Q810,150 795,160 Q780,150 780,130 Z',
+                '#616161', '#424242', 1.5, 'round'));
+            add(4, pathEl('M790,125 L800,145', 'none', '#212121', 2, 'round'));
+            // Eye watching (accountability)
+            add(4, pathEl('M120,140 Q150,120 180,140 Q150,160 120,140 Z',
+                '#FFF', '#5D4037', 1.5, 'round'));
+            add(4, el('circle', { cx: 150, cy: 140, r: 8, fill: '#795548', stroke: '#4E342E', 'stroke-width': 1 }));
+            add(4, el('circle', { cx: 150, cy: 140, r: 3, fill: '#1a0a0a' }));
+
+            // G5: Fire glow on the right side
+            add(5, el('circle', { cx: 750, cy: 320, r: 60, fill: 'url(#fireGlow)' }));
+            // Fire tongues
+            for (let i = 0; i < 5; i++) {
+                const fx = 720 + i * 20;
+                add(5, pathEl(`M${fx},345 Q${fx+4},325 ${fx+8},335 Q${fx+12},315 ${fx+16},340`,
+                    'none', '#FF6F00', 2, 'round'));
+            }
+
+            // G6: Hope element - green door/light on left (repentance)
+            add(6, pathEl('M80,240 L140,240 L140,340 L80,340 Z', '#66BB6A', '#388E3C', 2, 'round'));
+            add(6, pathEl('M80,240 Q110,225 140,240', '#A5D6A7', '#66BB6A', 1.5, 'round'));
+            add(6, el('circle', { cx: 130, cy: 295, r: 3, fill: '#FFD54F' }));
+            add(6, textEl('Tawbah', 110, 355, { size: 14, color: '#66BB6A', weight: 600 }));
+            add(6, textEl('(Repentance)', 110, 370, { size: 11, color: '#A5D6A7', weight: 500 }));
+            // Light from the door
+            add(6, el('ellipse', { cx: 110, cy: 290, rx: 45, ry: 60, fill: 'url(#goldenGlow)' }));
+
+            // G7: Dark storm elements
+            add(7, el('ellipse', { cx: 300, cy: 30, rx: 100, ry: 35, fill: 'url(#darkCloudGrad)' }));
+            add(7, el('ellipse', { cx: 600, cy: 25, rx: 120, ry: 38, fill: 'url(#darkCloudGrad)' }));
+            // Lightning
+            add(7, pathEl('M350,60 L360,90 L345,95 L360,130', 'none', '#FFF9C4', 2.5, 'round'));
+
+            // G8: Contrasting sparkles (warning vs hope)
+            [[100,180],[130,220],[80,200]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 5 + Math.random()*4));
+            });
+            // Red warning sparkles on right
+            [[700,180],[750,200],[800,220],[680,220]].forEach(([x,y]) => {
+                add(8, el('circle', { cx: x, cy: y, r: 3, fill: '#FF6F00', filter: 'url(#glow)' }));
+            });
+
+            // G9: Title
+            add(9, textEl('"An atom\'s weight of evil will be seen"', 450, 480, { size: 22, color: '#C62828', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>

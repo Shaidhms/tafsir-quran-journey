@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Humazah - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5em;
+            color: #fff;
+            direction: rtl;
+        }
+        .header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            color: #c9a84c;
+            margin-bottom: 4px;
+        }
+        .header p { color: #888; font-size: 0.85em; }
+
+        /* ===== SLIDE FRAME ===== */
+        .slide-frame {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 20px;
+            border: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .slide-drawing {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #FFF9F0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sceneSvg { width: 100%; height: 100%; }
+
+        /* ===== PENCIL CURSOR ===== */
+        #penCursor {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+            width: 52px;
+            height: 65px;
+            left: 0; top: 0;
+            transition: left 0.05s linear, top 0.05s linear;
+        }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+
+        /* ===== VERSE TEXT AREA ===== */
+        .slide-bottom {
+            background: #FFF3E0;
+            padding: 24px 30px;
+            border-top: 2px dashed #e0c9a0;
+            text-align: center;
+        }
+        .verse-num-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; background: #e67e22; color: #fff;
+            border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .slide-arabic-text {
+            font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50;
+            direction: rtl; margin-bottom: 4px; min-height: 1.8em;
+        }
+        .slide-translit-text {
+            color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        .slide-kid-text {
+            font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5;
+            min-height: 2em;
+        }
+
+        .typewriter-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background: currentColor; margin-left: 2px; vertical-align: text-bottom;
+            animation: cursorBlink 0.6s step-end infinite;
+        }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .controls button {
+            background: #1a1a1a; border: 2px solid #333; color: #c9a84c;
+            padding: 10px 24px; border-radius: 10px;
+            font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+
+        .verse-indicator {
+            color: #c9a84c;
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .speed-control {
+            margin-top: 12px; color: #666; font-size: 0.85em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .speed-control input { width: 120px; }
+
+        /* ===== VERSE DOTS ===== */
+        .verse-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .verse-dots .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-dots .dot.active {
+            background: #c9a84c;
+            border-color: #c9a84c;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .slide-bottom { padding: 18px 16px; }
+            .slide-kid-text { font-size: 1.1em; }
+            .controls button { padding: 8px 16px; font-size: 0.85em; }
+        }
+        /* ===== NAV BAR ===== */
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; transition: opacity 0.2s, transform 0.2s; flex-shrink: 0; }
+        .nav-bar .logo:hover .home-icon { opacity: 1; transform: scale(1.1); }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; }
+        .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; }
+        .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201, 168, 76, 0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138, 180, 248, 0.05); border: 1px solid rgba(138, 180, 248, 0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201, 168, 76, 0.08); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 104 of 114</div>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْهُمَزَةِ</div>
+        <h1>Surah Al-Humazah</h1>
+        <p>The Backbiter - 9 Verses - Makkan</p>
+    </div>
+
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor">
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E8A317"/>
+                            <stop offset="20%" stop-color="#FDD835"/>
+                            <stop offset="50%" stop-color="#FFEE58"/>
+                            <stop offset="80%" stop-color="#FDD835"/>
+                            <stop offset="100%" stop-color="#C49000"/>
+                        </linearGradient>
+                        <linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#9E9E9E"/>
+                            <stop offset="30%" stop-color="#E0E0E0"/>
+                            <stop offset="60%" stop-color="#BDBDBD"/>
+                            <stop offset="100%" stop-color="#757575"/>
+                        </linearGradient>
+                        <linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#E48BA0"/>
+                            <stop offset="40%" stop-color="#F8BBD0"/>
+                            <stop offset="100%" stop-color="#D4738B"/>
+                        </linearGradient>
+                        <linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stop-color="#BA8B5C"/>
+                            <stop offset="30%" stop-color="#DEB887"/>
+                            <stop offset="70%" stop-color="#D2A76A"/>
+                            <stop offset="100%" stop-color="#8B6914"/>
+                        </linearGradient>
+                        <filter id="pencilShadow">
+                            <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/>
+                        </filter>
+                    </defs>
+                    <g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)">
+                        <rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/>
+                        <rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/>
+                        <rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/>
+                        <line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/>
+                        <rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/>
+                        <rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/>
+                        <rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/>
+                        <line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/>
+                        <line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/>
+                        <polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/>
+                        <polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/>
+                        <polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/>
+                        <line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse - 1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 9</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse + 1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1">
+        <span id="speedLabel">1x</span>
+    </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <!-- Quick Facts -->
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div>
+                <div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">104</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">9</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">33</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Backbiter</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Backbiting &amp; Greed</div></div>
+                </div>
+            </section>
+
+            <!-- Story -->
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div>
+                <div class="glow-line reveal"></div>
+                <p>This surah was revealed in Makkah and delivers a stern warning against two destructive habits: <span class="highlight">backbiting (talking badly about someone behind their back)</span> and <span class="highlight">slandering (mocking someone to their face)</span>. The Arabic word "humazah" refers to someone who mocks and insults people openly, while "lumazah" refers to someone who does it behind their backs.</p>
+                <p>Some scholars say this surah was revealed about specific individuals among the Quraysh who used to mock the Prophet (peace be upon him) and the early Muslims. Others, like Ibn Kathir, explain that the warning is <span class="highlight">general and applies to anyone</span> who engages in this behavior.</p>
+                <div class="important">
+                    <p>The surah connects two sins together: backbiting/slandering and obsessive love of wealth. The person described here not only mocks others but also hoards money, counting it over and over, thinking wealth will make them live forever. Allah warns that such a person will be thrown into Al-Hutamah (the Crusher), a terrifying name for Hellfire that crushes and breaks everything thrown into it.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>The surah then describes this punishment in vivid detail: it is <span class="highlight">the fire of Allah, eternally fueled</span>, which reaches deep into the hearts of the sinners. It will be <span class="highlight">closed over them</span> in towering columns, leaving no escape. This imagery emphasizes that the punishment is not just physical but penetrates to the core of their being.</p>
+                <p>As-Sa'di explains that <span class="highlight">the fire reaching the hearts</span> is significant because the heart is where arrogance, contempt for others, and love of wealth reside. The punishment matches the crime perfectly.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div>
+                <div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card">
+                    <div class="verse-number">1</div>
+                    <div class="verse-arabic">وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّمَزَةٍ</div>
+                    <div class="verse-transliteration">Waylul li-kulli humazatil lumazah</div>
+                    <div class="verse-translation">Woe to every scorner and mocker.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / Destruction</span></div>
+                            <div class="word-chip"><span class="ar">لِّكُلِّ</span><span class="trans">li-kulli</span><span class="meaning">To every</span></div>
+                            <div class="word-chip"><span class="ar">هُمَزَةٍ</span><span class="trans">humazatin</span><span class="meaning">Scorner (face-to-face)</span></div>
+                            <div class="word-chip"><span class="ar">لُّمَزَةٍ</span><span class="trans">lumazatin</span><span class="meaning">Mocker (behind the back)</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Waylun" is one of the strongest words of warning in the Quran - it means terrible destruction and punishment. "Humazah" comes from "hamz" which means to crush or break, referring to someone who attacks others openly with insults and mockery. "Lumazah" comes from "lamz" which means to hint or gesture, referring to backbiting and mocking people behind their backs. Both forms of hurting people are condemned equally.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">2</div>
+                    <div class="verse-arabic">الَّذِي جَمَعَ مَالًا وَعَدَّدَهُ</div>
+                    <div class="verse-transliteration">Alladhi jama'a maalan wa 'addadah</div>
+                    <div class="verse-translation">Who collects wealth and continuously counts it.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The one who</span></div>
+                            <div class="word-chip"><span class="ar">جَمَعَ</span><span class="trans">jama'a</span><span class="meaning">Collected / gathered</span></div>
+                            <div class="word-chip"><span class="ar">مَالًا</span><span class="trans">maalan</span><span class="meaning">Wealth / money</span></div>
+                            <div class="word-chip"><span class="ar">وَعَدَّدَهُ</span><span class="trans">wa 'addadah</span><span class="meaning">And counted it repeatedly</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Jama'a" means to gather and amass, implying this person is obsessively accumulating wealth from every direction. "'Addadah" comes from "'adad" (number/count) and the form used here implies doing it again and again. This person keeps counting their money repeatedly, finding pleasure and security in the numbers rather than using the wealth for good. Ibn Kathir notes this describes someone whose entire life revolves around accumulating and counting wealth.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">3</div>
+                    <div class="verse-arabic">يَحْسَبُ أَنَّ مَالَهُ أَخْلَدَهُ</div>
+                    <div class="verse-transliteration">Yahsabu anna maalahu akhladah</div>
+                    <div class="verse-translation">He thinks that his wealth will make him immortal.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">يَحْسَبُ</span><span class="trans">yahsabu</span><span class="meaning">He thinks / assumes</span></div>
+                            <div class="word-chip"><span class="ar">أَنَّ</span><span class="trans">anna</span><span class="meaning">That</span></div>
+                            <div class="word-chip"><span class="ar">مَالَهُ</span><span class="trans">maalahu</span><span class="meaning">His wealth</span></div>
+                            <div class="word-chip"><span class="ar">أَخْلَدَهُ</span><span class="trans">akhladah</span><span class="meaning">Will make him immortal</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Yahsabu" means he assumes or supposes, implying a false belief. "Akhladah" comes from "khuld" meaning eternity or immortality. This person has deluded himself into thinking that wealth can somehow protect him from death or extend his life indefinitely. As-Sa'di explains that this is the ultimate delusion: thinking money can buy what only Allah controls. No matter how rich someone becomes, death comes to everyone without exception.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">4</div>
+                    <div class="verse-arabic">كَلَّا ۖ لَيُنبَذَنَّ فِي الْحُطَمَةِ</div>
+                    <div class="verse-transliteration">Kalla, la-yunbadhanna fil-hutamah</div>
+                    <div class="verse-translation">No! He will surely be thrown into the Crusher.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Absolutely not!</span></div>
+                            <div class="word-chip"><span class="ar">لَيُنبَذَنَّ</span><span class="trans">la-yunbadhanna</span><span class="meaning">He will surely be thrown</span></div>
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">Into</span></div>
+                            <div class="word-chip"><span class="ar">الْحُطَمَةِ</span><span class="trans">al-hutamah</span><span class="meaning">The Crusher</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Kalla" is a strong word of rejection and rebuke - Allah is forcefully rejecting the delusion mentioned in the previous verse. "Yunbadhanna" means to be thrown or cast away with contempt, like something worthless. "Al-Hutamah" comes from "hatm" meaning to crush and break into pieces. It is a name for Hellfire that emphasizes its crushing, breaking nature. Just as this person crushed others with their words, they will be crushed by the fire. The punishment mirrors the crime.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">5</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا الْحُطَمَةُ</div>
+                    <div class="verse-transliteration">Wa maa adraaka mal-hutamah</div>
+                    <div class="verse-translation">And what can make you know what the Crusher is?</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa maa</span><span class="meaning">And what</span></div>
+                            <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraaka</span><span class="meaning">Can make you know</span></div>
+                            <div class="word-chip"><span class="ar">مَا</span><span class="trans">maa</span><span class="meaning">What</span></div>
+                            <div class="word-chip"><span class="ar">الْحُطَمَةُ</span><span class="trans">al-hutamah</span><span class="meaning">The Crusher</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>This rhetorical question "wa maa adraaka" (and what will make you know) is used in the Quran to emphasize something beyond human comprehension. It creates a sense of awe and terror - the Crusher is so terrible that no human mind can fully grasp its reality. Ibn Kathir explains that whenever Allah uses this phrase, He follows it with an explanation, which comes in the next verses.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">6</div>
+                    <div class="verse-arabic">نَارُ اللَّهِ الْمُوقَدَةُ</div>
+                    <div class="verse-transliteration">Naarullahil-muqadah</div>
+                    <div class="verse-translation">It is the fire of Allah, eternally fueled.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">نَارُ</span><span class="trans">naaru</span><span class="meaning">Fire of</span></div>
+                            <div class="word-chip"><span class="ar">اللَّهِ</span><span class="trans">Allahi</span><span class="meaning">Allah</span></div>
+                            <div class="word-chip"><span class="ar">الْمُوقَدَةُ</span><span class="trans">al-muqadah</span><span class="meaning">The eternally fueled / kindled</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>The fire is attributed to Allah Himself ("Naarullah"), which is extremely significant. Ibn Kathir points out that Allah rarely attributes things directly to Himself in this way, and when He does, it emphasizes their greatness and severity. "Al-Muqadah" means continuously kindled, burning without end. Unlike worldly fires that need fuel and eventually die out, this fire is maintained by Allah's power and never extinguishes.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">7</div>
+                    <div class="verse-arabic">الَّتِي تَطَّلِعُ عَلَى الْأَفْئِدَةِ</div>
+                    <div class="verse-transliteration">Allatee tattali'u 'alal-af'idah</div>
+                    <div class="verse-translation">Which mounts directed at the hearts.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">الَّتِي</span><span class="trans">allatee</span><span class="meaning">Which (feminine)</span></div>
+                            <div class="word-chip"><span class="ar">تَطَّلِعُ</span><span class="trans">tattali'u</span><span class="meaning">Mounts / rises upon</span></div>
+                            <div class="word-chip"><span class="ar">عَلَى</span><span class="trans">'ala</span><span class="meaning">Upon / over</span></div>
+                            <div class="word-chip"><span class="ar">الْأَفْئِدَةِ</span><span class="trans">al-af'idah</span><span class="meaning">The hearts</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Tattali'u" means to rise up, mount, or reach toward something. "Al-Af'idah" is the plural of "fu'aad" which refers to the innermost part of the heart. As-Sa'di beautifully explains that the fire targets the hearts specifically because the heart is where the diseases of arrogance, contempt for others, and obsessive love of wealth reside. The punishment reaches the very source of the sin. Some scholars say this means the fire causes the most intense pain at the heart, which is the most sensitive part of the body.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">8</div>
+                    <div class="verse-arabic">إِنَّهَا عَلَيْهِمْ مُّؤْصَدَةٌ</div>
+                    <div class="verse-transliteration">Innaha 'alayhim mu'sadah</div>
+                    <div class="verse-translation">Indeed, it will be closed down upon them.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">إِنَّهَا</span><span class="trans">innaha</span><span class="meaning">Indeed it</span></div>
+                            <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">Upon them</span></div>
+                            <div class="word-chip"><span class="ar">مُّؤْصَدَةٌ</span><span class="trans">mu'sadah</span><span class="meaning">Closed / sealed shut</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"Mu'sadah" means completely closed, sealed, and locked with no opening or exit. Ibn Kathir explains that the doors of Hellfire will be shut upon its inhabitants so that they can never leave. There is no escape, no reprieve, and no hope of exit. This imagery is especially terrifying because even in the worst worldly prisons, there is some hope of release. Here, there is none. The fire surrounds them from every direction with no way out.</p>
+                    </div>
+                </div>
+
+                <div class="verse-card">
+                    <div class="verse-number">9</div>
+                    <div class="verse-arabic">فِي عَمَدٍ مُّمَدَّدَةٍ</div>
+                    <div class="verse-transliteration">Fee 'amadim mumaddadah</div>
+                    <div class="verse-translation">In extended columns.</div>
+                    <div class="word-breakdown">
+                        <h4>Word by Word (right to left)</h4>
+                        <div class="words-grid">
+                            <div class="word-chip"><span class="ar">فِي</span><span class="trans">fee</span><span class="meaning">In</span></div>
+                            <div class="word-chip"><span class="ar">عَمَدٍ</span><span class="trans">'amadin</span><span class="meaning">Columns / pillars</span></div>
+                            <div class="word-chip"><span class="ar">مُّمَدَّدَةٍ</span><span class="trans">mumaddadah</span><span class="meaning">Extended / outstretched</span></div>
+                        </div>
+                    </div>
+                    <div class="friendly-explanation">
+                        <div class="label">Simple Explanation</div>
+                        <p>"'Amad" means pillars or columns, and "mumaddadah" means stretched out or extended. Scholars differ on the exact meaning: some say the doors are sealed with pillars stretching across them to reinforce the closure, making escape even more impossible. Others say the inhabitants themselves are bound to extended pillars of fire. Either way, the image is one of absolute confinement and inescapable punishment. This final verse seals the surah with a terrifying image of permanence and finality.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Lessons -->
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Humazah</div>
+                <div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Backbiting and mocking destroy communities.</strong><p style="color: #999; font-size: 0.95em;">Allah begins with "Waylun" (Woe!), one of the strongest warnings in the Quran. Mocking others, whether openly or behind their backs, is a serious sin that tears apart the bonds between people.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Wealth cannot save you from death.</strong><p style="color: #999; font-size: 0.95em;">No matter how much money you accumulate and count, it cannot make you immortal. The delusion that wealth equals permanence is shattered by the reality of death and accountability.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The punishment fits the crime.</strong><p style="color: #999; font-size: 0.95em;">The fire that reaches the hearts targets the very place where arrogance, contempt, and greed resided. This is divine justice in its most precise form.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">There is no escape from Allah's judgment.</strong><p style="color: #999; font-size: 0.95em;">The fire is described as being closed over them in extended columns. Unlike worldly prisons, there is no parole, no appeal, and no escape from the consequences of persistent arrogance and cruelty.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on classical tafsir sources including Tafsir Ibn Kathir and Tafsir As-Sa'di. The word "Al-Hutamah" (the Crusher) is a name for Hellfire unique to this surah. While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars for detailed rulings and interpretations.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.<br>
+        <a href="106-quraysh.html">Next: Surah Quraysh &rarr;</a>
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null;
+        let speed = 1;
+        let currentVerse = 0;
+        let isAnimating = false;
+
+        speedSlider.addEventListener('input', () => {
+            speed = parseFloat(speedSlider.value);
+            speedLabel.textContent = speed + 'x';
+        });
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        // ===== VERSE DATA =====
+        const verses = [
+            {
+                num: 1,
+                arabic: '\u0648\u064E\u064A\u0652\u0644\u064C \u0644\u0651\u0650\u0643\u064F\u0644\u0651\u0650 \u0647\u064F\u0645\u064E\u0632\u064E\u0629\u064D \u0644\u0651\u064F\u0645\u064E\u0632\u064E\u0629\u064D',
+                translit: "Waylul li-kulli humazatil lumazah",
+                explanation: "Woe and destruction to every person who mocks and insults others! Whether they do it to your face or behind your back, Allah sees it all.",
+                build: buildVerse1
+            },
+            {
+                num: 2,
+                arabic: '\u0627\u0644\u0651\u064E\u0630\u0650\u064A \u062C\u064E\u0645\u064E\u0639\u064E \u0645\u064E\u0627\u0644\u064B\u0627 \u0648\u064E\u0639\u064E\u062F\u0651\u064E\u062F\u064E\u0647\u064F',
+                translit: "Alladhi jama'a maalan wa 'addadah",
+                explanation: "This person is obsessed with money! They collect it and keep counting it over and over, as if it will last forever.",
+                build: buildVerse2
+            },
+            {
+                num: 3,
+                arabic: '\u064A\u064E\u062D\u0652\u0633\u064E\u0628\u064F \u0623\u064E\u0646\u0651\u064E \u0645\u064E\u0627\u0644\u064E\u0647\u064F \u0623\u064E\u062E\u0652\u0644\u064E\u062F\u064E\u0647\u064F',
+                translit: "Yahsabu anna maalahu akhladah",
+                explanation: "He actually thinks his money will make him live forever! But no amount of wealth can stop death from coming.",
+                build: buildVerse3
+            },
+            {
+                num: 4,
+                arabic: '\u0643\u064E\u0644\u0651\u064E\u0627 \u06DA \u0644\u064E\u064A\u064F\u0646\u0628\u064E\u0630\u064E\u0646\u0651\u064E \u0641\u0650\u064A \u0627\u0644\u0652\u062D\u064F\u0637\u064E\u0645\u064E\u0629\u0650',
+                translit: "Kalla, la-yunbadhanna fil-hutamah",
+                explanation: "No way! Allah says absolutely not! This person will be thrown into Al-Hutamah, the Crusher that breaks and destroys everything!",
+                build: buildVerse4
+            },
+            {
+                num: 5,
+                arabic: '\u0648\u064E\u0645\u064E\u0627 \u0623\u064E\u062F\u0652\u0631\u064E\u0627\u0643\u064E \u0645\u064E\u0627 \u0627\u0644\u0652\u062D\u064F\u0637\u064E\u0645\u064E\u0629\u064F',
+                translit: "Wa maa adraaka mal-hutamah",
+                explanation: "And what can make you understand how terrible the Crusher is? It is beyond anything you can imagine!",
+                build: buildVerse5
+            },
+            {
+                num: 6,
+                arabic: '\u0646\u064E\u0627\u0631\u064F \u0627\u0644\u0644\u0651\u064E\u0647\u0650 \u0627\u0644\u0652\u0645\u064F\u0648\u0642\u064E\u062F\u064E\u0629\u064F',
+                translit: "Naarullahil-muqadah",
+                explanation: "It is the fire of Allah Himself, burning forever and ever, never going out! A fire that Allah Himself has kindled.",
+                build: buildVerse6
+            },
+            {
+                num: 7,
+                arabic: '\u0627\u0644\u0651\u064E\u062A\u0650\u064A \u062A\u064E\u0637\u0651\u064E\u0644\u0650\u0639\u064F \u0639\u064E\u0644\u064E\u0649 \u0627\u0644\u0652\u0623\u064E\u0641\u0652\u0626\u0650\u062F\u064E\u0629\u0650',
+                translit: "Allatee tattali'u 'alal-af'idah",
+                explanation: "This fire reaches deep inside to the hearts! It targets the very place where arrogance and contempt for others lived.",
+                build: buildVerse7
+            },
+            {
+                num: 8,
+                arabic: '\u0625\u0650\u0646\u0651\u064E\u0647\u064E\u0627 \u0639\u064E\u0644\u064E\u064A\u0652\u0647\u0650\u0645 \u0645\u0651\u064F\u0624\u0652\u0635\u064E\u062F\u064E\u0629\u064C',
+                translit: "Innaha 'alayhim mu'sadah",
+                explanation: "The fire will be completely sealed over them with no way out! The doors are locked shut forever.",
+                build: buildVerse8
+            },
+            {
+                num: 9,
+                arabic: '\u0641\u0650\u064A \u0639\u064E\u0645\u064E\u062F\u064D \u0645\u0651\u064F\u0645\u064E\u062F\u0651\u064E\u062F\u064E\u0629\u064D',
+                translit: "Fee 'amadim mumaddadah",
+                explanation: "In towering columns that stretch endlessly! The pillars of fire surround them on every side, sealing their fate.",
+                build: buildVerse9
+            }
+        ];
+
+        // ===== SVG HELPERS =====
+        function el(tag, attrs) {
+            const e = document.createElementNS(svgNS, tag);
+            for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+            return e;
+        }
+        function pathEl(d, fill, stroke, sw, join) {
+            const attrs = { d, fill: fill || 'none', stroke: stroke || 'none' };
+            if (sw) attrs['stroke-width'] = sw;
+            if (join) { attrs['stroke-linejoin'] = join; attrs['stroke-linecap'] = join; }
+            return el('path', attrs);
+        }
+        function lineEl(x1, y1, x2, y2, stroke, sw) {
+            return el('line', { x1, y1, x2, y2, stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+        }
+        function textEl(text, x, y, opts = {}) {
+            const e = el('text', {
+                x, y, 'text-anchor': opts.anchor || 'middle', 'dominant-baseline': 'middle',
+                'font-family': opts.family || 'Caveat, cursive',
+                'font-size': opts.size || 22, 'font-weight': opts.weight || 600,
+                fill: opts.color || '#2c3e50'
+            });
+            e.textContent = text;
+            return e;
+        }
+        function createLinearGrad(id, x1, y1, x2, y2, stops) {
+            const g = document.createElementNS(svgNS, 'linearGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('x1', x1); g.setAttribute('y1', y1);
+            g.setAttribute('x2', x2); g.setAttribute('y2', y2);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function createRadialGrad(id, cx, cy, r, stops) {
+            const g = document.createElementNS(svgNS, 'radialGradient');
+            g.setAttribute('id', id);
+            g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+            stops.forEach(([off, col]) => {
+                const s = document.createElementNS(svgNS, 'stop');
+                s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+                g.appendChild(s);
+            });
+            return g;
+        }
+        function cartoonCloud(cx, cy, scale) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#softShadow)');
+            const s = scale;
+            [[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],
+             [cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry]) => {
+                g.appendChild(el('ellipse', { cx: x, cy: y, rx, ry, fill: 'url(#cloudGrad)' }));
+            });
+            g.appendChild(el('ellipse', { cx, cy: cy-8*s, rx: 25*s, ry: 12*s, fill: 'rgba(255,255,255,0.7)' }));
+            return g;
+        }
+        function cartoonSparkle(cx, cy, size) {
+            const g = document.createElementNS(svgNS, 'g');
+            g.setAttribute('filter', 'url(#glow)');
+            const s = size;
+            g.appendChild(pathEl(
+                `M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,
+                '#FFF9C4', '#FFD54F', 1, 'round'));
+            return g;
+        }
+        function cartoonStar(cx, cy, outerR, innerR, fill, stroke) {
+            const pts = [];
+            for (let i = 0; i < 10; i++) {
+                const r = i % 2 === 0 ? outerR : innerR;
+                const a = (Math.PI / 5) * i - Math.PI / 2;
+                pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+            }
+            return el('polygon', { points: pts.join(' '), fill, stroke, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+        }
+
+        // ===== COMMON DEFS =====
+        function addCommonDefs(svg) {
+            const defs = document.createElementNS(svgNS, 'defs');
+
+            defs.appendChild(createLinearGrad('skyGrad', '0%','0%','0%','100%',
+                [['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyDark', '0%','0%','0%','100%',
+                [['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            defs.appendChild(createLinearGrad('skyDramatic', '0%','0%','0%','100%',
+                [['0%','#4A148C'],['30%','#6A1B9A'],['60%','#E65100'],['100%','#FF8F00']]));
+            defs.appendChild(createLinearGrad('groundGrad', '0%','0%','0%','100%',
+                [['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('sandGrad', '0%','0%','0%','100%',
+                [['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('fireGrad', '0%','0%','0%','100%',
+                [['0%','#FF6F00'],['30%','#FF8F00'],['60%','#E65100'],['100%','#BF360C']]));
+            defs.appendChild(createLinearGrad('fireGradIntense', '0%','0%','0%','100%',
+                [['0%','#FFAB00'],['20%','#FF6D00'],['50%','#DD2C00'],['80%','#B71C1C'],['100%','#4A0000']]));
+            defs.appendChild(createLinearGrad('darkFireGrad', '0%','0%','0%','100%',
+                [['0%','#B71C1C'],['40%','#880E4F'],['70%','#4A148C'],['100%','#1a1a2e']]));
+            defs.appendChild(createLinearGrad('coinGrad', '0%','0%','100%','0%',
+                [['0%','#C9A84C'],['30%','#FFD54F'],['60%','#FFC107'],['100%','#C9A84C']]));
+            defs.appendChild(createLinearGrad('chestGrad', '0%','0%','0%','100%',
+                [['0%','#8D6E63'],['40%','#6D4C41'],['100%','#4E342E']]));
+            defs.appendChild(createLinearGrad('columnGrad', '0%','0%','100%','0%',
+                [['0%','#B71C1C'],['30%','#E65100'],['50%','#FF6F00'],['70%','#E65100'],['100%','#B71C1C']]));
+            defs.appendChild(createLinearGrad('gateGrad', '0%','0%','0%','100%',
+                [['0%','#333'],['30%','#212121'],['70%','#1a1a1a'],['100%','#111']]));
+            defs.appendChild(createLinearGrad('robeGrad', '0%','0%','100%','100%',
+                [['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            defs.appendChild(createLinearGrad('heartGrad', '0%','0%','0%','100%',
+                [['0%','#E53935'],['50%','#C62828'],['100%','#B71C1C']]));
+
+            defs.appendChild(createRadialGrad('sunGlow', '50%','50%','50%',
+                [['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('skinGrad', '40%','35%','50%',
+                [['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            defs.appendChild(createRadialGrad('cloudGrad', '40%','30%','55%',
+                [['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('fireGlow', '50%','50%','50%',
+                [['0%','rgba(255,111,0,0.6)'],['40%','rgba(255,111,0,0.3)'],['100%','rgba(255,111,0,0)']]));
+            defs.appendChild(createRadialGrad('goldenGlow', '50%','50%','50%',
+                [['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            defs.appendChild(createRadialGrad('warnGlow', '50%','50%','50%',
+                [['0%','rgba(229,57,53,0.5)'],['50%','rgba(229,57,53,0.2)'],['100%','rgba(229,57,53,0)']]));
+
+            const glow = document.createElementNS(svgNS, 'filter');
+            glow.setAttribute('id', 'glow');
+            glow.innerHTML = '<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+            defs.appendChild(glow);
+
+            const shadow = document.createElementNS(svgNS, 'filter');
+            shadow.setAttribute('id', 'softShadow');
+            shadow.setAttribute('x','-20%'); shadow.setAttribute('y','-20%');
+            shadow.setAttribute('width','140%'); shadow.setAttribute('height','140%');
+            shadow.innerHTML = '<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';
+            defs.appendChild(shadow);
+
+            const dotPattern = document.createElementNS(svgNS, 'pattern');
+            dotPattern.setAttribute('id','dots'); dotPattern.setAttribute('width','18');
+            dotPattern.setAttribute('height','18'); dotPattern.setAttribute('patternUnits','userSpaceOnUse');
+            dotPattern.appendChild(el('circle', { cx:9, cy:9, r:0.7, fill:'#e0d8c8' }));
+            defs.appendChild(dotPattern);
+
+            svg.appendChild(defs);
+            return defs;
+        }
+
+        function initSvg() {
+            const old = document.getElementById('sceneSvg');
+            if (old) old.remove();
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('id', 'sceneSvg');
+            svg.setAttribute('viewBox', '0 0 900 506');
+            svg.setAttribute('xmlns', svgNS);
+            container.appendChild(svg);
+            addCommonDefs(svg);
+            svg.appendChild(el('rect', { width:900, height:506, fill:'#FFF9F0' }));
+            svg.appendChild(el('rect', { width:900, height:506, fill:'url(#dots)' }));
+            const groups = [];
+            function add(gi, node) {
+                if (!groups[gi]) groups[gi] = [];
+                groups[gi].push(node);
+                svg.appendChild(node);
+            }
+            return { svg, groups, add };
+        }
+
+        // Helper: draw speech bubble with mean words
+        function drawSpeechBubble(add, gi, cx, cy, w, h, text, tailDir) {
+            const g = document.createElementNS(svgNS, 'g');
+            // Bubble
+            g.appendChild(el('rect', { x: cx-w/2, y: cy-h/2, width: w, height: h, rx: 12, ry: 12,
+                fill: '#FFF', stroke: '#E53935', 'stroke-width': 2 }));
+            // Tail
+            const tx = tailDir === 'left' ? cx-w/2+15 : cx+w/2-15;
+            const ty = cy+h/2;
+            g.appendChild(pathEl(`M${tx-8},${ty} L${tx},${ty+15} L${tx+8},${ty}`, '#FFF', '#E53935', 2, 'round'));
+            // Text
+            const t = el('text', { x: cx, y: cy, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+                'font-family': 'Caveat, cursive', 'font-size': 16, 'font-weight': 600, fill: '#E53935' });
+            t.textContent = text;
+            g.appendChild(t);
+            add(gi, g);
+        }
+
+        // Helper: draw a cartoon person silhouette (no face details, Islamic compliant)
+        function drawPerson(add, gi, cx, cy, scale, robeColor, headColor) {
+            const s = scale;
+            // Shadow
+            add(gi, el('ellipse', { cx, cy: cy+25*s, rx: 12*s, ry: 4*s, fill: 'rgba(0,0,0,0.12)' }));
+            // Robe/body
+            add(gi, pathEl(`M${cx-12*s},${cy-5*s} Q${cx-14*s},${cy+10*s} ${cx-16*s},${cy+22*s} L${cx+16*s},${cy+22*s} Q${cx+14*s},${cy+10*s} ${cx+12*s},${cy-5*s} Z`,
+                robeColor || 'url(#robeGrad)', '#90A4AE', 1.2*s, 'round'));
+            // Head (circle, no features)
+            add(gi, el('circle', { cx, cy: cy-12*s, r: 9*s, fill: headColor || 'url(#skinGrad)', stroke: '#E65100', 'stroke-width': 0.8*s }));
+        }
+
+        // Helper: draw coins
+        function drawCoin(add, gi, cx, cy, r) {
+            add(gi, el('ellipse', { cx, cy, rx: r, ry: r*0.7, fill: 'url(#coinGrad)', stroke: '#A68529', 'stroke-width': 1.2 }));
+            add(gi, el('ellipse', { cx, cy: cy-1, rx: r*0.6, ry: r*0.4, fill: 'rgba(255,255,255,0.3)' }));
+        }
+
+        // Helper: draw fire tongue
+        function drawFlame(add, gi, cx, cy, w, h) {
+            add(gi, pathEl(
+                `M${cx-w/2},${cy} Q${cx-w/4},${cy-h*0.3} ${cx-w/6},${cy-h*0.7} Q${cx},${cy-h} ${cx+w/6},${cy-h*0.7} Q${cx+w/4},${cy-h*0.3} ${cx+w/2},${cy} Z`,
+                'url(#fireGrad)', '#E65100', 1.5, 'round'));
+            // Inner flame
+            add(gi, pathEl(
+                `M${cx-w/4},${cy} Q${cx-w/8},${cy-h*0.2} ${cx},${cy-h*0.5} Q${cx+w/8},${cy-h*0.2} ${cx+w/4},${cy} Z`,
+                '#FFAB00', '#FF6D00', 1, 'round'));
+        }
+
+        // ===== VERSE 1: WOE TO EVERY BACKBITER =====
+        function buildVerse1() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Warm sky with ominous tint
+            add(0, pathEl('M0,0 L900,0 L900,180 L0,180 Z', 'url(#skyGrad)', 'none', 0));
+
+            // G1: Warning banner at top
+            add(1, pathEl('M200,20 L700,20 L710,55 L700,55 L700,90 L200,90 L200,55 L190,55 Z',
+                '#B71C1C', '#8B0000', 2, 'round'));
+            add(1, textEl('WAYLUN!', 450, 45, { size: 28, color: '#FFCDD2', weight: 700 }));
+            add(1, textEl('(Woe & Destruction!)', 450, 72, { size: 16, color: '#EF9A9A', weight: 600 }));
+
+            // G2: Ground
+            add(2, pathEl('M0,350 L900,350 L900,506 L0,506 Z', 'url(#sandGrad)', '#C49A52', 1.5));
+            // Grass tufts
+            for (let i = 0; i < 20; i++) {
+                const gx = 20 + i * 45;
+                add(2, pathEl(`M${gx},350 Q${gx-2},${340} ${gx-4},${335}`, 'none', '#66BB6A', 1.5, 'round'));
+                add(2, pathEl(`M${gx},350 Q${gx+3},${338} ${gx+5},${333}`, 'none', '#43A047', 1.5, 'round'));
+            }
+
+            // G3: Central scene - person pointing/mocking
+            drawPerson(add, 3, 450, 280, 2.5, '#78909C', 'url(#skinGrad)');
+            // Pointing hand (right)
+            add(3, pathEl('M475,270 L520,255 L525,258 L480,273', '#FFB74D', '#E65100', 1, 'round'));
+            // Pointing hand (left)
+            add(3, pathEl('M425,275 L380,260 L375,263 L420,278', '#FFB74D', '#E65100', 1, 'round'));
+
+            // G4: Victims on the sides
+            drawPerson(add, 4, 200, 300, 2.0, '#90CAF9', 'url(#skinGrad)');
+            drawPerson(add, 4, 700, 300, 2.0, '#A5D6A7', 'url(#skinGrad)');
+            // Sad indicators (drooping lines above heads)
+            add(4, pathEl('M190,260 Q200,255 210,260', 'none', '#42A5F5', 1.5, 'round'));
+            add(4, pathEl('M690,260 Q700,255 710,260', 'none', '#66BB6A', 1.5, 'round'));
+
+            // G5: Hurtful speech bubbles
+            drawSpeechBubble(add, 5, 340, 200, 100, 35, 'Ha ha!', 'right');
+            drawSpeechBubble(add, 5, 560, 210, 110, 35, '*whisper*', 'left');
+
+            // G6: More speech bubbles - gossip words
+            drawSpeechBubble(add, 6, 300, 150, 90, 30, 'Mock!', 'right');
+            drawSpeechBubble(add, 6, 600, 155, 100, 30, 'Insult!', 'left');
+
+            // G7: Small crowd in background watching
+            [[120,330],[160,335],[240,335],[280,330],[620,330],[660,335],[740,335],[780,330]].forEach(([px,py]) => {
+                add(7, el('circle', { cx: px, cy: py-15, r: 5, fill: '#BCAAA4' }));
+                add(7, pathEl(`M${px-4},${py-8} L${px-5},${py+5} L${px+5},${py+5} L${px+4},${py-8} Z`,
+                    '#CFD8DC', '#B0BEC5', 0.8, 'round'));
+            });
+
+            // G8: Red warning X marks
+            [[150,140],[750,140],[100,200],[800,200]].forEach(([x,y]) => {
+                add(8, lineEl(x-8, y-8, x+8, y+8, '#E53935', 2.5));
+                add(8, lineEl(x+8, y-8, x-8, y+8, '#E53935', 2.5));
+            });
+
+            // G9: Title
+            add(9, textEl('"Woe to every scorner and mocker"', 450, 480, { size: 24, color: '#B71C1C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 2: COLLECTS WEALTH AND COUNTS IT =====
+        function buildVerse2() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Rich interior background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#2C1810', 'none', 0));
+            add(0, pathEl('M0,0 L900,0 L900,150 L0,150 Z', '#3E2723', 'none', 0));
+            // Rich wallpaper pattern
+            for (let i = 0; i < 12; i++) {
+                for (let j = 0; j < 4; j++) {
+                    add(0, el('circle', { cx: 40+i*75, cy: 30+j*40, r: 1.5, fill: 'rgba(201,168,76,0.2)' }));
+                }
+            }
+
+            // G1: Floor
+            add(1, pathEl('M0,380 L900,380 L900,506 L0,506 Z', '#4E342E', '#3E2723', 1.5));
+            // Floor tiles
+            for (let i = 0; i < 10; i++) {
+                add(1, lineEl(i*100, 380, i*100, 506, 'rgba(62,39,35,0.5)', 1));
+            }
+
+            // G2: Big treasure chest in center
+            add(2, pathEl('M350,280 L550,280 L550,370 L350,370 Z', 'url(#chestGrad)', '#3E2723', 2.5, 'round'));
+            add(2, pathEl('M345,280 L555,280 L555,260 Q450,240 345,260 Z', '#795548', '#5D4037', 2, 'round'));
+            // Chest lock
+            add(2, el('rect', { x: 440, y: 290, width: 20, height: 15, rx: 3, fill: '#C9A84C', stroke: '#A68529', 'stroke-width': 1.5 }));
+            add(2, el('circle', { cx: 450, cy: 300, r: 3, fill: '#8D6E63' }));
+            // Chest bands
+            add(2, lineEl(350, 310, 550, 310, '#A68529', 2));
+            add(2, lineEl(350, 340, 550, 340, '#A68529', 2));
+
+            // G3: Overflowing coins from chest
+            [[370,275],[390,270],[410,268],[430,265],[450,263],[470,266],[490,269],[510,272],[530,276],
+             [380,260],[420,255],[460,252],[500,257],[540,262]].forEach(([cx,cy]) => {
+                drawCoin(add, 3, cx, cy, 8+Math.random()*4);
+            });
+
+            // G4: Scattered coins on floor
+            [[200,400],[250,410],[300,395],[380,390],[420,405],[480,395],
+             [530,400],[600,410],[650,395],[700,405],[750,390],[180,420],
+             [350,415],[500,420],[620,420],[770,415]].forEach(([cx,cy]) => {
+                drawCoin(add, 4, cx, cy, 6+Math.random()*3);
+            });
+
+            // G5: Person sitting counting money
+            drawPerson(add, 5, 200, 310, 2.2, '#5D4037', 'url(#skinGrad)');
+            // Hands reaching toward coins
+            add(5, pathEl('M220,305 Q240,300 260,290', 'none', '#FFB74D', 3, 'round'));
+            add(5, pathEl('M180,310 Q170,305 165,295', 'none', '#FFB74D', 3, 'round'));
+            // Coins in hand
+            drawCoin(add, 5, 265, 288, 7);
+            drawCoin(add, 5, 160, 292, 7);
+
+            // G6: Stacks of gold bars on right
+            [[680,350],[680,340],[680,330],[720,350],[720,340],[720,330],[760,350],[760,340]].forEach(([bx,by]) => {
+                add(6, pathEl(`M${bx-15},${by} L${bx+15},${by} L${bx+15},${by+10} L${bx-15},${by+10} Z`,
+                    'url(#coinGrad)', '#A68529', 1.2, 'round'));
+            });
+
+            // G7: Counting numbers floating
+            [['1...2...3', 300, 200],['100...200...', 550, 190],['$$$', 700, 220],
+             ['999...1000!', 450, 180]].forEach(([txt,x,y]) => {
+                add(7, textEl(txt, x, y, { size: 18, color: '#C9A84C', weight: 600 }));
+            });
+
+            // G8: Gold sparkles
+            [[250,250],[350,240],[500,230],[650,250],[150,280],[800,270]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 5+Math.random()*4));
+            });
+
+            // G9: Title
+            add(9, textEl('"Collects wealth and counts it"', 450, 475, { size: 24, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 3: THINKS WEALTH MAKES HIM IMMORTAL =====
+        function buildVerse3() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dreamy/delusional background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#1a1a2e', 'none', 0));
+            // Gradient overlay
+            add(0, el('circle', { cx: 450, cy: 253, r: 250, fill: 'url(#goldenGlow)' }));
+
+            // G1: Thought bubble cloud
+            add(1, cartoonCloud(450, 100, 1.5));
+            add(1, el('circle', { cx: 380, cy: 170, r: 10, fill: '#FFF', stroke: '#E0E0E0', 'stroke-width': 1 }));
+            add(1, el('circle', { cx: 360, cy: 200, r: 7, fill: '#FFF', stroke: '#E0E0E0', 'stroke-width': 1 }));
+            add(1, el('circle', { cx: 345, cy: 225, r: 5, fill: '#FFF', stroke: '#E0E0E0', 'stroke-width': 1 }));
+
+            // G2: Inside thought bubble - infinity symbol made of coins
+            add(2, pathEl('M380,80 Q410,50 440,80 Q470,110 500,80 Q530,50 560,80 Q530,110 500,80 Q470,50 440,80 Q410,110 380,80',
+                'none', '#C9A84C', 3, 'round'));
+            add(2, textEl('FOREVER?', 470, 100, { size: 20, color: '#C9A84C', weight: 700 }));
+            // Small coins on the infinity symbol
+            [[390,78],[430,73],[470,88],[510,73],[550,78]].forEach(([cx,cy]) => {
+                drawCoin(add, 2, cx, cy, 5);
+            });
+
+            // G3: Ground
+            add(3, pathEl('M0,380 L900,380 L900,506 L0,506 Z', '#111', '#222', 1));
+
+            // G4: Person on throne of gold
+            // Throne
+            add(4, pathEl('M280,250 L360,250 L370,380 L270,380 Z', '#C9A84C', '#A68529', 2.5, 'round'));
+            add(4, pathEl('M260,250 L380,250 L370,230 L270,230 Z', '#FFD54F', '#C9A84C', 2, 'round'));
+            // Throne back
+            add(4, pathEl('M270,250 L270,180 Q320,160 370,180 L370,250', 'none', '#C9A84C', 3, 'round'));
+            // Person on throne
+            drawPerson(add, 4, 320, 280, 2.5, '#4A148C', 'url(#skinGrad)');
+            // Crown
+            add(4, pathEl('M305,243 L310,230 L315,240 L320,225 L325,240 L330,230 L335,243',
+                '#FFD54F', '#C9A84C', 1.5, 'round'));
+
+            // G5: Hourglass on the right (time running out)
+            // Top triangle
+            add(5, pathEl('M600,200 L660,200 L630,270 Z', 'none', '#90A4AE', 2.5, 'round'));
+            // Bottom triangle
+            add(5, pathEl('M600,340 L660,340 L630,270 Z', 'none', '#90A4AE', 2.5, 'round'));
+            // Sand in top
+            add(5, pathEl('M615,210 L645,210 L630,260 Z', '#F5D6A0', 'none', 0));
+            // Sand in bottom
+            add(5, pathEl('M615,330 L645,330 L630,280 Z', '#E8C888', 'none', 0));
+            // Sand falling
+            add(5, lineEl(630, 260, 630, 280, '#C49A52', 1.5));
+            // Frame
+            add(5, lineEl(595, 195, 665, 195, '#546E7A', 3));
+            add(5, lineEl(595, 345, 665, 345, '#546E7A', 3));
+
+            // G6: Skull symbol (mortality reminder) - subtle
+            add(6, el('circle', { cx: 750, cy: 280, r: 25, fill: '#333', stroke: '#555', 'stroke-width': 2 }));
+            add(6, el('circle', { cx: 741, cy: 273, r: 5, fill: '#111' }));
+            add(6, el('circle', { cx: 759, cy: 273, r: 5, fill: '#111' }));
+            add(6, pathEl('M742,292 L745,288 L748,292 L751,288 L754,292 L757,288', 'none', '#111', 1.5, 'round'));
+            add(6, textEl('?', 750, 320, { size: 24, color: '#E53935', weight: 700 }));
+
+            // G7: Dollar signs floating (delusion)
+            [['$',100,200],['$',150,300],['$',800,200],['$',850,300],
+             ['$',120,150],['$',780,350],['$',200,400],['$',700,400]].forEach(([txt,x,y]) => {
+                add(7, textEl(txt, x, y, { size: 30+Math.random()*20, color: 'rgba(201,168,76,0.3)', weight: 700 }));
+            });
+
+            // G8: Sparkles around the throne
+            [[250,200],[400,180],[350,350],[290,300],[500,280],[550,200]].forEach(([x,y]) => {
+                add(8, cartoonSparkle(x, y, 4+Math.random()*4));
+            });
+
+            // G9: Title
+            add(9, textEl('"He thinks his wealth will make him immortal"', 450, 475, { size: 22, color: '#C9A84C', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 4: THROWN INTO THE CRUSHER =====
+        function buildVerse4() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark dramatic sky
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#darkFireGrad)', 'none', 0));
+
+            // G1: "KALLA!" warning text
+            add(1, textEl('KALLA!', 450, 50, { size: 40, color: '#FF5252', weight: 700 }));
+            add(1, textEl('(Absolutely Not!)', 450, 80, { size: 18, color: '#FF8A80', weight: 600 }));
+
+            // G2: Crushing walls/jaws
+            // Left wall
+            add(2, pathEl('M0,120 L180,150 L180,420 L0,450 Z', '#4A0000', '#B71C1C', 3, 'round'));
+            add(2, pathEl('M180,150 L200,140 L200,430 L180,420 Z', '#7f0000', '#B71C1C', 2, 'round'));
+            // Teeth on left wall
+            for (let i = 0; i < 6; i++) {
+                const ty = 170 + i * 45;
+                add(2, pathEl(`M180,${ty} L210,${ty+12} L180,${ty+25}`, '#FF6F00', '#E65100', 2, 'round'));
+            }
+            // Right wall
+            add(2, pathEl('M900,120 L720,150 L720,420 L900,450 Z', '#4A0000', '#B71C1C', 3, 'round'));
+            add(2, pathEl('M720,150 L700,140 L700,430 L720,420 Z', '#7f0000', '#B71C1C', 2, 'round'));
+            // Teeth on right wall
+            for (let i = 0; i < 6; i++) {
+                const ty = 170 + i * 45;
+                add(2, pathEl(`M720,${ty} L690,${ty+12} L720,${ty+25}`, '#FF6F00', '#E65100', 2, 'round'));
+            }
+
+            // G3: Fire at the bottom
+            for (let i = 0; i < 12; i++) {
+                const fx = 200 + i * 45;
+                const fh = 60 + Math.random() * 40;
+                drawFlame(add, 3, fx, 460, 35, fh);
+            }
+
+            // G4: Person being thrown (falling figure)
+            // Motion lines
+            add(4, lineEl(430, 130, 400, 100, '#FF8A80', 2));
+            add(4, lineEl(470, 130, 500, 100, '#FF8A80', 2));
+            add(4, lineEl(450, 120, 450, 90, '#FF8A80', 2));
+            // Falling person
+            drawPerson(add, 4, 450, 250, 2.0, '#78909C', 'url(#skinGrad)');
+            // Coins falling from pockets
+            [[420,280],[460,290],[440,310],[470,260],[430,250]].forEach(([cx,cy]) => {
+                drawCoin(add, 4, cx, cy, 5);
+            });
+
+            // G5: Crushing arrows pointing inward
+            add(5, pathEl('M230,280 L280,280', 'none', '#FF5252', 4, 'round'));
+            add(5, pathEl('M270,270 L285,280 L270,290', 'none', '#FF5252', 3, 'round'));
+            add(5, pathEl('M670,280 L620,280', 'none', '#FF5252', 4, 'round'));
+            add(5, pathEl('M630,270 L615,280 L630,290', 'none', '#FF5252', 3, 'round'));
+
+            // G6: "AL-HUTAMAH" label
+            add(6, pathEl('M300,380 L600,380 L610,400 L600,400 L600,430 L300,430 L300,400 L290,400 Z',
+                'rgba(183,28,28,0.8)', '#FF5252', 2, 'round'));
+            add(6, textEl('AL-HUTAMAH', 450, 405, { size: 26, color: '#FFCDD2', weight: 700 }));
+
+            // G7: Fire glow
+            add(7, el('circle', { cx: 450, cy: 400, r: 150, fill: 'url(#fireGlow)' }));
+            add(7, el('circle', { cx: 250, cy: 350, r: 80, fill: 'url(#warnGlow)' }));
+            add(7, el('circle', { cx: 650, cy: 350, r: 80, fill: 'url(#warnGlow)' }));
+
+            // G8: Embers floating
+            for (let i = 0; i < 15; i++) {
+                const ex = 200 + Math.random() * 500;
+                const ey = 150 + Math.random() * 250;
+                add(8, el('circle', { cx: ex, cy: ey, r: 1.5+Math.random()*2, fill: '#FF6F00', filter: 'url(#glow)' }));
+            }
+
+            // G9: Title
+            add(9, textEl('"He will be thrown into the Crusher"', 450, 475, { size: 24, color: '#FF8A80', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 5: WHAT IS THE CRUSHER? =====
+        function buildVerse5() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark mysterious background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#0a0a0a', 'none', 0));
+
+            // G1: Giant question mark in center
+            add(1, pathEl('M400,80 Q400,50 430,40 Q470,30 490,60 Q510,90 470,120 Q450,140 450,170',
+                'none', '#E53935', 6, 'round'));
+            add(1, el('circle', { cx: 450, cy: 195, r: 6, fill: '#E53935' }));
+            // Glow around question mark
+            add(1, el('circle', { cx: 450, cy: 120, r: 100, fill: 'url(#warnGlow)' }));
+
+            // G2: The word "AL-HUTAMAH" broken apart dramatically
+            add(2, textEl('A', 180, 260, { size: 50, color: '#FF6F00', weight: 700 }));
+            add(2, textEl('L', 230, 250, { size: 50, color: '#FF8F00', weight: 700 }));
+            add(2, textEl('-', 270, 255, { size: 50, color: '#FFAB00', weight: 700 }));
+            add(2, textEl('H', 320, 260, { size: 50, color: '#FF6F00', weight: 700 }));
+            add(2, textEl('U', 370, 250, { size: 50, color: '#E65100', weight: 700 }));
+            add(2, textEl('T', 420, 260, { size: 50, color: '#DD2C00', weight: 700 }));
+            add(2, textEl('A', 470, 250, { size: 50, color: '#BF360C', weight: 700 }));
+            add(2, textEl('M', 530, 260, { size: 50, color: '#FF6F00', weight: 700 }));
+            add(2, textEl('A', 590, 250, { size: 50, color: '#E65100', weight: 700 }));
+            add(2, textEl('H', 640, 260, { size: 50, color: '#DD2C00', weight: 700 }));
+
+            // G3: Cracks radiating from the word
+            [[180,280,130,330],[230,280,200,340],[320,280,280,350],[450,280,420,360],
+             [550,280,580,350],[640,280,680,340],[700,260,750,310]].forEach(([x1,y1,x2,y2]) => {
+                add(3, lineEl(x1, y1, x2, y2, '#B71C1C', 2));
+            });
+            // More cracks going outward
+            [[350,280,300,220],[500,280,560,210],[400,280,350,200],[600,260,660,200]].forEach(([x1,y1,x2,y2]) => {
+                add(3, lineEl(x1, y1, x2, y2, '#7f0000', 1.5));
+            });
+
+            // G4: Fire peeking through cracks
+            for (let i = 0; i < 8; i++) {
+                const fx = 200 + i * 70;
+                drawFlame(add, 4, fx, 330, 20, 30+Math.random()*20);
+            }
+
+            // G5: Meaning annotations
+            add(5, pathEl('M150,370 L750,370 L750,420 L150,420 Z',
+                'rgba(183,28,28,0.3)', '#B71C1C', 1.5, 'round'));
+            add(5, textEl('The Crusher - that which breaks and shatters everything', 450, 395, { size: 18, color: '#FF8A80', weight: 600 }));
+
+            // G6: Broken objects scattered
+            // Broken coins
+            [[150,300],[200,320],[700,300],[750,320]].forEach(([cx,cy]) => {
+                add(6, pathEl(`M${cx-5},${cy} L${cx+5},${cy} L${cx+3},${cy+6} L${cx-3},${cy+6} Z`,
+                    '#C9A84C', '#A68529', 1, 'round'));
+                add(6, lineEl(cx-2, cy+1, cx+2, cy+5, '#8B0000', 1.5));
+            });
+
+            // G7: Ominous glows
+            add(7, el('circle', { cx: 200, cy: 300, r: 60, fill: 'url(#fireGlow)' }));
+            add(7, el('circle', { cx: 700, cy: 300, r: 60, fill: 'url(#fireGlow)' }));
+            add(7, el('circle', { cx: 450, cy: 350, r: 100, fill: 'url(#warnGlow)' }));
+
+            // G8: Floating embers
+            for (let i = 0; i < 20; i++) {
+                const ex = 100 + Math.random() * 700;
+                const ey = 100 + Math.random() * 300;
+                add(8, el('circle', { cx: ex, cy: ey, r: 1+Math.random()*1.5, fill: '#FF6F00', filter: 'url(#glow)' }));
+            }
+
+            // G9: Title
+            add(9, textEl('"What can make you know the Crusher?"', 450, 470, { size: 22, color: '#FF8A80', weight: 700 }));
+
+            return { svg, groups };
+        }
+        // ===== VERSE 6: FIRE OF ALLAH =====
+        function buildVerse6() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Inferno background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', 'url(#fireGradIntense)', 'none', 0));
+
+            // G1: Massive flames rising from bottom
+            for (let i = 0; i < 18; i++) {
+                const fx = 30 + i * 50;
+                const fh = 100 + Math.random() * 150;
+                drawFlame(add, 1, fx, 480, 45, fh);
+            }
+
+            // G2: Central intense flame pillar
+            add(2, pathEl('M350,506 Q370,400 380,300 Q400,200 420,120 Q440,80 450,50 Q460,80 470,120 Q490,200 500,300 Q510,400 530,506 Z',
+                '#FFAB00', '#FF6D00', 2, 'round'));
+            add(2, pathEl('M400,506 Q410,420 420,350 Q430,280 440,200 Q450,150 450,100 Q460,150 470,200 Q480,280 490,350 Q500,420 510,506 Z',
+                '#FFF9C4', '#FFD54F', 1.5, 'round'));
+
+            // G3: "NAARULLAH" text - Fire of Allah
+            add(3, pathEl('M250,50 L650,50 L660,80 L650,80 L650,110 L250,110 L250,80 L240,80 Z',
+                'rgba(0,0,0,0.5)', '#FF5252', 2, 'round'));
+            add(3, textEl('NAARULLAH', 450, 70, { size: 30, color: '#FFF9C4', weight: 700 }));
+            add(3, textEl('The Fire of Allah', 450, 95, { size: 16, color: '#FFCDD2', weight: 600 }));
+
+            // G4: Eternally fueled - fuel symbols
+            // Bellows/wind feeding the fire
+            for (let i = 0; i < 6; i++) {
+                const wx = 100 + i * 140;
+                const wy = 420 + Math.random() * 30;
+                add(4, pathEl(`M${wx},${wy} Q${wx+15},${wy-20} ${wx+30},${wy}`, 'none', '#FF8F00', 2, 'round'));
+                add(4, pathEl(`M${wx+10},${wy-5} L${wx+15},${wy-25}`, 'none', '#FFAB00', 1.5, 'round'));
+            }
+
+            // G5: Heat shimmer lines
+            for (let i = 0; i < 12; i++) {
+                const hx = 50 + i * 75;
+                const hy = 200 + Math.random() * 100;
+                add(5, pathEl(`M${hx},${hy} Q${hx+10},${hy-10} ${hx+20},${hy} Q${hx+30},${hy+10} ${hx+40},${hy}`,
+                    'none', 'rgba(255,171,0,0.4)', 1.5, 'round'));
+            }
+
+            // G6: Fire glow orbs
+            add(6, el('circle', { cx: 450, cy: 300, r: 200, fill: 'url(#fireGlow)' }));
+            add(6, el('circle', { cx: 200, cy: 350, r: 100, fill: 'url(#fireGlow)' }));
+            add(6, el('circle', { cx: 700, cy: 350, r: 100, fill: 'url(#fireGlow)' }));
+
+            // G7: Embers and sparks rising
+            for (let i = 0; i < 30; i++) {
+                const ex = 50 + Math.random() * 800;
+                const ey = 50 + Math.random() * 400;
+                const er = 1 + Math.random() * 2.5;
+                add(7, el('circle', { cx: ex, cy: ey, r: er, fill: i%3===0 ? '#FFF9C4' : '#FF6F00', filter: 'url(#glow)' }));
+            }
+
+            // G8: "AL-MUQADAH" label
+            add(8, textEl('Al-Muqadah: Eternally Fueled', 450, 180, { size: 20, color: '#FFF9C4', weight: 600 }));
+
+            // G9: Title
+            add(9, textEl('"The fire of Allah, eternally fueled"', 450, 475, { size: 24, color: '#FFF9C4', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 7: MOUNTS UPON THE HEARTS =====
+        function buildVerse7() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep dark red background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#1a0000', 'none', 0));
+            add(0, el('circle', { cx: 450, cy: 253, r: 300, fill: 'url(#warnGlow)' }));
+
+            // G1: Large heart shape in center
+            add(1, pathEl('M450,200 Q480,160 520,170 Q570,180 560,230 Q550,280 450,340 Q350,280 340,230 Q330,180 380,170 Q420,160 450,200 Z',
+                'url(#heartGrad)', '#8B0000', 3, 'round'));
+            // Heart highlight
+            add(1, pathEl('M410,190 Q420,178 440,185', 'none', 'rgba(255,255,255,0.3)', 2, 'round'));
+
+            // G2: Fire arrows targeting the heart from all sides
+            // From left
+            add(2, pathEl('M150,250 L320,240', 'none', '#FF6F00', 3, 'round'));
+            add(2, pathEl('M310,230 L325,240 L310,250', 'none', '#FF6F00', 2.5, 'round'));
+            drawFlame(add, 2, 180, 250, 25, 25);
+            // From right
+            add(2, pathEl('M750,250 L580,240', 'none', '#FF6F00', 3, 'round'));
+            add(2, pathEl('M590,230 L575,240 L590,250', 'none', '#FF6F00', 2.5, 'round'));
+            drawFlame(add, 2, 720, 250, 25, 25);
+            // From top
+            add(2, pathEl('M450,80 L450,175', 'none', '#FF6F00', 3, 'round'));
+            add(2, pathEl('M440,185 L450,170 L460,185', 'none', '#FF6F00', 2.5, 'round'));
+            drawFlame(add, 2, 450, 80, 25, 30);
+            // From bottom
+            add(2, pathEl('M450,430 L450,345', 'none', '#FF6F00', 3, 'round'));
+            add(2, pathEl('M440,355 L450,340 L460,355', 'none', '#FF6F00', 2.5, 'round'));
+            drawFlame(add, 2, 450, 430, 25, 30);
+
+            // G3: Fire engulfing the heart
+            drawFlame(add, 3, 390, 300, 30, 60);
+            drawFlame(add, 3, 450, 310, 35, 70);
+            drawFlame(add, 3, 510, 300, 30, 60);
+            drawFlame(add, 3, 420, 290, 25, 50);
+            drawFlame(add, 3, 480, 290, 25, 50);
+
+            // G4: Labels - what resides in the heart
+            add(4, textEl('Arrogance', 200, 150, { size: 18, color: '#FF8A80', weight: 600 }));
+            add(4, textEl('Contempt', 700, 150, { size: 18, color: '#FF8A80', weight: 600 }));
+            add(4, textEl('Greed', 200, 380, { size: 18, color: '#FF8A80', weight: 600 }));
+            add(4, textEl('Mockery', 700, 380, { size: 18, color: '#FF8A80', weight: 600 }));
+            // Connecting lines from labels to heart
+            add(4, lineEl(240, 160, 380, 200, 'rgba(255,138,128,0.4)', 1));
+            add(4, lineEl(660, 160, 520, 200, 'rgba(255,138,128,0.4)', 1));
+            add(4, lineEl(230, 370, 390, 310, 'rgba(255,138,128,0.4)', 1));
+            add(4, lineEl(660, 370, 510, 310, 'rgba(255,138,128,0.4)', 1));
+
+            // G5: Fire glow around heart
+            add(5, el('circle', { cx: 450, cy: 260, r: 120, fill: 'url(#fireGlow)' }));
+
+            // G6: Small flames around edges
+            [[100,100],[800,100],[100,400],[800,400],[50,250],[850,250]].forEach(([fx,fy]) => {
+                drawFlame(add, 6, fx, fy, 18, 25+Math.random()*15);
+            });
+
+            // G7: Embers
+            for (let i = 0; i < 15; i++) {
+                const ex = 100 + Math.random() * 700;
+                const ey = 50 + Math.random() * 400;
+                add(7, el('circle', { cx: ex, cy: ey, r: 1+Math.random()*2, fill: '#FF6F00', filter: 'url(#glow)' }));
+            }
+
+            // G8: Explanation label
+            add(8, textEl('The fire penetrates to the core', 450, 440, { size: 18, color: '#EF9A9A', weight: 600 }));
+
+            // G9: Title
+            add(9, textEl('"Which mounts directed at the hearts"', 450, 475, { size: 22, color: '#FF8A80', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 8: CLOSED DOWN UPON THEM =====
+        function buildVerse8() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Dark sealed background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#0a0000', 'none', 0));
+
+            // G1: Massive gate/door structure
+            // Left door
+            add(1, pathEl('M150,80 L430,80 L430,420 L150,420 Z', 'url(#gateGrad)', '#333', 3, 'round'));
+            // Right door
+            add(1, pathEl('M470,80 L750,80 L750,420 L470,420 Z', 'url(#gateGrad)', '#333', 3, 'round'));
+            // Door arch
+            add(1, pathEl('M150,80 Q450,20 750,80', '#222', '#444', 3, 'round'));
+            // Door frame
+            add(1, pathEl('M140,70 L140,430 L760,430 L760,70', 'none', '#555', 4, 'round'));
+
+            // G2: Chains and locks on doors
+            // Chain across
+            for (let i = 0; i < 8; i++) {
+                const cx = 250 + i * 55;
+                add(2, el('circle', { cx, cy: 250, r: 8, fill: 'none', stroke: '#666', 'stroke-width': 3 }));
+            }
+            // Big lock in center
+            add(2, el('rect', { x: 425, y: 230, width: 50, height: 40, rx: 5, fill: '#444', stroke: '#666', 'stroke-width': 2 }));
+            add(2, pathEl('M440,230 Q450,215 460,230', 'none', '#666', 4, 'round'));
+            add(2, el('circle', { cx: 450, cy: 252, r: 5, fill: '#333', stroke: '#555', 'stroke-width': 1 }));
+
+            // G3: Fire visible through crack between doors
+            for (let i = 0; i < 5; i++) {
+                const fy = 120 + i * 60;
+                drawFlame(add, 3, 450, fy, 15, 20+Math.random()*15);
+            }
+            // Light seeping through crack
+            add(3, pathEl('M445,80 L455,80 L455,420 L445,420 Z', 'rgba(255,111,0,0.3)', 'none', 0));
+
+            // G4: "MU'SADAH" - sealed/locked label
+            add(4, pathEl('M280,440 L620,440 L630,460 L620,460 L620,490 L280,490 L280,460 L270,460 Z',
+                'rgba(0,0,0,0.7)', '#E53935', 2, 'round'));
+            add(4, textEl("MU'SADAH - Sealed Shut Forever", 450, 465, { size: 20, color: '#FFCDD2', weight: 700 }));
+
+            // G5: Bolts on the doors
+            [[200,150],[350,150],[200,350],[350,350],[550,150],[700,150],[550,350],[700,350]].forEach(([bx,by]) => {
+                add(5, el('circle', { cx: bx, cy: by, r: 6, fill: '#555', stroke: '#777', 'stroke-width': 1.5 }));
+                add(5, lineEl(bx-3, by, bx+3, by, '#444', 1.5));
+            });
+
+            // G6: Fire glow behind doors
+            add(6, el('circle', { cx: 450, cy: 250, r: 180, fill: 'url(#fireGlow)' }));
+
+            // G7: Smoke wisps from top
+            add(7, pathEl('M300,80 Q310,50 330,40 Q340,30 350,40', 'none', 'rgba(100,100,100,0.4)', 2, 'round'));
+            add(7, pathEl('M500,80 Q510,45 530,35 Q540,25 555,35', 'none', 'rgba(100,100,100,0.4)', 2, 'round'));
+            add(7, pathEl('M400,70 Q420,40 440,30', 'none', 'rgba(100,100,100,0.3)', 1.5, 'round'));
+
+            // G8: Dark atmosphere
+            add(8, el('circle', { cx: 100, cy: 250, r: 80, fill: 'url(#warnGlow)' }));
+            add(8, el('circle', { cx: 800, cy: 250, r: 80, fill: 'url(#warnGlow)' }));
+
+            // G9: Title
+            add(9, textEl('"It will be closed down upon them"', 450, 475, { size: 24, color: '#FF8A80', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== VERSE 9: IN EXTENDED COLUMNS =====
+        function buildVerse9() {
+            const { svg, groups, add } = initSvg();
+
+            // G0: Deep infernal background
+            add(0, pathEl('M0,0 L900,0 L900,506 L0,506 Z', '#0a0000', 'none', 0));
+            add(0, pathEl('M0,450 L900,450 L900,506 L0,506 Z', '#1a0000', '#330000', 1));
+
+            // G1: Towering fire columns - left
+            add(1, pathEl('M80,506 L80,50 L130,50 L130,506 Z', 'url(#columnGrad)', '#B71C1C', 2.5, 'round'));
+            add(1, pathEl('M220,506 L220,80 L270,80 L270,506 Z', 'url(#columnGrad)', '#B71C1C', 2.5, 'round'));
+
+            // G2: Towering fire columns - right
+            add(2, pathEl('M630,506 L630,80 L680,80 L680,506 Z', 'url(#columnGrad)', '#B71C1C', 2.5, 'round'));
+            add(2, pathEl('M770,506 L770,50 L820,50 L820,506 Z', 'url(#columnGrad)', '#B71C1C', 2.5, 'round'));
+
+            // G3: Center columns
+            add(3, pathEl('M380,506 L380,100 L420,100 L420,506 Z', 'url(#columnGrad)', '#E65100', 2, 'round'));
+            add(3, pathEl('M480,506 L480,100 L520,100 L520,506 Z', 'url(#columnGrad)', '#E65100', 2, 'round'));
+
+            // G4: Flames atop each column
+            drawFlame(add, 4, 105, 50, 40, 45);
+            drawFlame(add, 4, 245, 80, 40, 40);
+            drawFlame(add, 4, 400, 100, 35, 40);
+            drawFlame(add, 4, 500, 100, 35, 40);
+            drawFlame(add, 4, 655, 80, 40, 40);
+            drawFlame(add, 4, 795, 50, 40, 45);
+
+            // G5: Connecting fire beams between columns (horizontal)
+            add(5, pathEl('M130,150 L220,150', '#FF6F00', '#E65100', 8, 'round'));
+            add(5, pathEl('M270,200 L380,200', '#FF6F00', '#E65100', 8, 'round'));
+            add(5, pathEl('M420,250 L480,250', '#FF6F00', '#E65100', 8, 'round'));
+            add(5, pathEl('M520,200 L630,200', '#FF6F00', '#E65100', 8, 'round'));
+            add(5, pathEl('M680,150 L770,150', '#FF6F00', '#E65100', 8, 'round'));
+
+            // G6: Column ornamental bands
+            [[80,130],[80,250],[80,370],[220,160],[220,280],[220,400],
+             [380,180],[380,300],[380,420],[480,180],[480,300],[480,420],
+             [630,160],[630,280],[630,400],[770,130],[770,250],[770,370]].forEach(([bx,by]) => {
+                add(6, lineEl(bx, by, bx+50, by, '#FFAB00', 2));
+            });
+
+            // G7: Fire glow between columns
+            add(7, el('circle', { cx: 450, cy: 300, r: 180, fill: 'url(#fireGlow)' }));
+            add(7, el('circle', { cx: 170, cy: 300, r: 80, fill: 'url(#fireGlow)' }));
+            add(7, el('circle', { cx: 730, cy: 300, r: 80, fill: 'url(#fireGlow)' }));
+
+            // G8: Embers and sparks filling the space
+            for (let i = 0; i < 25; i++) {
+                const ex = 100 + Math.random() * 700;
+                const ey = 50 + Math.random() * 400;
+                add(8, el('circle', { cx: ex, cy: ey, r: 1+Math.random()*2, fill: i%2===0 ? '#FFF9C4' : '#FF6F00', filter: 'url(#glow)' }));
+            }
+
+            // G9: Title
+            add(9, textEl('"In extended columns"', 450, 475, { size: 26, color: '#FFF9C4', weight: 700 }));
+
+            return { svg, groups };
+        }
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups) {
+            groups.forEach(group => {
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => hideElement(child));
+                        item.style.opacity = '0';
+                    } else {
+                        hideElement(item);
+                    }
+                });
+            });
+        }
+        function hideElement(el) {
+            try {
+                if (el.getTotalLength) {
+                    const len = el.getTotalLength();
+                    el.style.strokeDasharray = len;
+                    el.style.strokeDashoffset = len;
+                    el.style.fillOpacity = '0';
+                    return;
+                }
+            } catch(e) {}
+            el.style.opacity = '0';
+        }
+        function animateGroup(group, duration) {
+            return new Promise(resolve => {
+                const startTime = performance.now();
+                const elements = [];
+                group.forEach(item => {
+                    if (item.tagName === 'g') {
+                        item.querySelectorAll('path, line, circle, ellipse, rect, polygon').forEach(child => {
+                            elements.push(prepElement(child));
+                        });
+                        elements.push({ el: item, hasPath: false, isGroup: true });
+                    } else {
+                        elements.push(prepElement(item));
+                    }
+                });
+                function prepElement(el) {
+                    try {
+                        if (el.getTotalLength) {
+                            const len = el.getTotalLength();
+                            el.style.strokeDasharray = len;
+                            el.style.strokeDashoffset = len;
+                            el.style.fillOpacity = '0';
+                            return { el, len, hasPath: true };
+                        }
+                    } catch(e) {}
+                    el.style.opacity = '0';
+                    return { el, hasPath: false };
+                }
+                function tick(now) {
+                    const elapsed = (now - startTime) * speed;
+                    const t = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    elements.forEach(({ el, len, hasPath, isGroup }) => {
+                        if (isGroup) { el.style.opacity = eased; }
+                        else if (hasPath) {
+                            el.style.strokeDashoffset = len * (1 - eased);
+                            if (eased > 0.5) el.style.fillOpacity = (eased - 0.5) / 0.5;
+                        } else { el.style.opacity = eased; }
+                    });
+                    if (t < 1) {
+                        for (let j = elements.length - 1; j >= 0; j--) {
+                            if (elements[j].hasPath) {
+                                try {
+                                    const pt = elements[j].el.getPointAtLength(elements[j].len * eased);
+                                    if (pt && isFinite(pt.x) && isFinite(pt.y)) { movePen(pt.x, pt.y); break; }
+                                } catch(e) {}
+                            }
+                        }
+                        animationId = requestAnimationFrame(tick);
+                    } else {
+                        elements.forEach(({ el, hasPath, isGroup }) => {
+                            if (isGroup) el.style.opacity = '1';
+                            else if (hasPath) { el.style.strokeDashoffset = '0'; el.style.fillOpacity = '1'; }
+                            else el.style.opacity = '1';
+                        });
+                        resolve();
+                    }
+                }
+                animationId = requestAnimationFrame(tick);
+            });
+        }
+
+        function movePen(svgX, svgY) {
+            const svg = document.getElementById('sceneSvg');
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            penCursor.style.opacity = '1';
+            penCursor.style.left = (svgX * rect.width / 900 - 18) + 'px';
+            penCursor.style.top = (svgY * rect.height / 506 - 58) + 'px';
+        }
+        function hidePen() { penCursor.style.opacity = '0'; }
+
+        // ===== TYPEWRITER =====
+        let typewriterAbort = false;
+        function typewrite(element, text, opts = {}) {
+            return new Promise(resolve => {
+                const charDelay = opts.charDelay || 40;
+                element.textContent = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor' + (opts.rtl ? ' rtl' : '');
+                element.appendChild(cursor);
+                let i = 0;
+                function next() {
+                    if (typewriterAbort) { resolve(); return; }
+                    if (i < text.length) {
+                        element.insertBefore(document.createTextNode(text[i]), cursor);
+                        i++;
+                        setTimeout(next, charDelay / speed);
+                    } else { setTimeout(() => { cursor.remove(); resolve(); }, 300 / speed); }
+                }
+                next();
+            });
+        }
+
+        function resetBottomText() {
+            document.getElementById('verseBadge').style.opacity = '0';
+            ['arabicText','translitText','kidText'].forEach(id => document.getElementById(id).textContent = '');
+        }
+
+        async function animateBottomText(verse) {
+            const badge = document.getElementById('verseBadge');
+            badge.textContent = verse.num;
+            badge.style.opacity = '1';
+            await new Promise(r => setTimeout(r, 200 / speed));
+            await typewrite(document.getElementById('arabicText'), verse.arabic, { charDelay: 50, rtl: true });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('translitText'), verse.translit, { charDelay: 30 });
+            await new Promise(r => setTimeout(r, 100 / speed));
+            await typewrite(document.getElementById('kidText'), verse.explanation, { charDelay: 20 });
+        }
+
+        // ===== PLAY VERSE =====
+        async function playVerse(index) {
+            if (animationId) cancelAnimationFrame(animationId);
+            typewriterAbort = true;
+            await new Promise(r => setTimeout(r, 50));
+            typewriterAbort = false;
+            isAnimating = true;
+            resetBottomText();
+            updateControls();
+
+            const verse = verses[index];
+            const { groups } = verse.build();
+            hideAllPaths(groups);
+
+            const gap = 100;
+            let textStarted = false;
+            let textPromise = null;
+            const textTrigger = Math.floor(groups.length * 0.4);
+
+            for (let i = 0; i < groups.length; i++) {
+                if (typewriterAbort) break;
+                await animateGroup(groups[i], 600);
+                if (i === textTrigger && !textStarted) {
+                    textStarted = true;
+                    textPromise = animateBottomText(verse);
+                }
+                if (i < groups.length - 1) await new Promise(r => setTimeout(r, gap / speed));
+            }
+
+            hidePen();
+            if (!textStarted) textPromise = animateBottomText(verse);
+            if (textPromise) await textPromise;
+            isAnimating = false;
+            updateControls();
+        }
+
+        // ===== NAVIGATION =====
+        function goVerse(index) {
+            if (index < 0 || index >= verses.length) return;
+            currentVerse = index;
+            updateControls();
+            playVerse(index);
+        }
+
+        function replayAnimation() { playVerse(currentVerse); }
+
+        function updateControls() {
+            document.getElementById('prevBtn').disabled = currentVerse === 0;
+            document.getElementById('nextBtn').disabled = currentVerse === verses.length - 1;
+            document.getElementById('verseIndicator').textContent = `${currentVerse + 1} / ${verses.length}`;
+            document.querySelectorAll('.verse-dots .dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentVerse);
+            });
+        }
+
+        // ===== INIT =====
+        function initDots() {
+            const dotsEl = document.getElementById('verseDots');
+            verses.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goVerse(i);
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        // Keyboard nav
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goVerse(currentVerse + 1);
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goVerse(currentVerse - 1);
+            if (e.key === 'r' || e.key === 'R') replayAnimation();
+        });
+
+        window.addEventListener('load', () => {
+            initDots();
+            updateControls();
+            setTimeout(() => playVerse(0), 500);
+        });
+        // ===== VIEW TOGGLE =====
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>
