@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Ash-Shams - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .slide-frame { width: 100%; max-width: 900px; border-radius: 20px; border: 3px solid #333; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .slide-drawing { width: 100%; aspect-ratio: 16 / 9; background: #FFF9F0; position: relative; overflow: hidden; }
+        #sceneSvg { width: 100%; height: 100%; }
+        #penCursor { position: absolute; pointer-events: none; opacity: 0; z-index: 100; width: 52px; height: 65px; left: 0; top: 0; transition: left 0.05s linear, top 0.05s linear; }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+        .slide-bottom { background: #FFF3E0; padding: 24px 30px; border-top: 2px dashed #e0c9a0; text-align: center; }
+        .verse-num-badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: #e67e22; color: #fff; border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px; opacity: 0; transition: opacity 0.3s; }
+        .slide-arabic-text { font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50; direction: rtl; margin-bottom: 4px; min-height: 1.8em; }
+        .slide-translit-text { color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px; min-height: 1.2em; }
+        .slide-kid-text { font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5; min-height: 2em; }
+        .typewriter-cursor { display: inline-block; width: 2px; height: 1em; background: currentColor; margin-left: 2px; vertical-align: text-bottom; animation: cursorBlink 0.6s step-end infinite; }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .controls { margin-top: 20px; display: flex; gap: 12px; align-items: center; }
+        .controls button { background: #1a1a1a; border: 2px solid #333; color: #c9a84c; padding: 10px 24px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer; transition: all 0.3s; }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+        .verse-indicator { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.3em; min-width: 80px; text-align: center; }
+        .speed-control { margin-top: 12px; color: #666; font-size: 0.85em; display: flex; align-items: center; gap: 10px; }
+        .speed-control input { width: 120px; }
+        .verse-dots { display: flex; gap: 8px; margin-top: 12px; }
+        .verse-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; border: 1px solid #555; cursor: pointer; transition: all 0.3s; }
+        .verse-dots .dot.active { background: #c9a84c; border-color: #c9a84c; transform: scale(1.3); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .slide-bottom { padding: 18px 16px; } .slide-kid-text { font-size: 1.1em; } .controls button { padding: 8px 16px; font-size: 0.85em; } }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 91 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الشَّمْسِ</div>
+        <h1>Surah Ash-Shams</h1>
+        <p>The Sun - 15 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor"><svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E8A317"/><stop offset="20%" stop-color="#FDD835"/><stop offset="50%" stop-color="#FFEE58"/><stop offset="80%" stop-color="#FDD835"/><stop offset="100%" stop-color="#C49000"/></linearGradient><linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9E9E9E"/><stop offset="30%" stop-color="#E0E0E0"/><stop offset="60%" stop-color="#BDBDBD"/><stop offset="100%" stop-color="#757575"/></linearGradient><linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E48BA0"/><stop offset="40%" stop-color="#F8BBD0"/><stop offset="100%" stop-color="#D4738B"/></linearGradient><linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#BA8B5C"/><stop offset="30%" stop-color="#DEB887"/><stop offset="70%" stop-color="#D2A76A"/><stop offset="100%" stop-color="#8B6914"/></linearGradient><filter id="pencilShadow"><feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/></filter></defs><g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)"><rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/><rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/><rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/><line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/><line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/><rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/><rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/><rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/><line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/><line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/><polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/><polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/><polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/><line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/></g></svg></div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse-1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 15</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse+1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control"><span>Speed:</span><input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1"><span id="speedLabel">1x</span></div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">91</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">15</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">54</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Sun</div></div>
+                    <div class="fact-card"><div class="label">Notable Feature</div><div class="value" style="font-size:0.9em">11 Consecutive Oaths</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Ash-Shams is one of the most powerful surahs in the Quran in terms of its rhetorical structure. It contains <span class="highlight">11 consecutive oaths</span> - more than any other surah. Allah swears by the sun, the moon, the day, the night, the sky, the earth, and the human soul. All of this is to emphasize one single point: the soul and its purification.</p>
+                <p>The surah then presents <span class="highlight">the central choice</span> every human faces: to purify the soul through taqwa (God-consciousness) or to corrupt it through sin. Success belongs to those who purify their souls, and failure to those who corrupt them.</p>
+                <div class="important">
+                    <p>The Prophet (peace be upon him) used to recite Surah Ash-Shams in the Isha prayer. When Mu'adh ibn Jabal led the prayer and recited Surah Al-Baqarah (a very long surah), a man left the prayer. When the Prophet heard about this, he said: "Are you putting people to trial, O Mu'adh? Why don't you recite Surah Ash-Shams, or Surah Ad-Duha, or Surah Al-A'la?"</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih Bukhari 705, Sahih Muslim 465</p>
+                </div>
+                <p>The surah concludes with the story of <span class="highlight">Thamud</span>, the ancient people who rejected Prophet Salih and hamstrung the she-camel that was a miraculous sign from Allah. Their destruction serves as a vivid example of what happens when a people collectively corrupt their souls and deny divine guidance.</p>
+                <p>The structure is masterful: <span class="highlight">cosmic oaths</span> (verses 1-6) establish the grandeur of creation, the <span class="highlight">soul's nature</span> (verses 7-10) reveals the inner battlefield, and the <span class="highlight">story of Thamud</span> (verses 11-15) shows the real-world consequences of choosing corruption over purification.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">وَالشَّمْسِ وَضُحَاهَا</div>
+                    <div class="verse-transliteration">Wash-shamsi wa duhaha</div>
+                    <div class="verse-translation">By the sun and its brightness.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">By (oath)</span></div>
+                        <div class="word-chip"><span class="ar">الشَّمْسِ</span><span class="trans">ash-shamsi</span><span class="meaning">The sun</span></div>
+                        <div class="word-chip"><span class="ar">وَضُحَاهَا</span><span class="trans">wa duhaha</span><span class="meaning">And its brightness</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah begins with a powerful oath by the sun and its radiant morning light ("duha"). The word "duhaha" refers to the brightness and warmth the sun spreads across the earth. The sun is the most visible, most vital creation we see daily - it gives light, warmth, and life. By starting with this, Allah draws attention to the magnificence of His creation before making His point about the human soul.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وَالْقَمَرِ إِذَا تَلَاهَا</div>
+                    <div class="verse-transliteration">Wal-qamari idha talaha</div>
+                    <div class="verse-translation">And [by] the moon when it follows it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">الْقَمَرِ</span><span class="trans">al-qamari</span><span class="meaning">The moon</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">تَلَاهَا</span><span class="trans">talaha</span><span class="meaning">It follows it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The moon follows the sun - as the sun sets, the moon rises and takes over illuminating the earth with its reflected, gentle light. "Talaha" means to follow or come after. Ibn Kathir explains that this refers to how the moon follows the sun across the sky, receiving its light from the sun and reflecting it. The relationship between sun and moon is one of perfect divine coordination.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَالنَّهَارِ إِذَا جَلَّاهَا</div>
+                    <div class="verse-transliteration">Wan-nahari idha jallaha</div>
+                    <div class="verse-translation">And [by] the day when it displays it (the sun).</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">النَّهَارِ</span><span class="trans">an-nahari</span><span class="meaning">The day</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">جَلَّاهَا</span><span class="trans">jallaha</span><span class="meaning">It reveals / displays it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Jallaha" means to reveal, uncover, or make manifest. When the day comes, it reveals the sun in its full glory and makes everything visible. As-Sa'di explains that the day unveils the world and allows us to see, work, and function. The day is like clarity and truth - it makes everything visible. This pairs with the next verse about the night covering things.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">وَاللَّيْلِ إِذَا يَغْشَاهَا</div>
+                    <div class="verse-transliteration">Wal-layli idha yaghshaha</div>
+                    <div class="verse-translation">And [by] the night when it covers it (the sun).</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">اللَّيْلِ</span><span class="trans">al-layli</span><span class="meaning">The night</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">يَغْشَاهَا</span><span class="trans">yaghshaha</span><span class="meaning">It covers it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Yaghshaha" means to cover, envelop, or shroud. When the night comes, it covers the sun's light and wraps the world in darkness. Ibn Kathir notes that the night and day are opposites that follow each other in perfect rhythm - neither can overtake the other. This contrast between light and darkness, revelation and concealment, is building toward the main point about the soul's choice between purification and corruption.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">وَالسَّمَاءِ وَمَا بَنَاهَا</div>
+                    <div class="verse-transliteration">Was-sama'i wa ma banaha</div>
+                    <div class="verse-translation">And [by] the sky and He who constructed it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءِ</span><span class="trans">as-sama'i</span><span class="meaning">The sky / heaven</span></div>
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And He who</span></div>
+                        <div class="word-chip"><span class="ar">بَنَاهَا</span><span class="trans">banaha</span><span class="meaning">Built / constructed it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the oaths move from celestial bodies to the structures of creation themselves. "Banaha" means to build or construct. The sky is described as a grand construction - raised without pillars, perfectly designed, vast and awe-inspiring. The word "ma" here can mean "what" (referring to the act of building) or "who" (referring to the Builder, Allah). Either way, the sky's construction points to the power and precision of its Creator.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">وَالْأَرْضِ وَمَا طَحَاهَا</div>
+                    <div class="verse-transliteration">Wal-ardi wa ma tahaha</div>
+                    <div class="verse-translation">And [by] the earth and He who spread it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرْضِ</span><span class="trans">al-ardi</span><span class="meaning">The earth</span></div>
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And He who</span></div>
+                        <div class="word-chip"><span class="ar">طَحَاهَا</span><span class="trans">tahaha</span><span class="meaning">Spread it out</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Tahaha" means to spread out, flatten, or extend. Allah spread the earth wide so that humans and creatures can live on it, walk on it, and benefit from it. As-Sa'di explains that Allah made the earth stable and spread out with mountains, rivers, paths, and provisions for life. The sky above and the earth below - both are signs of Allah's creative power, and both are sworn by to emphasize what comes next about the soul.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">وَنَفْسٍ وَمَا سَوَّاهَا</div>
+                    <div class="verse-transliteration">Wa nafsin wa ma sawwaha</div>
+                    <div class="verse-translation">And [by] the soul and He who proportioned it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">نَفْسٍ</span><span class="trans">nafsin</span><span class="meaning">A soul</span></div>
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And He who</span></div>
+                        <div class="word-chip"><span class="ar">سَوَّاهَا</span><span class="trans">sawwaha</span><span class="meaning">Proportioned / perfected it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now comes the climax of the oaths - the human soul (nafs). "Sawwaha" means to proportion, perfect, and balance. Allah created the human soul with a natural balance, with the capacity for both good and evil. The soul is mentioned after the sun, moon, day, night, sky, and earth because it is the crown of creation. All of those cosmic signs were building up to this: YOUR soul is the most important thing in creation.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَاهَا</div>
+                    <div class="verse-transliteration">Fa'alhamaha fujuraha wa taqwaha</div>
+                    <div class="verse-translation">And He inspired it [with discernment of] its wickedness and its righteousness.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَأَلْهَمَهَا</span><span class="trans">fa'alhamaha</span><span class="meaning">Then He inspired it</span></div>
+                        <div class="word-chip"><span class="ar">فُجُورَهَا</span><span class="trans">fujuraha</span><span class="meaning">Its wickedness</span></div>
+                        <div class="word-chip"><span class="ar">وَتَقْوَاهَا</span><span class="trans">wa taqwaha</span><span class="meaning">And its righteousness</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Alhamaha" means He inspired, instilled, or gave innate knowledge. Allah placed within every soul the ability to recognize right from wrong. "Fujur" is wickedness, immorality, and sin. "Taqwa" is God-consciousness, righteousness, and piety. Ibn Kathir explains that Allah showed the soul both paths and gave it the ability to choose. This is the fitrah - the natural disposition. Every person KNOWS deep down what is right and what is wrong. The question is: which path will you choose?</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">قَدْ أَفْلَحَ مَن زَكَّاهَا</div>
+                    <div class="verse-transliteration">Qad aflaha man zakkaha</div>
+                    <div class="verse-translation">He has succeeded who purifies it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قَدْ</span><span class="trans">qad</span><span class="meaning">Certainly / indeed</span></div>
+                        <div class="word-chip"><span class="ar">أَفْلَحَ</span><span class="trans">aflaha</span><span class="meaning">Has succeeded</span></div>
+                        <div class="word-chip"><span class="ar">مَن</span><span class="trans">man</span><span class="meaning">The one who</span></div>
+                        <div class="word-chip"><span class="ar">زَكَّاهَا</span><span class="trans">zakkaha</span><span class="meaning">Purifies it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>THIS is the answer to all 11 oaths. "Qad aflaha" - truly, certainly successful is the one who purifies their soul. "Zakkaha" comes from tazkiyah, which means to purify, cleanse, and grow. After swearing by the sun, moon, day, night, sky, earth, and soul, the entire point is this: purify your soul. The Prophet (peace be upon him) used to make dua: "O Allah, give my soul its taqwa and purify it, for You are the best to purify it. You are its Guardian and Master." (Sahih Muslim 2722)</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَقَدْ خَابَ مَن دَسَّاهَا</div>
+                    <div class="verse-transliteration">Wa qad khaba man dassaha</div>
+                    <div class="verse-translation">And he has failed who instills it [with corruption].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَقَدْ</span><span class="trans">wa qad</span><span class="meaning">And certainly</span></div>
+                        <div class="word-chip"><span class="ar">خَابَ</span><span class="trans">khaba</span><span class="meaning">Has failed</span></div>
+                        <div class="word-chip"><span class="ar">مَن</span><span class="trans">man</span><span class="meaning">The one who</span></div>
+                        <div class="word-chip"><span class="ar">دَسَّاهَا</span><span class="trans">dassaha</span><span class="meaning">Corrupts / buries it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Khaba" means to fail, lose, and be disappointed. "Dassaha" is a powerful word - it means to bury, hide, and corrupt. It comes from the root meaning to conceal something in the ground. When someone corrupts their soul, they are essentially burying their own potential, hiding their goodness under layers of sin. As-Sa'di explains that this person diminishes their soul through disobedience until it becomes small and insignificant, when it was meant to be noble and elevated.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">كَذَّبَتْ ثَمُودُ بِطَغْوَاهَا</div>
+                    <div class="verse-transliteration">Kadhdhabat Thamudu bitaghwaha</div>
+                    <div class="verse-translation">Thamud denied [their prophet] by reason of their transgression.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَذَّبَتْ</span><span class="trans">kadhdhabat</span><span class="meaning">Denied / rejected</span></div>
+                        <div class="word-chip"><span class="ar">ثَمُودُ</span><span class="trans">Thamudu</span><span class="meaning">Thamud (the people)</span></div>
+                        <div class="word-chip"><span class="ar">بِطَغْوَاهَا</span><span class="trans">bitaghwaha</span><span class="meaning">Because of their transgression</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now comes the real-world example: the people of Thamud. They were an ancient Arabian tribe who lived in the rock-carved city of Al-Hijr (also called Mada'in Salih). "Kadhdhabat" means they denied their prophet, Salih. And WHY did they deny him? "Bitaghwaha" - because of their transgression and rebellion. Their sin was not ignorance. It was arrogance. They CHOSE to corrupt their souls, and this is what it looked like in practice.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">إِذِ انبَعَثَ أَشْقَاهَا</div>
+                    <div class="verse-transliteration">Idhin ba'atha ashqaha</div>
+                    <div class="verse-translation">When the most wretched of them was sent forth.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِذِ</span><span class="trans">idhi</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">انبَعَثَ</span><span class="trans">inba'atha</span><span class="meaning">Rose up / was sent forth</span></div>
+                        <div class="word-chip"><span class="ar">أَشْقَاهَا</span><span class="trans">ashqaha</span><span class="meaning">The most wretched of them</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Ashqaha" means the most wretched, the most miserable. This refers to the man who volunteered to hamstring the she-camel. Ibn Kathir identifies him as Qudar ibn Salif, who was the most wicked person among the Thamud. He rose up eagerly to commit the crime. The word "inba'atha" suggests he was driven forward by his own corruption - his soul, buried under sin, propelled him toward destruction.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">فَقَالَ لَهُمْ رَسُولُ اللَّهِ نَاقَةَ اللَّهِ وَسُقْيَاهَا</div>
+                    <div class="verse-transliteration">Faqala lahum Rasulullahi naqatallahi wa suqyaha</div>
+                    <div class="verse-translation">And the messenger of Allah said to them, "[Do not harm] the she-camel of Allah or [prevent] her from drinking."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَقَالَ</span><span class="trans">faqala</span><span class="meaning">Then said</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">To them</span></div>
+                        <div class="word-chip"><span class="ar">رَسُولُ اللَّهِ</span><span class="trans">Rasulullahi</span><span class="meaning">The Messenger of Allah</span></div>
+                        <div class="word-chip"><span class="ar">نَاقَةَ اللَّهِ</span><span class="trans">naqatallahi</span><span class="meaning">The she-camel of Allah</span></div>
+                        <div class="word-chip"><span class="ar">وَسُقْيَاهَا</span><span class="trans">wa suqyaha</span><span class="meaning">And her drink</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Prophet Salih (peace be upon him) warned them clearly: "This is the she-camel of Allah" - meaning it was a miraculous sign from Allah, not an ordinary animal. "Wa suqyaha" - and leave her share of water alone. The she-camel had a designated day to drink from the well, and the people had their own day. This was a simple test of obedience. The warning was clear, the command was easy. But the corrupted soul finds even simple obedience impossible.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">فَكَذَّبُوهُ فَعَقَرُوهَا</div>
+                    <div class="verse-transliteration">Fakadhdhabuhu fa'aqaruha</div>
+                    <div class="verse-translation">But they denied him and hamstrung her.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَكَذَّبُوهُ</span><span class="trans">fakadhdhabuhu</span><span class="meaning">But they denied him</span></div>
+                        <div class="word-chip"><span class="ar">فَعَقَرُوهَا</span><span class="trans">fa'aqaruha</span><span class="meaning">And they hamstrung her</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Kadhdhabuhu" - they denied him (Salih). "Aqaruha" - they hamstrung her (the she-camel). Notice that even though one man did the physical act, the verb is plural ("they hamstrung"). Ibn Kathir explains this is because they ALL approved of it and were complicit. When a society collectively agrees to sin and no one speaks up, they ALL share the blame. This is a powerful lesson about collective responsibility and the danger of silent approval of wrongdoing.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">فَدَمْدَمَ عَلَيْهِمْ رَبُّهُم بِذَنبِهِمْ فَسَوَّاهَا</div>
+                    <div class="verse-transliteration">Fadamdama 'alayhim Rabbuhum bidhanbihim fasawwaha</div>
+                    <div class="verse-translation">So their Lord brought down upon them destruction for their sin and made it equal [upon all of them].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَدَمْدَمَ</span><span class="trans">fadamdama</span><span class="meaning">So He destroyed</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">Upon them</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّهُم</span><span class="trans">Rabbuhum</span><span class="meaning">Their Lord</span></div>
+                        <div class="word-chip"><span class="ar">بِذَنبِهِمْ</span><span class="trans">bidhanbihim</span><span class="meaning">For their sin</span></div>
+                        <div class="word-chip"><span class="ar">فَسَوَّاهَا</span><span class="trans">fasawwaha</span><span class="meaning">And leveled it equally</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Damdama" is an Arabic word that carries the sound of destruction - it means to crush, flatten, and destroy completely. "Fasawwaha" - He made the destruction equal upon all of them. No one was spared, because the sin was collective. As-Sa'di notes that when Allah sent the earthquake and the thunderous scream (as-sayhah), it leveled their homes and lives completely. The verse ends with a profound statement: "wa la yakhāfu 'uqbāhā" - and He does not fear any consequence. Allah's justice is absolute. This is the ultimate warning about what happens when souls are collectively corrupted.</p></div>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Ash-Shams</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Your soul is the most important thing in creation.</strong><p style="color: #999; font-size: 0.95em;">Allah swore by the sun, moon, day, night, sky, and earth - all to make one point: purify your soul. The entire cosmos was mentioned to show how important YOUR inner state is.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Every person knows right from wrong.</strong><p style="color: #999; font-size: 0.95em;">Allah placed within every soul the knowledge of fujur (wickedness) and taqwa (righteousness). No one can claim total ignorance. The fitrah is real, and we are accountable for our choices.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Success is defined by soul purification, not worldly gain.</strong><p style="color: #999; font-size: 0.95em;">The word "aflaha" (succeeded) is used only for the one who purifies their soul. Not the wealthy, not the powerful. Thamud were wealthy and powerful, and they were destroyed.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Collective sin brings collective punishment.</strong><p style="color: #999; font-size: 0.95em;">One man hamstrung the camel, but ALL of Thamud were punished because they approved and were complicit. Silence in the face of evil makes you part of it.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Corruption buries your potential.</strong><p style="color: #999; font-size: 0.95em;">The word "dassaha" (corrupted) literally means to bury. When you choose sin over righteousness, you are burying the best version of yourself under layers of darkness.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on Tafsir Ibn Kathir, Tafsir As-Sa'di, and authentic hadith from Sahih Bukhari and Sahih Muslim. The hadith about the Prophet's recommendation to recite this surah is from Sahih Bukhari (705) and Sahih Muslim (465). The dua for soul purification is from Sahih Muslim (2722). While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null, speed = 1, currentVerse = 0, isAnimating = false;
+        speedSlider.addEventListener('input', () => { speed = parseFloat(speedSlider.value); speedLabel.textContent = speed + 'x'; });
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        const verses = [
+            { num:1, arabic:'وَالشَّمْسِ وَضُحَاهَا', translit:"Wash-shamsi wa duhaha", explanation:"By the sun and its brilliant brightness! Allah starts this surah with the most powerful light in the sky.", build: buildVerse1 },
+            { num:2, arabic:'وَالْقَمَرِ إِذَا تَلَاهَا', translit:"Wal-qamari idha talaha", explanation:"And by the moon when it follows the sun! The moon gently takes over as the sun goes to rest.", build: buildVerse2 },
+            { num:3, arabic:'وَالنَّهَارِ إِذَا جَلَّاهَا', translit:"Wan-nahari idha jallaha", explanation:"And by the day when it reveals everything! The daytime uncovers the world so we can see and work.", build: buildVerse3 },
+            { num:4, arabic:'وَاللَّيْلِ إِذَا يَغْشَاهَا', translit:"Wal-layli idha yaghshaha", explanation:"And by the night when it covers everything! Darkness wraps around like a blanket over the world.", build: buildVerse4 },
+            { num:5, arabic:'وَالسَّمَاءِ وَمَا بَنَاهَا', translit:"Was-sama'i wa ma banaha", explanation:"And by the sky and the One who built it! The sky is a magnificent structure with no pillars at all!", build: buildVerse5 },
+            { num:6, arabic:'وَالْأَرْضِ وَمَا طَحَاهَا', translit:"Wal-ardi wa ma tahaha", explanation:"And by the earth and the One who spread it out! Allah laid the earth wide with mountains, rivers, and paths.", build: buildVerse6 },
+            { num:7, arabic:'وَنَفْسٍ وَمَا سَوَّاهَا', translit:"Wa nafsin wa ma sawwaha", explanation:"And by the soul and the One who perfected it! The soul is the most important creation - even greater than the sun!", build: buildVerse7 },
+            { num:8, arabic:'فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَاهَا', translit:"Fa'alhamaha fujuraha wa taqwaha", explanation:"Allah placed inside every soul the knowledge of right and wrong. Two paths: light or darkness. You choose!", build: buildVerse8 },
+            { num:9, arabic:'قَدْ أَفْلَحَ مَن زَكَّاهَا', translit:"Qad aflaha man zakkaha", explanation:"The one who purifies their soul has truly succeeded! This is the BIG answer to all 11 oaths!", build: buildVerse9 },
+            { num:10, arabic:'وَقَدْ خَابَ مَن دَسَّاهَا', translit:"Wa qad khaba man dassaha", explanation:"And the one who buries their soul in sin has failed! Corruption dims the light inside you.", build: buildVerse10 },
+            { num:11, arabic:'كَذَّبَتْ ثَمُودُ بِطَغْوَاهَا', translit:"Kadhdhabat Thamudu bitaghwaha", explanation:"The people of Thamud denied the truth because of their arrogance and rebellion. A real example of corrupted souls!", build: buildVerse11 },
+            { num:12, arabic:'إِذِ انبَعَثَ أَشْقَاهَا', translit:"Idhin ba'atha ashqaha", explanation:"The most wretched person among them stood up to do the evil deed. His corrupted soul drove him forward.", build: buildVerse12 },
+            { num:13, arabic:'فَقَالَ لَهُمْ رَسُولُ اللَّهِ نَاقَةَ اللَّهِ وَسُقْيَاهَا', translit:"Faqala lahum Rasulullahi naqatallahi wa suqyaha", explanation:"The Messenger of Allah warned them: Leave the she-camel of Allah alone! Don't stop her from drinking!", build: buildVerse13 },
+            { num:14, arabic:'فَكَذَّبُوهُ فَعَقَرُوهَا', translit:"Fakadhdhabuhu fa'aqaruha", explanation:"But they denied him and killed the she-camel! One man did it, but they ALL approved, so they ALL share the blame.", build: buildVerse14 },
+            { num:15, arabic:'فَدَمْدَمَ عَلَيْهِمْ رَبُّهُم بِذَنبِهِمْ فَسَوَّاهَا', translit:"Fadamdama 'alayhim Rabbuhum bidhanbihim fasawwaha", explanation:"So Allah crushed them all for their sin, equally! No one was spared. This is what happens when souls are collectively corrupted.", build: buildVerse15 }
+        ];
+
+        function el(tag, attrs) { const e = document.createElementNS(svgNS, tag); for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, String(v)); return e; }
+        function pathEl(d, fill, stroke, sw, join) { const attrs = { d, fill: fill||'none', stroke: stroke||'none' }; if(sw) attrs['stroke-width']=sw; if(join){attrs['stroke-linejoin']=join;attrs['stroke-linecap']=join;} return el('path', attrs); }
+        function lineEl(x1,y1,x2,y2,stroke,sw) { return el('line',{x1,y1,x2,y2,stroke,'stroke-width':sw,'stroke-linecap':'round'}); }
+        function textEl(text,x,y,opts={}) { const e = el('text',{x,y,'text-anchor':opts.anchor||'middle','dominant-baseline':'middle','font-family':opts.family||'Caveat, cursive','font-size':opts.size||22,'font-weight':opts.weight||600,fill:opts.color||'#2c3e50'}); e.textContent=text; return e; }
+        function createLinearGrad(id,x1,y1,x2,y2,stops){const g=document.createElementNS(svgNS,'linearGradient');g.setAttribute('id',id);g.setAttribute('x1',x1);g.setAttribute('y1',y1);g.setAttribute('x2',x2);g.setAttribute('y2',y2);stops.forEach(([off,col])=>{const s=document.createElementNS(svgNS,'stop');s.setAttribute('offset',off);s.setAttribute('stop-color',col);g.appendChild(s);});return g;}
+        function createRadialGrad(id,cx,cy,r,stops){const g=document.createElementNS(svgNS,'radialGradient');g.setAttribute('id',id);g.setAttribute('cx',cx);g.setAttribute('cy',cy);g.setAttribute('r',r);stops.forEach(([off,col])=>{const s=document.createElementNS(svgNS,'stop');s.setAttribute('offset',off);s.setAttribute('stop-color',col);g.appendChild(s);});return g;}
+        function cartoonCloud(cx,cy,scale){const g=document.createElementNS(svgNS,'g');g.setAttribute('filter','url(#softShadow)');const s=scale;[[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],[cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry])=>{g.appendChild(el('ellipse',{cx:x,cy:y,rx,ry,fill:'url(#cloudGrad)'}));});g.appendChild(el('ellipse',{cx,cy:cy-8*s,rx:25*s,ry:12*s,fill:'rgba(255,255,255,0.7)'}));return g;}
+        function cartoonSparkle(cx,cy,size){const g=document.createElementNS(svgNS,'g');g.setAttribute('filter','url(#glow)');const s=size;g.appendChild(pathEl(`M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,'#FFF9C4','#FFD54F',1,'round'));return g;}
+        function cartoonStar(cx,cy,outerR,innerR,fill,stroke){const pts=[];for(let i=0;i<10;i++){const r=i%2===0?outerR:innerR;const a=(Math.PI/5)*i-Math.PI/2;pts.push(`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`);}return el('polygon',{points:pts.join(' '),fill,stroke,'stroke-width':1.5,'stroke-linejoin':'round'});}
+
+        function addCommonDefs(svg){
+            const defs=document.createElementNS(svgNS,'defs');
+            defs.appendChild(createLinearGrad('skyGrad','0%','0%','0%','100%',[['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyNight','0%','0%','0%','100%',[['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            defs.appendChild(createLinearGrad('groundGrad','0%','0%','0%','100%',[['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('sandGrad','0%','0%','0%','100%',[['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('lightGrad','50%','0%','50%','100%',[['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('robeGrad','0%','0%','100%','100%',[['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            defs.appendChild(createLinearGrad('dawnGrad','0%','0%','0%','100%',[['0%','#FF8F00'],['30%','#FFB74D'],['60%','#FFE0B2'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('pathGold','0%','0%','100%','0%',[['0%','#FFD54F'],['50%','#FFF176'],['100%','#FFD54F']]));
+            defs.appendChild(createLinearGrad('prayerMatGrad','0%','0%','0%','100%',[['0%','#1B5E20'],['40%','#2E7D32'],['70%','#388E3C'],['100%','#1B5E20']]));
+            defs.appendChild(createRadialGrad('sunGlow','50%','50%','50%',[['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('skinGrad','40%','35%','50%',[['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            defs.appendChild(createRadialGrad('cloudGrad','40%','30%','55%',[['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('goldenGlow','50%','50%','50%',[['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            // Additional gradients for this surah
+            defs.appendChild(createRadialGrad('moonGlow','50%','50%','50%',[['0%','#FFFFFF'],['40%','#E0E0E0'],['70%','#BDBDBD'],['100%','rgba(189,189,189,0)']]));
+            defs.appendChild(createLinearGrad('soulGrad','50%','0%','50%','100%',[['0%','#CE93D8'],['40%','#AB47BC'],['100%','#7B1FA2']]));
+            defs.appendChild(createRadialGrad('soulGlow','50%','50%','50%',[['0%','rgba(206,147,216,0.6)'],['40%','rgba(171,71,188,0.3)'],['100%','rgba(171,71,188,0)']]));
+            defs.appendChild(createLinearGrad('darkPathGrad','0%','0%','100%','0%',[['0%','#37474F'],['50%','#263238'],['100%','#37474F']]));
+            defs.appendChild(createLinearGrad('lightPathGrad','0%','0%','100%','0%',[['0%','#FFF9C4'],['50%','#FFF176'],['100%','#FFF9C4']]));
+            defs.appendChild(createLinearGrad('desertGrad','0%','0%','0%','100%',[['0%','#FFCC80'],['40%','#FFB74D'],['70%','#F57C00'],['100%','#E65100']]));
+            defs.appendChild(createRadialGrad('destructGlow','50%','50%','50%',[['0%','#FF5722'],['40%','#E64A19'],['70%','rgba(230,74,25,0.3)'],['100%','rgba(230,74,25,0)']]));
+            const glow=document.createElementNS(svgNS,'filter');glow.setAttribute('id','glow');glow.innerHTML='<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';defs.appendChild(glow);
+            const shadow=document.createElementNS(svgNS,'filter');shadow.setAttribute('id','softShadow');shadow.setAttribute('x','-20%');shadow.setAttribute('y','-20%');shadow.setAttribute('width','140%');shadow.setAttribute('height','140%');shadow.innerHTML='<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';defs.appendChild(shadow);
+            const dotP=document.createElementNS(svgNS,'pattern');dotP.setAttribute('id','dots');dotP.setAttribute('width','18');dotP.setAttribute('height','18');dotP.setAttribute('patternUnits','userSpaceOnUse');dotP.appendChild(el('circle',{cx:9,cy:9,r:0.7,fill:'#e0d8c8'}));defs.appendChild(dotP);
+            svg.appendChild(defs);
+        }
+
+        function initSvg(){const old=document.getElementById('sceneSvg');if(old)old.remove();const svg=document.createElementNS(svgNS,'svg');svg.setAttribute('id','sceneSvg');svg.setAttribute('viewBox','0 0 900 506');svg.setAttribute('xmlns',svgNS);container.appendChild(svg);addCommonDefs(svg);svg.appendChild(el('rect',{width:900,height:506,fill:'#FFF9F0'}));svg.appendChild(el('rect',{width:900,height:506,fill:'url(#dots)'}));const groups=[];function add(gi,node){if(!groups[gi])groups[gi]=[];groups[gi].push(node);svg.appendChild(node);}return{svg,groups,add};}
+
+        // V1: Brilliant sun with radiating light
+        function buildVerse1(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#dawnGrad)','none',0));
+            add(1,el('circle',{cx:450,cy:180,r:80,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(1,el('circle',{cx:450,cy:180,r:130,fill:'url(#goldenGlow)'}));
+            for(let i=0;i<16;i++){const a=(i*Math.PI/8);add(2,lineEl(450+90*Math.cos(a),180+90*Math.sin(a),450+160*Math.cos(a),180+160*Math.sin(a),'#FDD835',3));}
+            add(3,pathEl('M0,400 Q200,380 450,390 Q700,375 900,400 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            [[150,80],[250,120],[650,100],[750,130],[350,60],[550,70]].forEach(([x,y])=>{add(4,cartoonSparkle(x,y,6+Math.random()*5));});
+            add(4,cartoonCloud(100,55,0.5));add(4,cartoonCloud(800,50,0.45));
+            add(5,textEl('"By the sun and its brightness"',450,470,{size:24,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V2: Moon following the sun
+        function buildVerse2(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyNight)','none',0));
+            // Setting sun on left
+            add(1,el('circle',{cx:150,cy:300,r:50,fill:'#F9A825',opacity:'0.5'}));
+            add(1,el('circle',{cx:150,cy:300,r:80,fill:'url(#goldenGlow)',opacity:'0.3'}));
+            // Moon on right following
+            add(2,el('circle',{cx:600,cy:150,r:50,fill:'url(#moonGlow)',filter:'url(#glow)'}));
+            add(2,pathEl('M580,120 Q590,110 610,115 Q625,125 630,145 Q625,170 610,180 Q590,185 580,175 Q600,165 605,150 Q605,130 580,120 Z','#1a1a2e','none',0));
+            // Stars
+            [[200,80],[350,50],[500,70],[700,60],[800,90],[300,130],[450,110],[750,150]].forEach(([x,y])=>{add(3,cartoonStar(x,y,4,2,'rgba(255,255,255,0.7)','rgba(255,255,255,0.3)'));});
+            // Arrow showing moon following sun
+            add(4,pathEl('M250,280 Q400,200 550,170','none','rgba(255,249,196,0.4)',3,'round'));
+            add(4,pathEl('M540,162 L555,170 L540,178','none','rgba(255,249,196,0.4)',2,'round'));
+            add(4,pathEl('M0,380 Q450,370 900,380 L900,506 L0,506 Z','#0f3460','#16213e',2,'round'));
+            add(5,textEl('"And the moon when it follows the sun"',450,470,{size:22,color:'#FFE082',weight:700}));
+            return{svg,groups};}
+
+        // V3: Bright day scene
+        function buildVerse3(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(1,el('circle',{cx:450,cy:80,r:45,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(1,pathEl('M350,0 L330,250 L570,250 L550,0 Z','url(#lightGrad)','none',0));
+            // Revealed landscape
+            add(2,pathEl('M0,350 Q150,320 300,340 Q450,310 600,330 Q750,310 900,350 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Trees and flowers visible
+            add(3,pathEl('M200,350 Q195,310 200,280','none','#5D4037',4,'round'));add(3,el('circle',{cx:200,cy:270,r:25,fill:'#66BB6A',stroke:'#388E3C','stroke-width':1.5}));
+            add(3,pathEl('M700,340 Q695,300 700,270','none','#5D4037',4,'round'));add(3,el('circle',{cx:700,cy:260,r:28,fill:'#66BB6A',stroke:'#388E3C','stroke-width':1.5}));
+            add(3,pathEl('M450,330 Q445,290 450,260','none','#5D4037',4,'round'));add(3,el('circle',{cx:450,cy:250,r:30,fill:'#81C784',stroke:'#388E3C','stroke-width':1.5}));
+            // Small flowers
+            [[300,370],[350,380],[500,365],[600,375],[400,385]].forEach(([x,y])=>{add(4,el('circle',{cx:x,cy:y,r:4,fill:'#E91E63',stroke:'#C2185B','stroke-width':1}));});
+            add(4,cartoonCloud(120,50,0.5));add(4,cartoonCloud(780,45,0.45));
+            add(5,textEl('"And the day when it reveals everything"',450,470,{size:22,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // V4: Night covering everything
+        function buildVerse4(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyNight)','none',0));
+            // Dark blanket descending
+            add(1,pathEl('M0,0 L900,0 L900,300 Q700,280 450,290 Q200,280 0,300 Z','rgba(15,15,30,0.6)','none',0));
+            // Stars twinkling
+            [[100,50],[200,90],[350,40],[500,65],[650,50],[800,80],[150,140],[450,100],[700,120],[300,160]].forEach(([x,y])=>{add(2,cartoonStar(x,y,3+Math.random()*3,1.5,'rgba(255,255,255,0.6)','rgba(255,255,255,0.3)'));});
+            // Silhouette landscape
+            add(3,pathEl('M0,350 Q200,330 350,345 Q500,320 650,340 Q800,325 900,350 L900,506 L0,506 Z','#0a0a1a','#16213e',2,'round'));
+            // Sleeping village silhouettes
+            add(4,pathEl('M300,340 L300,310 L340,290 L380,310 L380,340','none','#16213e',3,'round'));
+            add(4,pathEl('M500,335 L500,305 L530,285 L560,305 L560,335','none','#16213e',3,'round'));
+            add(4,textEl('Yaghshaha',450,240,{size:28,color:'rgba(255,249,196,0.5)',weight:700}));
+            add(5,textEl('"And the night when it covers"',450,470,{size:22,color:'#FFE082',weight:700}));
+            return{svg,groups};}
+
+        // V5: Sky dome/arch
+        function buildVerse5(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            // Grand sky arch
+            add(1,pathEl('M50,400 Q50,80 450,50 Q850,80 850,400','none','#2196F3',4,'round'));
+            add(1,pathEl('M80,400 Q80,100 450,70 Q820,100 820,400','none','rgba(33,150,243,0.3)',2,'round'));
+            // Stars/dots in the sky
+            [[200,130],[300,100],[400,80],[500,85],[600,100],[700,130],[350,150],[550,145],[250,200],[650,195]].forEach(([x,y])=>{add(2,cartoonSparkle(x,y,4+Math.random()*3));});
+            // Ground
+            add(3,pathEl('M0,400 Q450,390 900,400 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Small figure looking up in wonder
+            add(4,el('ellipse',{cx:450,cy:393,rx:18,ry:3,fill:'rgba(0,0,0,0.1)'}));
+            add(4,pathEl('M438,310 Q436,350 435,390 L465,390 Q464,350 462,310 Z','url(#robeGrad)','#78909C',2,'round'));
+            add(4,el('circle',{cx:450,cy:295,r:16,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(4,pathEl('M434,290 Q450,278 466,290','#ECEFF1','#B0BEC5',1.2,'round'));
+            add(5,textEl('"By the sky and He who built it"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V6: Earth spread out with mountains
+        function buildVerse6(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,el('circle',{cx:800,cy:60,r:30,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            // Mountains
+            add(1,pathEl('M0,350 L120,200 L240,350','#795548','#5D4037',2,'round'));
+            add(1,pathEl('M100,350 L250,150 L400,350','#8D6E63','#6D4C41',2,'round'));
+            add(1,pathEl('M600,350 L720,180 L840,350','#795548','#5D4037',2,'round'));
+            // Snow caps
+            add(2,pathEl('M230,170 L250,150 L270,170 Q250,180 230,170','#FFFFFF','#E0E0E0',1,'round'));
+            add(2,pathEl('M105,220 L120,200 L135,220 Q120,230 105,220','#FFFFFF','#E0E0E0',1,'round'));
+            add(2,pathEl('M700,200 L720,180 L740,200 Q720,210 700,200','#FFFFFF','#E0E0E0',1,'round'));
+            // Wide earth/ground
+            add(3,pathEl('M0,350 Q450,340 900,350 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // River winding
+            add(3,pathEl('M350,370 Q400,380 450,370 Q500,360 550,375 Q600,385 650,370','none','#42A5F5',3,'round'));
+            // Spread-out arrows
+            add(4,pathEl('M350,420 L200,440','none','#C9A84C',2,'round'));add(4,pathEl('M550,420 L700,440','none','#C9A84C',2,'round'));
+            add(4,pathEl('M450,430 L450,460','none','#C9A84C',2,'round'));
+            add(4,cartoonCloud(450,50,0.6));
+            add(5,textEl('"By the earth and He who spread it"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V7: Soul represented by glowing orb
+        function buildVerse7(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#dawnGrad)','none',0));
+            // Cosmic backdrop (small sun, moon, stars to show all oaths came before this)
+            add(1,el('circle',{cx:120,cy:60,r:20,fill:'#FDD835',opacity:'0.4'}));
+            add(1,el('circle',{cx:780,cy:55,r:15,fill:'#E0E0E0',opacity:'0.4'}));
+            [[200,40],[300,60],[400,35],[500,50],[600,45],[700,65]].forEach(([x,y])=>{add(1,cartoonStar(x,y,3,1.5,'rgba(255,255,255,0.3)','rgba(255,255,255,0.15)'));});
+            // Central glowing soul orb
+            add(2,el('circle',{cx:450,cy:230,r:100,fill:'url(#soulGlow)'}));
+            add(2,el('circle',{cx:450,cy:230,r:60,fill:'url(#soulGrad)',filter:'url(#glow)'}));
+            add(2,el('circle',{cx:450,cy:230,r:40,fill:'rgba(255,255,255,0.3)'}));
+            // Inner sparkle
+            [[420,200],[480,210],[440,260],[460,190],[430,240]].forEach(([x,y])=>{add(3,cartoonSparkle(x,y,4));});
+            // Label
+            add(4,textEl('The Soul',450,340,{size:26,color:'#7B1FA2',weight:700}));
+            add(4,textEl('The crown of all creation',450,370,{size:16,color:'#9C27B0',weight:600}));
+            // Outer sparkles
+            [[250,150],[650,160],[300,300],[600,290],[200,250],[700,240]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5+Math.random()*4));});
+            add(5,textEl('"By the soul and He who perfected it"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V8: Two paths - light (taqwa) and dark (fujoor)
+        function buildVerse8(){const{svg,groups,add}=initSvg();
+            // Split background
+            add(0,pathEl('M0,0 L450,0 L450,506 L0,506 Z','url(#skyNight)','none',0));
+            add(0,pathEl('M450,0 L900,0 L900,506 L450,506 Z','url(#dawnGrad)','none',0));
+            // Dark path on left
+            add(1,pathEl('M100,400 Q150,350 200,370 Q250,330 300,380','none','url(#darkPathGrad)',6,'round'));
+            add(1,textEl('Fujur',200,280,{size:22,color:'#EF5350',weight:700}));
+            add(1,textEl('Wickedness',200,310,{size:14,color:'#E57373',weight:600}));
+            // Light path on right
+            add(2,pathEl('M600,400 Q650,350 700,370 Q750,330 800,380','none','url(#lightPathGrad)',6,'round'));
+            add(2,textEl('Taqwa',700,280,{size:22,color:'#2E7D32',weight:700}));
+            add(2,textEl('Righteousness',700,310,{size:14,color:'#4CAF50',weight:600}));
+            // Central soul at the fork
+            add(3,el('circle',{cx:450,cy:250,r:35,fill:'url(#soulGrad)',filter:'url(#glow)'}));
+            add(3,el('circle',{cx:450,cy:250,r:55,fill:'url(#soulGlow)'}));
+            // Dividing line
+            add(3,lineEl(450,0,450,506,'rgba(255,255,255,0.15)',1.5));
+            // Fork arrows
+            add(4,pathEl('M430,270 Q350,320 280,370','none','#EF5350',3,'round'));
+            add(4,pathEl('M470,270 Q550,320 620,370','none','#4CAF50',3,'round'));
+            [[550,130],[600,100],[700,120],[750,150]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"He inspired it with its wickedness and righteousness"',450,470,{size:18,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V9: Purified soul glowing brightly
+        function buildVerse9(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#dawnGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Radiant soul - large glowing orb
+            add(1,el('circle',{cx:450,cy:200,r:120,fill:'url(#goldenGlow)'}));
+            add(1,el('circle',{cx:450,cy:200,r:70,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            // Rising upward rays
+            for(let i=0;i<12;i++){const a=(i*30)*Math.PI/180;add(2,lineEl(450+60*Math.cos(a),200+60*Math.sin(a),450+110*Math.cos(a),200+110*Math.sin(a),'rgba(255,213,79,0.6)',2));}
+            // Success text inside
+            add(3,textEl('SUCCESS',450,195,{size:28,color:'#E65100',weight:700}));
+            add(3,textEl('Zakkaha',450,230,{size:18,color:'#BF360C',weight:600}));
+            // Sparkles everywhere
+            [[200,100],[300,150],[600,140],[700,100],[250,250],[650,240],[350,80],[550,75]].forEach(([x,y])=>{add(4,cartoonSparkle(x,y,6+Math.random()*5));});
+            add(4,cartoonCloud(100,50,0.5));add(4,cartoonCloud(800,45,0.45));
+            add(5,textEl('"He has succeeded who purifies it"',450,470,{size:22,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // V10: Corrupted soul dimming
+        function buildVerse10(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyNight)','none',0));
+            // Dim, buried soul
+            add(1,el('circle',{cx:450,cy:280,r:80,fill:'rgba(55,71,79,0.5)'}));
+            add(1,el('circle',{cx:450,cy:280,r:45,fill:'#37474F',stroke:'#263238','stroke-width':2}));
+            // Darkness pressing in
+            add(2,pathEl('M300,200 Q350,230 400,250','none','rgba(38,50,56,0.6)',4,'round'));
+            add(2,pathEl('M600,200 Q550,230 500,250','none','rgba(38,50,56,0.6)',4,'round'));
+            add(2,pathEl('M350,350 Q400,320 430,300','none','rgba(38,50,56,0.6)',4,'round'));
+            add(2,pathEl('M550,350 Q500,320 470,300','none','rgba(38,50,56,0.6)',4,'round'));
+            // Faint spark barely visible inside
+            add(3,el('circle',{cx:450,cy:280,r:8,fill:'rgba(255,249,196,0.2)'}));
+            // Labels
+            add(3,textEl('FAILURE',450,180,{size:28,color:'#EF5350',weight:700}));
+            add(3,textEl('Dassaha',450,210,{size:18,color:'#E57373',weight:600}));
+            // Ground covering/burying
+            add(4,pathEl('M0,380 Q450,370 900,380 L900,506 L0,506 Z','#1a1a2e','#0f3460',2,'round'));
+            add(4,pathEl('M350,370 Q400,360 450,365 Q500,360 550,370','none','#263238',3,'round'));
+            add(5,textEl('"And he has failed who corrupts it"',450,470,{size:22,color:'#EF5350',weight:700}));
+            return{svg,groups};}
+
+        // V11: Thamud people scene
+        function buildVerse11(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,350 L900,350 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Rock-carved dwellings
+            add(1,pathEl('M100,200 L100,350 L250,350 L250,200 Q175,160 100,200 Z','#A1887F','#795548',2,'round'));
+            add(1,pathEl('M130,270 L130,350 L220,350 L220,270 Q175,250 130,270 Z','#5D4037','#4E342E',1.5,'round'));
+            add(1,pathEl('M650,220 L650,350 L800,350 L800,220 Q725,180 650,220 Z','#A1887F','#795548',2,'round'));
+            add(1,pathEl('M680,280 L680,350 L770,350 L770,280 Q725,260 680,280 Z','#5D4037','#4E342E',1.5,'round'));
+            // Arrogant figures
+            add(2,el('ellipse',{cx:400,cy:348,rx:15,ry:3,fill:'rgba(0,0,0,0.1)'}));
+            add(2,pathEl('M390,290 Q388,318 387,346 L413,346 Q412,318 410,290 Z','url(#robeGrad)','#78909C',1.5,'round'));
+            add(2,el('circle',{cx:400,cy:278,r:13,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            add(2,el('ellipse',{cx:500,cy:348,rx:15,ry:3,fill:'rgba(0,0,0,0.1)'}));
+            add(2,pathEl('M490,290 Q488,318 487,346 L513,346 Q512,318 510,290 Z','url(#robeGrad)','#78909C',1.5,'round'));
+            add(2,el('circle',{cx:500,cy:278,r:13,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            // Rebellion symbol - raised fists
+            add(3,pathEl('M395,290 Q385,275 380,265','none','#B0BEC5',3,'round'));
+            add(3,pathEl('M505,290 Q515,275 520,265','none','#B0BEC5',3,'round'));
+            // Label
+            add(4,textEl('Thamud',450,180,{size:30,color:'#795548',weight:700}));
+            add(4,textEl('Rejected the truth out of arrogance',450,210,{size:16,color:'#8D6E63',weight:600}));
+            add(5,textEl('"Thamud denied because of their transgression"',450,470,{size:20,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V12: The most wretched person rises
+        function buildVerse12(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,370 L900,370 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Dark figure rising/stepping forward
+            add(1,el('ellipse',{cx:450,cy:365,rx:22,ry:4,fill:'rgba(0,0,0,0.15)'}));
+            add(1,pathEl('M435,270 Q432,316 430,362 L470,362 Q468,316 465,270 Z','#455A64','#37474F',2,'round'));
+            add(1,el('circle',{cx:450,cy:253,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(1,pathEl('M434,248 Q450,237 466,248','#546E7A','#455A64',1.2,'round'));
+            // Angry expression
+            add(2,pathEl('M443,258 Q450,262 457,258','none','#2C1810',2,'round'));
+            add(2,lineEl(440,247,446,250,'#2C1810',1.5));add(2,lineEl(460,247,454,250,'#2C1810',1.5));
+            // Dark aura around him
+            add(3,el('circle',{cx:450,cy:280,r:80,fill:'rgba(55,71,79,0.2)'}));
+            add(3,el('circle',{cx:450,cy:280,r:50,fill:'rgba(38,50,56,0.15)'}));
+            // Other figures in background shrinking away
+            add(4,el('circle',{cx:250,cy:340,r:10,fill:'url(#skinGrad)',opacity:'0.5'}));
+            add(4,pathEl('M242,345 Q240,355 239,367 L261,367 Q260,355 258,345 Z','#B0BEC5','#78909C',1,'round'));
+            add(4,el('circle',{cx:650,cy:335,r:10,fill:'url(#skinGrad)',opacity:'0.5'}));
+            add(4,pathEl('M642,340 Q640,350 639,367 L661,367 Q660,350 658,340 Z','#B0BEC5','#78909C',1,'round'));
+            add(4,textEl('Ashqaha',450,180,{size:26,color:'#D32F2F',weight:700}));
+            add(5,textEl('"The most wretched among them rose up"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V13: She-camel with warning
+        function buildVerse13(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,360 L900,360 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // She-camel (simple cartoon)
+            add(1,el('ellipse',{cx:550,cy:300,rx:60,ry:35,fill:'#D7CCC8',stroke:'#A1887F','stroke-width':2}));
+            add(1,pathEl('M510,300 L510,355 M530,300 L530,355 M570,300 L570,355 M590,300 L590,355','none','#A1887F',4,'round'));
+            add(1,el('circle',{cx:500,cy:268,r:18,fill:'#D7CCC8',stroke:'#A1887F','stroke-width':2}));
+            add(1,pathEl('M498,260 Q496,245 500,238','none','#A1887F',2,'round'));add(1,pathEl('M502,260 Q504,245 500,238','none','#A1887F',2,'round'));
+            add(1,el('circle',{cx:494,cy:264,r:2,fill:'#5D4037'}));
+            add(1,pathEl('M490,273 Q496,278 502,273','none','#795548',1.5,'round'));
+            // Hump
+            add(1,pathEl('M540,265 Q555,240 570,265','#BCAAA4','#A1887F',1.5,'round'));
+            // Water trough
+            add(2,pathEl('M620,340 L620,360 L720,360 L720,340 Q670,330 620,340 Z','#42A5F5','#1E88E5',1.5,'round'));
+            // Prophet Salih warning figure (generic with head covering)
+            add(3,el('ellipse',{cx:300,cy:358,rx:18,ry:3,fill:'rgba(0,0,0,0.1)'}));
+            add(3,pathEl('M288,280 Q286,318 285,355 L315,355 Q314,318 312,280 Z','url(#robeGrad)','#78909C',2,'round'));
+            add(3,el('circle',{cx:300,cy:265,r:16,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(3,pathEl('M284,260 Q300,248 316,260','#ECEFF1','#B0BEC5',1.2,'round'));
+            // Warning hand gesture
+            add(3,pathEl('M310,290 Q330,275 345,280','none','#B0BEC5',3,'round'));
+            // Warning label
+            add(4,pathEl('M300,200 L300,180 L500,180 L500,200 Q400,210 300,200 Z','rgba(255,249,196,0.8)','#C9A84C',1.5,'round'));
+            add(4,textEl('Leave her alone!',400,192,{size:14,color:'#E65100',weight:700}));
+            // Golden glow around camel
+            add(5,el('circle',{cx:550,cy:300,r:90,fill:'url(#goldenGlow)'}));
+            add(5,textEl('"The she-camel of Allah - let her drink!"',450,470,{size:20,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V14: They denied and hamstrung her
+        function buildVerse14(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#dawnGrad)','none',0));
+            add(0,pathEl('M0,370 L900,370 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Fallen camel silhouette
+            add(1,el('ellipse',{cx:500,cy:350,rx:70,ry:25,fill:'#BCAAA4',stroke:'#8D6E63','stroke-width':2}));
+            add(1,el('circle',{cx:430,cy:340,r:15,fill:'#BCAAA4',stroke:'#8D6E63','stroke-width':1.5}));
+            add(1,pathEl('M530,345 L540,365 M550,350 L560,370 M470,345 L460,365 M450,350 L440,370','none','#8D6E63',3,'round'));
+            // X marks
+            add(2,lineEl(480,320,520,350,'#D32F2F',3));add(2,lineEl(520,320,480,350,'#D32F2F',3));
+            // Crowd of people (guilty - all plural)
+            [[200,340],[250,335],[300,340],[350,338],[650,340],[700,335],[750,340]].forEach(([x,y])=>{
+                add(3,el('circle',{cx:x,cy:y-25,r:8,fill:'url(#skinGrad)',opacity:'0.6'}));
+                add(3,pathEl(`M${x-6},${y-15} Q${x-7},${y-5} ${x-8},${y+5} L${x+8},${y+5} Q${x+7},${y-5} ${x+6},${y-15} Z`,'#90A4AE','#78909C',1,'round'));
+            });
+            // Red text
+            add(4,textEl('They ALL denied.',450,200,{size:24,color:'#D32F2F',weight:700}));
+            add(4,textEl('They ALL shared the blame.',450,235,{size:20,color:'#E57373',weight:600}));
+            [[350,280],[550,275],[400,300],[500,295]].forEach(([x,y])=>{add(5,el('circle',{cx:x,cy:y,r:3,fill:'#D32F2F',opacity:'0.5'}));});
+            add(5,textEl('"They denied him and hamstrung her"',450,470,{size:22,color:'#D32F2F',weight:700}));
+            return{svg,groups};}
+
+        // V15: Destruction/earthquake scene
+        function buildVerse15(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#desertGrad)','none',0));
+            // Destruction - crumbling buildings
+            add(1,pathEl('M100,200 L100,380 L250,380 L250,200 Q175,160 100,200 Z','#A1887F','#795548',2,'round'));
+            add(1,pathEl('M120,250 L130,200 L200,200 L210,250','none','#795548',2,'round'));
+            // Crack lines through buildings
+            add(2,pathEl('M100,200 L170,300 L120,350','none','#D32F2F',2,'round'));
+            add(2,pathEl('M250,220 L200,280 L230,360','none','#D32F2F',2,'round'));
+            // Crumbling pieces
+            add(2,pathEl('M650,230 L650,380 L800,380 L800,230 Q725,190 650,230 Z','#A1887F','#795548',2,'round'));
+            add(2,pathEl('M650,250 L720,290 L800,260','none','#D32F2F',2,'round'));
+            // Earthquake ground cracks
+            add(3,pathEl('M0,380 L900,380 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            add(3,pathEl('M200,380 L250,420 L220,460 L260,506','none','#D32F2F',3,'round'));
+            add(3,pathEl('M500,380 L480,430 L510,470 L490,506','none','#D32F2F',3,'round'));
+            add(3,pathEl('M700,380 L720,420 L690,460 L730,506','none','#D32F2F',3,'round'));
+            // Destruction glow
+            add(4,el('circle',{cx:450,cy:300,r:120,fill:'url(#destructGlow)'}));
+            // Debris falling
+            [[300,180],[350,150],[400,170],[500,160],[550,180],[600,150],[450,130]].forEach(([x,y])=>{
+                add(4,el('rect',{x:x-4,y:y-4,width:8,height:8,fill:'#8D6E63',stroke:'#5D4037','stroke-width':1,transform:`rotate(${Math.random()*45},${x},${y})`}));
+            });
+            add(4,textEl('Damdama',450,100,{size:30,color:'#D32F2F',weight:700}));
+            add(5,textEl('"Their Lord destroyed them for their sin"',450,470,{size:20,color:'#D32F2F',weight:700}));
+            return{svg,groups};}
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups){groups.forEach(group=>{group.forEach(item=>{if(item.tagName==='g'){item.querySelectorAll('path,line,circle,ellipse,rect,polygon').forEach(child=>hideElement(child));item.style.opacity='0';}else{hideElement(item);}});});}
+        function hideElement(el){try{if(el.getTotalLength){const len=el.getTotalLength();el.style.strokeDasharray=len;el.style.strokeDashoffset=len;el.style.fillOpacity='0';return;}}catch(e){}el.style.opacity='0';}
+        function animateGroup(group,duration){return new Promise(resolve=>{const startTime=performance.now();const elements=[];group.forEach(item=>{if(item.tagName==='g'){item.querySelectorAll('path,line,circle,ellipse,rect,polygon').forEach(child=>{elements.push(prepElement(child));});elements.push({el:item,hasPath:false,isGroup:true});}else{elements.push(prepElement(item));}});function prepElement(el){try{if(el.getTotalLength){const len=el.getTotalLength();el.style.strokeDasharray=len;el.style.strokeDashoffset=len;el.style.fillOpacity='0';return{el,len,hasPath:true};}}catch(e){}el.style.opacity='0';return{el,hasPath:false};}function tick(now){const elapsed=(now-startTime)*speed;const t=Math.min(elapsed/duration,1);const eased=1-Math.pow(1-t,3);elements.forEach(({el,len,hasPath,isGroup})=>{if(isGroup){el.style.opacity=eased;}else if(hasPath){el.style.strokeDashoffset=len*(1-eased);if(eased>0.5)el.style.fillOpacity=(eased-0.5)/0.5;}else{el.style.opacity=eased;}});if(t<1){for(let j=elements.length-1;j>=0;j--){if(elements[j].hasPath){try{const pt=elements[j].el.getPointAtLength(elements[j].len*eased);if(pt&&isFinite(pt.x)&&isFinite(pt.y)){movePen(pt.x,pt.y);break;}}catch(e){}}}animationId=requestAnimationFrame(tick);}else{elements.forEach(({el,hasPath,isGroup})=>{if(isGroup)el.style.opacity='1';else if(hasPath){el.style.strokeDashoffset='0';el.style.fillOpacity='1';}else el.style.opacity='1';});resolve();}}animationId=requestAnimationFrame(tick);});}
+        function movePen(svgX,svgY){const svg=document.getElementById('sceneSvg');if(!svg)return;const rect=svg.getBoundingClientRect();penCursor.style.opacity='1';penCursor.style.left=(svgX*rect.width/900-18)+'px';penCursor.style.top=(svgY*rect.height/506-58)+'px';}
+        function hidePen(){penCursor.style.opacity='0';}
+        let typewriterAbort=false;
+        function typewrite(element,text,opts={}){return new Promise(resolve=>{const charDelay=opts.charDelay||40;element.textContent='';const cursor=document.createElement('span');cursor.className='typewriter-cursor'+(opts.rtl?' rtl':'');element.appendChild(cursor);let i=0;function next(){if(typewriterAbort){resolve();return;}if(i<text.length){element.insertBefore(document.createTextNode(text[i]),cursor);i++;setTimeout(next,charDelay/speed);}else{setTimeout(()=>{cursor.remove();resolve();},300/speed);}}next();});}
+        function resetBottomText(){document.getElementById('verseBadge').style.opacity='0';['arabicText','translitText','kidText'].forEach(id=>document.getElementById(id).textContent='');}
+        async function animateBottomText(verse){const badge=document.getElementById('verseBadge');badge.textContent=verse.num;badge.style.opacity='1';await new Promise(r=>setTimeout(r,200/speed));await typewrite(document.getElementById('arabicText'),verse.arabic,{charDelay:50,rtl:true});await new Promise(r=>setTimeout(r,100/speed));await typewrite(document.getElementById('translitText'),verse.translit,{charDelay:30});await new Promise(r=>setTimeout(r,100/speed));await typewrite(document.getElementById('kidText'),verse.explanation,{charDelay:20});}
+        async function playVerse(index){if(animationId)cancelAnimationFrame(animationId);typewriterAbort=true;await new Promise(r=>setTimeout(r,50));typewriterAbort=false;isAnimating=true;resetBottomText();updateControls();const verse=verses[index];const{groups}=verse.build();hideAllPaths(groups);const gap=100;let textStarted=false;let textPromise=null;const textTrigger=Math.floor(groups.length*0.4);for(let i=0;i<groups.length;i++){if(typewriterAbort)break;await animateGroup(groups[i],600);if(i===textTrigger&&!textStarted){textStarted=true;textPromise=animateBottomText(verse);}if(i<groups.length-1)await new Promise(r=>setTimeout(r,gap/speed));}hidePen();if(!textStarted)textPromise=animateBottomText(verse);if(textPromise)await textPromise;isAnimating=false;updateControls();}
+        function goVerse(index){if(index<0||index>=verses.length)return;currentVerse=index;updateControls();playVerse(index);}
+        function replayAnimation(){playVerse(currentVerse);}
+        function updateControls(){document.getElementById('prevBtn').disabled=currentVerse===0;document.getElementById('nextBtn').disabled=currentVerse===verses.length-1;document.getElementById('verseIndicator').textContent=`${currentVerse+1} / ${verses.length}`;document.querySelectorAll('.verse-dots .dot').forEach((d,i)=>{d.classList.toggle('active',i===currentVerse);});}
+        function initDots(){const dotsEl=document.getElementById('verseDots');verses.forEach((_,i)=>{const dot=document.createElement('div');dot.className='dot'+(i===0?' active':'');dot.onclick=()=>goVerse(i);dotsEl.appendChild(dot);});}
+        document.addEventListener('keydown',(e)=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')goVerse(currentVerse+1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')goVerse(currentVerse-1);if(e.key==='r'||e.key==='R')replayAnimation();});
+        window.addEventListener('load',()=>{initDots();updateControls();setTimeout(()=>playVerse(0),500);});
+        function showView(view){const carousel=document.getElementById('carousel-view');const deepDive=document.getElementById('deep-dive-view');const buttons=document.querySelectorAll('.view-toggle button');if(view==='carousel'){carousel.classList.remove('hidden');deepDive.classList.remove('visible');buttons[0].classList.add('active');buttons[1].classList.remove('active');}else{carousel.classList.add('hidden');deepDive.classList.add('visible');buttons[1].classList.add('active');buttons[0].classList.remove('active');setTimeout(setupScrollReveal,100);}}
+        function setupScrollReveal(){const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1});document.querySelectorAll('.reveal, .glow-line').forEach(el=>observer.observe(el));}
+    </script>
+</body>
+</html>

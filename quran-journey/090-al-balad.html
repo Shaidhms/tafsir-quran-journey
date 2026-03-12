@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Balad - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .slide-frame { width: 100%; max-width: 900px; border-radius: 20px; border: 3px solid #333; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .slide-drawing { width: 100%; aspect-ratio: 16 / 9; background: #FFF9F0; position: relative; overflow: hidden; }
+        #sceneSvg { width: 100%; height: 100%; }
+        #penCursor { position: absolute; pointer-events: none; opacity: 0; z-index: 100; width: 52px; height: 65px; left: 0; top: 0; transition: left 0.05s linear, top 0.05s linear; }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+        .slide-bottom { background: #FFF3E0; padding: 24px 30px; border-top: 2px dashed #e0c9a0; text-align: center; }
+        .verse-num-badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: #e67e22; color: #fff; border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px; opacity: 0; transition: opacity 0.3s; }
+        .slide-arabic-text { font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50; direction: rtl; margin-bottom: 4px; min-height: 1.8em; }
+        .slide-translit-text { color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px; min-height: 1.2em; }
+        .slide-kid-text { font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5; min-height: 2em; }
+        .typewriter-cursor { display: inline-block; width: 2px; height: 1em; background: currentColor; margin-left: 2px; vertical-align: text-bottom; animation: cursorBlink 0.6s step-end infinite; }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .controls { margin-top: 20px; display: flex; gap: 12px; align-items: center; }
+        .controls button { background: #1a1a1a; border: 2px solid #333; color: #c9a84c; padding: 10px 24px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer; transition: all 0.3s; }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+        .verse-indicator { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.3em; min-width: 80px; text-align: center; }
+        .speed-control { margin-top: 12px; color: #666; font-size: 0.85em; display: flex; align-items: center; gap: 10px; }
+        .speed-control input { width: 120px; }
+        .verse-dots { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+        .verse-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; border: 1px solid #555; cursor: pointer; transition: all 0.3s; }
+        .verse-dots .dot.active { background: #c9a84c; border-color: #c9a84c; transform: scale(1.3); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .slide-bottom { padding: 18px 16px; } .slide-kid-text { font-size: 1.1em; } .controls button { padding: 8px 16px; font-size: 0.85em; } }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 90 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْبَلَد</div>
+        <h1>Surah Al-Balad</h1>
+        <p>The City - 20 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor"><svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E8A317"/><stop offset="20%" stop-color="#FDD835"/><stop offset="50%" stop-color="#FFEE58"/><stop offset="80%" stop-color="#FDD835"/><stop offset="100%" stop-color="#C49000"/></linearGradient><linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9E9E9E"/><stop offset="30%" stop-color="#E0E0E0"/><stop offset="60%" stop-color="#BDBDBD"/><stop offset="100%" stop-color="#757575"/></linearGradient><linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E48BA0"/><stop offset="40%" stop-color="#F8BBD0"/><stop offset="100%" stop-color="#D4738B"/></linearGradient><linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#BA8B5C"/><stop offset="30%" stop-color="#DEB887"/><stop offset="70%" stop-color="#D2A76A"/><stop offset="100%" stop-color="#8B6914"/></linearGradient><filter id="pencilShadow"><feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/></filter></defs><g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)"><rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/><rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/><rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/><line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/><line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/><rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/><rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/><rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/><line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/><line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/><polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/><polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/><polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/><line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/></g></svg></div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse-1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 20</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse+1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control"><span>Speed:</span><input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1"><span id="speedLabel">1x</span></div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">90</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">20</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">82</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The City</div></div>
+                    <div class="fact-card"><div class="label">Key Theme</div><div class="value" style="font-size:0.9em">Two Paths of Life</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Balad was revealed in Makkah during the early period of the Prophet's mission. The surah takes its name from the word <span class="highlight">"Al-Balad" (The City)</span>, referring to the sacred city of Makkah. Allah swears by this city to honor it, and specifically mentions the Prophet's presence in it.</p>
+                <p>The surah addresses a fundamental reality of human existence: <span class="highlight">life is a struggle</span>. The Arabic word "kabad" (verse 4) means hardship, toil, and difficulty. From the moment a person is born until they leave this world, they face challenges. This is not a punishment but the nature of the test.</p>
+                <div class="important">
+                    <p>Ibn Kathir explains that the oath by Makkah is particularly significant because Allah is honoring the city where His Prophet resides. The phrase "wa anta hillun bihadhal-balad" has been interpreted by many scholars to mean that the Prophet is a free dweller in this city, adding to its honor and sanctity.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>The surah then critiques the <span class="highlight">arrogance of those who boast about their wealth</span>, thinking no one sees them or has power over them. Allah reminds them of the blessings He gave: eyes, tongue, lips, and the ability to distinguish right from wrong.</p>
+                <p>The climax of the surah introduces <span class="highlight">"al-aqabah" (the steep path)</span>, which represents the difficult but rewarding path of righteousness: freeing slaves, feeding the hungry, caring for orphans, and helping the poor. The surah concludes by dividing humanity into two groups: the people of the right hand (those who chose faith and compassion) and the people of the left hand (those who rejected Allah's signs).</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">لَا أُقْسِمُ بِهَٰذَا الْبَلَدِ</div>
+                    <div class="verse-transliteration">La uqsimu bihadhal-balad</div>
+                    <div class="verse-translation">I swear by this city.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَا</span><span class="trans">la</span><span class="meaning">Nay / Indeed</span></div>
+                        <div class="word-chip"><span class="ar">أُقْسِمُ</span><span class="trans">uqsimu</span><span class="meaning">I swear</span></div>
+                        <div class="word-chip"><span class="ar">بِهَٰذَا</span><span class="trans">bihadha</span><span class="meaning">By this</span></div>
+                        <div class="word-chip"><span class="ar">الْبَلَدِ</span><span class="trans">al-balad</span><span class="meaning">The city</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah begins by swearing an oath by the city of Makkah. The word "la" here is used for emphasis (not negation), strengthening the oath. Makkah is the most sacred city on earth, home to the Kaaba, and the birthplace of the Prophet (peace be upon him). By swearing by it, Allah highlights its immense significance.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وَأَنتَ حِلٌّ بِهَٰذَا الْبَلَدِ</div>
+                    <div class="verse-transliteration">Wa anta hillun bihadhal-balad</div>
+                    <div class="verse-translation">And you are free [to do what you wish] in this city.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنتَ</span><span class="trans">wa anta</span><span class="meaning">And you</span></div>
+                        <div class="word-chip"><span class="ar">حِلٌّ</span><span class="trans">hillun</span><span class="meaning">Free / lawful</span></div>
+                        <div class="word-chip"><span class="ar">بِهَٰذَا</span><span class="trans">bihadha</span><span class="meaning">In this</span></div>
+                        <div class="word-chip"><span class="ar">الْبَلَدِ</span><span class="trans">al-balad</span><span class="meaning">The city</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah addresses the Prophet directly, honoring him as a resident of this sacred city. Some scholars say "hillun" means the Prophet is treated as lawful (i.e., his enemies don't respect his sanctity despite being in a sacred city). Others interpret it as a prophecy that Makkah would become lawful for the Prophet during its conquest. Either way, it highlights the Prophet's special connection to this blessed land.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَوَالِدٍ وَمَا وَلَدَ</div>
+                    <div class="verse-transliteration">Wa walidin wa ma walad</div>
+                    <div class="verse-translation">And [by] the parent and that which was born [of him].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَوَالِدٍ</span><span class="trans">wa walidin</span><span class="meaning">And a parent</span></div>
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                        <div class="word-chip"><span class="ar">وَلَدَ</span><span class="trans">walad</span><span class="meaning">He begot / offspring</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah swears by the parent and the child. Some scholars say this refers to Adam (peace be upon him) and all his descendants. Others say it refers generally to every parent and child, highlighting the sacred bond of family. This oath emphasizes the nobility of human creation and the chain of generations that Allah has established.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">لَقَدْ خَلَقْنَا الْإِنسَانَ فِي كَبَدٍ</div>
+                    <div class="verse-transliteration">Laqad khalaqnal-insana fi kabad</div>
+                    <div class="verse-translation">We have certainly created man into hardship.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَقَدْ</span><span class="trans">laqad</span><span class="meaning">Certainly / Indeed</span></div>
+                        <div class="word-chip"><span class="ar">خَلَقْنَا</span><span class="trans">khalaqna</span><span class="meaning">We created</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانَ</span><span class="trans">al-insana</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                        <div class="word-chip"><span class="ar">كَبَدٍ</span><span class="trans">kabad</span><span class="meaning">Hardship / toil</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the answer to the oath: humans were created to face hardship. "Kabad" means difficulty, toil, and struggle. From birth (a difficult process) to death, life is full of challenges. As-Sa'di explains this means that no human is free from some form of hardship, whether physical, emotional, or spiritual. This is the nature of the test of life. Knowing this helps us stop expecting a trouble-free life and instead prepare for the struggles ahead with faith.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">أَيَحْسَبُ أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌ</div>
+                    <div class="verse-transliteration">Ayahsabu an lan yaqdira 'alayhi ahad</div>
+                    <div class="verse-translation">Does he think that never will anyone overcome him?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَيَحْسَبُ</span><span class="trans">ayahsabu</span><span class="meaning">Does he think</span></div>
+                        <div class="word-chip"><span class="ar">أَن</span><span class="trans">an</span><span class="meaning">That</span></div>
+                        <div class="word-chip"><span class="ar">لَّن يَقْدِرَ</span><span class="trans">lan yaqdira</span><span class="meaning">Never will overpower</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِ</span><span class="trans">'alayhi</span><span class="meaning">Over him</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدٌ</span><span class="trans">ahad</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse addresses the arrogance of the human being who, when given strength and wealth, begins to think he is invincible. He forgets that Allah has complete power over him. Ibn Kathir notes this refers to those who become so intoxicated with their own power that they believe no one, not even Allah, can hold them accountable. This is the height of delusion.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">يَقُولُ أَهْلَكْتُ مَالًا لُّبَدًا</div>
+                    <div class="verse-transliteration">Yaqulu ahlaktu malan lubada</div>
+                    <div class="verse-translation">He says, "I have spent wealth in abundance."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَقُولُ</span><span class="trans">yaqulu</span><span class="meaning">He says</span></div>
+                        <div class="word-chip"><span class="ar">أَهْلَكْتُ</span><span class="trans">ahlaktu</span><span class="meaning">I have spent / destroyed</span></div>
+                        <div class="word-chip"><span class="ar">مَالًا</span><span class="trans">malan</span><span class="meaning">Wealth</span></div>
+                        <div class="word-chip"><span class="ar">لُّبَدًا</span><span class="trans">lubada</span><span class="meaning">In abundance / heaped</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This person boasts about how much money he has spent, wanting to show off his wealth and generosity to people. The word "ahlaktu" literally means "I destroyed" (my wealth), implying reckless spending for show. "Lubada" means piles upon piles. But this spending was not for Allah's sake; it was to show off. True charity in Islam is done sincerely for Allah, not for the praise of people.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">أَيَحْسَبُ أَن لَّمْ يَرَهُ أَحَدٌ</div>
+                    <div class="verse-transliteration">Ayahsabu an lam yarahu ahad</div>
+                    <div class="verse-translation">Does he think that no one has seen him?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَيَحْسَبُ</span><span class="trans">ayahsabu</span><span class="meaning">Does he think</span></div>
+                        <div class="word-chip"><span class="ar">أَن</span><span class="trans">an</span><span class="meaning">That</span></div>
+                        <div class="word-chip"><span class="ar">لَّمْ يَرَهُ</span><span class="trans">lam yarahu</span><span class="meaning">Has not seen him</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدٌ</span><span class="trans">ahad</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Does this person think that Allah does not see what he does with his wealth? Whether he spends it sincerely or for show, whether he earned it lawfully or unlawfully, Allah sees everything. As-Sa'di explains that this is a reminder that Allah is Al-Basir (The All-Seeing) and Al-Khabir (The All-Aware). Nothing is hidden from Him, not even the intentions behind our actions.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">أَلَمْ نَجْعَل لَّهُ عَيْنَيْنِ</div>
+                    <div class="verse-transliteration">Alam naj'al lahu 'aynayn</div>
+                    <div class="verse-translation">Have We not made for him two eyes?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَمْ</span><span class="trans">alam</span><span class="meaning">Have not</span></div>
+                        <div class="word-chip"><span class="ar">نَجْعَل</span><span class="trans">naj'al</span><span class="meaning">We made</span></div>
+                        <div class="word-chip"><span class="ar">لَّهُ</span><span class="trans">lahu</span><span class="meaning">For him</span></div>
+                        <div class="word-chip"><span class="ar">عَيْنَيْنِ</span><span class="trans">'aynayn</span><span class="meaning">Two eyes</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah now reminds the ungrateful person of His blessings. Two eyes to see the world, to read the signs of Allah, to witness the beauty of creation, and to navigate through life. The dual form "aynayn" emphasizes the precision of Allah's design. These blessings should lead to gratitude, not arrogance. Every time you see something, remember: that ability is a gift from Allah.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">وَلِسَانًا وَشَفَتَيْنِ</div>
+                    <div class="verse-transliteration">Wa lisanan wa shafatayn</div>
+                    <div class="verse-translation">And a tongue and two lips?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلِسَانًا</span><span class="trans">wa lisanan</span><span class="meaning">And a tongue</span></div>
+                        <div class="word-chip"><span class="ar">وَشَفَتَيْنِ</span><span class="trans">wa shafatayn</span><span class="meaning">And two lips</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A tongue to speak, taste, and express. Two lips to form words, to eat, to smile. These are gifts that enable communication, the sharing of knowledge, the expression of gratitude (dhikr), and the ability to connect with others. The tongue is one of the most powerful tools a person has: it can build or destroy. The Prophet (peace be upon him) said: "Whoever believes in Allah and the Last Day, let him speak good or remain silent." (Sahih Bukhari 6018)</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَهَدَيْنَاهُ النَّجْدَيْنِ</div>
+                    <div class="verse-transliteration">Wa hadaynahun-najdayn</div>
+                    <div class="verse-translation">And have shown him the two ways?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَهَدَيْنَاهُ</span><span class="trans">wa hadaynahu</span><span class="meaning">And We showed him</span></div>
+                        <div class="word-chip"><span class="ar">النَّجْدَيْنِ</span><span class="trans">an-najdayn</span><span class="meaning">The two paths</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"An-najdayn" literally means "the two elevated paths" or "the two highways." Ibn Kathir and As-Sa'di explain this as the path of good and the path of evil. Allah gave every human being the ability to distinguish between right and wrong through fitrah (natural disposition), intellect, and revelation. The choice is ours. This verse establishes human moral responsibility: you cannot claim ignorance when you were shown both roads clearly.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">فَلَا اقْتَحَمَ الْعَقَبَةَ</div>
+                    <div class="verse-transliteration">Falaq-tahamal-'aqabah</div>
+                    <div class="verse-translation">But he has not broken through the difficult pass.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَلَا</span><span class="trans">fala</span><span class="meaning">But not</span></div>
+                        <div class="word-chip"><span class="ar">اقْتَحَمَ</span><span class="trans">iqtahama</span><span class="meaning">He has attempted</span></div>
+                        <div class="word-chip"><span class="ar">الْعَقَبَةَ</span><span class="trans">al-'aqabah</span><span class="meaning">The steep path</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-aqabah" means a steep, difficult mountain pass. The word "iqtahama" means to rush into something difficult, to break through a barrier. Despite being shown both paths, this person has not attempted the harder but more rewarding path of righteousness. The next verses will explain what this steep path consists of. It requires sacrifice, but that is exactly what makes it valuable.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا الْعَقَبَةُ</div>
+                    <div class="verse-transliteration">Wa ma adraka mal-'aqabah</div>
+                    <div class="verse-translation">And what can make you know what is the difficult pass?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                        <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraka</span><span class="meaning">Will make you know</span></div>
+                        <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What is</span></div>
+                        <div class="word-chip"><span class="ar">الْعَقَبَةُ</span><span class="trans">al-'aqabah</span><span class="meaning">The steep path</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is a rhetorical question used throughout the Quran to build anticipation and emphasize the greatness of what is about to be described. "Wa ma adraka" is a formula that appears in several surahs (Al-Haqqah, Al-Qari'ah, Al-Infitar, etc.) and always introduces something of tremendous importance. Allah is about to reveal the deeds that constitute this steep, rewarding path.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">فَكُّ رَقَبَةٍ</div>
+                    <div class="verse-transliteration">Fakku raqabah</div>
+                    <div class="verse-translation">It is the freeing of a slave.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَكُّ</span><span class="trans">fakku</span><span class="meaning">Freeing / releasing</span></div>
+                        <div class="word-chip"><span class="ar">رَقَبَةٍ</span><span class="trans">raqabah</span><span class="meaning">A neck / slave</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The first component of the steep path: freeing a slave. "Raqabah" literally means "neck," used metaphorically for a person in bondage. Islam systematically worked to abolish slavery by making the freeing of slaves one of the most rewarded deeds. It is the expiation for many sins and broken oaths. The Prophet (peace be upon him) said: "Whoever frees a Muslim slave, Allah will save every part of his body from the Fire." (Sahih Bukhari 2517). In modern times, this extends to freeing people from any form of oppression and bondage.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">أَوْ إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ</div>
+                    <div class="verse-transliteration">Aw it'amun fi yawmin dhi masghabah</div>
+                    <div class="verse-translation">Or feeding on a day of severe hunger.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَوْ</span><span class="trans">aw</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">إِطْعَامٌ</span><span class="trans">it'amun</span><span class="meaning">Feeding</span></div>
+                        <div class="word-chip"><span class="ar">فِي يَوْمٍ</span><span class="trans">fi yawmin</span><span class="meaning">On a day</span></div>
+                        <div class="word-chip"><span class="ar">ذِي</span><span class="trans">dhi</span><span class="meaning">Of / possessing</span></div>
+                        <div class="word-chip"><span class="ar">مَسْغَبَةٍ</span><span class="trans">masghabah</span><span class="meaning">Severe hunger</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The second component: feeding others, specifically on a day when food is scarce and hunger is widespread. "Masghabah" means extreme, intense hunger. Charity given during times of hardship is worth far more than charity given in ease. When you yourself are struggling but still give to others, that is the steep path. As-Sa'di notes that specifying "a day of severe hunger" means the reward is greater when the need is most desperate.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">يَتِيمًا ذَا مَقْرَبَةٍ</div>
+                    <div class="verse-transliteration">Yatiman dha maqrabah</div>
+                    <div class="verse-translation">An orphan of near relationship.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَتِيمًا</span><span class="trans">yatiman</span><span class="meaning">An orphan</span></div>
+                        <div class="word-chip"><span class="ar">ذَا</span><span class="trans">dha</span><span class="meaning">Possessing / of</span></div>
+                        <div class="word-chip"><span class="ar">مَقْرَبَةٍ</span><span class="trans">maqrabah</span><span class="meaning">Near kinship</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Feed specifically an orphan who is a relative. Islam places great emphasis on maintaining family ties (silat al-rahm). An orphan within your own family has a double right upon you: the right of kinship and the right of being an orphan. By specifying "dha maqrabah" (of near relationship), the Quran reminds us to look after our own extended family first before looking elsewhere. Sometimes the people closest to us are the ones we overlook the most.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">أَوْ مِسْكِينًا ذَا مَتْرَبَةٍ</div>
+                    <div class="verse-transliteration">Aw miskinan dha matrabah</div>
+                    <div class="verse-translation">Or a needy person in misery.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَوْ</span><span class="trans">aw</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">مِسْكِينًا</span><span class="trans">miskinan</span><span class="meaning">A needy person</span></div>
+                        <div class="word-chip"><span class="ar">ذَا</span><span class="trans">dha</span><span class="meaning">Possessing / of</span></div>
+                        <div class="word-chip"><span class="ar">مَتْرَبَةٍ</span><span class="trans">matrabah</span><span class="meaning">Clinging to dust / utter poverty</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Miskin" is someone in severe poverty. "Dha matrabah" literally means "clinging to the dust," describing someone so poor they have nothing and lie on the bare ground. This is the lowest level of material existence. Feeding such a person is one of the greatest acts of worship. The Prophet (peace be upon him) said: "He is not a believer whose stomach is filled while the neighbor beside him goes hungry." (Al-Adab Al-Mufrad, authenticated by Al-Albani)</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">ثُمَّ كَانَ مِنَ الَّذِينَ آمَنُوا وَتَوَاصَوْا بِالصَّبْرِ وَتَوَاصَوْا بِالْمَرْحَمَةِ</div>
+                    <div class="verse-transliteration">Thumma kana minal-ladhina amanu wa tawasaw bis-sabri wa tawasaw bil-marhamah</div>
+                    <div class="verse-translation">And then being among those who believed and advised one another to patience and advised one another to compassion.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Being</span></div>
+                        <div class="word-chip"><span class="ar">مِنَ الَّذِينَ</span><span class="trans">minal-ladhina</span><span class="meaning">Among those who</span></div>
+                        <div class="word-chip"><span class="ar">آمَنُوا</span><span class="trans">amanu</span><span class="meaning">Believed</span></div>
+                        <div class="word-chip"><span class="ar">وَتَوَاصَوْا</span><span class="trans">wa tawasaw</span><span class="meaning">And advised one another</span></div>
+                        <div class="word-chip"><span class="ar">بِالصَّبْرِ</span><span class="trans">bis-sabri</span><span class="meaning">To patience</span></div>
+                        <div class="word-chip"><span class="ar">وَتَوَاصَوْا</span><span class="trans">wa tawasaw</span><span class="meaning">And advised one another</span></div>
+                        <div class="word-chip"><span class="ar">بِالْمَرْحَمَةِ</span><span class="trans">bil-marhamah</span><span class="meaning">To compassion / mercy</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the crown of the steep path: faith combined with community. "Tawasaw" means to mutually advise, encourage, and remind each other. It's not a one-way street; it's believers supporting each other. Two qualities are highlighted: "sabr" (patience in hardship, persistence in obedience, and restraint from sin) and "marhamah" (mercy, compassion, tenderness). A community built on patience and mercy is the ideal Muslim community. Good deeds without faith are incomplete, and faith without good deeds is empty.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">أُولَٰئِكَ أَصْحَابُ الْمَيْمَنَةِ</div>
+                    <div class="verse-transliteration">Ula'ika ashabul-maymanah</div>
+                    <div class="verse-translation">Those are the companions of the right.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أُولَٰئِكَ</span><span class="trans">ula'ika</span><span class="meaning">Those</span></div>
+                        <div class="word-chip"><span class="ar">أَصْحَابُ</span><span class="trans">ashabu</span><span class="meaning">Companions / people of</span></div>
+                        <div class="word-chip"><span class="ar">الْمَيْمَنَةِ</span><span class="trans">al-maymanah</span><span class="meaning">The right hand</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Those who climb the steep path, who free others, feed the hungry, care for orphans and the poor, believe in Allah, and encourage patience and mercy among themselves, they are "ashab al-maymanah" (the people of the right hand). In the Quran, the right hand symbolizes honor, success, and salvation. On the Day of Judgment, those who receive their record in their right hand are the successful ones (see Surah Al-Haqqah 69:19). This is the ultimate reward for choosing the harder but nobler path.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَالَّذِينَ كَفَرُوا بِآيَاتِنَا هُمْ أَصْحَابُ الْمَشْأَمَةِ</div>
+                    <div class="verse-transliteration">Walladhina kafaru bi'ayatina hum ashabul-mash'amah</div>
+                    <div class="verse-translation">But they who disbelieved in Our signs - those are the companions of the left.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَالَّذِينَ</span><span class="trans">walladhina</span><span class="meaning">And those who</span></div>
+                        <div class="word-chip"><span class="ar">كَفَرُوا</span><span class="trans">kafaru</span><span class="meaning">Disbelieved</span></div>
+                        <div class="word-chip"><span class="ar">بِآيَاتِنَا</span><span class="trans">bi'ayatina</span><span class="meaning">In Our signs</span></div>
+                        <div class="word-chip"><span class="ar">هُمْ</span><span class="trans">hum</span><span class="meaning">They are</span></div>
+                        <div class="word-chip"><span class="ar">أَصْحَابُ</span><span class="trans">ashabu</span><span class="meaning">Companions / people of</span></div>
+                        <div class="word-chip"><span class="ar">الْمَشْأَمَةِ</span><span class="trans">al-mash'amah</span><span class="meaning">The left hand</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>In contrast, those who rejected Allah's signs, who refused to climb the steep path, who chose arrogance over compassion, they are "ashab al-mash'amah" (the people of the left hand). "Mash'amah" comes from "shu'm" which means ill omen, misfortune. These are the ones who will receive their record in their left hand on the Day of Judgment (see Surah Al-Haqqah 69:25). The Quran presents a clear binary: every person will end up in one of these two groups based on their choices.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">عَلَيْهِمْ نَارٌ مُّؤْصَدَةٌ</div>
+                    <div class="verse-transliteration">'Alayhim narun mu'sadah</div>
+                    <div class="verse-translation">Over them will be fire closed in.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">Over them</span></div>
+                        <div class="word-chip"><span class="ar">نَارٌ</span><span class="trans">narun</span><span class="meaning">Fire</span></div>
+                        <div class="word-chip"><span class="ar">مُّؤْصَدَةٌ</span><span class="trans">mu'sadah</span><span class="meaning">Closed in / sealed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah ends with the consequence for the people of the left hand: fire that is "mu'sadah" (sealed, closed, locked over them). This means there is no escape, no exit. Ibn Kathir explains that the gates of Hellfire will be shut upon them, enclosing them completely. This is mentioned in Surah Al-Humazah (104:8) as well: "It will be closed down over them." This is not meant to cause despair but to serve as a powerful warning: the choices we make in this life have eternal consequences. Choose the steep path while you still can.</p></div>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Balad</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Life is meant to be a struggle.</strong><p style="color: #999; font-size: 0.95em;">Allah created humans "fi kabad" (in hardship). Expecting a problem-free life is unrealistic. Instead, prepare for challenges with faith, patience, and the right mindset.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Wealth without purpose is worthless.</strong><p style="color: #999; font-size: 0.95em;">Boasting about spending money is not generosity. True generosity is spending for Allah's sake, sincerely, especially when it is difficult and when others need it most.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah sees everything.</strong><p style="color: #999; font-size: 0.95em;">No action, intention, or thought is hidden from Allah. The arrogant person who thinks no one watches him is deeply mistaken. Live with the awareness that Allah is always watching (ihsan).</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The steep path is hard but leads to success.</strong><p style="color: #999; font-size: 0.95em;">Freeing the oppressed, feeding the hungry, caring for orphans, helping the destitute: these are difficult acts. But this is exactly the path that leads to being among the "people of the right hand."</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Faith must be paired with patience and mercy.</strong><p style="color: #999; font-size: 0.95em;">Good deeds alone are not enough. They must be rooted in faith (iman), supported by patience (sabr), and expressed through compassion (marhamah). These three together form the complete picture.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Every person faces a choice between two paths.</strong><p style="color: #999; font-size: 0.95em;">Allah showed us both paths clearly. The choice between right and left, good and evil, compassion and arrogance is ours to make. And the consequences of that choice are eternal.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on Tafsir Ibn Kathir, Tafsir As-Sa'di, and authentic hadith from Sahih Bukhari and Sahih Muslim. The hadith about freeing slaves is from Sahih Bukhari (2517). The hadith about speaking good is from Sahih Bukhari (6018). While care has been taken to ensure accuracy, this is a learning aid - always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        const container = document.getElementById('slideDrawing');
+        const penCursor = document.getElementById('penCursor');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        let animationId = null, speed = 1, currentVerse = 0, isAnimating = false;
+        speedSlider.addEventListener('input', () => { speed = parseFloat(speedSlider.value); speedLabel.textContent = speed + 'x'; });
+        const svgNS = 'http://www.w3.org/2000/svg';
+
+        const verses = [
+            { num:1, arabic:'لَا أُقْسِمُ بِهَٰذَا الْبَلَدِ', translit:"La uqsimu bihadhal-balad", explanation:"I swear by this city of Makkah! Allah takes an oath by the sacred city to show its great importance.", build: buildVerse1 },
+            { num:2, arabic:'وَأَنتَ حِلٌّ بِهَٰذَا الْبَلَدِ', translit:"Wa anta hillun bihadhal-balad", explanation:"And you are free to do what you want in this city. The Prophet is honored as a resident of this blessed land.", build: buildVerse2 },
+            { num:3, arabic:'وَوَالِدٍ وَمَا وَلَدَ', translit:"Wa walidin wa ma walad", explanation:"And by the parent and that which is born! Allah swears by the bond between parent and child.", build: buildVerse3 },
+            { num:4, arabic:'لَقَدْ خَلَقْنَا الْإِنسَانَ فِي كَبَدٍ', translit:"Laqad khalaqnal-insana fi kabad", explanation:"We have created the human being into a life of hardship and struggle. Life is not meant to be easy!", build: buildVerse4 },
+            { num:5, arabic:'أَيَحْسَبُ أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌ', translit:"Ayahsabu an lan yaqdira 'alayhi ahad", explanation:"Does he think that no one has power over him? Some people become so arrogant they forget Allah!", build: buildVerse5 },
+            { num:6, arabic:'يَقُولُ أَهْلَكْتُ مَالًا لُّبَدًا', translit:"Yaqulu ahlaktu malan lubada", explanation:"He boasts: 'I have spent so much wealth!' showing off his money to impress people.", build: buildVerse6 },
+            { num:7, arabic:'أَيَحْسَبُ أَن لَّمْ يَرَهُ أَحَدٌ', translit:"Ayahsabu an lam yarahu ahad", explanation:"Does he think that no one sees him? Allah sees everything, even what is hidden in the heart!", build: buildVerse7 },
+            { num:8, arabic:'أَلَمْ نَجْعَل لَّهُ عَيْنَيْنِ', translit:"Alam naj'al lahu 'aynayn", explanation:"Did We not give him two eyes to see the truth and the signs of Allah around him?", build: buildVerse8 },
+            { num:9, arabic:'وَلِسَانًا وَشَفَتَيْنِ', translit:"Wa lisanan wa shafatayn", explanation:"And a tongue and two lips to speak, to thank Allah, and to say kind words to others?", build: buildVerse9 },
+            { num:10, arabic:'وَهَدَيْنَاهُ النَّجْدَيْنِ', translit:"Wa hadaynahun-najdayn", explanation:"And We showed him the two clear paths: the path of good and the path of evil. The choice is yours!", build: buildVerse10 },
+            { num:11, arabic:'فَلَا اقْتَحَمَ الْعَقَبَةَ', translit:"Falaq-tahamal-'aqabah", explanation:"But he has not attempted the steep path! The path of goodness is hard, but it leads to success.", build: buildVerse11 },
+            { num:12, arabic:'وَمَا أَدْرَاكَ مَا الْعَقَبَةُ', translit:"Wa ma adraka mal-'aqabah", explanation:"And what will make you realize what the steep path is? Allah builds anticipation for its meaning.", build: buildVerse12 },
+            { num:13, arabic:'فَكُّ رَقَبَةٍ', translit:"Fakku raqabah", explanation:"It is freeing a slave! Setting someone free from bondage is one of the greatest deeds in Islam.", build: buildVerse13 },
+            { num:14, arabic:'أَوْ إِطْعَامٌ فِي يَوْمٍ ذِي مَسْغَبَةٍ', translit:"Aw it'amun fi yawmin dhi masghabah", explanation:"Or feeding others on a day of severe hunger, when food is scarce and people are desperate.", build: buildVerse14 },
+            { num:15, arabic:'يَتِيمًا ذَا مَقْرَبَةٍ', translit:"Yatiman dha maqrabah", explanation:"An orphan who is a relative, someone close to you who needs your help the most.", build: buildVerse15 },
+            { num:16, arabic:'أَوْ مِسْكِينًا ذَا مَتْرَبَةٍ', translit:"Aw miskinan dha matrabah", explanation:"Or a poor person in utter need, lying in the dust with nothing. Help those who have the least!", build: buildVerse16 },
+            { num:17, arabic:'ثُمَّ كَانَ مِنَ الَّذِينَ آمَنُوا وَتَوَاصَوْا بِالصَّبْرِ وَتَوَاصَوْا بِالْمَرْحَمَةِ', translit:"Thumma kana minal-ladhina amanu wa tawasaw bis-sabri wa tawasaw bil-marhamah", explanation:"Then be among those who believe, and encourage each other to be patient and to be merciful!", build: buildVerse17 },
+            { num:18, arabic:'أُولَٰئِكَ أَصْحَابُ الْمَيْمَنَةِ', translit:"Ula'ika ashabul-maymanah", explanation:"Those are the people of the right hand, the successful ones who chose the path of goodness!", build: buildVerse18 },
+            { num:19, arabic:'وَالَّذِينَ كَفَرُوا بِآيَاتِنَا هُمْ أَصْحَابُ الْمَشْأَمَةِ', translit:"Walladhina kafaru bi'ayatina hum ashabul-mash'amah", explanation:"But those who rejected Our signs are the people of the left hand, who chose the wrong path.", build: buildVerse19 },
+            { num:20, arabic:'عَلَيْهِمْ نَارٌ مُّؤْصَدَةٌ', translit:"'Alayhim narun mu'sadah", explanation:"Over them will be fire, closed in. A reminder of the serious consequence of rejecting Allah's guidance.", build: buildVerse20 }
+        ];
+
+        function el(tag, attrs) { const e = document.createElementNS(svgNS, tag); for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, String(v)); return e; }
+        function pathEl(d, fill, stroke, sw, join) { const attrs = { d, fill: fill||'none', stroke: stroke||'none' }; if(sw) attrs['stroke-width']=sw; if(join){attrs['stroke-linejoin']=join;attrs['stroke-linecap']=join;} return el('path', attrs); }
+        function lineEl(x1,y1,x2,y2,stroke,sw) { return el('line',{x1,y1,x2,y2,stroke,'stroke-width':sw,'stroke-linecap':'round'}); }
+        function textEl(text,x,y,opts={}) { const e = el('text',{x,y,'text-anchor':opts.anchor||'middle','dominant-baseline':'middle','font-family':opts.family||'Caveat, cursive','font-size':opts.size||22,'font-weight':opts.weight||600,fill:opts.color||'#2c3e50'}); e.textContent=text; return e; }
+        function createLinearGrad(id,x1,y1,x2,y2,stops){const g=document.createElementNS(svgNS,'linearGradient');g.setAttribute('id',id);g.setAttribute('x1',x1);g.setAttribute('y1',y1);g.setAttribute('x2',x2);g.setAttribute('y2',y2);stops.forEach(([off,col])=>{const s=document.createElementNS(svgNS,'stop');s.setAttribute('offset',off);s.setAttribute('stop-color',col);g.appendChild(s);});return g;}
+        function createRadialGrad(id,cx,cy,r,stops){const g=document.createElementNS(svgNS,'radialGradient');g.setAttribute('id',id);g.setAttribute('cx',cx);g.setAttribute('cy',cy);g.setAttribute('r',r);stops.forEach(([off,col])=>{const s=document.createElementNS(svgNS,'stop');s.setAttribute('offset',off);s.setAttribute('stop-color',col);g.appendChild(s);});return g;}
+        function cartoonCloud(cx,cy,scale){const g=document.createElementNS(svgNS,'g');g.setAttribute('filter','url(#softShadow)');const s=scale;[[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],[cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry])=>{g.appendChild(el('ellipse',{cx:x,cy:y,rx,ry,fill:'url(#cloudGrad)'}));});g.appendChild(el('ellipse',{cx,cy:cy-8*s,rx:25*s,ry:12*s,fill:'rgba(255,255,255,0.7)'}));return g;}
+        function cartoonSparkle(cx,cy,size){const g=document.createElementNS(svgNS,'g');g.setAttribute('filter','url(#glow)');const s=size;g.appendChild(pathEl(`M${cx},${cy-s} L${cx+s*0.25},${cy-s*0.25} L${cx+s},${cy} L${cx+s*0.25},${cy+s*0.25} L${cx},${cy+s} L${cx-s*0.25},${cy+s*0.25} L${cx-s},${cy} L${cx-s*0.25},${cy-s*0.25} Z`,'#FFF9C4','#FFD54F',1,'round'));return g;}
+        function cartoonStar(cx,cy,outerR,innerR,fill,stroke){const pts=[];for(let i=0;i<10;i++){const r=i%2===0?outerR:innerR;const a=(Math.PI/5)*i-Math.PI/2;pts.push(`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`);}return el('polygon',{points:pts.join(' '),fill,stroke,'stroke-width':1.5,'stroke-linejoin':'round'});}
+
+        function addCommonDefs(svg){
+            const defs=document.createElementNS(svgNS,'defs');
+            defs.appendChild(createLinearGrad('skyGrad','0%','0%','0%','100%',[['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('skyNight','0%','0%','0%','100%',[['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            defs.appendChild(createLinearGrad('groundGrad','0%','0%','0%','100%',[['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            defs.appendChild(createLinearGrad('sandGrad','0%','0%','0%','100%',[['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            defs.appendChild(createLinearGrad('lightGrad','50%','0%','50%','100%',[['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            defs.appendChild(createLinearGrad('robeGrad','0%','0%','100%','100%',[['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            defs.appendChild(createLinearGrad('dawnGrad','0%','0%','0%','100%',[['0%','#FF8F00'],['30%','#FFB74D'],['60%','#FFE0B2'],['100%','#E1F5FE']]));
+            defs.appendChild(createLinearGrad('pathGold','0%','0%','100%','0%',[['0%','#FFD54F'],['50%','#FFF176'],['100%','#FFD54F']]));
+            defs.appendChild(createLinearGrad('fireGrad','0%','0%','0%','100%',[['0%','#FF6F00'],['30%','#FF8F00'],['60%','#FFA726'],['100%','#FFE082']]));
+            defs.appendChild(createLinearGrad('darkFireGrad','0%','100%','0%','0%',[['0%','#B71C1C'],['40%','#D32F2F'],['70%','#FF5722'],['100%','#FF9800']]));
+            defs.appendChild(createRadialGrad('sunGlow','50%','50%','50%',[['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            defs.appendChild(createRadialGrad('skinGrad','40%','35%','50%',[['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            defs.appendChild(createRadialGrad('cloudGrad','40%','30%','55%',[['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            defs.appendChild(createRadialGrad('goldenGlow','50%','50%','50%',[['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            const glow=document.createElementNS(svgNS,'filter');glow.setAttribute('id','glow');glow.innerHTML='<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';defs.appendChild(glow);
+            const shadow=document.createElementNS(svgNS,'filter');shadow.setAttribute('id','softShadow');shadow.setAttribute('x','-20%');shadow.setAttribute('y','-20%');shadow.setAttribute('width','140%');shadow.setAttribute('height','140%');shadow.innerHTML='<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';defs.appendChild(shadow);
+            const dotP=document.createElementNS(svgNS,'pattern');dotP.setAttribute('id','dots');dotP.setAttribute('width','18');dotP.setAttribute('height','18');dotP.setAttribute('patternUnits','userSpaceOnUse');dotP.appendChild(el('circle',{cx:9,cy:9,r:0.7,fill:'#e0d8c8'}));defs.appendChild(dotP);
+            svg.appendChild(defs);
+        }
+
+        function initSvg(){const old=document.getElementById('sceneSvg');if(old)old.remove();const svg=document.createElementNS(svgNS,'svg');svg.setAttribute('id','sceneSvg');svg.setAttribute('viewBox','0 0 900 506');svg.setAttribute('xmlns',svgNS);container.appendChild(svg);addCommonDefs(svg);svg.appendChild(el('rect',{width:900,height:506,fill:'#FFF9F0'}));svg.appendChild(el('rect',{width:900,height:506,fill:'url(#dots)'}));const groups=[];function add(gi,node){if(!groups[gi])groups[gi]=[];groups[gi].push(node);svg.appendChild(node);}return{svg,groups,add};}
+
+        // V1: City of Makkah with Kaaba outline
+        function buildVerse1(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#dawnGrad)','none',0));
+            add(0,pathEl('M0,350 Q200,320 400,340 Q600,310 900,350 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Mountains
+            add(1,pathEl('M0,250 L100,150 L200,220 L300,130 L400,200 L500,120 L600,190 L700,140 L800,210 L900,160 L900,350 L0,350 Z','#8D6E63','#5D4037',2,'round'));
+            // Kaaba silhouette
+            add(2,pathEl('M400,280 L400,220 L500,220 L500,280 Z','#263238','#37474F',2,'round'));
+            add(2,pathEl('M410,250 L490,250','none','#C9A84C',2,'round'));
+            add(2,pathEl('M395,220 L505,220','none','#37474F',3,'round'));
+            // City buildings silhouette
+            add(3,pathEl('M100,350 L100,300 L130,300 L130,280 L160,280 L160,310 L190,310 L190,350','#455A64','#37474F',1.5,'round'));
+            add(3,pathEl('M700,350 L700,290 L730,290 L730,270 L760,270 L760,300 L790,300 L790,350','#455A64','#37474F',1.5,'round'));
+            // Minaret
+            add(3,pathEl('M580,350 L580,240 L590,240 L590,350','#546E7A','#37474F',1.5,'round'));
+            add(3,pathEl('M575,240 L585,220 L595,240','#546E7A','#37474F',1.5,'round'));
+            // Golden glow over city
+            add(4,el('circle',{cx:450,cy:200,r:120,fill:'url(#goldenGlow)'}));
+            [[200,100],[350,80],[550,85],[700,100],[150,180],[750,170]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5+Math.random()*4));});
+            add(5,textEl('"I swear by this city"',450,470,{size:24,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V2: Prophet honored in the city
+        function buildVerse2(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,370 Q450,350 900,370 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // City outline
+            add(1,pathEl('M100,370 L100,300 L150,300 L150,280 L200,280 L200,310 L250,310 L250,370','#8D6E63','#5D4037',1.5,'round'));
+            add(1,pathEl('M650,370 L650,290 L700,290 L700,270 L750,270 L750,310 L800,310 L800,370','#8D6E63','#5D4037',1.5,'round'));
+            // Central figure (generic, with head covering)
+            add(2,el('ellipse',{cx:450,cy:368,rx:22,ry:4,fill:'rgba(0,0,0,0.1)'}));
+            add(2,pathEl('M435,270 Q432,320 430,365 L470,365 Q468,320 465,270 Z','url(#robeGrad)','#78909C',2,'round'));
+            add(2,el('circle',{cx:450,cy:253,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(2,pathEl('M432,248 Q450,235 468,248','#ECEFF1','#B0BEC5',1.2,'round'));
+            // Golden aura around figure
+            add(3,el('circle',{cx:450,cy:280,r:90,fill:'url(#goldenGlow)'}));
+            add(3,el('circle',{cx:450,cy:280,r:60,fill:'url(#goldenGlow)'}));
+            // Text label
+            add(4,textEl('Free in this City',450,180,{size:22,color:'#C9A84C',weight:700}));
+            [[300,150],[600,145],[350,220],[550,215]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"And you are free in this city"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V3: Parent and child bond
+        function buildVerse3(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Parent figure
+            add(1,el('ellipse',{cx:380,cy:375,rx:20,ry:4,fill:'rgba(0,0,0,0.1)'}));
+            add(1,pathEl('M365,270 Q362,320 360,372 L400,372 Q398,320 395,270 Z','url(#robeGrad)','#78909C',2,'round'));
+            add(1,el('circle',{cx:380,cy:253,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(1,pathEl('M362,248 Q380,235 398,248','#ECEFF1','#B0BEC5',1.2,'round'));
+            // Child figure
+            add(2,el('ellipse',{cx:500,cy:375,rx:14,ry:3,fill:'rgba(0,0,0,0.1)'}));
+            add(2,pathEl('M490,320 Q488,348 487,373 L513,373 Q512,348 510,320 Z','url(#robeGrad)','#78909C',1.5,'round'));
+            add(2,el('circle',{cx:500,cy:308,r:13,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            // Hands connecting
+            add(3,pathEl('M395,310 Q430,320 485,320','none','#B0BEC5',3,'round'));
+            // Heart above
+            add(4,pathEl('M440,220 C440,220 425,208 425,198 C425,188 432,185 440,193 C448,185 455,188 455,198 C455,208 440,220 440,220 Z','#E57373','#C62828',1.5,'round'));
+            add(4,el('circle',{cx:440,cy:260,r:70,fill:'url(#goldenGlow)'}));
+            [[300,180],[550,175],[350,140],[520,140]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"And by the parent and offspring"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V4: Person climbing steep mountain (toil/struggle)
+        function buildVerse4(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            // Steep mountain
+            add(1,pathEl('M200,500 L450,80 L700,500 Z','#8D6E63','#5D4037',2,'round'));
+            add(1,pathEl('M300,500 L450,150 L600,500','#A1887F','#795548',1.5,'round'));
+            // Rocky texture
+            add(2,pathEl('M350,350 Q370,340 390,350','none','#795548',2,'round'));
+            add(2,pathEl('M400,280 Q420,270 440,280','none','#795548',2,'round'));
+            add(2,pathEl('M450,200 Q460,190 480,200','none','#795548',2,'round'));
+            // Figure climbing
+            add(3,el('ellipse',{cx:420,cy:310,rx:12,ry:3,fill:'rgba(0,0,0,0.1)'}));
+            add(3,pathEl('M412,270 Q410,290 409,308 L431,308 Q430,290 428,270 Z','url(#robeGrad)','#78909C',1.5,'round'));
+            add(3,el('circle',{cx:420,cy:258,r:12,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            add(3,pathEl('M415,275 Q400,265 395,255','none','#B0BEC5',3,'round'));
+            // Sweat drops
+            add(4,pathEl('M435,250 Q438,245 436,240','none','#64B5F6',2,'round'));
+            add(4,pathEl('M440,260 Q443,255 441,250','none','#64B5F6',2,'round'));
+            add(4,textEl('KABAD',450,130,{size:28,color:'#E65100',weight:700}));
+            add(4,textEl('Hardship & Struggle',450,160,{size:18,color:'#795548',weight:600}));
+            add(5,textEl('"We created man in toil"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V5: Arrogant figure thinking no one has power
+        function buildVerse5(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Arrogant figure with puffed chest
+            add(1,el('ellipse',{cx:450,cy:375,rx:22,ry:4,fill:'rgba(0,0,0,0.1)'}));
+            add(1,pathEl('M430,260 Q425,310 422,372 L478,372 Q475,310 470,260 Z','#455A64','#37474F',2,'round'));
+            add(1,el('circle',{cx:450,cy:243,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(1,pathEl('M435,248 Q450,252 465,248','none','#2C1810',1.5,'round'));
+            // Arms crossed defiantly
+            add(2,pathEl('M435,280 Q410,290 400,300','none','#37474F',4,'round'));
+            add(2,pathEl('M465,280 Q490,290 500,300','none','#37474F',4,'round'));
+            // Thought bubble: "No one can touch me!"
+            add(3,cartoonCloud(450,130,0.7));
+            add(3,textEl('No one has',450,115,{size:16,color:'#455A64',weight:600}));
+            add(3,textEl('power over me!',450,135,{size:16,color:'#455A64',weight:600}));
+            // Small circles connecting to thought
+            add(3,el('circle',{cx:450,cy:185,r:5,fill:'#E0E0E0',stroke:'#BDBDBD','stroke-width':1}));
+            add(3,el('circle',{cx:450,cy:205,r:3,fill:'#E0E0E0',stroke:'#BDBDBD','stroke-width':1}));
+            // Warning X marks
+            add(4,lineEl(200,300,230,330,'#E53935',3));add(4,lineEl(230,300,200,330,'#E53935',3));
+            add(4,lineEl(670,300,700,330,'#E53935',3));add(4,lineEl(700,300,670,330,'#E53935',3));
+            add(5,textEl('"Does he think no one has power over him?"',450,470,{size:20,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V6: Boasting about wealth
+        function buildVerse6(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Figure with coins
+            add(1,el('ellipse',{cx:450,cy:375,rx:22,ry:4,fill:'rgba(0,0,0,0.1)'}));
+            add(1,pathEl('M435,270 Q432,320 430,372 L470,372 Q468,320 465,270 Z','#455A64','#37474F',2,'round'));
+            add(1,el('circle',{cx:450,cy:253,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            // Arms throwing coins
+            add(2,pathEl('M440,285 Q410,270 380,260','none','#37474F',4,'round'));
+            add(2,pathEl('M460,285 Q490,270 520,260','none','#37474F',4,'round'));
+            // Scattered coins
+            add(3,[[300,200],[320,250],[340,180],[500,190],[520,240],[540,170],[280,300],[560,290],[350,320],[490,310]].forEach(([cx,cy])=>{add(3,el('circle',{cx,cy,r:8,fill:'#FFD54F',stroke:'#C9A84C','stroke-width':1.5}));}));
+            // Speech bubble
+            add(4,pathEl('M350,120 Q340,90 380,80 L520,80 Q560,90 550,120 L530,120 L510,140 L500,120 Z','#FFF9C4','#C9A84C',1.5,'round'));
+            add(4,textEl('"I spent SO much wealth!"',450,100,{size:16,color:'#5D4037',weight:600}));
+            add(5,textEl('"He says: I have spent wealth in abundance!"',450,470,{size:20,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V7: All-Seeing Eye of Allah (abstract, no depiction)
+        function buildVerse7(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyNight)','none',0));
+            // Small figure trying to hide
+            add(1,el('ellipse',{cx:300,cy:380,rx:18,ry:3,fill:'rgba(0,0,0,0.08)'}));
+            add(1,pathEl('M288,300 Q286,340 285,378 L315,378 Q314,340 312,300 Z','#455A64','#37474F',1.5,'round'));
+            add(1,el('circle',{cx:300,cy:288,r:14,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            // Light beams from above revealing him
+            add(2,pathEl('M400,0 L250,400 L350,400 Z','rgba(255,249,196,0.15)','none',0));
+            add(2,pathEl('M500,0 L350,400 L450,400 Z','rgba(255,249,196,0.1)','none',0));
+            // Text: Allah Sees All
+            add(3,textEl('Allah',600,180,{size:30,color:'#FFD54F',weight:700}));
+            add(3,textEl('Sees',600,220,{size:30,color:'#FFD54F',weight:700}));
+            add(3,textEl('Everything',600,260,{size:30,color:'#FFD54F',weight:700}));
+            // Sparkles representing divine awareness
+            add(4,el('circle',{cx:600,cy:220,r:100,fill:'url(#goldenGlow)'}));
+            [[450,80],[500,60],[550,50],[650,55],[700,70],[750,90],[500,300],[700,300]].forEach(([x,y])=>{add(5,cartoonStar(x,y,4,2,'rgba(255,255,255,0.7)','rgba(255,255,255,0.3)'));});
+            add(5,textEl('"Does he think no one sees him?"',450,470,{size:22,color:'#FFE082',weight:700}));
+            return{svg,groups};}
+
+        // V8: Two eyes
+        function buildVerse8(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            // Left eye
+            add(1,pathEl('M250,200 Q350,130 450,200 Q350,270 250,200 Z','#FFFFFF','#5D4037',2.5,'round'));
+            add(1,el('circle',{cx:350,cy:200,r:30,fill:'#5D4037'}));
+            add(1,el('circle',{cx:350,cy:200,r:15,fill:'#000'}));
+            add(1,el('circle',{cx:342,cy:192,r:6,fill:'#fff'}));
+            // Right eye
+            add(2,pathEl('M450,200 Q550,130 650,200 Q550,270 450,200 Z','#FFFFFF','#5D4037',2.5,'round'));
+            add(2,el('circle',{cx:550,cy:200,r:30,fill:'#5D4037'}));
+            add(2,el('circle',{cx:550,cy:200,r:15,fill:'#000'}));
+            add(2,el('circle',{cx:542,cy:192,r:6,fill:'#fff'}));
+            // Golden glow
+            add(3,el('circle',{cx:450,cy:200,r:150,fill:'url(#goldenGlow)'}));
+            // Label
+            add(4,textEl('Two Eyes',450,320,{size:26,color:'#C9A84C',weight:700}));
+            add(4,textEl('A gift to see truth & beauty',450,355,{size:18,color:'#795548',weight:600}));
+            [[200,120],[700,120],[250,300],[650,300]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,6));});
+            add(5,textEl('"Did We not give him two eyes?"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V9: Tongue and two lips
+        function buildVerse9(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            // Lips shape
+            add(1,pathEl('M350,220 Q400,180 450,220 Q500,180 550,220','none','#E57373',3,'round'));
+            add(1,pathEl('M350,220 Q400,260 450,220 Q500,260 550,220','none','#E57373',3,'round'));
+            add(1,pathEl('M370,220 Q410,200 450,220 Q490,200 530,220 Q490,240 450,220 Q410,240 370,220 Z','#FFCDD2','#E57373',1.5,'round'));
+            // Words coming out
+            add(2,textEl('Alhamdulillah',300,150,{size:18,color:'#C9A84C',weight:600}));
+            add(2,textEl('SubhanAllah',600,140,{size:18,color:'#C9A84C',weight:600}));
+            add(2,textEl('Kind Words',450,130,{size:16,color:'#2E7D32',weight:600}));
+            add(2,textEl('Truth',350,110,{size:15,color:'#1565C0',weight:600}));
+            add(2,textEl('Mercy',550,115,{size:15,color:'#1565C0',weight:600}));
+            // Golden glow
+            add(3,el('circle',{cx:450,cy:200,r:120,fill:'url(#goldenGlow)'}));
+            add(4,textEl('A Tongue & Two Lips',450,320,{size:24,color:'#C9A84C',weight:700}));
+            add(4,textEl('Tools for gratitude & kindness',450,355,{size:18,color:'#795548',weight:600}));
+            [[250,100],[650,100],[200,200],[700,200]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"And a tongue and two lips"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V10: Two paths diverging
+        function buildVerse10(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,350 Q450,335 900,350 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Single path splitting into two
+            add(1,pathEl('M450,450 Q450,350 450,300','none','#795548',8,'round'));
+            // Right path (good) - golden
+            add(2,pathEl('M450,300 Q550,250 700,180','none','url(#pathGold)',6,'round'));
+            add(2,el('circle',{cx:700,cy:180,r:40,fill:'url(#goldenGlow)'}));
+            add(2,el('circle',{cx:700,cy:180,r:25,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(2,textEl('Good',700,130,{size:20,color:'#2E7D32',weight:700}));
+            // Left path (evil) - dark
+            add(3,pathEl('M450,300 Q350,250 200,180','none','#455A64',6,'round'));
+            add(3,el('circle',{cx:200,cy:180,r:40,fill:'rgba(0,0,0,0.3)'}));
+            add(3,textEl('Evil',200,130,{size:20,color:'#B71C1C',weight:700}));
+            // Fork sign
+            add(4,pathEl('M440,280 L450,260 L460,280','none','#C9A84C',3,'round'));
+            add(4,textEl('AN-NAJDAYN',450,240,{size:18,color:'#E65100',weight:700}));
+            add(4,textEl('The Two Paths',450,210,{size:16,color:'#795548',weight:600}));
+            add(5,textEl('"We showed him the two paths"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V11: The steep path (al-aqabah)
+        function buildVerse11(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            // Very steep mountain
+            add(1,pathEl('M250,500 L450,60 L650,500 Z','#8D6E63','#5D4037',2.5,'round'));
+            add(1,pathEl('M350,500 L450,130 L550,500','#A1887F','#795548',1.5,'round'));
+            // Steps carved into mountain
+            add(2,lineEl(380,400,480,400,'#795548',2));
+            add(2,lineEl(390,340,470,340,'#795548',2));
+            add(2,lineEl(400,280,460,280,'#795548',2));
+            add(2,lineEl(410,220,450,220,'#795548',2));
+            add(2,lineEl(420,170,445,170,'#795548',2));
+            // Golden light at top
+            add(3,el('circle',{cx:450,cy:60,r:40,fill:'url(#goldenGlow)'}));
+            add(3,el('circle',{cx:450,cy:60,r:20,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            // Label
+            add(4,textEl('AL-AQABAH',450,470,{size:0.01,color:'transparent',weight:100}));
+            add(4,textEl('The Steep Path',180,200,{size:22,color:'#C9A84C',weight:700}));
+            add(4,textEl('Hard but rewarding!',180,230,{size:16,color:'#795548',weight:600}));
+            [[300,80],[600,85],[350,120],[550,115]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"But he has not attempted the steep path!"',450,470,{size:20,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V12: What is the steep path?
+        function buildVerse12(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#dawnGrad)','none',0));
+            // Question marks floating
+            add(1,textEl('?',250,150,{size:60,color:'rgba(201,168,76,0.5)',weight:700}));
+            add(1,textEl('?',450,100,{size:80,color:'rgba(201,168,76,0.7)',weight:700}));
+            add(1,textEl('?',650,160,{size:60,color:'rgba(201,168,76,0.5)',weight:700}));
+            // Steep path silhouette
+            add(2,pathEl('M300,450 L450,150 L600,450','none','#C9A84C',4,'round'));
+            // Glowing mystery at top
+            add(3,el('circle',{cx:450,cy:150,r:60,fill:'url(#goldenGlow)'}));
+            add(3,el('circle',{cx:450,cy:150,r:30,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(4,textEl('What is',450,260,{size:26,color:'#5D4037',weight:600}));
+            add(4,textEl('THE STEEP PATH?',450,300,{size:30,color:'#E65100',weight:700}));
+            [[200,200],[700,200],[300,300],[600,300]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,6));});
+            add(5,textEl('"And what will make you know what the steep path is?"',450,470,{size:18,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V13: Breaking chains / freeing a slave
+        function buildVerse13(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Chains breaking apart
+            add(1,pathEl('M300,200 Q320,195 340,200 Q360,205 380,200','none','#78909C',5,'round'));
+            add(1,pathEl('M520,200 Q540,195 560,200 Q580,205 600,200','none','#78909C',5,'round'));
+            // Break point with sparks
+            add(2,lineEl(380,200,520,200,'#78909C',5));
+            add(2,pathEl('M420,180 L440,200 L420,220','none','#FFD54F',3,'round'));
+            add(2,pathEl('M480,180 L460,200 L480,220','none','#FFD54F',3,'round'));
+            // Freed figure with arms raised
+            add(3,el('ellipse',{cx:450,cy:375,rx:20,ry:4,fill:'rgba(0,0,0,0.1)'}));
+            add(3,pathEl('M435,280 Q432,325 430,372 L470,372 Q468,325 465,280 Z','url(#robeGrad)','#78909C',2,'round'));
+            add(3,el('circle',{cx:450,cy:263,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(3,pathEl('M440,290 Q420,260 410,240','none','#B0BEC5',4,'round'));
+            add(3,pathEl('M460,290 Q480,260 490,240','none','#B0BEC5',4,'round'));
+            // Golden glow of freedom
+            add(4,el('circle',{cx:450,cy:280,r:100,fill:'url(#goldenGlow)'}));
+            add(4,textEl('FREEDOM!',450,160,{size:28,color:'#2E7D32',weight:700}));
+            [[300,120],[600,115],[350,300],[550,300]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,6));});
+            add(5,textEl('"It is the freeing of a slave"',450,470,{size:22,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // V14: Feeding on a day of hunger
+        function buildVerse14(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Plate of food
+            add(1,el('ellipse',{cx:450,cy:280,rx:80,ry:20,fill:'#EFEBE9',stroke:'#8D6E63','stroke-width':2}));
+            add(1,el('ellipse',{cx:450,cy:275,rx:60,ry:15,fill:'#FFF3E0',stroke:'#D7CCC8','stroke-width':1}));
+            // Food items on plate
+            add(2,el('circle',{cx:430,cy:270,r:10,fill:'#FF8A65',stroke:'#E64A19','stroke-width':1}));
+            add(2,el('circle',{cx:460,cy:268,r:8,fill:'#AED581',stroke:'#689F38','stroke-width':1}));
+            add(2,el('circle',{cx:445,cy:262,r:9,fill:'#FFD54F',stroke:'#F9A825','stroke-width':1}));
+            // Hands offering food
+            add(3,pathEl('M350,310 Q380,290 410,280','none','url(#skinGrad)',6,'round'));
+            add(3,pathEl('M550,310 Q520,290 490,280','none','url(#skinGrad)',6,'round'));
+            // Hunger/need indicator
+            add(4,textEl('Day of Severe Hunger',450,180,{size:22,color:'#E65100',weight:700}));
+            add(4,el('circle',{cx:450,cy:270,r:90,fill:'url(#goldenGlow)'}));
+            [[300,150],[600,145],[250,250],[650,250]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"Or feeding on a day of severe hunger"',450,470,{size:20,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V15: Orphan relative
+        function buildVerse15(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Small orphan child
+            add(1,el('ellipse',{cx:450,cy:375,rx:14,ry:3,fill:'rgba(0,0,0,0.1)'}));
+            add(1,pathEl('M440,320 Q438,348 437,373 L463,373 Q462,348 460,320 Z','url(#robeGrad)','#78909C',1.5,'round'));
+            add(1,el('circle',{cx:450,cy:308,r:13,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            add(1,pathEl('M444,313 Q450,318 456,313','none','#2C1810',1.2,'round'));
+            // Tear drop
+            add(2,pathEl('M458,310 Q460,315 458,320','none','#64B5F6',1.5,'round'));
+            // Heart and caring hands reaching
+            add(3,pathEl('M350,300 Q380,290 430,310','none','#B0BEC5',4,'round'));
+            add(3,pathEl('M550,300 Q520,290 470,310','none','#B0BEC5',4,'round'));
+            // Heart above
+            add(4,pathEl('M450,230 C450,230 435,218 435,208 C435,198 442,195 450,203 C458,195 465,198 465,208 C465,218 450,230 450,230 Z','#E57373','#C62828',1.5,'round'));
+            add(4,textEl('Orphan Relative',450,180,{size:22,color:'#C9A84C',weight:700}));
+            add(4,el('circle',{cx:450,cy:300,r:80,fill:'url(#goldenGlow)'}));
+            [[300,200],[600,195],[350,150],[550,150]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"An orphan who is a relative"',450,470,{size:22,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // V16: Poor person in the dust
+        function buildVerse16(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,360 Q450,345 900,360 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Poor figure sitting on ground
+            add(1,el('ellipse',{cx:450,cy:370,rx:30,ry:5,fill:'rgba(0,0,0,0.08)'}));
+            add(1,pathEl('M435,340 Q430,355 428,368 L472,368 Q470,355 465,340 Z','#90A4AE','#78909C',1.5,'round'));
+            add(1,el('circle',{cx:450,cy:328,r:13,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            add(1,pathEl('M444,333 Q450,336 456,333','none','#2C1810',1,'round'));
+            // Dust particles
+            add(2,[[400,375],[420,380],[480,378],[500,382],[380,385],[520,380]].forEach(([cx,cy])=>{add(2,el('circle',{cx,cy,r:2,fill:'#D7CCC8'}));}));
+            // Helping hand from above
+            add(3,pathEl('M450,200 Q445,240 448,280','none','url(#skinGrad)',5,'round'));
+            add(3,pathEl('M440,200 L450,180 L460,200','none','#C9A84C',2,'round'));
+            // Light beam
+            add(4,pathEl('M400,0 L420,320 L480,320 L500,0 Z','rgba(255,249,196,0.15)','none',0));
+            add(4,textEl('MISKIN',450,150,{size:24,color:'#E65100',weight:700}));
+            add(4,textEl('The truly needy',450,120,{size:16,color:'#795548',weight:600}));
+            [[300,150],[600,145],[350,250],[550,250]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"Or a poor person in utter need"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V17: Believers encouraging patience and mercy
+        function buildVerse17(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Group of 3 figures
+            [[350,375],[450,375],[550,375]].forEach(([cx,cy],i)=>{
+                add(1,el('ellipse',{cx,cy,rx:18,ry:3,fill:'rgba(0,0,0,0.1)'}));
+                add(1,pathEl(`M${cx-15},${cy-100} Q${cx-18},${cy-50} L${cx-20},${cy-3} L${cx+20},${cy-3} Q${cx+18},${cy-50} L${cx+15},${cy-100} Z`,'url(#robeGrad)','#78909C',1.5,'round'));
+                add(1,el('circle',{cx,cy:cy-115,r:14,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+                add(1,pathEl(`M${cx-10},${cy-120} Q${cx},${cy-130} L${cx+10},${cy-120}`,'#ECEFF1','#B0BEC5',1,'round'));
+            });
+            // Connection lines between them
+            add(2,pathEl('M380,310 Q415,300 450,310','none','#C9A84C',2,'round'));
+            add(2,pathEl('M480,310 Q515,300 550,310','none','#C9A84C',2,'round'));
+            // Labels
+            add(3,textEl('SABR',350,200,{size:22,color:'#1565C0',weight:700}));
+            add(3,textEl('Patience',350,225,{size:14,color:'#5D4037',weight:600}));
+            add(4,textEl('MARHAMAH',550,200,{size:22,color:'#C62828',weight:700}));
+            add(4,textEl('Mercy',550,225,{size:14,color:'#5D4037',weight:600}));
+            add(4,el('circle',{cx:450,cy:300,r:120,fill:'url(#goldenGlow)'}));
+            [[250,180],[650,175],[300,130],[600,130]].forEach(([x,y])=>{add(5,cartoonSparkle(x,y,5));});
+            add(5,textEl('"Believe, encourage patience, and show mercy"',450,470,{size:18,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // V18: People of the right hand (light)
+        function buildVerse18(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#dawnGrad)','none',0));
+            add(0,pathEl('M0,380 Q450,365 900,380 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            // Group bathed in golden light
+            add(1,el('circle',{cx:450,cy:280,r:150,fill:'url(#goldenGlow)'}));
+            add(1,el('circle',{cx:450,cy:280,r:80,fill:'url(#goldenGlow)'}));
+            // Figures in light
+            [[380,370],[450,370],[520,370]].forEach(([cx,cy])=>{
+                add(2,el('ellipse',{cx,cy,rx:16,ry:3,fill:'rgba(0,0,0,0.1)'}));
+                add(2,pathEl(`M${cx-13},${cy-90} Q${cx-15},${cy-45} L${cx-17},${cy-3} L${cx+17},${cy-3} Q${cx+15},${cy-45} L${cx+13},${cy-90} Z`,'url(#robeGrad)','#78909C',1.5,'round'));
+                add(2,el('circle',{cx,cy:cy-103,r:13,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            });
+            // Right hand symbol
+            add(3,pathEl('M450,150 Q445,170 440,180 L460,180 Q455,170 450,150 Z','url(#skinGrad)','#E65100',1,'round'));
+            add(3,textEl('RIGHT HAND',450,130,{size:22,color:'#2E7D32',weight:700}));
+            // Sparkles
+            [[300,150],[600,145],[250,250],[650,250],[350,120],[550,120]].forEach(([x,y])=>{add(4,cartoonSparkle(x,y,6));});
+            add(4,cartoonCloud(120,50,0.5));add(4,cartoonCloud(780,55,0.45));
+            add(5,textEl('"Those are the people of the right hand"',450,470,{size:20,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // V19: People of the left hand (darkness)
+        function buildVerse19(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyNight)','none',0));
+            // Dark atmosphere
+            add(1,el('circle',{cx:450,cy:280,r:150,fill:'rgba(0,0,0,0.3)'}));
+            // Figures in shadow
+            [[380,370],[450,370],[520,370]].forEach(([cx,cy])=>{
+                add(2,el('ellipse',{cx,cy,rx:16,ry:3,fill:'rgba(0,0,0,0.08)'}));
+                add(2,pathEl(`M${cx-13},${cy-90} Q${cx-15},${cy-45} L${cx-17},${cy-3} L${cx+17},${cy-3} Q${cx+15},${cy-45} L${cx+13},${cy-90} Z`,'#37474F','#263238',1.5,'round'));
+                add(2,el('circle',{cx,cy:cy-103,r:13,fill:'#455A64',stroke:'#37474F','stroke-width':1}));
+            });
+            // Left hand symbol
+            add(3,textEl('LEFT HAND',450,130,{size:22,color:'#E53935',weight:700}));
+            add(3,textEl('They rejected the signs',450,165,{size:16,color:'#EF9A9A',weight:600}));
+            // Warning signs
+            add(4,lineEl(200,200,230,230,'#E53935',3));add(4,lineEl(230,200,200,230,'#E53935',3));
+            add(4,lineEl(670,200,700,230,'#E53935',3));add(4,lineEl(700,200,670,230,'#E53935',3));
+            add(4,lineEl(200,300,230,330,'#E53935',2));add(4,lineEl(230,300,200,330,'#E53935',2));
+            add(4,lineEl(670,300,700,330,'#E53935',2));add(4,lineEl(700,300,670,330,'#E53935',2));
+            add(5,textEl('"Those who rejected Our signs are people of the left"',450,470,{size:18,color:'#EF9A9A',weight:700}));
+            return{svg,groups};}
+
+        // V20: Fire closed over them
+        function buildVerse20(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','#1a1a2e','none',0));
+            // Fire from below
+            add(1,pathEl('M0,506 Q100,400 200,430 Q300,350 400,390 Q450,340 500,380 Q600,330 700,400 Q800,350 900,430 L900,506 Z','url(#fireGrad)','none',0));
+            add(1,pathEl('M0,506 Q150,420 300,460 Q450,400 600,450 Q750,410 900,460 L900,506 Z','url(#darkFireGrad)','none',0));
+            // Fire tongues reaching up
+            add(2,pathEl('M250,400 Q260,350 250,300 Q270,320 280,350','#FF6F00','#FF8F00',2,'round'));
+            add(2,pathEl('M450,370 Q460,300 450,250 Q470,280 480,340','#FF6F00','#FF8F00',2,'round'));
+            add(2,pathEl('M650,390 Q660,340 650,280 Q670,310 680,360','#FF6F00','#FF8F00',2,'round'));
+            // Closing dome of fire
+            add(3,pathEl('M100,300 Q250,100 450,80 Q650,100 800,300','none','#FF6F00',4,'round'));
+            add(3,pathEl('M150,280 Q300,120 450,100 Q600,120 750,280','none','#FF8F00',3,'round'));
+            // MU'SADAH - sealed/closed
+            add(4,textEl("MU'SADAH",450,200,{size:28,color:'#FFE082',weight:700}));
+            add(4,textEl('Sealed Over Them',450,235,{size:18,color:'#FFCC80',weight:600}));
+            // Embers
+            [[200,350],[300,380],[400,360],[500,370],[600,350],[700,380],[350,300],[550,310]].forEach(([x,y])=>{add(5,el('circle',{cx:x,cy:y,r:3,fill:'#FFE082',filter:'url(#glow)'}));});
+            add(5,textEl('"Over them will be fire, closed in"',450,470,{size:22,color:'#FFE082',weight:700}));
+            return{svg,groups};}
+
+        // ===== ANIMATION ENGINE =====
+        function hideAllPaths(groups){groups.forEach(group=>{group.forEach(item=>{if(item.tagName==='g'){item.querySelectorAll('path,line,circle,ellipse,rect,polygon').forEach(child=>hideElement(child));item.style.opacity='0';}else{hideElement(item);}});});}
+        function hideElement(el){try{if(el.getTotalLength){const len=el.getTotalLength();el.style.strokeDasharray=len;el.style.strokeDashoffset=len;el.style.fillOpacity='0';return;}}catch(e){}el.style.opacity='0';}
+        function animateGroup(group,duration){return new Promise(resolve=>{const startTime=performance.now();const elements=[];group.forEach(item=>{if(item.tagName==='g'){item.querySelectorAll('path,line,circle,ellipse,rect,polygon').forEach(child=>{elements.push(prepElement(child));});elements.push({el:item,hasPath:false,isGroup:true});}else{elements.push(prepElement(item));}});function prepElement(el){try{if(el.getTotalLength){const len=el.getTotalLength();el.style.strokeDasharray=len;el.style.strokeDashoffset=len;el.style.fillOpacity='0';return{el,len,hasPath:true};}}catch(e){}el.style.opacity='0';return{el,hasPath:false};}function tick(now){const elapsed=(now-startTime)*speed;const t=Math.min(elapsed/duration,1);const eased=1-Math.pow(1-t,3);elements.forEach(({el,len,hasPath,isGroup})=>{if(isGroup){el.style.opacity=eased;}else if(hasPath){el.style.strokeDashoffset=len*(1-eased);if(eased>0.5)el.style.fillOpacity=(eased-0.5)/0.5;}else{el.style.opacity=eased;}});if(t<1){for(let j=elements.length-1;j>=0;j--){if(elements[j].hasPath){try{const pt=elements[j].el.getPointAtLength(elements[j].len*eased);if(pt&&isFinite(pt.x)&&isFinite(pt.y)){movePen(pt.x,pt.y);break;}}catch(e){}}}animationId=requestAnimationFrame(tick);}else{elements.forEach(({el,hasPath,isGroup})=>{if(isGroup)el.style.opacity='1';else if(hasPath){el.style.strokeDashoffset='0';el.style.fillOpacity='1';}else el.style.opacity='1';});resolve();}}animationId=requestAnimationFrame(tick);});}
+        function movePen(svgX,svgY){const svg=document.getElementById('sceneSvg');if(!svg)return;const rect=svg.getBoundingClientRect();penCursor.style.opacity='1';penCursor.style.left=(svgX*rect.width/900-18)+'px';penCursor.style.top=(svgY*rect.height/506-58)+'px';}
+        function hidePen(){penCursor.style.opacity='0';}
+        let typewriterAbort=false;
+        function typewrite(element,text,opts={}){return new Promise(resolve=>{const charDelay=opts.charDelay||40;element.textContent='';const cursor=document.createElement('span');cursor.className='typewriter-cursor'+(opts.rtl?' rtl':'');element.appendChild(cursor);let i=0;function next(){if(typewriterAbort){resolve();return;}if(i<text.length){element.insertBefore(document.createTextNode(text[i]),cursor);i++;setTimeout(next,charDelay/speed);}else{setTimeout(()=>{cursor.remove();resolve();},300/speed);}}next();});}
+        function resetBottomText(){document.getElementById('verseBadge').style.opacity='0';['arabicText','translitText','kidText'].forEach(id=>document.getElementById(id).textContent='');}
+        async function animateBottomText(verse){const badge=document.getElementById('verseBadge');badge.textContent=verse.num;badge.style.opacity='1';await new Promise(r=>setTimeout(r,200/speed));await typewrite(document.getElementById('arabicText'),verse.arabic,{charDelay:50,rtl:true});await new Promise(r=>setTimeout(r,100/speed));await typewrite(document.getElementById('translitText'),verse.translit,{charDelay:30});await new Promise(r=>setTimeout(r,100/speed));await typewrite(document.getElementById('kidText'),verse.explanation,{charDelay:20});}
+        async function playVerse(index){if(animationId)cancelAnimationFrame(animationId);typewriterAbort=true;await new Promise(r=>setTimeout(r,50));typewriterAbort=false;isAnimating=true;resetBottomText();updateControls();const verse=verses[index];const{groups}=verse.build();hideAllPaths(groups);const gap=100;let textStarted=false;let textPromise=null;const textTrigger=Math.floor(groups.length*0.4);for(let i=0;i<groups.length;i++){if(typewriterAbort)break;await animateGroup(groups[i],600);if(i===textTrigger&&!textStarted){textStarted=true;textPromise=animateBottomText(verse);}if(i<groups.length-1)await new Promise(r=>setTimeout(r,gap/speed));}hidePen();if(!textStarted)textPromise=animateBottomText(verse);if(textPromise)await textPromise;isAnimating=false;updateControls();}
+        function goVerse(index){if(index<0||index>=verses.length)return;currentVerse=index;updateControls();playVerse(index);}
+        function replayAnimation(){playVerse(currentVerse);}
+        function updateControls(){document.getElementById('prevBtn').disabled=currentVerse===0;document.getElementById('nextBtn').disabled=currentVerse===verses.length-1;document.getElementById('verseIndicator').textContent=`${currentVerse+1} / ${verses.length}`;document.querySelectorAll('.verse-dots .dot').forEach((d,i)=>{d.classList.toggle('active',i===currentVerse);});}
+        function initDots(){const dotsEl=document.getElementById('verseDots');verses.forEach((_,i)=>{const dot=document.createElement('div');dot.className='dot'+(i===0?' active':'');dot.onclick=()=>goVerse(i);dotsEl.appendChild(dot);});}
+        document.addEventListener('keydown',(e)=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')goVerse(currentVerse+1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')goVerse(currentVerse-1);if(e.key==='r'||e.key==='R')replayAnimation();});
+        window.addEventListener('load',()=>{initDots();updateControls();setTimeout(()=>playVerse(0),500);});
+        function showView(view){const carousel=document.getElementById('carousel-view');const deepDive=document.getElementById('deep-dive-view');const buttons=document.querySelectorAll('.view-toggle button');if(view==='carousel'){carousel.classList.remove('hidden');deepDive.classList.remove('visible');buttons[0].classList.add('active');buttons[1].classList.remove('active');}else{carousel.classList.add('hidden');deepDive.classList.add('visible');buttons[1].classList.add('active');buttons[0].classList.remove('active');setTimeout(setupScrollReveal,100);}}
+        function setupScrollReveal(){const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1});document.querySelectorAll('.reveal, .glow-line').forEach(el=>observer.observe(el));}
+    </script>
+</body>
+</html>
