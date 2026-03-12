@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Alaq - 3D Cartoon Doodle | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .slide-frame { width: 100%; max-width: 900px; border-radius: 20px; border: 3px solid #333; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .slide-drawing { width: 100%; aspect-ratio: 16 / 9; background: #FFF9F0; position: relative; overflow: hidden; }
+        #sceneSvg { width: 100%; height: 100%; }
+        #penCursor { position: absolute; pointer-events: none; opacity: 0; z-index: 100; width: 52px; height: 65px; left: 0; top: 0; transition: left 0.05s linear, top 0.05s linear; }
+        #penCursor svg { width: 52px; height: 65px; display: block; }
+        .slide-bottom { background: #FFF3E0; padding: 24px 30px; border-top: 2px dashed #e0c9a0; text-align: center; }
+        .verse-num-badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: #e67e22; color: #fff; border-radius: 50%; font-weight: 700; font-size: 0.85em; margin-bottom: 8px; opacity: 0; transition: opacity 0.3s; }
+        .slide-arabic-text { font-family: 'Amiri', serif; font-size: 1.5em; color: #2c3e50; direction: rtl; margin-bottom: 4px; min-height: 1.8em; }
+        .slide-translit-text { color: #7f8c8d; font-style: italic; font-size: 0.85em; margin-bottom: 10px; min-height: 1.2em; }
+        .slide-kid-text { font-family: 'Caveat', cursive; font-size: 1.25em; color: #34495e; line-height: 1.5; min-height: 2em; }
+        .typewriter-cursor { display: inline-block; width: 2px; height: 1em; background: currentColor; margin-left: 2px; vertical-align: text-bottom; animation: cursorBlink 0.6s step-end infinite; }
+        .typewriter-cursor.rtl { margin-left: 0; margin-right: 2px; }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .controls { margin-top: 20px; display: flex; gap: 12px; align-items: center; }
+        .controls button { background: #1a1a1a; border: 2px solid #333; color: #c9a84c; padding: 10px 24px; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.95em; cursor: pointer; transition: all 0.3s; }
+        .controls button:hover { background: #c9a84c; color: #000; }
+        .controls button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .controls button:disabled:hover { background: #1a1a1a; color: #c9a84c; }
+        .verse-indicator { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.3em; min-width: 80px; text-align: center; }
+        .speed-control { margin-top: 12px; color: #666; font-size: 0.85em; display: flex; align-items: center; gap: 10px; }
+        .speed-control input { width: 120px; }
+        .verse-dots { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+        .verse-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; border: 1px solid #555; cursor: pointer; transition: all 0.3s; }
+        .verse-dots .dot.active { background: #c9a84c; border-color: #c9a84c; transform: scale(1.3); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .slide-bottom { padding: 18px 16px; } .slide-kid-text { font-size: 1.1em; } .controls button { padding: 8px 16px; font-size: 0.85em; } }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 96 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْعَلَقِ</div>
+        <h1>Surah Al-Alaq</h1>
+        <p>The Clot / Read! - 19 Verses - Makkan - The First Revelation</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+    <div class="carousel-section" id="carousel-view">
+    <div class="slide-frame">
+        <div class="slide-drawing" id="slideDrawing">
+            <div id="penCursor"><svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pencilBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E8A317"/><stop offset="20%" stop-color="#FDD835"/><stop offset="50%" stop-color="#FFEE58"/><stop offset="80%" stop-color="#FDD835"/><stop offset="100%" stop-color="#C49000"/></linearGradient><linearGradient id="ferruleGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#9E9E9E"/><stop offset="30%" stop-color="#E0E0E0"/><stop offset="60%" stop-color="#BDBDBD"/><stop offset="100%" stop-color="#757575"/></linearGradient><linearGradient id="eraserGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E48BA0"/><stop offset="40%" stop-color="#F8BBD0"/><stop offset="100%" stop-color="#D4738B"/></linearGradient><linearGradient id="woodTip" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#BA8B5C"/><stop offset="30%" stop-color="#DEB887"/><stop offset="70%" stop-color="#D2A76A"/><stop offset="100%" stop-color="#8B6914"/></linearGradient><filter id="pencilShadow"><feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/></filter></defs><g transform="rotate(32, 28, 40)" filter="url(#pencilShadow)"><rect x="22" y="2" width="12" height="8" rx="2" fill="url(#eraserGrad)" stroke="#C0627A" stroke-width="0.6"/><rect x="24" y="3" width="6" height="2" rx="1" fill="rgba(255,255,255,0.4)"/><rect x="21" y="10" width="14" height="7" rx="0.5" fill="url(#ferruleGrad)" stroke="#616161" stroke-width="0.5"/><line x1="21.5" y1="12" x2="34.5" y2="12" stroke="#9E9E9E" stroke-width="0.5"/><line x1="21.5" y1="14.5" x2="34.5" y2="14.5" stroke="#9E9E9E" stroke-width="0.5"/><rect x="22" y="17" width="12" height="36" fill="url(#pencilBody)" stroke="#C49000" stroke-width="0.6"/><rect x="26" y="17" width="3" height="36" fill="rgba(255,255,255,0.25)"/><rect x="23" y="28" width="10" height="5" rx="0.5" fill="#2E7D32" opacity="0.8"/><line x1="24.5" y1="30" x2="31.5" y2="30" stroke="#FFF" stroke-width="0.6" opacity="0.7"/><line x1="25" y1="31.5" x2="31" y2="31.5" stroke="#FFF" stroke-width="0.4" opacity="0.5"/><polygon points="22,53 34,53 28,68" fill="url(#woodTip)" stroke="#8B6914" stroke-width="0.5"/><polygon points="28,53 34,53 28,68" fill="rgba(0,0,0,0.1)"/><polygon points="26,64 30,64 28,72" fill="#333" stroke="#222" stroke-width="0.3"/><line x1="27.5" y1="65" x2="28" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/></g></svg></div>
+        </div>
+        <div class="slide-bottom">
+            <div class="verse-num-badge" id="verseBadge">1</div>
+            <div class="slide-arabic-text" id="arabicText"></div>
+            <div class="slide-translit-text" id="translitText"></div>
+            <div class="slide-kid-text" id="kidText"></div>
+        </div>
+    </div>
+    <div class="controls">
+        <button id="prevBtn" onclick="goVerse(currentVerse-1)">Prev</button>
+        <span class="verse-indicator" id="verseIndicator">1 / 19</span>
+        <button id="nextBtn" onclick="goVerse(currentVerse+1)">Next</button>
+        <button onclick="replayAnimation()">Replay</button>
+    </div>
+    <div class="verse-dots" id="verseDots"></div>
+    <div class="speed-control"><span>Speed:</span><input type="range" id="speedSlider" min="0.3" max="3" step="0.1" value="1"><span id="speedLabel">1x</span></div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">96</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">19</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">72</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Clot / Read!</div></div>
+                    <div class="fact-card"><div class="label">Significance</div><div class="value" style="font-size:0.9em">First Revelation</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Alaq holds one of the most extraordinary positions in the entire Quran: its <span class="highlight">first five verses were the very first words of revelation</span> ever sent down to Prophet Muhammad (peace be upon him). This happened in the Cave of Hira on Mount Noor near Makkah, during the month of Ramadan, when the Prophet was 40 years old.</p>
+                <p>The Prophet used to retreat to Cave Hira for days at a time, contemplating and worshipping in solitude. One night, the angel Jibreel (Gabriel) appeared to him and said: <span class="highlight">"Iqra!" (Read!)</span>. The Prophet, who could not read or write, replied: "I cannot read." Jibreel squeezed him tightly, released him, and said "Iqra!" again. This happened three times before Jibreel recited the first five verses.</p>
+                <div class="important">
+                    <p>Aisha (may Allah be pleased with her) reported: "The commencement of divine revelation to the Messenger of Allah was in the form of true dreams. He would see nothing in his sleep except that it came to pass like the morning light. Then he began to love seclusion and would go to Cave Hira to worship there. Then the Truth (Jibreel) came to him and said: 'Read!' He said: 'I cannot read.' The Prophet said: 'He squeezed me until I could not bear it anymore, then released me and said: Read! In the name of your Lord who created...'"</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih Bukhari 3, Sahih Muslim 160</p>
+                </div>
+                <p>The Prophet returned to Khadijah trembling and said: <span class="highlight">"Cover me! Cover me!"</span> She covered him until his fear subsided. Then she reassured him with some of the most beautiful words ever spoken: "By Allah, Allah will never disgrace you. You maintain family ties, bear the burden of the weak, earn for those who have nothing, honor guests, and help those struck by calamity."</p>
+                <p>The remaining verses (6-19) were revealed later and deal with <span class="highlight">Abu Jahl</span>, who threatened to stomp on the Prophet's neck if he ever saw him praying at the Ka'bah. Allah responded with a powerful warning, calling Abu Jahl's forelock "lying and sinful" and challenging him to call his supporters. The surah concludes with the most powerful antidote to arrogance: <span class="highlight">"Prostrate and draw near to Allah."</span></p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ</div>
+                    <div class="verse-transliteration">Iqra' bismi rabbika alladhi khalaq</div>
+                    <div class="verse-translation">Read in the name of your Lord who created.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">اقْرَأْ</span><span class="trans">iqra'</span><span class="meaning">Read / Recite</span></div>
+                        <div class="word-chip"><span class="ar">بِاسْمِ</span><span class="trans">bismi</span><span class="meaning">In the name of</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">Who</span></div>
+                        <div class="word-chip"><span class="ar">خَلَقَ</span><span class="trans">khalaq</span><span class="meaning">Created</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Iqra'" - Read! This was the very first word of the Quran revealed. The command to read and learn is the foundation of Islam. But notice it says "bismi rabbika" - read "in the name of your Lord." All learning and knowledge should begin with and be connected to Allah. The word "Rabb" (Lord, Nurturer, Sustainer) emphasizes that the same God who created everything is now teaching you. Knowledge is a gift from the Creator.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">خَلَقَ الْإِنسَانَ مِنْ عَلَقٍ</div>
+                    <div class="verse-transliteration">Khalaqal insana min 'alaq</div>
+                    <div class="verse-translation">Created man from a clinging substance.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">خَلَقَ</span><span class="trans">khalaqa</span><span class="meaning">He created</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانَ</span><span class="trans">al-insana</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">مِنْ</span><span class="trans">min</span><span class="meaning">From</span></div>
+                        <div class="word-chip"><span class="ar">عَلَقٍ</span><span class="trans">'alaq</span><span class="meaning">A clinging clot</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah specifies HOW He created humans: from 'alaq - a clinging clot, a tiny embryo that clings to the wall of the womb. This is a remarkable scientific description revealed 1400 years ago. The purpose of mentioning this is humility: you came from something insignificant, so how can you be arrogant? The One who made you from a clot can certainly teach you and guide you.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">اقْرَأْ وَرَبُّكَ الْأَكْرَمُ</div>
+                    <div class="verse-transliteration">Iqra' wa rabbukal akram</div>
+                    <div class="verse-translation">Read, and your Lord is the Most Generous.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">اقْرَأْ</span><span class="trans">iqra'</span><span class="meaning">Read / Recite</span></div>
+                        <div class="word-chip"><span class="ar">وَرَبُّكَ</span><span class="trans">wa rabbuka</span><span class="meaning">And your Lord</span></div>
+                        <div class="word-chip"><span class="ar">الْأَكْرَمُ</span><span class="trans">al-akram</span><span class="meaning">The Most Generous</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Iqra'" is repeated - emphasizing the supreme importance of reading and learning. Then Allah describes Himself as "Al-Akram" - the MOST Generous, the superlative form. His generosity has no limits. He gives knowledge freely, He teaches those who cannot learn on their own, and He doesn't charge for His gifts. Every skill, every insight, every "aha moment" you've ever had is from Al-Akram.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">الَّذِي عَلَّمَ بِالْقَلَمِ</div>
+                    <div class="verse-transliteration">Alladhi 'allama bil qalam</div>
+                    <div class="verse-translation">Who taught by the pen.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">Who / The One who</span></div>
+                        <div class="word-chip"><span class="ar">عَلَّمَ</span><span class="trans">'allama</span><span class="meaning">Taught</span></div>
+                        <div class="word-chip"><span class="ar">بِالْقَلَمِ</span><span class="trans">bil-qalam</span><span class="meaning">By the pen</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah taught humanity through the pen - the tool of writing, recording, and preserving knowledge. The pen is mentioned because writing is how knowledge transcends time and space. What someone writes today can teach millions tomorrow. The pen is mightier than the sword because it carries ideas across generations. This verse elevates literacy, scholarship, and writing as sacred activities blessed by Allah.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">عَلَّمَ الْإِنسَانَ مَا لَمْ يَعْلَمْ</div>
+                    <div class="verse-transliteration">'Allamal insana ma lam ya'lam</div>
+                    <div class="verse-translation">Taught man that which he knew not.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَلَّمَ</span><span class="trans">'allama</span><span class="meaning">He taught</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانَ</span><span class="trans">al-insana</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">That which</span></div>
+                        <div class="word-chip"><span class="ar">لَمْ</span><span class="trans">lam</span><span class="meaning">Not</span></div>
+                        <div class="word-chip"><span class="ar">يَعْلَمْ</span><span class="trans">ya'lam</span><span class="meaning">He knew</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The last of the first five verses. Humans are born knowing nothing, and every piece of knowledge they acquire comes ultimately from Allah. Medicine, astronomy, mathematics, language - all of it is taught by Allah. This should inspire two things: gratitude (for every skill you have) and humility (you didn't create your own intelligence). These five verses together establish that Islam is a religion of knowledge, reading, and learning.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">كَلَّا إِنَّ الْإِنسَانَ لَيَطْغَىٰ</div>
+                    <div class="verse-transliteration">Kalla innal insana layatgha</div>
+                    <div class="verse-translation">No! Indeed, man transgresses.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / But nay!</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانَ</span><span class="trans">al-insana</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">لَيَطْغَىٰ</span><span class="trans">layatgha</span><span class="meaning">Surely transgresses</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Kalla!" - a sharp warning. Despite being created from a clot and given knowledge by Allah, humans become arrogant and transgress. "Tughyan" means to exceed all limits, to rebel against boundaries. This is the turning point of the surah - from the beauty of knowledge to the danger of arrogance. When people forget their humble origins and the Source of their blessings, they become tyrants.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">أَن رَّآهُ اسْتَغْنَىٰ</div>
+                    <div class="verse-transliteration">An ra'ahus taghna</div>
+                    <div class="verse-translation">Because he sees himself self-sufficient.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَن</span><span class="trans">an</span><span class="meaning">Because</span></div>
+                        <div class="word-chip"><span class="ar">رَّآهُ</span><span class="trans">ra'ahu</span><span class="meaning">He sees himself</span></div>
+                        <div class="word-chip"><span class="ar">اسْتَغْنَىٰ</span><span class="trans">istaghna</span><span class="meaning">Self-sufficient</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The root cause of transgression: "istaghna" - seeing yourself as not needing anyone, not even Allah. When wealth, power, or status make someone feel they don't need God, that's the beginning of their downfall. This was exactly Abu Jahl's problem - his wealth and tribal status made him feel invincible. But no one is self-sufficient. Everyone depends on Allah for every breath.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">إِنَّ إِلَىٰ رَبِّكَ الرُّجْعَىٰ</div>
+                    <div class="verse-transliteration">Inna ila rabbikar ruj'a</div>
+                    <div class="verse-translation">Indeed, to your Lord is the return.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">To / toward</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">الرُّجْعَىٰ</span><span class="trans">ar-ruj'a</span><span class="meaning">The return</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A reality check for every arrogant person: no matter how powerful you think you are, you WILL return to Allah. "Ar-ruj'a" - the ultimate return. This is inescapable. Your wealth won't come with you, your status won't protect you, your supporters won't help you. You will stand alone before your Lord. This verse should humble every person who thinks they are above accountability.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">9-10</div>
+                    <div class="verse-arabic">أَرَأَيْتَ الَّذِي يَنْهَىٰ ۝ عَبْدًا إِذَا صَلَّىٰ</div>
+                    <div class="verse-transliteration">Ara'aytal ladhi yanha / 'Abdan idha salla</div>
+                    <div class="verse-translation">Have you seen the one who forbids / A servant when he prays?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَرَأَيْتَ</span><span class="trans">ara'ayta</span><span class="meaning">Have you seen</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The one who</span></div>
+                        <div class="word-chip"><span class="ar">يَنْهَىٰ</span><span class="trans">yanha</span><span class="meaning">Forbids / prevents</span></div>
+                        <div class="word-chip"><span class="ar">عَبْدًا</span><span class="trans">'abdan</span><span class="meaning">A servant</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">صَلَّىٰ</span><span class="trans">salla</span><span class="meaning">He prays</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>These verses refer to Abu Jahl, who threatened to stomp on the Prophet's neck if he saw him praying at the Ka'bah. Allah asks in amazement: "Have you SEEN this person?" - expressing how outrageous it is to prevent someone from worshipping their Creator. The Prophet is called "'abd" (servant/slave of Allah) - the most honorable title a human can have. Trying to stop someone from praying is fighting against Allah Himself.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">11-12</div>
+                    <div class="verse-arabic">أَرَأَيْتَ إِن كَانَ عَلَى الْهُدَىٰ ۝ أَوْ أَمَرَ بِالتَّقْوَىٰ</div>
+                    <div class="verse-transliteration">Ara'ayta in kana 'alal huda / Aw amara bit-taqwa</div>
+                    <div class="verse-translation">Have you seen if he is upon guidance / Or enjoins righteousness?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَرَأَيْتَ</span><span class="trans">ara'ayta</span><span class="meaning">Have you seen</span></div>
+                        <div class="word-chip"><span class="ar">إِن كَانَ</span><span class="trans">in kana</span><span class="meaning">If he is</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى الْهُدَىٰ</span><span class="trans">'alal huda</span><span class="meaning">Upon guidance</span></div>
+                        <div class="word-chip"><span class="ar">أَوْ</span><span class="trans">aw</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">أَمَرَ</span><span class="trans">amara</span><span class="meaning">He commands</span></div>
+                        <div class="word-chip"><span class="ar">بِالتَّقْوَىٰ</span><span class="trans">bit-taqwa</span><span class="meaning">Righteousness / God-consciousness</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah poses a devastating rhetorical question: what if the person you're trying to stop is actually on the right path? What if he's upon "huda" (divine guidance) and commanding "taqwa" (God-consciousness)? By preventing him, you're not just fighting a man - you're opposing guidance and righteousness themselves. This exposes the absurdity and evil of Abu Jahl's actions.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">13-14</div>
+                    <div class="verse-arabic">أَرَأَيْتَ إِن كَذَّبَ وَتَوَلَّىٰ ۝ أَلَمْ يَعْلَم بِأَنَّ اللَّهَ يَرَىٰ</div>
+                    <div class="verse-transliteration">Ara'ayta in kadhdhaba wa tawalla / Alam ya'lam bi'annallaha yara</div>
+                    <div class="verse-translation">Have you seen if he denies and turns away? / Does he not know that Allah sees?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَرَأَيْتَ</span><span class="trans">ara'ayta</span><span class="meaning">Have you seen</span></div>
+                        <div class="word-chip"><span class="ar">إِن كَذَّبَ</span><span class="trans">in kadhdhaba</span><span class="meaning">If he denies</span></div>
+                        <div class="word-chip"><span class="ar">وَتَوَلَّىٰ</span><span class="trans">wa tawalla</span><span class="meaning">And turns away</span></div>
+                        <div class="word-chip"><span class="ar">أَلَمْ يَعْلَم</span><span class="trans">alam ya'lam</span><span class="meaning">Does he not know</span></div>
+                        <div class="word-chip"><span class="ar">بِأَنَّ اللَّهَ</span><span class="trans">bi'annallaha</span><span class="meaning">That Allah</span></div>
+                        <div class="word-chip"><span class="ar">يَرَىٰ</span><span class="trans">yara</span><span class="meaning">Sees</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Alam ya'lam bi'annallaha yara" - Does he not KNOW that ALLAH SEES? This is one of the most powerful verses in the Quran. Every secret act, every hidden intention, every whispered threat - Allah sees it all. Abu Jahl thought he was powerful enough to intimidate the Prophet. But he was being watched by the All-Seeing. This awareness of Allah's sight should transform how we behave, both publicly and privately.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">15-16</div>
+                    <div class="verse-arabic">كَلَّا لَئِن لَّمْ يَنتَهِ لَنَسْفَعًا بِالنَّاصِيَةِ ۝ نَاصِيَةٍ كَاذِبَةٍ خَاطِئَةٍ</div>
+                    <div class="verse-transliteration">Kalla la'in lam yantahi lanasfa'an bin-nasiyah / Nasiyatin kadhibatin khati'ah</div>
+                    <div class="verse-translation">No! If he does not desist, We will surely drag him by the forelock / A lying, sinning forelock.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Never!</span></div>
+                        <div class="word-chip"><span class="ar">لَئِن لَّمْ يَنتَهِ</span><span class="trans">la'in lam yantahi</span><span class="meaning">If he does not stop</span></div>
+                        <div class="word-chip"><span class="ar">لَنَسْفَعًا</span><span class="trans">lanasfa'an</span><span class="meaning">We will surely seize/drag</span></div>
+                        <div class="word-chip"><span class="ar">بِالنَّاصِيَةِ</span><span class="trans">bin-nasiyah</span><span class="meaning">By the forelock</span></div>
+                        <div class="word-chip"><span class="ar">نَاصِيَةٍ</span><span class="trans">nasiyatin</span><span class="meaning">A forelock</span></div>
+                        <div class="word-chip"><span class="ar">كَاذِبَةٍ</span><span class="trans">kadhibatin</span><span class="meaning">Lying</span></div>
+                        <div class="word-chip"><span class="ar">خَاطِئَةٍ</span><span class="trans">khati'ah</span><span class="meaning">Sinful / erring</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A severe warning: if Abu Jahl doesn't stop his oppression, Allah will seize him by his "nasiyah" (forelock - the front of the head). Being grabbed by the forelock was the ultimate humiliation in Arab culture. And Allah describes this forelock as "lying and sinful" - interestingly, modern neuroscience has discovered that the prefrontal cortex (behind the forehead) is responsible for decision-making, lying, and moral choices. The Quran attributed lying to the forelock 1400 years ago.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">17-18</div>
+                    <div class="verse-arabic">فَلْيَدْعُ نَادِيَهُ ۝ سَنَدْعُ الزَّبَانِيَةَ</div>
+                    <div class="verse-transliteration">Falyad'u nadiyahu / Sanad'uz zabaniyah</div>
+                    <div class="verse-translation">Then let him call his associates / We will call the angels of Hell.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَلْيَدْعُ</span><span class="trans">falyad'u</span><span class="meaning">Then let him call</span></div>
+                        <div class="word-chip"><span class="ar">نَادِيَهُ</span><span class="trans">nadiyahu</span><span class="meaning">His associates / council</span></div>
+                        <div class="word-chip"><span class="ar">سَنَدْعُ</span><span class="trans">sanad'u</span><span class="meaning">We will call</span></div>
+                        <div class="word-chip"><span class="ar">الزَّبَانِيَةَ</span><span class="trans">az-zabaniyah</span><span class="meaning">The angels of Hell</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A direct challenge: "Go ahead, call your people, your supporters, your tribal council!" Abu Jahl relied on his clan for power and intimidation. But Allah says: "We will call the Zabaniyah" - the powerful, harsh angels who guard Hell. When Abu Jahl once threatened the Prophet, the Prophet said: "Let him do so. By Allah, if he does, the angels would seize him right there." (Sahih Muslim) No human army can stand against Allah's forces.</p></div>
+                </div>
+
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">كَلَّا لَا تُطِعْهُ وَاسْجُدْ وَاقْتَرِب</div>
+                    <div class="verse-transliteration">Kalla la tuti'hu wasjud waqtarib</div>
+                    <div class="verse-translation">No! Do not obey him. But prostrate and draw near [to Allah].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Never!</span></div>
+                        <div class="word-chip"><span class="ar">لَا</span><span class="trans">la</span><span class="meaning">Do not</span></div>
+                        <div class="word-chip"><span class="ar">تُطِعْهُ</span><span class="trans">tuti'hu</span><span class="meaning">Obey him</span></div>
+                        <div class="word-chip"><span class="ar">وَاسْجُدْ</span><span class="trans">wasjud</span><span class="meaning">And prostrate</span></div>
+                        <div class="word-chip"><span class="ar">وَاقْتَرِب</span><span class="trans">waqtarib</span><span class="meaning">And draw near</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The final verse is the most powerful conclusion. Three commands: (1) Don't obey the oppressor. (2) Prostrate - make sujood to Allah. (3) Draw near to Allah. The Prophet (peace be upon him) said: "The closest a servant is to his Lord is when he is in prostration" (Sahih Muslim 482). Sujood is the ultimate antidote to arrogance - you put the highest part of your body (your face) on the lowest place (the ground) in submission to the Highest (Allah). This is a verse of sajdah - Muslims prostrate when reciting it.</p></div>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Alaq</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Knowledge and reading are the foundation of Islam.</strong><p style="color: #999; font-size: 0.95em;">"Iqra'" was the very first word revealed. Islam began not with a command to fight, fast, or even pray - but to READ. Learning, literacy, and the pursuit of knowledge are sacred duties in Islam.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The pen is one of Allah's greatest gifts.</strong><p style="color: #999; font-size: 0.95em;">Allah taught through the pen - the tool that preserves knowledge across time and space. Writing, recording, and sharing knowledge are acts of worship when done for Allah's sake.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Arrogance from wealth and power is humanity's greatest danger.</strong><p style="color: #999; font-size: 0.95em;">When people feel self-sufficient, they transgress all limits. True strength is recognizing your dependence on Allah, not denying it.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah sees everything - nothing is hidden.</strong><p style="color: #999; font-size: 0.95em;">"Does he not know that Allah sees?" This awareness should transform how we behave, both in public and in private. The All-Seeing is always watching.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Sujood brings you closest to Allah.</strong><p style="color: #999; font-size: 0.95em;">The antidote to arrogance is prostration. When you put your face on the ground before Allah, you're at your closest to Him. Sujood is the most humble and most powerful position a human can be in.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations are based on Tafsir Ibn Kathir, Tafsir As-Sa'di, and Tafsir Al-Qurtubi. The hadith of the first revelation is from Sahih Bukhari (3) and Sahih Muslim (160). The hadith about sujood being the closest position to Allah is from Sahih Muslim (482). The incident of Abu Jahl is documented in multiple authentic sources. This is a learning aid - always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        const container=document.getElementById('slideDrawing'),penCursor=document.getElementById('penCursor'),speedSlider=document.getElementById('speedSlider'),speedLabel=document.getElementById('speedLabel');
+        let animationId=null,speed=1,currentVerse=0,isAnimating=false;
+        speedSlider.addEventListener('input',()=>{speed=parseFloat(speedSlider.value);speedLabel.textContent=speed+'x';});
+        const svgNS='http://www.w3.org/2000/svg';
+
+        const verses=[
+            {num:1,arabic:'اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ',translit:"Iqra' bismi rabbika alladhi khalaq",explanation:"Read! In the name of your Lord who created everything. This was the very FIRST word of the Quran ever revealed!",build:buildV1},
+            {num:2,arabic:'خَلَقَ الْإِنسَانَ مِنْ عَلَقٍ',translit:"Khalaqal insana min 'alaq",explanation:"He created humans from a tiny clinging clot. From something so small, Allah made something amazing!",build:buildV2},
+            {num:3,arabic:'اقْرَأْ وَرَبُّكَ الْأَكْرَمُ',translit:"Iqra' wa rabbukal akram",explanation:"Read! And your Lord is the Most Generous - He gives knowledge freely and abundantly!",build:buildV3},
+            {num:4,arabic:'الَّذِي عَلَّمَ بِالْقَلَمِ',translit:"Alladhi 'allama bil qalam",explanation:"He is the One who taught by the pen. Writing is how knowledge is preserved and shared across time!",build:buildV4},
+            {num:5,arabic:'عَلَّمَ الْإِنسَانَ مَا لَمْ يَعْلَمْ',translit:"'Allamal insana ma lam ya'lam",explanation:"He taught humans what they never knew. Every bit of knowledge comes from Allah!",build:buildV5},
+            {num:6,arabic:'كَلَّا إِنَّ الْإِنسَانَ لَيَطْغَىٰ',translit:"Kalla innal insana layatgha",explanation:"But no! Humans become arrogant and cross all limits when they feel powerful.",build:buildV6},
+            {num:7,arabic:'أَن رَّآهُ اسْتَغْنَىٰ',translit:"An ra'ahus taghna",explanation:"Because they see themselves as self-sufficient, not needing anyone - not even Allah!",build:buildV7},
+            {num:8,arabic:'إِنَّ إِلَىٰ رَبِّكَ الرُّجْعَىٰ',translit:"Inna ila rabbikar ruj'a",explanation:"But surely, to your Lord is the return. Everyone goes back to Allah in the end.",build:buildV8},
+            {num:9,arabic:'أَرَأَيْتَ الَّذِي يَنْهَىٰ',translit:"Ara'aytal ladhi yanha",explanation:"Have you seen the one who tries to stop others from doing good?",build:buildV9},
+            {num:10,arabic:'عَبْدًا إِذَا صَلَّىٰ',translit:"'Abdan idha salla",explanation:"He tries to prevent a servant of Allah from praying! Can you imagine?",build:buildV9},
+            {num:11,arabic:'أَرَأَيْتَ إِن كَانَ عَلَى الْهُدَىٰ',translit:"Ara'ayta in kana 'alal huda",explanation:"What if the one praying is actually on the right path of guidance?",build:buildV11},
+            {num:12,arabic:'أَوْ أَمَرَ بِالتَّقْوَىٰ',translit:"Aw amara bit-taqwa",explanation:"Or he commands righteousness and God-consciousness? Still you stop him?",build:buildV11},
+            {num:13,arabic:'أَرَأَيْتَ إِن كَذَّبَ وَتَوَلَّىٰ',translit:"Ara'ayta in kadhdhaba wa tawalla",explanation:"What if the one stopping is actually a denier who turned away from truth?",build:buildV13},
+            {num:14,arabic:'أَلَمْ يَعْلَم بِأَنَّ اللَّهَ يَرَىٰ',translit:"Alam ya'lam bi'annallaha yara",explanation:"Does he not know that Allah sees EVERYTHING? Nothing is hidden from Him!",build:buildV14},
+            {num:15,arabic:'كَلَّا لَئِن لَّمْ يَنتَهِ لَنَسْفَعًا بِالنَّاصِيَةِ',translit:"Kalla la'in lam yantahi lanasfa'an bin-nasiyah",explanation:"No! If he doesn't stop, he will be seized and dragged by the forelock!",build:buildV15},
+            {num:16,arabic:'نَاصِيَةٍ كَاذِبَةٍ خَاطِئَةٍ',translit:"Nasiyatin kadhibatin khati'ah",explanation:"A forelock that is lying and sinful - belonging to someone who spreads lies.",build:buildV15},
+            {num:17,arabic:'فَلْيَدْعُ نَادِيَهُ',translit:"Falyad'u nadiyahu",explanation:"Let him call his supporters and helpers! See if they can save him.",build:buildV17},
+            {num:18,arabic:'سَنَدْعُ الزَّبَانِيَةَ',translit:"Sanad'uz zabaniyah",explanation:"We will call the angels of punishment. No one can stand against them!",build:buildV17},
+            {num:19,arabic:'كَلَّا لَا تُطِعْهُ وَاسْجُدْ وَاقْتَرِب',translit:"Kalla la tuti'hu wasjud waqtarib",explanation:"No! Do not obey him. Instead, prostrate to Allah and draw near to Him!",build:buildV19}
+        ];
+
+        function el(tag,attrs){const e=document.createElementNS(svgNS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;}
+        function pathEl(d,fill,stroke,sw,join){const attrs={d,fill:fill||'none',stroke:stroke||'none'};if(sw)attrs['stroke-width']=sw;if(join){attrs['stroke-linejoin']=join;attrs['stroke-linecap']=join;}return el('path',attrs);}
+        function lineEl(x1,y1,x2,y2,stroke,sw){return el('line',{x1,y1,x2,y2,stroke,'stroke-width':sw,'stroke-linecap':'round'});}
+        function textEl(text,x,y,opts={}){const e=el('text',{x,y,'text-anchor':opts.anchor||'middle','dominant-baseline':'middle','font-family':opts.family||'Caveat, cursive','font-size':opts.size||22,'font-weight':opts.weight||600,fill:opts.color||'#2c3e50'});e.textContent=text;return e;}
+        function cLG(id,x1,y1,x2,y2,s){const g=document.createElementNS(svgNS,'linearGradient');g.setAttribute('id',id);g.setAttribute('x1',x1);g.setAttribute('y1',y1);g.setAttribute('x2',x2);g.setAttribute('y2',y2);s.forEach(([o,c])=>{const st=document.createElementNS(svgNS,'stop');st.setAttribute('offset',o);st.setAttribute('stop-color',c);g.appendChild(st);});return g;}
+        function cRG(id,cx,cy,r,s){const g=document.createElementNS(svgNS,'radialGradient');g.setAttribute('id',id);g.setAttribute('cx',cx);g.setAttribute('cy',cy);g.setAttribute('r',r);s.forEach(([o,c])=>{const st=document.createElementNS(svgNS,'stop');st.setAttribute('offset',o);st.setAttribute('stop-color',c);g.appendChild(st);});return g;}
+        function cCloud(cx,cy,sc){const g=document.createElementNS(svgNS,'g');g.setAttribute('filter','url(#softShadow)');const s=sc;[[cx-30*s,cy+5*s,35*s,22*s],[cx,cy-5*s,40*s,28*s],[cx+30*s,cy+3*s,32*s,20*s],[cx-10*s,cy+10*s,38*s,18*s],[cx+15*s,cy+8*s,35*s,20*s]].forEach(([x,y,rx,ry])=>{g.appendChild(el('ellipse',{cx:x,cy:y,rx,ry,fill:'url(#cloudGrad)'}));});g.appendChild(el('ellipse',{cx,cy:cy-8*s,rx:25*s,ry:12*s,fill:'rgba(255,255,255,0.7)'}));return g;}
+        function cSparkle(cx,cy,sz){const g=document.createElementNS(svgNS,'g');g.setAttribute('filter','url(#glow)');g.appendChild(pathEl(`M${cx},${cy-sz} L${cx+sz*0.25},${cy-sz*0.25} L${cx+sz},${cy} L${cx+sz*0.25},${cy+sz*0.25} L${cx},${cy+sz} L${cx-sz*0.25},${cy+sz*0.25} L${cx-sz},${cy} L${cx-sz*0.25},${cy-sz*0.25} Z`,'#FFF9C4','#FFD54F',1,'round'));return g;}
+        function cStar(cx,cy,oR,iR,f,s){const p=[];for(let i=0;i<10;i++){const r=i%2===0?oR:iR;const a=(Math.PI/5)*i-Math.PI/2;p.push(`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`);}return el('polygon',{points:p.join(' '),fill:f,stroke:s,'stroke-width':1.5,'stroke-linejoin':'round'});}
+
+        function addDefs(svg){
+            const d=document.createElementNS(svgNS,'defs');
+            d.appendChild(cLG('skyGrad','0%','0%','0%','100%',[['0%','#FFE0B2'],['40%','#FFCC80'],['70%','#FFF9C4'],['100%','#E1F5FE']]));
+            d.appendChild(cLG('skyNight','0%','0%','0%','100%',[['0%','#1a1a2e'],['50%','#16213e'],['100%','#0f3460']]));
+            d.appendChild(cLG('groundGrad','0%','0%','0%','100%',[['0%','#A5D6A7'],['40%','#66BB6A'],['100%','#388E3C']]));
+            d.appendChild(cLG('sandGrad','0%','0%','0%','100%',[['0%','#F5D6A0'],['30%','#E8C888'],['60%','#D4AD6A'],['100%','#C49A52']]));
+            d.appendChild(cLG('lightGrad','50%','0%','50%','100%',[['0%','#FFF9C4'],['50%','#FFEE58'],['100%','rgba(255,238,88,0)']]));
+            d.appendChild(cLG('robeGrad','0%','0%','100%','100%',[['0%','#ECEFF1'],['30%','#CFD8DC'],['70%','#B0BEC5'],['100%','#78909C']]));
+            d.appendChild(cLG('stormGrad','0%','0%','0%','100%',[['0%','#263238'],['30%','#37474F'],['60%','#455A64'],['100%','#546E7A']]));
+            d.appendChild(cLG('pathGold','0%','0%','100%','0%',[['0%','#FFD54F'],['50%','#FFF176'],['100%','#FFD54F']]));
+            d.appendChild(cLG('fireGrad','0%','0%','0%','100%',[['0%','#FF6F00'],['30%','#E65100'],['60%','#BF360C'],['100%','#3E2723']]));
+            d.appendChild(cLG('caveGrad','0%','0%','0%','100%',[['0%','#3E2723'],['40%','#4E342E'],['100%','#5D4037']]));
+            d.appendChild(cRG('sunGlow','50%','50%','50%',[['0%','#FFF9C4'],['40%','#FFEE58'],['70%','#FDD835'],['100%','#F9A825']]));
+            d.appendChild(cRG('skinGrad','40%','35%','50%',[['0%','#FFCC80'],['60%','#FFB74D'],['100%','#F57C00']]));
+            d.appendChild(cRG('cloudGrad','40%','30%','55%',[['0%','#FFFFFF'],['50%','#F5F5F5'],['100%','#E0E0E0']]));
+            d.appendChild(cRG('goldenGlow','50%','50%','50%',[['0%','rgba(255,215,0,0.5)'],['40%','rgba(255,193,7,0.3)'],['100%','rgba(255,193,7,0)']]));
+            const glow=document.createElementNS(svgNS,'filter');glow.setAttribute('id','glow');glow.innerHTML='<feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';d.appendChild(glow);
+            const sh=document.createElementNS(svgNS,'filter');sh.setAttribute('id','softShadow');sh.setAttribute('x','-20%');sh.setAttribute('y','-20%');sh.setAttribute('width','140%');sh.setAttribute('height','140%');sh.innerHTML='<feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.25)"/>';d.appendChild(sh);
+            const dp=document.createElementNS(svgNS,'pattern');dp.setAttribute('id','dots');dp.setAttribute('width','18');dp.setAttribute('height','18');dp.setAttribute('patternUnits','userSpaceOnUse');dp.appendChild(el('circle',{cx:9,cy:9,r:0.7,fill:'#e0d8c8'}));d.appendChild(dp);
+            svg.appendChild(d);
+        }
+        function initSvg(){const old=document.getElementById('sceneSvg');if(old)old.remove();const svg=document.createElementNS(svgNS,'svg');svg.setAttribute('id','sceneSvg');svg.setAttribute('viewBox','0 0 900 506');svg.setAttribute('xmlns',svgNS);container.appendChild(svg);addDefs(svg);svg.appendChild(el('rect',{width:900,height:506,fill:'#FFF9F0'}));svg.appendChild(el('rect',{width:900,height:506,fill:'url(#dots)'}));const groups=[];function add(gi,node){if(!groups[gi])groups[gi]=[];groups[gi].push(node);svg.appendChild(node);}return{svg,groups,add};}
+
+        // V1: Cave Hira with light
+        function buildV1(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyNight)','none',0));
+            [[100,40],[250,70],[400,35],[600,55],[750,45],[850,75]].forEach(([x,y])=>{add(0,cStar(x,y,4,2,'rgba(255,255,255,0.6)','rgba(255,255,255,0.3)'));});
+            add(1,pathEl('M250,200 L350,80 L550,80 L650,200 L650,420 L250,420 Z','url(#caveGrad)','#3E2723',3,'round'));
+            add(1,pathEl('M300,420 Q350,380 400,390 Q450,370 500,390 Q550,380 600,420','none','#5D4037',2,'round'));
+            add(2,pathEl('M400,0 L380,200 L520,200 L500,0 Z','url(#lightGrad)','none',0));
+            add(2,el('circle',{cx:450,cy:150,r:40,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(3,pathEl('M360,250 L540,250 L530,280 L370,280 Z','#FFF9C4','#C9A84C',1.5,'round'));
+            add(3,lineEl(380,260,520,260,'#C9A84C',1));add(3,lineEl(380,270,510,270,'#C9A84C',1));
+            [[350,150],[550,145],[320,220],[580,215]].forEach(([x,y])=>{add(4,cSparkle(x,y,6));});
+            add(4,textEl('IQRA!',450,330,{size:32,color:'#FFD54F',weight:700}));
+            add(5,textEl('"Read! In the name of your Lord"',450,470,{size:22,color:'#FFE082',weight:700}));
+            return{svg,groups};}
+
+        // V2: Creation from clot
+        function buildV2(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(1,el('circle',{cx:450,cy:250,r:100,fill:'url(#goldenGlow)'}));
+            add(2,el('circle',{cx:450,cy:250,r:8,fill:'#E57373',stroke:'#C62828','stroke-width':2}));
+            add(2,el('circle',{cx:450,cy:250,r:20,fill:'none',stroke:'#EF9A9A','stroke-width':1.5}));
+            add(2,el('circle',{cx:450,cy:250,r:35,fill:'none',stroke:'#FFCDD2','stroke-width':1}));
+            add(3,el('circle',{cx:450,cy:250,r:55,fill:'none',stroke:'rgba(255,183,77,0.4)','stroke-width':1.5}));
+            add(3,el('circle',{cx:450,cy:250,r:75,fill:'none',stroke:'rgba(255,183,77,0.2)','stroke-width':1}));
+            [[380,200],[520,195],[400,310],[500,305],[350,250],[550,248]].forEach(([x,y])=>{add(4,cSparkle(x,y,5));});
+            add(4,textEl("'Alaq",450,370,{size:20,color:'#C62828',weight:600}));
+            add(5,textEl('"Created man from a clinging clot"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V3: Most Generous
+        function buildV3(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(1,el('circle',{cx:450,cy:200,r:70,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(1,el('circle',{cx:450,cy:200,r:110,fill:'url(#goldenGlow)'}));
+            for(let i=0;i<12;i++){const a=(i*30)*Math.PI/180;add(2,lineEl(450+75*Math.cos(a),200+75*Math.sin(a),450+120*Math.cos(a),200+120*Math.sin(a),'#FDD835',2.5));}
+            add(3,textEl('AL-AKRAM',450,200,{size:28,color:'#E65100',weight:700}));
+            add(3,textEl('The Most Generous',450,230,{size:18,color:'#FF8F00',weight:600}));
+            [[250,130],[650,125],[300,250],[600,245],[200,200],[700,195]].forEach(([x,y])=>{add(4,cSparkle(x,y,7));});
+            add(4,textEl('"Your Lord is the Most Generous"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V4: Pen and knowledge
+        function buildV4(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(1,pathEl('M300,150 L600,150 L610,160 L600,380 L300,380 L290,160 Z','#FFF9C4','#C9A84C',2,'round'));
+            add(2,lineEl(320,190,580,190,'#C9A84C',1.5));add(2,lineEl(320,220,570,220,'#C9A84C',1.5));add(2,lineEl(320,250,580,250,'#C9A84C',1.5));add(2,lineEl(320,280,560,280,'#C9A84C',1.5));add(2,lineEl(320,310,575,310,'#C9A84C',1.5));add(2,lineEl(320,340,550,340,'#C9A84C',1.5));
+            add(3,pathEl('M650,120 L660,350','none','#795548',5,'round'));
+            add(3,pathEl('M658,350 L662,365 L655,365 Z','#333','#222',1,'round'));
+            add(3,el('circle',{cx:655,cy:115,r:6,fill:'#C9A84C',stroke:'#A68529','stroke-width':1}));
+            [[250,120],[700,110],[240,300],[710,290]].forEach(([x,y])=>{add(4,cSparkle(x,y,6));});
+            add(4,textEl('"Who taught by the pen"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V5: Knowledge illumination
+        function buildV5(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L450,0 L450,506 L0,506 Z','url(#skyNight)','none',0));
+            add(0,pathEl('M450,0 L900,0 L900,506 L450,506 Z','url(#skyGrad)','none',0));
+            add(1,el('ellipse',{cx:300,cy:350,rx:20,ry:4,fill:'rgba(0,0,0,0.15)'}));
+            add(1,pathEl('M288,260 Q286,305 284,348 L316,348 Q314,305 312,260 Z','#37474F','#263238',1.5,'round'));
+            add(1,el('circle',{cx:300,cy:245,r:15,fill:'#546E7A',stroke:'#455A64','stroke-width':1.5}));
+            add(2,el('circle',{cx:600,cy:200,r:60,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(2,el('circle',{cx:600,cy:200,r:90,fill:'url(#goldenGlow)'}));
+            add(3,pathEl('M400,200 Q500,180 550,200','none','#FFD54F',3,'round'));
+            add(3,pathEl('M540,193 L555,200 L540,207','none','#FFD54F',2.5,'round'));
+            [[500,130],[650,120],[550,280],[700,260]].forEach(([x,y])=>{add(4,cSparkle(x,y,6));});
+            add(4,textEl('"Taught man what he knew not"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V6: Arrogant transgressor
+        function buildV6(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            add(1,el('ellipse',{cx:450,cy:390,rx:35,ry:6,fill:'rgba(0,0,0,0.15)'}));
+            add(1,pathEl('M420,220 Q415,305 410,385 L490,385 Q485,305 480,220 Z','#455A64','#37474F',2,'round'));
+            add(1,el('circle',{cx:450,cy:200,r:22,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(1,pathEl('M440,205 Q450,212 460,205','none','#2C1810',1.5,'round'));
+            add(2,pathEl('M200,300 L200,180 L260,180 L260,300 Z','#90A4AE','#78909C',1.5,'round'));
+            add(2,pathEl('M650,280 L650,160 L720,160 L720,280 Z','#90A4AE','#78909C',1.5,'round'));
+            add(2,pathEl('M100,320 L100,220 L150,220 L150,320 Z','#B0BEC5','#90A4AE',1,'round'));
+            add(3,pathEl('M425,235 Q400,210 380,185','none','#546E7A',4,'round'));
+            add(3,pathEl('M475,235 Q500,210 520,185','none','#546E7A',4,'round'));
+            add(3,textEl('TRANSGRESSES',450,140,{size:24,color:'#C62828',weight:700}));
+            add(4,textEl('"Man transgresses all limits"',450,470,{size:22,color:'#C62828',weight:700}));
+            return{svg,groups};}
+
+        // V7: Self-sufficient delusion
+        function buildV7(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            add(1,el('circle',{cx:450,cy:250,r:100,fill:'url(#goldenGlow)'}));
+            add(1,el('ellipse',{cx:450,cy:380,rx:25,ry:5,fill:'rgba(0,0,0,0.12)'}));
+            add(1,pathEl('M435,260 Q432,320 430,375 L470,375 Q468,320 465,260 Z','#455A64','#37474F',2,'round'));
+            add(1,el('circle',{cx:450,cy:243,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(2,[[380,200],[520,195],[400,310],[500,305]].forEach(([cx,cy])=>{add(2,el('circle',{cx,cy,r:7,fill:'#FFD54F',stroke:'#C9A84C','stroke-width':1}));}));
+            add(3,textEl('I don\'t need anyone!',450,160,{size:20,color:'#90A4AE',weight:600}));
+            add(3,textEl('"Sees himself self-sufficient"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V8: Return to Allah
+        function buildV8(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 L900,380 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            add(1,pathEl('M100,420 Q300,400 500,410 Q700,395 850,350','none','url(#pathGold)',5,'round'));
+            add(2,el('circle',{cx:850,cy:330,r:45,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(2,el('circle',{cx:850,cy:330,r:70,fill:'url(#goldenGlow)'}));
+            add(3,textEl('RETURN',850,330,{size:18,color:'#E65100',weight:700}));
+            [[700,280],[750,260],[800,240]].forEach(([x,y])=>{add(4,cSparkle(x,y,6));});
+            add(4,textEl('"To your Lord is the return"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V9-10: Blocking prayer
+        function buildV9(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,380 L900,380 L900,506 L0,506 Z','url(#sandGrad)','none',0));
+            // Arrogant blocker
+            add(1,pathEl('M335,260 Q332,320 330,375 L370,375 Q368,320 365,260 Z','#455A64','#37474F',2,'round'));
+            add(1,el('circle',{cx:350,cy:243,r:18,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1.5}));
+            add(1,pathEl('M362,280 Q390,290 410,300','none','#546E7A',4,'round'));
+            // Humble person trying to pray
+            add(2,pathEl('M560,300 Q555,350 550,375 L590,375 Q585,350 580,300 Z','url(#robeGrad)','#78909C',2,'round'));
+            add(2,el('circle',{cx:570,cy:285,r:15,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            add(2,pathEl('M555,308 Q550,320 548,325','none','#B0BEC5',3,'round'));
+            add(2,pathEl('M585,308 Q590,320 592,325','none','#B0BEC5',3,'round'));
+            // Block symbol
+            add(3,el('circle',{cx:460,cy:290,r:25,fill:'none',stroke:'#C62828','stroke-width':3}));
+            add(3,lineEl(442,308,478,272,'#C62828',3));
+            add(4,textEl('"Forbids a servant from praying"',450,470,{size:22,color:'#C62828',weight:700}));
+            return{svg,groups};}
+
+        // V11-12: On guidance
+        function buildV11(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,370 Q450,355 900,370 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            add(1,pathEl('M150,430 Q350,400 550,410 Q750,395 850,370','none','url(#pathGold)',5,'round'));
+            add(2,el('circle',{cx:450,cy:200,r:60,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(2,el('circle',{cx:450,cy:200,r:90,fill:'url(#goldenGlow)'}));
+            add(3,textEl('HUDA',400,200,{size:22,color:'#E65100',weight:700}));
+            add(3,textEl('TAQWA',500,200,{size:22,color:'#2E7D32',weight:700}));
+            [[300,150],[600,145],[350,250],[550,240]].forEach(([x,y])=>{add(4,cSparkle(x,y,6));});
+            add(4,textEl('"Upon guidance, commanding righteousness"',450,470,{size:20,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // V13: Denier turns away
+        function buildV13(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L450,0 L450,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M450,0 L900,0 L900,506 L450,506 Z','url(#skyNight)','none',0));
+            add(1,el('ellipse',{cx:600,cy:375,rx:22,ry:4,fill:'rgba(0,0,0,0.15)'}));
+            add(1,pathEl('M585,260 Q582,318 580,372 L620,372 Q618,318 615,260 Z','#455A64','#37474F',2,'round'));
+            add(1,el('circle',{cx:600,cy:243,r:17,fill:'#546E7A',stroke:'#455A64','stroke-width':1.5}));
+            add(2,pathEl('M500,280 Q550,260 580,270','none','#90A4AE',3,'round'));
+            add(2,pathEl('M572,263 L585,270 L572,277','none','#90A4AE',2.5,'round'));
+            add(3,textEl('Denies & turns away',600,200,{size:18,color:'#EF9A9A',weight:600}));
+            add(3,textEl('"He denies and turns away"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V14: Allah sees
+        function buildV14(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(1,el('circle',{cx:450,cy:220,r:80,fill:'url(#goldenGlow)'}));
+            add(1,el('circle',{cx:450,cy:220,r:50,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            for(let i=0;i<16;i++){const a=(i*22.5)*Math.PI/180;add(2,lineEl(450+55*Math.cos(a),220+55*Math.sin(a),450+90*Math.cos(a),220+90*Math.sin(a),'#FDD835',2));}
+            add(3,textEl('ALLAH SEES',450,220,{size:26,color:'#E65100',weight:700}));
+            [[300,140],[600,135],[250,280],[650,275]].forEach(([x,y])=>{add(4,cSparkle(x,y,7));});
+            add(4,textEl('"Does he not know that Allah sees?"',450,470,{size:22,color:'#5D4037',weight:700}));
+            return{svg,groups};}
+
+        // V15-16: Warning - forelock
+        function buildV15(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#stormGrad)','none',0));
+            add(1,pathEl('M0,60 Q200,30 400,55 Q600,25 900,60 L900,130 Q600,100 400,130 Q200,95 0,130 Z','#37474F','#263238',2,'round'));
+            add(2,textEl('WARNING',450,200,{size:32,color:'#E57373',weight:700}));
+            add(2,textEl('Nasiyah: A lying, sinful forelock',450,240,{size:18,color:'#EF9A9A',weight:600}));
+            for(let i=0;i<6;i++){add(3,lineEl(200+i*100,300,205+i*100,320,'#78909C',1.5));}
+            add(3,textEl('"We will seize him by the forelock!"',450,470,{size:22,color:'#EF9A9A',weight:700}));
+            return{svg,groups};}
+
+        // V17-18: Call your helpers
+        function buildV17(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#stormGrad)','none',0));
+            add(0,pathEl('M0,380 L900,380 L900,506 L0,506 Z','url(#fireGrad)','none',0));
+            [[200,320],[350,315],[550,310],[700,320]].forEach(([px,py])=>{
+                add(1,pathEl(`M${px-7},${py} Q${px-8},${py+10} ${px-8},${py+18} L${px+8},${py+18} Q${px+8},${py+10} ${px+7},${py} Z`,'#37474F','#263238',1,'round'));
+                add(1,el('circle',{cx:px,cy:py-7,r:6,fill:'#455A64',stroke:'#37474F','stroke-width':1}));
+            });
+            add(2,textEl('Call your helpers!',350,200,{size:22,color:'#90A4AE',weight:600}));
+            add(2,textEl('vs',450,230,{size:20,color:'#FFD54F',weight:700}));
+            add(2,textEl('ZABANIYAH',550,260,{size:22,color:'#FF6F00',weight:700}));
+            [[150,370],[300,365],[450,360],[600,365],[750,370]].forEach(([fx,fy])=>{
+                add(3,pathEl(`M${fx-15},${fy+30} Q${fx},${fy} ${fx+15},${fy+30} Z`,'#FF6F00','#E65100',1,'round'));
+            });
+            add(4,textEl('"We will call the angels of punishment"',450,470,{size:20,color:'#EF9A9A',weight:700}));
+            return{svg,groups};}
+
+        // V19: Sujood - draw near
+        function buildV19(){const{svg,groups,add}=initSvg();
+            add(0,pathEl('M0,0 L900,0 L900,506 L0,506 Z','url(#skyGrad)','none',0));
+            add(0,pathEl('M0,370 Q450,355 900,370 L900,506 L0,506 Z','url(#groundGrad)','#388E3C',2,'round'));
+            add(1,el('circle',{cx:450,cy:200,r:80,fill:'url(#goldenGlow)'}));
+            add(1,el('circle',{cx:450,cy:200,r:50,fill:'url(#sunGlow)',filter:'url(#glow)'}));
+            add(1,pathEl('M380,0 L370,250 L530,250 L520,0 Z','url(#lightGrad)','none',0));
+            // Person in sujood
+            add(2,el('ellipse',{cx:450,cy:368,rx:35,ry:5,fill:'rgba(0,0,0,0.1)'}));
+            // Body bent in prostration
+            add(2,pathEl('M430,340 Q445,320 470,340 L475,365 L425,365 Z','url(#robeGrad)','#78909C',2,'round'));
+            // Head touching ground
+            add(2,el('circle',{cx:480,cy:358,r:10,fill:'url(#skinGrad)',stroke:'#E65100','stroke-width':1}));
+            // Arms extended
+            add(2,pathEl('M435,345 Q420,355 410,360','none','#B0BEC5',3,'round'));
+            add(2,pathEl('M465,345 Q490,352 500,360','none','#B0BEC5',3,'round'));
+            for(let i=0;i<10;i++){const a=(i*36)*Math.PI/180;add(3,lineEl(450+55*Math.cos(a),200+55*Math.sin(a),450+85*Math.cos(a),200+85*Math.sin(a),'rgba(255,213,79,0.5)',2));}
+            [[300,150],[600,145],[350,250],[550,240],[250,200],[650,195]].forEach(([x,y])=>{add(4,cSparkle(x,y,7));});
+            add(4,cCloud(130,50,0.5));add(4,cCloud(770,45,0.45));
+            add(5,textEl('"Prostrate and draw near to Allah"',450,470,{size:22,color:'#2E7D32',weight:700}));
+            return{svg,groups};}
+
+        // ANIMATION ENGINE
+        function hideAllPaths(g){g.forEach(gr=>{if(!gr)return;gr.forEach(item=>{if(item.tagName==='g'){item.querySelectorAll('path,line,circle,ellipse,rect,polygon').forEach(c=>hideEl(c));item.style.opacity='0';}else{hideEl(item);}});});}
+        function hideEl(e){try{if(e.getTotalLength){const l=e.getTotalLength();e.style.strokeDasharray=l;e.style.strokeDashoffset=l;e.style.fillOpacity='0';return;}}catch(x){}e.style.opacity='0';}
+        function animateGroup(group,dur){return new Promise(res=>{const st=performance.now();const els=[];group.forEach(item=>{if(item.tagName==='g'){item.querySelectorAll('path,line,circle,ellipse,rect,polygon').forEach(c=>{els.push(prep(c));});els.push({el:item,hasPath:false,isGroup:true});}else{els.push(prep(item));}});function prep(e){try{if(e.getTotalLength){const l=e.getTotalLength();e.style.strokeDasharray=l;e.style.strokeDashoffset=l;e.style.fillOpacity='0';return{el:e,len:l,hasPath:true};}}catch(x){}e.style.opacity='0';return{el:e,hasPath:false};}function tick(now){const t=Math.min((now-st)*speed/dur,1);const ea=1-Math.pow(1-t,3);els.forEach(({el:e,len,hasPath,isGroup})=>{if(isGroup)e.style.opacity=ea;else if(hasPath){e.style.strokeDashoffset=len*(1-ea);if(ea>0.5)e.style.fillOpacity=(ea-0.5)/0.5;}else e.style.opacity=ea;});if(t<1){for(let j=els.length-1;j>=0;j--){if(els[j].hasPath){try{const pt=els[j].el.getPointAtLength(els[j].len*ea);if(pt&&isFinite(pt.x)&&isFinite(pt.y)){movePen(pt.x,pt.y);break;}}catch(x){}}}animationId=requestAnimationFrame(tick);}else{els.forEach(({el:e,hasPath,isGroup})=>{if(isGroup)e.style.opacity='1';else if(hasPath){e.style.strokeDashoffset='0';e.style.fillOpacity='1';}else e.style.opacity='1';});res();}}animationId=requestAnimationFrame(tick);});}
+        function movePen(sx,sy){const svg=document.getElementById('sceneSvg');if(!svg)return;const r=svg.getBoundingClientRect();penCursor.style.opacity='1';penCursor.style.left=(sx*r.width/900-18)+'px';penCursor.style.top=(sy*r.height/506-58)+'px';}
+        function hidePen(){penCursor.style.opacity='0';}
+        let twAbort=false;
+        function typewrite(elem,text,opts={}){return new Promise(res=>{const cd=opts.charDelay||40;elem.textContent='';const cur=document.createElement('span');cur.className='typewriter-cursor'+(opts.rtl?' rtl':'');elem.appendChild(cur);let i=0;function nxt(){if(twAbort){res();return;}if(i<text.length){elem.insertBefore(document.createTextNode(text[i]),cur);i++;setTimeout(nxt,cd/speed);}else{setTimeout(()=>{cur.remove();res();},300/speed);}}nxt();});}
+        function resetBtm(){document.getElementById('verseBadge').style.opacity='0';['arabicText','translitText','kidText'].forEach(id=>document.getElementById(id).textContent='');}
+        async function animBtm(v){const b=document.getElementById('verseBadge');b.textContent=v.num;b.style.opacity='1';await new Promise(r=>setTimeout(r,200/speed));await typewrite(document.getElementById('arabicText'),v.arabic,{charDelay:50,rtl:true});await new Promise(r=>setTimeout(r,100/speed));await typewrite(document.getElementById('translitText'),v.translit,{charDelay:30});await new Promise(r=>setTimeout(r,100/speed));await typewrite(document.getElementById('kidText'),v.explanation,{charDelay:20});}
+        async function playVerse(idx){if(animationId)cancelAnimationFrame(animationId);twAbort=true;await new Promise(r=>setTimeout(r,50));twAbort=false;isAnimating=true;resetBtm();updateControls();const v=verses[idx];const{groups}=v.build();hideAllPaths(groups);const gap=100;let ts=false,tp=null;const tt=Math.floor(groups.length*0.4);for(let i=0;i<groups.length;i++){if(twAbort)break;if(!groups[i])continue;await animateGroup(groups[i],600);if(i===tt&&!ts){ts=true;tp=animBtm(v);}if(i<groups.length-1)await new Promise(r=>setTimeout(r,gap/speed));}hidePen();if(!ts)tp=animBtm(v);if(tp)await tp;isAnimating=false;updateControls();}
+        function goVerse(i){if(i<0||i>=verses.length)return;currentVerse=i;updateControls();playVerse(i);}
+        function replayAnimation(){playVerse(currentVerse);}
+        function updateControls(){document.getElementById('prevBtn').disabled=currentVerse===0;document.getElementById('nextBtn').disabled=currentVerse===verses.length-1;document.getElementById('verseIndicator').textContent=`${currentVerse+1} / ${verses.length}`;document.querySelectorAll('.verse-dots .dot').forEach((d,i)=>{d.classList.toggle('active',i===currentVerse);});}
+        function initDots(){const de=document.getElementById('verseDots');verses.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' active':'');d.onclick=()=>goVerse(i);de.appendChild(d);});}
+        document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')goVerse(currentVerse+1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')goVerse(currentVerse-1);if(e.key==='r'||e.key==='R')replayAnimation();});
+        window.addEventListener('load',()=>{initDots();updateControls();setTimeout(()=>playVerse(0),500);});
+        function showView(v){const c=document.getElementById('carousel-view'),dd=document.getElementById('deep-dive-view'),b=document.querySelectorAll('.view-toggle button');if(v==='carousel'){c.classList.remove('hidden');dd.classList.remove('visible');b[0].classList.add('active');b[1].classList.remove('active');}else{c.classList.add('hidden');dd.classList.add('visible');b[1].classList.add('active');b[0].classList.remove('active');setTimeout(setupScrollReveal,100);}}
+        function setupScrollReveal(){const o=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible');});},{threshold:0.1});document.querySelectorAll('.reveal, .glow-line').forEach(e=>o.observe(e));}
+    </script>
+</body>
+</html>
