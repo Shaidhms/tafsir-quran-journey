@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Insan - Man / The Human Being | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 76 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْإِنسَانِ</div>
+        <h1>Surah Al-Insan</h1>
+        <p>Man / The Human Being (Also known as Ad-Dahr) - 31 Verses - Madani</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">76</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">31</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">243</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Madinah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">Man / The Human Being</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Gratitude, Paradise & Human Purpose</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Insan, also known as Ad-Dahr (Time), was revealed in Madinah according to the majority of scholars, though some consider parts of it Makkan. The surah takes its name from the very first verse, which poses a profound rhetorical question about the <span class="highlight">origin of the human being</span>. Before you existed, you were nothing. Not even a thing worth mentioning. Then Allah created you, gave you hearing and sight, and placed before you two paths.</p>
+                <p>The surah can be divided into three main themes. The first section (verses 1-3) establishes <span class="highlight">the origin of man and the test of free will</span>. The second section (verses 4-22) contrasts the fate of the ungrateful with the stunning, detailed rewards of Paradise for the righteous. The third section (verses 23-31) reassures the Prophet Muhammad (peace be upon him) and reminds him to be patient and steadfast.</p>
+                <div class="important">
+                    <p>Ibn Kathir reports that this surah was regularly recited by the Prophet (peace be upon him) in the Fajr prayer on Fridays. In Sahih Muslim, it is narrated from Abu Hurayrah that the Prophet would recite Surah As-Sajdah (32) and Surah Al-Insan (76) in the Friday Fajr prayer. This practice highlights the surah's significance, as it reminds the believers every Friday morning of their origin, their purpose, and their ultimate destination.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih Muslim, Book of Friday Prayer; Tafsir Ibn Kathir, Introduction to Surah Al-Insan</p>
+                </div>
+                <p>What makes this surah extraordinary is its <span class="highlight">vivid and deeply beautiful description of Paradise</span>. Silk garments, silver vessels, springs of camphor and ginger, shade without sun or cold, fruits hanging low within reach, and servants presenting cups of pure drink. It is among the most detailed Paradise descriptions in the entire Quran. But the key to all of it? The righteous earned it by feeding the poor, the orphan, and the captive, saying: "We feed you only for the countenance of Allah. We wish not from you reward or gratitude."</p>
+                <p>The surah closes with a powerful reminder that <span class="highlight">this Quran is a reminder, and whoever wills may take a path to his Lord</span>. But human will is not independent. It operates within Allah's will. He admits whom He wills into His mercy, and for the wrongdoers, He has prepared a painful punishment.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">هَلْ أَتَىٰ عَلَى الْإِنسَانِ حِينٌ مِّنَ الدَّهْرِ لَمْ يَكُن شَيْئًا مَّذْكُورًا</div>
+                    <div class="verse-transliteration">Hal ata 'alal-insani hinun minad-dahri lam yakun shay'an madhkura</div>
+                    <div class="verse-translation">Has there [not] come upon man a period of time when he was not a thing [even] mentioned?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">هَلْ</span><span class="trans">hal</span><span class="meaning">Has there [not]</span></div>
+                        <div class="word-chip"><span class="ar">أَتَىٰ</span><span class="trans">ata</span><span class="meaning">Come</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى</span><span class="trans">'ala</span><span class="meaning">Upon</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانِ</span><span class="trans">al-insani</span><span class="meaning">Man / the human</span></div>
+                        <div class="word-chip"><span class="ar">حِينٌ</span><span class="trans">hinun</span><span class="meaning">A period</span></div>
+                        <div class="word-chip"><span class="ar">مِّنَ الدَّهْرِ</span><span class="trans">minad-dahri</span><span class="meaning">Of time</span></div>
+                        <div class="word-chip"><span class="ar">لَمْ يَكُن</span><span class="trans">lam yakun</span><span class="meaning">He was not</span></div>
+                        <div class="word-chip"><span class="ar">شَيْئًا</span><span class="trans">shay'an</span><span class="meaning">A thing</span></div>
+                        <div class="word-chip"><span class="ar">مَّذْكُورًا</span><span class="trans">madhkura</span><span class="meaning">Mentioned / worth mentioning</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah opens with a rhetorical question that shakes human pride to its core. "Hal" here means "indeed, there has come." Before you were born, before your parents were born, there were billions of years when you simply did not exist. You were nothing. Not even a thing worth mentioning. Ibn Kathir explains that "hal" in this context is an affirmation, meaning: certainly, there passed over man a long stretch of time when he was absolutely nothing. As-Sa'di adds that this should humble every human being. You went from total non-existence to a hearing, seeing, thinking creature. This is entirely from Allah's grace, not your own doing.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">إِنَّا خَلَقْنَا الْإِنسَانَ مِن نُّطْفَةٍ أَمْشَاجٍ نَّبْتَلِيهِ فَجَعَلْنَاهُ سَمِيعًا بَصِيرًا</div>
+                    <div class="verse-transliteration">Inna khalaqnal-insana min nutfatin amshajin nabtalih, faja'alnahu sami'an basira</div>
+                    <div class="verse-translation">Indeed, We created man from a sperm-drop mixture that We may try him; and We made him hearing and seeing.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">خَلَقْنَا</span><span class="trans">khalaqna</span><span class="meaning">Created</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانَ</span><span class="trans">al-insana</span><span class="meaning">Man</span></div>
+                        <div class="word-chip"><span class="ar">مِن نُّطْفَةٍ</span><span class="trans">min nutfatin</span><span class="meaning">From a sperm-drop</span></div>
+                        <div class="word-chip"><span class="ar">أَمْشَاجٍ</span><span class="trans">amshajin</span><span class="meaning">Mixture / mingled</span></div>
+                        <div class="word-chip"><span class="ar">نَّبْتَلِيهِ</span><span class="trans">nabtalih</span><span class="meaning">We try / test him</span></div>
+                        <div class="word-chip"><span class="ar">فَجَعَلْنَاهُ</span><span class="trans">faja'alnahu</span><span class="meaning">So We made him</span></div>
+                        <div class="word-chip"><span class="ar">سَمِيعًا</span><span class="trans">sami'an</span><span class="meaning">Hearing</span></div>
+                        <div class="word-chip"><span class="ar">بَصِيرًا</span><span class="trans">basira</span><span class="meaning">Seeing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah reveals the purpose of human creation: it is a test. "Nutfatin amshaj" refers to a mixed drop, the combination of male and female fluids. From this humble origin, Allah created a complex being with hearing and sight. Ibn Kathir explains that "amshaj" means mixtures and combinations, referring to the blending of the male and female contributions. The purpose "nabtalih" (that We may test him) is stated before the faculties of hearing and sight, showing that the test is the primary reason for creation. As-Sa'di notes that hearing and sight are specifically mentioned because they are the two primary means by which guidance reaches a person. Allah gave you the tools to pass the test.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">إِنَّا هَدَيْنَاهُ السَّبِيلَ إِمَّا شَاكِرًا وَإِمَّا كَفُورًا</div>
+                    <div class="verse-transliteration">Inna hadaynahus-sabila imma shakiran wa imma kafura</div>
+                    <div class="verse-translation">Indeed, We guided him to the way, be he grateful or be he ungrateful.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">هَدَيْنَاهُ</span><span class="trans">hadaynahu</span><span class="meaning">Guided him</span></div>
+                        <div class="word-chip"><span class="ar">السَّبِيلَ</span><span class="trans">as-sabila</span><span class="meaning">The way / path</span></div>
+                        <div class="word-chip"><span class="ar">إِمَّا</span><span class="trans">imma</span><span class="meaning">Either</span></div>
+                        <div class="word-chip"><span class="ar">شَاكِرًا</span><span class="trans">shakiran</span><span class="meaning">Grateful</span></div>
+                        <div class="word-chip"><span class="ar">وَإِمَّا</span><span class="trans">wa imma</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">كَفُورًا</span><span class="trans">kafura</span><span class="meaning">Ungrateful / disbelieving</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah showed humanity the path. Now the choice is yours: be grateful or be ungrateful. Notice the powerful contrast in the Arabic: "shakiran" (grateful) uses the regular form, but "kafura" (ungrateful) uses the intensive form, indicating extreme ingratitude. Ibn Kathir explains that "hadaynahu" means We showed him and made clear to him the path of good and evil through messengers, books, and the natural disposition (fitrah). As-Sa'di adds that this verse establishes human free will within divine guidance. Allah did not leave you confused. He showed you the path clearly. Whether you take it or reject it is your choice, and you bear the consequences.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">إِنَّا أَعْتَدْنَا لِلْكَافِرِينَ سَلَاسِلَ وَأَغْلَالًا وَسَعِيرًا</div>
+                    <div class="verse-transliteration">Inna a'tadna lil-kafirina salasila wa aghlalan wa sa'ira</div>
+                    <div class="verse-translation">Indeed, We have prepared for the disbelievers chains and shackles and a blaze.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">أَعْتَدْنَا</span><span class="trans">a'tadna</span><span class="meaning">Have prepared</span></div>
+                        <div class="word-chip"><span class="ar">لِلْكَافِرِينَ</span><span class="trans">lil-kafirina</span><span class="meaning">For the disbelievers</span></div>
+                        <div class="word-chip"><span class="ar">سَلَاسِلَ</span><span class="trans">salasila</span><span class="meaning">Chains</span></div>
+                        <div class="word-chip"><span class="ar">وَأَغْلَالًا</span><span class="trans">wa aghlalan</span><span class="meaning">And shackles / iron collars</span></div>
+                        <div class="word-chip"><span class="ar">وَسَعِيرًا</span><span class="trans">wa sa'ira</span><span class="meaning">And a blazing fire</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The punishment of the ungrateful is described with three elements: chains that bind, shackles around their necks, and a blazing fire. Ibn Kathir explains that "salasil" are chains used to drag and bind them, "aghlal" are iron collars fastened around the neck connecting the hands, and "sa'ir" is the fiercely burning fire. As-Sa'di notes that "a'tadna" (We have prepared) uses the past tense, meaning this punishment already exists and is waiting. It is not something that will be created later. The fire, the chains, the shackles are all ready. This is a warning of the most serious kind.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">إِنَّ الْأَبْرَارَ يَشْرَبُونَ مِن كَأْسٍ كَانَ مِزَاجُهَا كَافُورًا</div>
+                    <div class="verse-transliteration">Innal-abrara yashrabuna min ka'sin kana mizajuha kafura</div>
+                    <div class="verse-translation">Indeed, the righteous will drink from a cup [of wine] whose mixture is of Kafur (camphor).</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">الْأَبْرَارَ</span><span class="trans">al-abrara</span><span class="meaning">The righteous</span></div>
+                        <div class="word-chip"><span class="ar">يَشْرَبُونَ</span><span class="trans">yashrabuna</span><span class="meaning">Will drink</span></div>
+                        <div class="word-chip"><span class="ar">مِن كَأْسٍ</span><span class="trans">min ka'sin</span><span class="meaning">From a cup</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Was / is</span></div>
+                        <div class="word-chip"><span class="ar">مِزَاجُهَا</span><span class="trans">mizajuha</span><span class="meaning">Its mixture</span></div>
+                        <div class="word-chip"><span class="ar">كَافُورًا</span><span class="trans">kafura</span><span class="meaning">Camphor</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the scene shifts dramatically from punishment to paradise. The righteous (al-abrar) will drink from cups mixed with camphor. Ibn Kathir explains that camphor in Paradise is not like the camphor of this world. It has the coolness and pleasant fragrance of camphor but with an indescribable sweetness and delight. As-Sa'di notes that "al-abrar" are those who were truthful in their faith and righteous in their deeds, whose hearts were pure and whose actions were consistent. The word "ka's" specifically refers to a cup filled with drink, implying it is always full, never empty.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">عَيْنًا يَشْرَبُ بِهَا عِبَادُ اللَّهِ يُفَجِّرُونَهَا تَفْجِيرًا</div>
+                    <div class="verse-transliteration">'Aynan yashrabu biha 'ibadullahi yufajjirunaha tafjira</div>
+                    <div class="verse-translation">A spring of which the [righteous] servants of Allah will drink; they will make it gush forth in force [wherever they wish].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَيْنًا</span><span class="trans">'aynan</span><span class="meaning">A spring</span></div>
+                        <div class="word-chip"><span class="ar">يَشْرَبُ بِهَا</span><span class="trans">yashrabu biha</span><span class="meaning">Will drink from it</span></div>
+                        <div class="word-chip"><span class="ar">عِبَادُ اللَّهِ</span><span class="trans">'ibadullahi</span><span class="meaning">The servants of Allah</span></div>
+                        <div class="word-chip"><span class="ar">يُفَجِّرُونَهَا</span><span class="trans">yufajjirunaha</span><span class="meaning">They will make it gush forth</span></div>
+                        <div class="word-chip"><span class="ar">تَفْجِيرًا</span><span class="trans">tafjira</span><span class="meaning">Abundantly / in full force</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This camphor-spring is not a fixed fountain they must travel to. The servants of Allah will cause it to gush forth wherever they wish. Ibn Kathir explains that "yufajjirunaha tafjira" means they will direct it and cause it to flow wherever they want, to their homes, their gardens, their gatherings. It obeys them completely. As-Sa'di adds that the title "ibadullah" (servants of Allah) is a title of honor. They were called servants not as a mark of lowliness but as the highest possible rank. To be a willing servant of Allah is the greatest honor a human can achieve. And their reward matches their devotion.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">يُوفُونَ بِالنَّذْرِ وَيَخَافُونَ يَوْمًا كَانَ شَرُّهُ مُسْتَطِيرًا</div>
+                    <div class="verse-transliteration">Yufuna bin-nadhri wa yakhafuna yawman kana sharruhu mustatira</div>
+                    <div class="verse-translation">They [are those who] fulfill [their] vows and fear a Day whose evil will be widespread.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يُوفُونَ</span><span class="trans">yufuna</span><span class="meaning">They fulfill</span></div>
+                        <div class="word-chip"><span class="ar">بِالنَّذْرِ</span><span class="trans">bin-nadhri</span><span class="meaning">Their vows</span></div>
+                        <div class="word-chip"><span class="ar">وَيَخَافُونَ</span><span class="trans">wa yakhafuna</span><span class="meaning">And they fear</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمًا</span><span class="trans">yawman</span><span class="meaning">A Day</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Was / will be</span></div>
+                        <div class="word-chip"><span class="ar">شَرُّهُ</span><span class="trans">sharruhu</span><span class="meaning">Its evil / horror</span></div>
+                        <div class="word-chip"><span class="ar">مُسْتَطِيرًا</span><span class="trans">mustatira</span><span class="meaning">Widespread / far-reaching</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now Allah describes the qualities of these righteous people. First: they fulfill their vows. Second: they fear the Day of Judgment. Ibn Kathir explains that fulfilling vows (nadhr) represents fulfilling all obligations. If they fulfill even their voluntary commitments, how much more so their obligatory duties? "Mustatira" means spreading everywhere like flying sparks. The horror of that Day will be all-encompassing. As-Sa'di notes that their fear of that Day was not mere lip service but drove their actions. They lived their lives with full awareness that they would face their Lord, and this awareness shaped every decision they made.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وَيُطْعِمُونَ الطَّعَامَ عَلَىٰ حُبِّهِ مِسْكِينًا وَيَتِيمًا وَأَسِيرًا</div>
+                    <div class="verse-transliteration">Wa yut'imunat-ta'ama 'ala hubbihi miskinan wa yatiman wa asira</div>
+                    <div class="verse-translation">And they give food in spite of love for it to the needy, the orphan, and the captive.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيُطْعِمُونَ</span><span class="trans">wa yut'imuna</span><span class="meaning">And they feed</span></div>
+                        <div class="word-chip"><span class="ar">الطَّعَامَ</span><span class="trans">at-ta'ama</span><span class="meaning">The food</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ حُبِّهِ</span><span class="trans">'ala hubbihi</span><span class="meaning">Despite their love for it</span></div>
+                        <div class="word-chip"><span class="ar">مِسْكِينًا</span><span class="trans">miskinan</span><span class="meaning">A needy person</span></div>
+                        <div class="word-chip"><span class="ar">وَيَتِيمًا</span><span class="trans">wa yatiman</span><span class="meaning">And an orphan</span></div>
+                        <div class="word-chip"><span class="ar">وَأَسِيرًا</span><span class="trans">wa asira</span><span class="meaning">And a captive</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is one of the most celebrated verses about charity in the Quran. The righteous feed others "despite their love for it," meaning they give food even when they themselves desire and need it. Ibn Kathir explains that "'ala hubbihi" means they love the food and want it for themselves, but they give it away. This is not giving away surplus but giving away what you need. Three categories of recipients are named: the miskin (poor person), the yatim (orphan, a child who lost their father), and the asir (captive/prisoner). As-Sa'di adds that this verse teaches that true charity is giving when it costs you something, not just giving what is easy or leftover.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">إِنَّمَا نُطْعِمُكُمْ لِوَجْهِ اللَّهِ لَا نُرِيدُ مِنكُمْ جَزَاءً وَلَا شُكُورًا</div>
+                    <div class="verse-transliteration">Innama nut'imukum li-wajhillahi la nuridu minkum jaza'an wa la shukura</div>
+                    <div class="verse-translation">[Saying], "We feed you only for the countenance of Allah. We wish not from you reward or gratitude."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّمَا</span><span class="trans">innama</span><span class="meaning">Only / solely</span></div>
+                        <div class="word-chip"><span class="ar">نُطْعِمُكُمْ</span><span class="trans">nut'imukum</span><span class="meaning">We feed you</span></div>
+                        <div class="word-chip"><span class="ar">لِوَجْهِ اللَّهِ</span><span class="trans">li-wajhillahi</span><span class="meaning">For the Face of Allah</span></div>
+                        <div class="word-chip"><span class="ar">لَا نُرِيدُ</span><span class="trans">la nuridu</span><span class="meaning">We do not want</span></div>
+                        <div class="word-chip"><span class="ar">مِنكُمْ</span><span class="trans">minkum</span><span class="meaning">From you</span></div>
+                        <div class="word-chip"><span class="ar">جَزَاءً</span><span class="trans">jaza'an</span><span class="meaning">Reward / repayment</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا شُكُورًا</span><span class="trans">wa la shukura</span><span class="meaning">Nor gratitude / thanks</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse captures the purest form of sincerity (ikhlas). They say: we feed you only for the sake of Allah. We want nothing from you. Not money, not a favor in return, not even a thank you. Ibn Kathir explains that this is the speech of their hearts, their internal intention expressed. They may not say these words out loud, but this is the state of their hearts. As-Sa'di calls this the gold standard of charity: when the only motivation is seeking Allah's pleasure and the only audience you care about is Allah. No social media posts about your charity, no expectation of gratitude. Pure sincerity.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">إِنَّا نَخَافُ مِن رَّبِّنَا يَوْمًا عَبُوسًا قَمْطَرِيرًا</div>
+                    <div class="verse-transliteration">Inna nakhafu min rabbina yawman 'abusan qamtarira</div>
+                    <div class="verse-translation">"Indeed, we fear from our Lord a Day austere and distressful."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, we</span></div>
+                        <div class="word-chip"><span class="ar">نَخَافُ</span><span class="trans">nakhafu</span><span class="meaning">Fear</span></div>
+                        <div class="word-chip"><span class="ar">مِن رَّبِّنَا</span><span class="trans">min rabbina</span><span class="meaning">From our Lord</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمًا</span><span class="trans">yawman</span><span class="meaning">A Day</span></div>
+                        <div class="word-chip"><span class="ar">عَبُوسًا</span><span class="trans">'abusan</span><span class="meaning">Austere / frowning</span></div>
+                        <div class="word-chip"><span class="ar">قَمْطَرِيرًا</span><span class="trans">qamtarira</span><span class="meaning">Distressful / severely distressing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Their motivation continues: they fear a Day so terrible it is described with two intense words. "'Abus" means frowning, stern, harsh, referring to a day that will make people's faces contort with distress. "Qamtarir" intensifies this further, meaning extremely severe and bitter. Ibn Kathir explains that this Day will cause people's faces to become distorted with grief and terror. As-Sa'di notes that "min rabbina" (from our Lord) shows they fear the Day because of what their Lord may decide for them, not just the Day's general horrors. Their fear is of Allah's judgment specifically, which is the mark of true believers.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">فَوَقَاهُمُ اللَّهُ شَرَّ ذَٰلِكَ الْيَوْمِ وَلَقَّاهُمْ نَضْرَةً وَسُرُورًا</div>
+                    <div class="verse-transliteration">Fawaqahumullahu sharra dhalikal-yawmi wa laqqahum nadratan wa surura</div>
+                    <div class="verse-translation">So Allah will protect them from the evil of that Day and give them radiance and happiness.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَوَقَاهُمُ</span><span class="trans">fawaqahumu</span><span class="meaning">So He protected them</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهُ</span><span class="trans">Allahu</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">شَرَّ</span><span class="trans">sharra</span><span class="meaning">From the evil</span></div>
+                        <div class="word-chip"><span class="ar">ذَٰلِكَ الْيَوْمِ</span><span class="trans">dhalikal-yawmi</span><span class="meaning">Of that Day</span></div>
+                        <div class="word-chip"><span class="ar">وَلَقَّاهُمْ</span><span class="trans">wa laqqahum</span><span class="meaning">And He gave them</span></div>
+                        <div class="word-chip"><span class="ar">نَضْرَةً</span><span class="trans">nadratan</span><span class="meaning">Radiance / brightness</span></div>
+                        <div class="word-chip"><span class="ar">وَسُرُورًا</span><span class="trans">wa surura</span><span class="meaning">And happiness / joy</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Because they feared that Day, Allah saved them from it. And not just saved them, but replaced fear with joy. "Nadra" is a radiance and glow on the face, the visible light of happiness and beauty. "Surur" is deep joy in the heart. Ibn Kathir explains that "nadra" appears on their faces while "surur" fills their hearts, meaning both their outward appearance and inward reality are filled with bliss. As-Sa'di points out the beautiful connection: they feared an "'abus" (frowning) Day, so Allah gave them "nadra" (radiant faces). They feared "qamtarir" (distress), so Allah gave them "surur" (happiness). The reward perfectly mirrors and reverses the fear.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">وَجَزَاهُم بِمَا صَبَرُوا جَنَّةً وَحَرِيرًا</div>
+                    <div class="verse-transliteration">Wa jazahum bima sabaru jannatan wa harira</div>
+                    <div class="verse-translation">And will reward them for what they patiently endured [with] a garden [in Paradise] and silk [garments].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَجَزَاهُم</span><span class="trans">wa jazahum</span><span class="meaning">And He rewarded them</span></div>
+                        <div class="word-chip"><span class="ar">بِمَا صَبَرُوا</span><span class="trans">bima sabaru</span><span class="meaning">For what they patiently endured</span></div>
+                        <div class="word-chip"><span class="ar">جَنَّةً</span><span class="trans">jannatan</span><span class="meaning">A garden (Paradise)</span></div>
+                        <div class="word-chip"><span class="ar">وَحَرِيرًا</span><span class="trans">wa harira</span><span class="meaning">And silk</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The keyword here is "sabaru" (patience). Their reward is specifically because of their patience. Patience in obeying Allah, patience in avoiding sin, patience in enduring hardship. Ibn Kathir explains that patience (sabr) encompasses all three types: patience in worship, patience in avoiding prohibited things, and patience during trials. Their reward? A garden (representing beauty, nature, peace) and silk (representing luxury, comfort, honor). As-Sa'di notes that silk is specifically mentioned because in this world, silk was forbidden for Muslim men to wear. In the Hereafter, they will wear the very thing they abstained from as a reward for their obedience.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">مُّتَّكِئِينَ فِيهَا عَلَى الْأَرَائِكِ ۖ لَا يَرَوْنَ فِيهَا شَمْسًا وَلَا زَمْهَرِيرًا</div>
+                    <div class="verse-transliteration">Muttaki'ina fiha 'alal-ara'iki la yarawna fiha shamsan wa la zamharira</div>
+                    <div class="verse-translation">Reclining therein on adorned couches. They will not see therein any [burning] sun or [freezing] cold.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">مُّتَّكِئِينَ</span><span class="trans">muttaki'ina</span><span class="meaning">Reclining</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Therein</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى الْأَرَائِكِ</span><span class="trans">'alal-ara'iki</span><span class="meaning">On adorned couches</span></div>
+                        <div class="word-chip"><span class="ar">لَا يَرَوْنَ</span><span class="trans">la yarawna</span><span class="meaning">They will not see</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Therein</span></div>
+                        <div class="word-chip"><span class="ar">شَمْسًا</span><span class="trans">shamsan</span><span class="meaning">Sun (scorching heat)</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا زَمْهَرِيرًا</span><span class="trans">wa la zamharira</span><span class="meaning">Nor freezing cold</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The scene of Paradise unfolds. They recline on beautiful couches (ara'ik, which are thrones adorned with canopies and curtains). The climate is perfect: no scorching sun, no biting cold. Ibn Kathir explains that "ara'ik" are luxurious beds under canopies, the ultimate symbol of comfort and honor. The absence of both extreme heat and extreme cold means a perfect, perpetual temperature. As-Sa'di adds that "zamharir" refers to the most severe, biting cold. Paradise removes every discomfort. In this world, weather is a constant struggle. In Paradise, the climate itself serves the believers in perfect harmony.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">وَدَانِيَةً عَلَيْهِمْ ظِلَالُهَا وَذُلِّلَتْ قُطُوفُهَا تَذْلِيلًا</div>
+                    <div class="verse-transliteration">Wa daniyatan 'alayhim zillaluha wa dhullilat qutufuha tadhlila</div>
+                    <div class="verse-translation">And near above them are its shades, and its [fruit] clusters will be brought within easy reach.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَدَانِيَةً</span><span class="trans">wa daniyatan</span><span class="meaning">And near / close</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">Above them</span></div>
+                        <div class="word-chip"><span class="ar">ظِلَالُهَا</span><span class="trans">zillaluha</span><span class="meaning">Its shades</span></div>
+                        <div class="word-chip"><span class="ar">وَذُلِّلَتْ</span><span class="trans">wa dhullilat</span><span class="meaning">And made easy / lowered</span></div>
+                        <div class="word-chip"><span class="ar">قُطُوفُهَا</span><span class="trans">qutufuha</span><span class="meaning">Its fruit clusters</span></div>
+                        <div class="word-chip"><span class="ar">تَذْلِيلًا</span><span class="trans">tadhlila</span><span class="meaning">Completely / fully within reach</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The shade of Paradise trees hangs close over them, providing gentle cover. The fruits hang low and bend down to whoever wants them. Ibn Kathir explains that "dhullilat" means the fruit branches bend down to the person regardless of whether they are standing, sitting, or reclining. The fruit comes to you, not the other way around. As-Sa'di beautifully notes that "tadhlila" (the emphatic form) means every possible effort has been removed. You do not climb trees, you do not reach up, you do not struggle. The fruit literally presents itself to you. This is the opposite of this world, where every sustenance requires effort.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">وَيُطَافُ عَلَيْهِم بِآنِيَةٍ مِّن فِضَّةٍ وَأَكْوَابٍ كَانَتْ قَوَارِيرَا</div>
+                    <div class="verse-transliteration">Wa yutafu 'alayhim bi-aniyatin min fiddatin wa akwabin kanat qawarira</div>
+                    <div class="verse-translation">And there will be circulated among them vessels of silver and cups having been [created] clear.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيُطَافُ</span><span class="trans">wa yutafu</span><span class="meaning">And will be circulated</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِم</span><span class="trans">'alayhim</span><span class="meaning">Among them</span></div>
+                        <div class="word-chip"><span class="ar">بِآنِيَةٍ</span><span class="trans">bi-aniyatin</span><span class="meaning">With vessels</span></div>
+                        <div class="word-chip"><span class="ar">مِّن فِضَّةٍ</span><span class="trans">min fiddatin</span><span class="meaning">Of silver</span></div>
+                        <div class="word-chip"><span class="ar">وَأَكْوَابٍ</span><span class="trans">wa akwabin</span><span class="meaning">And cups</span></div>
+                        <div class="word-chip"><span class="ar">كَانَتْ</span><span class="trans">kanat</span><span class="meaning">That are</span></div>
+                        <div class="word-chip"><span class="ar">قَوَارِيرَا</span><span class="trans">qawarira</span><span class="meaning">Crystal-clear</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Servants circulate among the people of Paradise carrying vessels made of silver and cups that are crystal-clear. Ibn Kathir explains that these vessels combine the beauty of silver with the transparency of crystal, something that does not exist in this world. Silver is normally opaque, but in Paradise, the vessels have the luster of silver yet you can see through them like glass. As-Sa'di notes that this miraculous combination represents how Paradise contains things that no eye has seen, no ear has heard, and no mind has imagined, as stated in the authentic hadith narrated in Sahih Bukhari and Muslim.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">قَوَارِيرَ مِن فِضَّةٍ قَدَّرُوهَا تَقْدِيرًا</div>
+                    <div class="verse-transliteration">Qawarira min fiddatin qaddaruha taqdira</div>
+                    <div class="verse-translation">Clear glasses [made] from silver of which they have determined the measure.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قَوَارِيرَ</span><span class="trans">qawarira</span><span class="meaning">Crystal glasses</span></div>
+                        <div class="word-chip"><span class="ar">مِن فِضَّةٍ</span><span class="trans">min fiddatin</span><span class="meaning">From silver</span></div>
+                        <div class="word-chip"><span class="ar">قَدَّرُوهَا</span><span class="trans">qaddaruha</span><span class="meaning">They determined them</span></div>
+                        <div class="word-chip"><span class="ar">تَقْدِيرًا</span><span class="trans">taqdira</span><span class="meaning">Perfectly measured</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The crystal glasses are made from silver, perfectly measured to each person's desire. Ibn Kathir explains that "qaddaruha taqdira" means the cups are filled to exactly the measure each person desires. Not too much, not too little. Each cup is perfectly sized and filled according to the wish of the drinker. As-Sa'di adds that this shows the absolute personalization of Paradise. Everything is tailored to each individual's preference. This level of care and customization is a mark of honor, as if each person in Paradise is being served as a distinguished guest.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">وَيُسْقَوْنَ فِيهَا كَأْسًا كَانَ مِزَاجُهَا زَنجَبِيلًا</div>
+                    <div class="verse-transliteration">Wa yusqawna fiha ka'san kana mizajuha zanjabila</div>
+                    <div class="verse-translation">And they will be given to drink a cup [of wine] whose mixture is of ginger.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيُسْقَوْنَ</span><span class="trans">wa yusqawna</span><span class="meaning">And they will be given to drink</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Therein</span></div>
+                        <div class="word-chip"><span class="ar">كَأْسًا</span><span class="trans">ka'san</span><span class="meaning">A cup</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Whose</span></div>
+                        <div class="word-chip"><span class="ar">مِزَاجُهَا</span><span class="trans">mizajuha</span><span class="meaning">Its mixture</span></div>
+                        <div class="word-chip"><span class="ar">زَنجَبِيلًا</span><span class="trans">zanjabila</span><span class="meaning">Ginger</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Another drink is described: a cup mixed with ginger. Earlier (verse 5) the drink was mixed with camphor (cool and fragrant). Now it is mixed with ginger (warm and spicy). Ibn Kathir explains that ginger was greatly prized by the Arabs for its warming, pleasant taste. The drink of Paradise combines the coolness of camphor with the warmth of ginger, achieving a perfect balance. As-Sa'di notes that the variety of drinks described in these verses shows the abundance and diversity of Paradise pleasures. There is no monotony in Paradise. Every experience is fresh and delightful.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">عَيْنًا فِيهَا تُسَمَّىٰ سَلْسَبِيلًا</div>
+                    <div class="verse-transliteration">'Aynan fiha tusamma salsabila</div>
+                    <div class="verse-translation">A fountain within it [i.e., Paradise] named Salsabil.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَيْنًا</span><span class="trans">'aynan</span><span class="meaning">A spring / fountain</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Within it (Paradise)</span></div>
+                        <div class="word-chip"><span class="ar">تُسَمَّىٰ</span><span class="trans">tusamma</span><span class="meaning">Called / named</span></div>
+                        <div class="word-chip"><span class="ar">سَلْسَبِيلًا</span><span class="trans">salsabila</span><span class="meaning">Salsabil</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This ginger-mixed drink comes from a spring in Paradise called Salsabil. The word "salsabil" in Arabic evokes smoothness, ease of flow, and pleasantness on the throat. Ibn Kathir explains that Salsabil is the name of a specific spring in Paradise, and the name itself describes its nature: it flows smoothly and is easy and delightful to drink. As-Sa'di adds that the naming of this spring suggests it is so famous and honored among the springs of Paradise that it has a known name. It is a destination, a landmark of Paradise, like a famous spring in a great garden.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَيَطُوفُ عَلَيْهِمْ وِلْدَانٌ مُّخَلَّدُونَ إِذَا رَأَيْتَهُمْ حَسِبْتَهُمْ لُؤْلُؤًا مَّنثُورًا</div>
+                    <div class="verse-transliteration">Wa yatufu 'alayhim wildanun mukhalladun, idha ra'aytahum hasibtahum lu'lu'an manthura</div>
+                    <div class="verse-translation">There will circulate among them young boys made eternal. When you see them, you would think them [as beautiful as] scattered pearls.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيَطُوفُ</span><span class="trans">wa yatufu</span><span class="meaning">And will circulate</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">Among them</span></div>
+                        <div class="word-chip"><span class="ar">وِلْدَانٌ</span><span class="trans">wildanun</span><span class="meaning">Young boys / youths</span></div>
+                        <div class="word-chip"><span class="ar">مُّخَلَّدُونَ</span><span class="trans">mukhalladun</span><span class="meaning">Made eternal / ever-youthful</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا رَأَيْتَهُمْ</span><span class="trans">idha ra'aytahum</span><span class="meaning">When you see them</span></div>
+                        <div class="word-chip"><span class="ar">حَسِبْتَهُمْ</span><span class="trans">hasibtahum</span><span class="meaning">You would think them</span></div>
+                        <div class="word-chip"><span class="ar">لُؤْلُؤًا</span><span class="trans">lu'lu'an</span><span class="meaning">Pearls</span></div>
+                        <div class="word-chip"><span class="ar">مَّنثُورًا</span><span class="trans">manthura</span><span class="meaning">Scattered</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Young, eternally youthful servants circulate among the people of Paradise, and they are so beautiful they look like scattered pearls. "Mukhalladun" means they will never age, never tire, never change. They remain forever young and radiant. Ibn Kathir explains that "scattered pearls" is used because pearls are most beautiful when they are loose and scattered, catching light from every angle. When gathered in a pile, their individual beauty is lost. So these youths, moving about in different directions, each one catching the light, look like pearls scattered across a beautiful surface. As-Sa'di adds that this imagery captures both their beauty and their movement, as they serve with grace and elegance.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">وَإِذَا رَأَيْتَ ثَمَّ رَأَيْتَ نَعِيمًا وَمُلْكًا كَبِيرًا</div>
+                    <div class="verse-transliteration">Wa idha ra'ayta thamma ra'ayta na'iman wa mulkan kabira</div>
+                    <div class="verse-translation">And when you look there [in Paradise], you will see pleasure and great dominion.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">رَأَيْتَ</span><span class="trans">ra'ayta</span><span class="meaning">You look / see</span></div>
+                        <div class="word-chip"><span class="ar">ثَمَّ</span><span class="trans">thamma</span><span class="meaning">There</span></div>
+                        <div class="word-chip"><span class="ar">رَأَيْتَ</span><span class="trans">ra'ayta</span><span class="meaning">You will see</span></div>
+                        <div class="word-chip"><span class="ar">نَعِيمًا</span><span class="trans">na'iman</span><span class="meaning">Pleasure / bliss</span></div>
+                        <div class="word-chip"><span class="ar">وَمُلْكًا</span><span class="trans">wa mulkan</span><span class="meaning">And a dominion / kingdom</span></div>
+                        <div class="word-chip"><span class="ar">كَبِيرًا</span><span class="trans">kabira</span><span class="meaning">Great / vast</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Wherever you look in Paradise, you see only bliss and a vast kingdom. "Na'im" is comprehensive pleasure and luxury, and "mulk kabir" is a great, vast dominion. Ibn Kathir narrates that the Prophet (peace be upon him) said: "The space of a whip in Paradise is better than the world and everything in it." The lowest person in Paradise will have what equals ten times this world. As-Sa'di explains that "mulk kabir" means every person in Paradise is a king in their own right, with a kingdom so vast that the eye cannot see its boundaries. This is not shared space but personal dominion for each believer.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">عَالِيَهُمْ ثِيَابُ سُندُسٍ خُضْرٌ وَإِسْتَبْرَقٌ ۖ وَحُلُّوا أَسَاوِرَ مِن فِضَّةٍ وَسَقَاهُمْ رَبُّهُمْ شَرَابًا طَهُورًا</div>
+                    <div class="verse-transliteration">'Aliyahum thiyabu sundusin khudrun wa istabraq, wa hullu asawira min fiddah, wa saqahum rabbuhum sharaban tahura</div>
+                    <div class="verse-translation">Upon them will be green garments of fine silk and brocade. And they will be adorned with bracelets of silver, and their Lord will give them a purifying drink.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَالِيَهُمْ</span><span class="trans">'aliyahum</span><span class="meaning">Upon them</span></div>
+                        <div class="word-chip"><span class="ar">ثِيَابُ</span><span class="trans">thiyabu</span><span class="meaning">Garments</span></div>
+                        <div class="word-chip"><span class="ar">سُندُسٍ</span><span class="trans">sundusin</span><span class="meaning">Fine silk</span></div>
+                        <div class="word-chip"><span class="ar">خُضْرٌ</span><span class="trans">khudrun</span><span class="meaning">Green</span></div>
+                        <div class="word-chip"><span class="ar">وَإِسْتَبْرَقٌ</span><span class="trans">wa istabraq</span><span class="meaning">And brocade (thick silk)</span></div>
+                        <div class="word-chip"><span class="ar">وَحُلُّوا</span><span class="trans">wa hullu</span><span class="meaning">And they will be adorned</span></div>
+                        <div class="word-chip"><span class="ar">أَسَاوِرَ</span><span class="trans">asawira</span><span class="meaning">With bracelets</span></div>
+                        <div class="word-chip"><span class="ar">مِن فِضَّةٍ</span><span class="trans">min fiddah</span><span class="meaning">Of silver</span></div>
+                        <div class="word-chip"><span class="ar">وَسَقَاهُمْ</span><span class="trans">wa saqahum</span><span class="meaning">And gave them to drink</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّهُمْ</span><span class="trans">rabbuhum</span><span class="meaning">Their Lord</span></div>
+                        <div class="word-chip"><span class="ar">شَرَابًا</span><span class="trans">sharaban</span><span class="meaning">A drink</span></div>
+                        <div class="word-chip"><span class="ar">طَهُورًا</span><span class="trans">tahura</span><span class="meaning">Pure / purifying</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse is rich with imagery. Green silk garments (sundus is thin, fine silk; istabraq is thick, rich brocade), silver bracelets, and most importantly, a purifying drink given by their Lord Himself. Ibn Kathir explains that "sundus" and "istabraq" represent two types of silk: one thin and delicate, the other thick and luxurious, giving variety in clothing. But the most remarkable part is "wa saqahum rabbuhum sharaban tahura" (their Lord gave them a purifying drink). As-Sa'di explains that this drink, given personally by Allah, purifies their hearts from every trace of envy, malice, and spiritual impurity. This is the greatest honor: to be served by the Lord of the worlds Himself. This single phrase represents the ultimate reward beyond all material bliss.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">إِنَّ هَٰذَا كَانَ لَكُمْ جَزَاءً وَكَانَ سَعْيُكُم مَّشْكُورًا</div>
+                    <div class="verse-transliteration">Inna hadha kana lakum jaza'an wa kana sa'yukum mashkura</div>
+                    <div class="verse-translation">[And it will be said], "Indeed, this is for you a reward, and your effort has been appreciated."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">هَٰذَا</span><span class="trans">hadha</span><span class="meaning">This</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Is / was</span></div>
+                        <div class="word-chip"><span class="ar">لَكُمْ</span><span class="trans">lakum</span><span class="meaning">For you</span></div>
+                        <div class="word-chip"><span class="ar">جَزَاءً</span><span class="trans">jaza'an</span><span class="meaning">A reward</span></div>
+                        <div class="word-chip"><span class="ar">وَكَانَ</span><span class="trans">wa kana</span><span class="meaning">And was</span></div>
+                        <div class="word-chip"><span class="ar">سَعْيُكُم</span><span class="trans">sa'yukum</span><span class="meaning">Your effort / striving</span></div>
+                        <div class="word-chip"><span class="ar">مَّشْكُورًا</span><span class="trans">mashkura</span><span class="meaning">Appreciated / thanked</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After the elaborate description of Paradise, the people of Paradise are told: all of this is your reward, and your effort has been appreciated. "Mashkura" means that Allah acknowledges and thanks them for their striving. Ibn Kathir explains that this is said to them as an honor: you earned this, this is the fruit of your labor. As-Sa'di makes a deeply moving point: the Creator of the universe is saying to His servants that He appreciates what they did. Think about that. The One who needs nothing, who owns everything, who created all things, is thanking you for your worship and patience. This single word "mashkura" should fill every believer's heart with hope and motivation.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">إِنَّا نَحْنُ نَزَّلْنَا عَلَيْكَ الْقُرْآنَ تَنزِيلًا</div>
+                    <div class="verse-transliteration">Inna nahnu nazzalna 'alaykal-Qur'ana tanzila</div>
+                    <div class="verse-translation">Indeed, it is We who have sent down to you, [O Muhammad], the Quran progressively.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">نَحْنُ</span><span class="trans">nahnu</span><span class="meaning">We (emphasis)</span></div>
+                        <div class="word-chip"><span class="ar">نَزَّلْنَا</span><span class="trans">nazzalna</span><span class="meaning">Sent down</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْكَ</span><span class="trans">'alayka</span><span class="meaning">Upon you</span></div>
+                        <div class="word-chip"><span class="ar">الْقُرْآنَ</span><span class="trans">al-Qur'ana</span><span class="meaning">The Quran</span></div>
+                        <div class="word-chip"><span class="ar">تَنزِيلًا</span><span class="trans">tanzila</span><span class="meaning">Progressively / a gradual sending</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah now shifts to address the Prophet Muhammad (peace be upon him) directly. Allah affirms that He is the One who sent down the Quran gradually. "Nazzalna" with the emphatic "nahnu" (We, Ourselves) stresses that this is from Allah alone, not from any other source. Ibn Kathir explains that "tanzila" indicates the Quran was revealed gradually over 23 years, piece by piece, to suit different situations and needs. As-Sa'di adds that this gradual revelation was a mercy, allowing the community to absorb, practice, and internalize its teachings step by step. This verse also serves as a transition: the Quran is the guide to everything described before.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">فَاصْبِرْ لِحُكْمِ رَبِّكَ وَلَا تُطِعْ مِنْهُمْ آثِمًا أَوْ كَفُورًا</div>
+                    <div class="verse-transliteration">Fasbir li-hukmi rabbika wa la tuti' minhum athiman aw kafura</div>
+                    <div class="verse-translation">So be patient for the decision of your Lord and do not obey from among them a sinner or ungrateful [disbeliever].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَاصْبِرْ</span><span class="trans">fasbir</span><span class="meaning">So be patient</span></div>
+                        <div class="word-chip"><span class="ar">لِحُكْمِ</span><span class="trans">li-hukmi</span><span class="meaning">For the decision / ruling</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Of your Lord</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا تُطِعْ</span><span class="trans">wa la tuti'</span><span class="meaning">And do not obey</span></div>
+                        <div class="word-chip"><span class="ar">مِنْهُمْ</span><span class="trans">minhum</span><span class="meaning">From among them</span></div>
+                        <div class="word-chip"><span class="ar">آثِمًا</span><span class="trans">athiman</span><span class="meaning">A sinner</span></div>
+                        <div class="word-chip"><span class="ar">أَوْ كَفُورًا</span><span class="trans">aw kafura</span><span class="meaning">Or an ungrateful disbeliever</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Two commands to the Prophet (and by extension, all believers): be patient, and do not yield to sinners or disbelievers. "Fasbir" connects back to verse 12 where patience was the reason for the reward. Ibn Kathir explains that "athim" (sinner) refers to someone who commits sins openly and tries to lead others into sin, while "kafur" (disbeliever) is someone who denies the truth entirely. Do not obey either of them. As-Sa'di notes that patience for Allah's ruling means accepting His decree, His legislation, and His timing. It also means patience in the face of opposition, insults, and persecution from disbelievers. This is not passive waiting but active, purposeful endurance.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">وَاذْكُرِ اسْمَ رَبِّكَ بُكْرَةً وَأَصِيلًا</div>
+                    <div class="verse-transliteration">Wadhkurisma rabbika bukratan wa asila</div>
+                    <div class="verse-translation">And mention the name of your Lord [in prayer] morning and evening.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاذْكُرِ</span><span class="trans">wadhkur</span><span class="meaning">And remember / mention</span></div>
+                        <div class="word-chip"><span class="ar">اسْمَ رَبِّكَ</span><span class="trans">isma rabbika</span><span class="meaning">The name of your Lord</span></div>
+                        <div class="word-chip"><span class="ar">بُكْرَةً</span><span class="trans">bukratan</span><span class="meaning">In the morning</span></div>
+                        <div class="word-chip"><span class="ar">وَأَصِيلًا</span><span class="trans">wa asila</span><span class="meaning">And in the evening</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The prescription for patience: remember Allah morning and evening. "Bukra" is the early morning and "asil" is the late afternoon and evening. Ibn Kathir explains that this refers to the Fajr (dawn) and Asr (afternoon) prayers specifically, as well as general remembrance of Allah throughout the day. As-Sa'di adds that dhikr (remembrance of Allah) is the fuel for patience. You cannot be patient without being connected to Allah. Morning and evening remembrance bookends your day with divine connection. It is both a command and a remedy: when the world presses on you, remember Allah. When people oppose you, remember Allah.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">وَمِنَ اللَّيْلِ فَاسْجُدْ لَهُ وَسَبِّحْهُ لَيْلًا طَوِيلًا</div>
+                    <div class="verse-transliteration">Wa minal-layli fasjud lahu wa sabbihhu laylan tawila</div>
+                    <div class="verse-translation">And during the night prostrate to Him and exalt Him a long [part of the] night.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمِنَ اللَّيْلِ</span><span class="trans">wa minal-layli</span><span class="meaning">And during the night</span></div>
+                        <div class="word-chip"><span class="ar">فَاسْجُدْ لَهُ</span><span class="trans">fasjud lahu</span><span class="meaning">So prostrate to Him</span></div>
+                        <div class="word-chip"><span class="ar">وَسَبِّحْهُ</span><span class="trans">wa sabbihhu</span><span class="meaning">And glorify Him</span></div>
+                        <div class="word-chip"><span class="ar">لَيْلًا</span><span class="trans">laylan</span><span class="meaning">A night</span></div>
+                        <div class="word-chip"><span class="ar">طَوِيلًا</span><span class="trans">tawila</span><span class="meaning">Long</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The night prayer (tahajjud/qiyam al-layl) is commanded. Prostrate to Allah and glorify Him for a long portion of the night. Ibn Kathir explains that this refers to the voluntary night prayer, which was a regular practice of the Prophet (peace be upon him). He would stand in prayer for so long that his feet would swell. "Laylan tawila" means a significant portion of the night, not just a few minutes. As-Sa'di explains that the night is special because it is when the world is quiet, distractions are fewer, and the heart can connect most deeply with Allah. The night prayer is described as the strongest spiritual foundation because it requires sacrifice of sleep and comfort.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">إِنَّ هَٰؤُلَاءِ يُحِبُّونَ الْعَاجِلَةَ وَيَذَرُونَ وَرَاءَهُمْ يَوْمًا ثَقِيلًا</div>
+                    <div class="verse-transliteration">Inna ha'ula'i yuhibbunal-'ajilata wa yadharuna wara'ahum yawman thaqila</div>
+                    <div class="verse-translation">Indeed, these [disbelievers] love the immediate and leave behind them a grave Day.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">هَٰؤُلَاءِ</span><span class="trans">ha'ula'i</span><span class="meaning">These (people)</span></div>
+                        <div class="word-chip"><span class="ar">يُحِبُّونَ</span><span class="trans">yuhibbuna</span><span class="meaning">Love</span></div>
+                        <div class="word-chip"><span class="ar">الْعَاجِلَةَ</span><span class="trans">al-'ajilata</span><span class="meaning">The immediate (worldly life)</span></div>
+                        <div class="word-chip"><span class="ar">وَيَذَرُونَ</span><span class="trans">wa yadharuna</span><span class="meaning">And they leave behind</span></div>
+                        <div class="word-chip"><span class="ar">وَرَاءَهُمْ</span><span class="trans">wara'ahum</span><span class="meaning">Behind them</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمًا</span><span class="trans">yawman</span><span class="meaning">A Day</span></div>
+                        <div class="word-chip"><span class="ar">ثَقِيلًا</span><span class="trans">thaqila</span><span class="meaning">Heavy / grave</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The root problem of the disbelievers is diagnosed: they love the immediate, temporary world and ignore the heavy Day ahead. "Al-'ajila" means the rushing, quick, fleeting worldly life. "Thaqila" means heavy, weighty, grave, a Day of immense weight and consequence. Ibn Kathir explains that they prioritize the temporary over the eternal, the fleeting over the permanent. They chase pleasures that last years while ignoring consequences that last forever. As-Sa'di adds that "wara'ahum" (behind them) is ironic: they put the Day of Judgment "behind them" (ignoring it), but it is actually ahead of them, rushing toward them. They turn their backs on the very thing they are running toward.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">نَحْنُ خَلَقْنَاهُمْ وَشَدَدْنَا أَسْرَهُمْ ۖ وَإِذَا شِئْنَا بَدَّلْنَا أَمْثَالَهُمْ تَبْدِيلًا</div>
+                    <div class="verse-transliteration">Nahnu khalaqnahum wa shadadna asrahum, wa idha shi'na baddalna amthalahum tabdila</div>
+                    <div class="verse-translation">We created them and strengthened their forms, and when We will, We can replace them with others like them in substitution.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">نَحْنُ</span><span class="trans">nahnu</span><span class="meaning">We</span></div>
+                        <div class="word-chip"><span class="ar">خَلَقْنَاهُمْ</span><span class="trans">khalaqnahum</span><span class="meaning">Created them</span></div>
+                        <div class="word-chip"><span class="ar">وَشَدَدْنَا</span><span class="trans">wa shadadna</span><span class="meaning">And We strengthened</span></div>
+                        <div class="word-chip"><span class="ar">أَسْرَهُمْ</span><span class="trans">asrahum</span><span class="meaning">Their forms / joints</span></div>
+                        <div class="word-chip"><span class="ar">وَإِذَا شِئْنَا</span><span class="trans">wa idha shi'na</span><span class="meaning">And when We will</span></div>
+                        <div class="word-chip"><span class="ar">بَدَّلْنَا</span><span class="trans">baddalna</span><span class="meaning">We can replace</span></div>
+                        <div class="word-chip"><span class="ar">أَمْثَالَهُمْ</span><span class="trans">amthalahum</span><span class="meaning">Others like them</span></div>
+                        <div class="word-chip"><span class="ar">تَبْدِيلًا</span><span class="trans">tabdila</span><span class="meaning">A complete replacement</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah reminds them of His power. He created them, strengthened their bodies, and if He wills, He can replace them entirely with a new creation. "Shadadna asrahum" means Allah made their physical forms strong: their joints, ligaments, muscles, and structure are all held together by His design. Ibn Kathir explains that "asrahum" refers to the physical binding of the body, the tendons, sinews, and joints that hold the body together. The One who assembled you can disassemble and replace you. As-Sa'di adds that "tabdila" (the emphatic form) means a complete, total replacement. Allah is not dependent on any creation. If all of humanity rejected Him, He could replace them with people who would believe.</p></div>
+                </div>
+
+                <!-- Verse 29 -->
+                <div class="verse-card"><div class="verse-number">29</div>
+                    <div class="verse-arabic">إِنَّ هَٰذِهِ تَذْكِرَةٌ ۖ فَمَن شَاءَ اتَّخَذَ إِلَىٰ رَبِّهِ سَبِيلًا</div>
+                    <div class="verse-transliteration">Inna hadhihi tadhkirah, faman sha'attakhadha ila rabbihi sabila</div>
+                    <div class="verse-translation">Indeed, this is a reminder, so he who wills may take to his Lord a way.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">هَٰذِهِ</span><span class="trans">hadhihi</span><span class="meaning">This</span></div>
+                        <div class="word-chip"><span class="ar">تَذْكِرَةٌ</span><span class="trans">tadhkirah</span><span class="meaning">A reminder</span></div>
+                        <div class="word-chip"><span class="ar">فَمَن شَاءَ</span><span class="trans">faman sha'a</span><span class="meaning">So whoever wills</span></div>
+                        <div class="word-chip"><span class="ar">اتَّخَذَ</span><span class="trans">ittakhadha</span><span class="meaning">May take</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ رَبِّهِ</span><span class="trans">ila rabbihi</span><span class="meaning">To his Lord</span></div>
+                        <div class="word-chip"><span class="ar">سَبِيلًا</span><span class="trans">sabila</span><span class="meaning">A way / path</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This surah is a reminder. Whoever wants to take a path to their Lord may do so. The choice is presented clearly. Ibn Kathir explains that "tadhkirah" means this surah, and by extension the entire Quran, serves as a reminder and an admonition. It lays out the consequences clearly. As-Sa'di notes that "faman sha'a" (whoever wills) establishes that the path is open and the invitation is universal. But the next verse adds an essential qualification that prevents anyone from misunderstanding this as absolute human autonomy.</p></div>
+                </div>
+
+                <!-- Verse 30 -->
+                <div class="verse-card"><div class="verse-number">30</div>
+                    <div class="verse-arabic">وَمَا تَشَاءُونَ إِلَّا أَن يَشَاءَ اللَّهُ ۚ إِنَّ اللَّهَ كَانَ عَلِيمًا حَكِيمًا</div>
+                    <div class="verse-transliteration">Wa ma tasha'una illa an yasha'Allah, innAllaha kana 'aliman hakima</div>
+                    <div class="verse-translation">And you do not will except that Allah wills. Indeed, Allah is ever Knowing and Wise.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">تَشَاءُونَ</span><span class="trans">tasha'una</span><span class="meaning">Do you will</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">أَن يَشَاءَ</span><span class="trans">an yasha'a</span><span class="meaning">That wills</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهُ</span><span class="trans">Allahu</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ اللَّهَ</span><span class="trans">innAllaha</span><span class="meaning">Indeed, Allah</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Is ever</span></div>
+                        <div class="word-chip"><span class="ar">عَلِيمًا</span><span class="trans">'aliman</span><span class="meaning">All-Knowing</span></div>
+                        <div class="word-chip"><span class="ar">حَكِيمًا</span><span class="trans">hakima</span><span class="meaning">All-Wise</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is one of the most important verses about the relationship between human will and divine will. You have free will, but your will operates within Allah's will. You cannot will anything unless Allah has already willed it. Ibn Kathir explains that this verse was revealed to correct anyone who might think verse 29 gave humans absolute, independent power. Human choice is real but not independent. It exists within the framework of Allah's all-encompassing will. As-Sa'di adds that "Aliman Hakima" (All-Knowing, All-Wise) means Allah's will is not arbitrary. He knows who deserves guidance and who deserves to be left astray, and His decisions are based on perfect wisdom. He guides those who sincerely seek guidance, and He leaves those who insist on rejection.</p></div>
+                </div>
+
+                <!-- Verse 31 -->
+                <div class="verse-card"><div class="verse-number">31</div>
+                    <div class="verse-arabic">يُدْخِلُ مَن يَشَاءُ فِي رَحْمَتِهِ ۚ وَالظَّالِمِينَ أَعَدَّ لَهُمْ عَذَابًا أَلِيمًا</div>
+                    <div class="verse-transliteration">Yudkhilu man yasha'u fi rahmatihi, waz-zalimina a'adda lahum 'adhaban alima</div>
+                    <div class="verse-translation">He admits whom He wills into His mercy; but the wrongdoers - He has prepared for them a painful punishment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يُدْخِلُ</span><span class="trans">yudkhilu</span><span class="meaning">He admits</span></div>
+                        <div class="word-chip"><span class="ar">مَن يَشَاءُ</span><span class="trans">man yasha'u</span><span class="meaning">Whom He wills</span></div>
+                        <div class="word-chip"><span class="ar">فِي رَحْمَتِهِ</span><span class="trans">fi rahmatihi</span><span class="meaning">Into His mercy</span></div>
+                        <div class="word-chip"><span class="ar">وَالظَّالِمِينَ</span><span class="trans">waz-zalimina</span><span class="meaning">And the wrongdoers</span></div>
+                        <div class="word-chip"><span class="ar">أَعَدَّ</span><span class="trans">a'adda</span><span class="meaning">He has prepared</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">For them</span></div>
+                        <div class="word-chip"><span class="ar">عَذَابًا</span><span class="trans">'adhaban</span><span class="meaning">A punishment</span></div>
+                        <div class="word-chip"><span class="ar">أَلِيمًا</span><span class="trans">alima</span><span class="meaning">Painful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah ends with two outcomes: mercy for those Allah admits, and painful punishment for the wrongdoers. Notice the beautiful structure: the mercy is attributed to Allah's will ("He admits whom He wills into His mercy"), emphasizing divine grace. But the punishment is attributed to the wrongdoers' own actions ("the wrongdoers"), emphasizing personal responsibility. Ibn Kathir explains that this final verse brings the surah full circle. It began with the two paths (grateful or ungrateful) and ends with the two destinations (mercy or punishment). As-Sa'di concludes that "rahmatihi" (His mercy) encompasses Paradise and everything good, while "'adhaban alima" is reserved for those who wronged themselves by choosing disbelief and sin despite having the guidance right in front of them.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>You were once nothing.</strong> Before you existed, you were not even worth mentioning. Every ability you have, every breath you take, is a gift from Allah. This should eliminate all arrogance and replace it with deep gratitude.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Life is a test with two clear paths.</strong> Allah gave you hearing, sight, and guidance. The path is shown. The choice between gratitude and ingratitude is yours. There is no confusion about what is expected.</div></li>
+                    <li><span class="bullet">03</span><div><strong>True charity is giving what you love, for Allah's sake alone.</strong> The righteous feed others despite needing the food themselves, and they seek nothing in return. No recognition, no thanks, no social proof. Only Allah's pleasure.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Paradise is beyond imagination.</strong> The descriptions in this surah, from camphor springs to silk garments to silver vessels to the spring of Salsabil, are just glimpses. The reality is far greater than words can capture.</div></li>
+                    <li><span class="bullet">05</span><div><strong>Patience is the currency of Paradise.</strong> Verse 12 explicitly states that the reward of Paradise is specifically for their patience. Not their wealth, not their status, but their patience in obeying Allah, avoiding sin, and enduring hardship.</div></li>
+                    <li><span class="bullet">06</span><div><strong>Human will exists within divine will.</strong> You have real choices, but your choices operate within Allah's framework. This is not a contradiction but a balance. Seek guidance sincerely, and trust that Allah, the All-Knowing and All-Wise, will guide you.</div></li>
+                    <li><span class="bullet">07</span><div><strong>Remember Allah morning, evening, and through the night.</strong> The prescription for spiritual strength is constant connection with Allah through prayer and remembrance. This is what fuels patience and keeps you on the path.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih Muslim (hadith about reciting Surah As-Sajdah and Al-Insan in Friday Fajr prayer, narrated by Abu Hurayrah), Sahih Bukhari, Sahih Muslim (hadith: "In Paradise there is what no eye has seen, no ear has heard, and no mind has imagined"). All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 76, totalVerses: 31 });
+    }
+    </script>
+</body>
+</html>

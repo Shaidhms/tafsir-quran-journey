@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Mursalat - Those Sent Forth | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 77 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْمُرْسَلَاتِ</div>
+        <h1>Surah Al-Mursalat</h1>
+        <p>Those Sent Forth - 50 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">77</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">50</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">181</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">Those Sent Forth</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Day of Judgment & Warning</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Mursalat was revealed in Makkah and is one of the most powerful warning surahs in the Quran. Its name, "Those Sent Forth," refers to the winds or angels sent by Allah. The surah is built around a <span class="highlight">devastating refrain that appears ten times</span>: "Woe that Day to the deniers!" This repetition hammers the message home with increasing intensity, leaving no room for doubt or dismissal.</p>
+                <p>The surah opens with <span class="highlight">a series of magnificent oaths</span> by winds that blow in succession, by storms that scatter, by verses that distinguish truth from falsehood. These oaths build to a single conclusion: what you have been promised, the Day of Judgment, is absolutely going to happen. The stars will be extinguished, the sky will be split open, the mountains will be blown away like dust.</p>
+                <div class="important">
+                    <p>Abdullah ibn Mas'ud (may Allah be pleased with him) narrated: "We were with the Prophet (peace be upon him) in a cave at Mina when Surah Al-Mursalat was revealed. He was reciting it and I was learning it from his mouth. Indeed, his mouth was moist with it when a snake came out at us. The Prophet said, 'Kill it!' We rushed to kill it but it escaped. The Prophet said, 'It was saved from your harm just as you were saved from its harm.'"</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih al-Bukhari 1830, Sahih Muslim 2234</p>
+                </div>
+                <p>After the oaths, the surah recounts <span class="highlight">the destruction of former nations</span> who denied their messengers, then reminds humans of their own humble origins from a drop of fluid placed in a secure lodging. It asks: did We not create you from a worthless fluid? Did We not make the earth a container for the living and the dead? Did We not place firm mountains and give you fresh water? These are reminders of Allah's power and generosity, yet the deniers turn away.</p>
+                <p>The surah closes with a scene of the Day of Judgment: the deniers cannot speak, cannot make excuses, cannot prostrate even if told to do so. Their hearts are sealed. The final verse delivers a haunting question: <span class="highlight">"Then in what message after this will they believe?"</span> If the Quran itself cannot shake them awake, nothing will.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">وَالْمُرْسَلَاتِ عُرْفًا</div>
+                    <div class="verse-transliteration">Wal-mursalati 'urfa</div>
+                    <div class="verse-translation">By those [winds] sent forth in succession.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَالْمُرْسَلَاتِ</span><span class="trans">wal-mursalati</span><span class="meaning">By those sent forth</span></div>
+                        <div class="word-chip"><span class="ar">عُرْفًا</span><span class="trans">'urfa</span><span class="meaning">In succession / one after another</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah begins with an oath. "Al-Mursalat" refers to those sent forth. Ibn Kathir mentions multiple opinions: they may be winds sent one after another, or angels sent with revelation and commands. The word "'urfa" means in succession, like waves following each other, or in a recognized and beneficial manner. As-Sa'di explains that Allah swears by these mighty forces to establish the certainty of what follows: the Day of Judgment is real and unavoidable. The oath by winds reminds us of Allah's power over nature, a power that will one day dismantle this entire world.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">فَالْعَاصِفَاتِ عَصْفًا</div>
+                    <div class="verse-transliteration">Fal-'asifati 'asfa</div>
+                    <div class="verse-translation">And the winds that blow violently.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَالْعَاصِفَاتِ</span><span class="trans">fal-'asifati</span><span class="meaning">And the blowing violently</span></div>
+                        <div class="word-chip"><span class="ar">عَصْفًا</span><span class="trans">'asfa</span><span class="meaning">With violence / fiercely</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After the gentle winds come the violent storms. "'Asifat" comes from "'asf" meaning to blow with tremendous force and fury. Ibn Kathir explains these are the fierce winds that uproot trees and destroy structures. As-Sa'di notes the progression: first the winds sent gently in succession, then the violent tempests. This mirrors how Allah's warnings come first gently through messengers, then, if ignored, through devastating punishment. The escalation in the oaths mirrors the escalation of consequence for those who deny.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَالنَّاشِرَاتِ نَشْرًا</div>
+                    <div class="verse-transliteration">Wan-nashirati nashra</div>
+                    <div class="verse-translation">And [by] the winds that spread [clouds].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَالنَّاشِرَاتِ</span><span class="trans">wan-nashirati</span><span class="meaning">And those that spread</span></div>
+                        <div class="word-chip"><span class="ar">نَشْرًا</span><span class="trans">nashra</span><span class="meaning">Spreading widely</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"An-Nashirat" are those that spread. Ibn Kathir says these are the winds that spread clouds across the sky, bringing rain and mercy. Others say they are angels that spread Allah's commands throughout creation. As-Sa'di explains that "nashr" means to spread, scatter, or distribute widely. Whether winds spreading rain clouds or angels spreading divine decree, the point is the same: Allah has systems that carry out His will across the entire creation. Nothing escapes His administration.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">فَالْفَارِقَاتِ فَرْقًا</div>
+                    <div class="verse-transliteration">Fal-fariqati farqa</div>
+                    <div class="verse-translation">And those [angels] that separate [with] criterion.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَالْفَارِقَاتِ</span><span class="trans">fal-fariqati</span><span class="meaning">And those that separate / distinguish</span></div>
+                        <div class="word-chip"><span class="ar">فَرْقًا</span><span class="trans">farqa</span><span class="meaning">A clear separation</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-Fariqat" are those that make a clear distinction and separation. Ibn Kathir explains these are the angels who bring revelation that separates truth from falsehood, lawful from unlawful, guidance from misguidance. As-Sa'di notes that "farq" is the act of making a decisive separation. The Quran itself is called "Al-Furqan" (The Criterion) because it separates truth from falsehood. These verses that come down through angels are the ultimate standard by which all claims are judged.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">فَالْمُلْقِيَاتِ ذِكْرًا</div>
+                    <div class="verse-transliteration">Fal-mulqiyati dhikra</div>
+                    <div class="verse-translation">And those [angels] that deliver a reminder.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَالْمُلْقِيَاتِ</span><span class="trans">fal-mulqiyati</span><span class="meaning">And those that deliver / cast</span></div>
+                        <div class="word-chip"><span class="ar">ذِكْرًا</span><span class="trans">dhikra</span><span class="meaning">A reminder / remembrance</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-Mulqiyat" are those that deliver or cast down. "Dhikr" means reminder, remembrance, or message. Ibn Kathir explains these are the angels, particularly Jibril (Gabriel), who deliver revelation to the prophets. The word "alqa" means to throw or deliver, and it conveys the weight and force with which the message is brought down. As-Sa'di notes that the purpose of this delivery is "dhikr," a reminder. Revelation is not just information; it is a wake-up call, meant to remind humans of what they already know deep inside: that they were created with purpose and will return to their Creator.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">عُذْرًا أَوْ نُذْرًا</div>
+                    <div class="verse-transliteration">'Udhran aw nudhra</div>
+                    <div class="verse-translation">As justification or warning.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عُذْرًا</span><span class="trans">'udhra</span><span class="meaning">As justification / excuse-removing</span></div>
+                        <div class="word-chip"><span class="ar">أَوْ</span><span class="trans">aw</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">نُذْرًا</span><span class="trans">nudhra</span><span class="meaning">Warning</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The reminder delivered by angels serves two purposes. "'Udhr" means to remove excuses. No one can say on the Day of Judgment, "I was not warned." "Nudhr" means warning of consequences. Ibn Kathir explains that the revelation cuts off all excuses and delivers a clear warning of what happens to those who reject. As-Sa'di emphasizes that this verse establishes Allah's perfect justice: He never punishes without first sending clear warning through His messengers. The proof has been delivered. The excuse has been removed. What remains is the choice.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">إِنَّمَا تُوعَدُونَ لَوَاقِعٌ</div>
+                    <div class="verse-transliteration">Innama tu'aduna lawaqi'</div>
+                    <div class="verse-translation">Indeed, what you are promised is to occur.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّمَا</span><span class="trans">innama</span><span class="meaning">Indeed, surely</span></div>
+                        <div class="word-chip"><span class="ar">تُوعَدُونَ</span><span class="trans">tu'aduna</span><span class="meaning">You are promised</span></div>
+                        <div class="word-chip"><span class="ar">لَوَاقِعٌ</span><span class="trans">lawaqi'</span><span class="meaning">Is to occur / will happen</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the conclusion of the oaths. After swearing by the winds, storms, and angels, Allah declares: what you have been promised will absolutely happen. "Waqi'" means to fall, to occur, to come to pass with certainty. Ibn Kathir explains that "ma tu'aduna" refers to the Day of Judgment, resurrection, and accountability. The word "lawaqi'" with the emphatic "la" prefix makes this an absolute guarantee. As-Sa'di notes that this verse is the answer to all the oaths: the entire purpose of those magnificent swearings was to establish this one truth. The Day of Judgment is coming, and nothing can stop it.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">فَإِذَا النُّجُومُ طُمِسَتْ</div>
+                    <div class="verse-transliteration">Fa-idhan-nujumu tumisat</div>
+                    <div class="verse-translation">So when the stars are obliterated.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَإِذَا</span><span class="trans">fa-idha</span><span class="meaning">So when</span></div>
+                        <div class="word-chip"><span class="ar">النُّجُومُ</span><span class="trans">an-nujumu</span><span class="meaning">The stars</span></div>
+                        <div class="word-chip"><span class="ar">طُمِسَتْ</span><span class="trans">tumisat</span><span class="meaning">Are obliterated / extinguished</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now begins the description of how that promised Day will unfold. The stars, those brilliant lights that have guided travelers for millennia, will be "tumisat," meaning erased, extinguished, their light wiped out. Ibn Kathir explains that "tams" means to erase completely, like wiping writing off a board. The stars will lose their light and be scattered. As-Sa'di notes that the stars are mentioned first because they represent the most stable, beautiful features of the night sky. When even the stars are destroyed, you understand that nothing in this universe is permanent except Allah.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">وَإِذَا السَّمَاءُ فُرِجَتْ</div>
+                    <div class="verse-transliteration">Wa idhas-sama'u furijat</div>
+                    <div class="verse-translation">And when the sky is split open.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءُ</span><span class="trans">as-sama'u</span><span class="meaning">The sky</span></div>
+                        <div class="word-chip"><span class="ar">فُرِجَتْ</span><span class="trans">furijat</span><span class="meaning">Is split open / cleft asunder</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The sky will be torn open. "Furijat" comes from "farj" meaning to open, split, or create gaps. Ibn Kathir explains the sky will be rent asunder with massive cracks and openings. It will no longer be the seamless canopy we see above us. As-Sa'di notes this is consistent with other descriptions in the Quran (81:11, 82:1, 84:1) where the sky is described as splitting, folding, and tearing apart on the Day of Judgment. The sky that seemed so permanent and unbreakable will crumble like everything else.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَإِذَا الْجِبَالُ نُسِفَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-jibalu nusifat</div>
+                    <div class="verse-translation">And when the mountains are blown away.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْجِبَالُ</span><span class="trans">al-jibalu</span><span class="meaning">The mountains</span></div>
+                        <div class="word-chip"><span class="ar">نُسِفَتْ</span><span class="trans">nusifat</span><span class="meaning">Are blown away / scattered as dust</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The mountains will be uprooted and blown away like dust. "Nusifat" means to be carried away by the wind, to be scattered like chaff. Ibn Kathir explains that the massive mountains that seem immovable will be reduced to fine dust and blown away as if they never existed. As-Sa'di notes that mountains are mentioned because they represent the ultimate symbol of stability and permanence in this world. If even mountains are blown away like nothing, then truly nothing in this world can be relied upon. Only Allah is the Permanent, the Everlasting.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">وَإِذَا الرُّسُلُ أُقِّتَتْ</div>
+                    <div class="verse-transliteration">Wa idhar-rusulu uqqitat</div>
+                    <div class="verse-translation">And when the messengers' time has come.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الرُّسُلُ</span><span class="trans">ar-rusulu</span><span class="meaning">The messengers</span></div>
+                        <div class="word-chip"><span class="ar">أُقِّتَتْ</span><span class="trans">uqqitat</span><span class="meaning">Their time is set / appointed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The messengers are gathered at their appointed time. "Uqqitat" comes from "waqt" meaning time, and it means to have their time fixed and set. Ibn Kathir explains this refers to the messengers being gathered to testify against their nations on the Day of Judgment. Each messenger will be asked: did you deliver the message? And each nation will be asked: did the message reach you? As-Sa'di notes that the appointment of a time for the messengers means the Day of Judgment has a fixed schedule that cannot be delayed or brought forward. Everything is precisely timed by Allah.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">لِأَيِّ يَوْمٍ أُجِّلَتْ</div>
+                    <div class="verse-transliteration">Li-ayyi yawmin ujjilat</div>
+                    <div class="verse-translation">For what Day were they postponed?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِأَيِّ</span><span class="trans">li-ayyi</span><span class="meaning">For what / which</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمٍ</span><span class="trans">yawmin</span><span class="meaning">Day</span></div>
+                        <div class="word-chip"><span class="ar">أُجِّلَتْ</span><span class="trans">ujjilat</span><span class="meaning">Were they postponed / delayed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A rhetorical question to build awe and suspense. For what great Day were all these events postponed? The question is not seeking an answer; it is creating dread. Ibn Kathir explains that this magnifies the Day of Judgment by asking about its enormity. The postponement ("ujjilat" from "ajal" meaning deadline or appointed term) implies that this Day has been scheduled since the beginning of creation. As-Sa'di notes that the question forces the listener to pause and consider: what kind of Day must it be, that even the testimony of all the prophets is being saved for it?</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">لِيَوْمِ الْفَصْلِ</div>
+                    <div class="verse-transliteration">Li-yawmil-fasl</div>
+                    <div class="verse-translation">For the Day of Judgement.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِيَوْمِ</span><span class="trans">li-yawmi</span><span class="meaning">For the Day of</span></div>
+                        <div class="word-chip"><span class="ar">الْفَصْلِ</span><span class="trans">al-fasl</span><span class="meaning">Judgement / separation / decision</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The answer: for the Day of Separation, the Day of Decision. "Al-Fasl" means to separate, to judge, to make a final decisive ruling between parties. Ibn Kathir explains this is one of the names of the Day of Judgment because on that Day, Allah will separate the truthful from the liars, the believers from the disbelievers, the people of Paradise from the people of Hell. As-Sa'di notes that "fasl" implies finality. There will be no appeal, no second hearing, no overturning of the verdict. This is the ultimate and final court.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا يَوْمُ الْفَصْلِ</div>
+                    <div class="verse-transliteration">Wa ma adraka ma yawmul-fasl</div>
+                    <div class="verse-translation">And what can make you know what is the Day of Judgement?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                        <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraka</span><span class="meaning">Can make you know</span></div>
+                        <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What is</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمُ الْفَصْلِ</span><span class="trans">yawmul-fasl</span><span class="meaning">The Day of Judgement</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Wa ma adraka" is one of the most powerful phrases in the Quran. It means: what could possibly give you any idea of what this is? It conveys that the reality of this Day is beyond human comprehension. Ibn Kathir notes that whenever this phrase appears in the Quran, it indicates something so immense that no human mind can fully grasp it. As-Sa'di explains that this question is meant to fill the heart with awe and the mind with gravity. You think you understand "the Day of Judgment," but you have no idea how terrifying it truly is.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the first appearance of the devastating refrain that will echo ten times throughout this surah. "Wayl" is a word of severe punishment and destruction. Some scholars say it is a valley in Hellfire. "Al-Mukadhdhibin" are those who deny, reject, and call the truth a lie. Ibn Kathir explains that "wayl" is the most severe form of warning in Arabic. As-Sa'di notes that each time this refrain appears, it follows a different proof or argument. After each evidence is presented and the case is made stronger, the warning is repeated: woe to those who still deny after all of this.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">أَلَمْ نُهْلِكِ الْأَوَّلِينَ</div>
+                    <div class="verse-transliteration">Alam nuhliki-l-awwalin</div>
+                    <div class="verse-translation">Did We not destroy the former peoples?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَمْ</span><span class="trans">alam</span><span class="meaning">Did We not</span></div>
+                        <div class="word-chip"><span class="ar">نُهْلِكِ</span><span class="trans">nuhliki</span><span class="meaning">Destroy</span></div>
+                        <div class="word-chip"><span class="ar">الْأَوَّلِينَ</span><span class="trans">al-awwalin</span><span class="meaning">The former peoples</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A rhetorical question that demands reflection. Did We not destroy the people who came before you? Ibn Kathir explains this refers to nations like the people of Nuh, 'Ad, Thamud, and the people of Lut, all of whom denied their messengers and were utterly destroyed. The question "alam" (did We not) expects the answer "yes, of course You did." As-Sa'di notes that this is both a historical reminder and a direct threat: if Allah destroyed those who denied before, what makes you think you are safe from the same fate?</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">ثُمَّ نُتْبِعُهُمُ الْآخِرِينَ</div>
+                    <div class="verse-transliteration">Thumma nutbi'uhumul-akhirin</div>
+                    <div class="verse-translation">Then We will follow them up with the later ones.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">نُتْبِعُهُمُ</span><span class="trans">nutbi'uhumu</span><span class="meaning">We will follow them up with</span></div>
+                        <div class="word-chip"><span class="ar">الْآخِرِينَ</span><span class="trans">al-akhirin</span><span class="meaning">The later ones</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>And then We will cause the later deniers to follow the same fate as those before them. "Nutbi'u" means to make follow, to cause one to follow another. Ibn Kathir explains this means that later generations of deniers will face the same destruction as earlier ones. The pattern does not change. Denial leads to destruction, always. As-Sa'di notes the word "thumma" (then) indicates that this is an ongoing process. Allah's way (sunnah) with deniers does not change across time or generations. If you deny, you will follow the same path to the same end.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">كَذَٰلِكَ نَفْعَلُ بِالْمُجْرِمِينَ</div>
+                    <div class="verse-transliteration">Kadhalika naf'alu bil-mujrimin</div>
+                    <div class="verse-translation">Thus do We deal with the criminals.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَذَٰلِكَ</span><span class="trans">kadhalika</span><span class="meaning">Thus / in this way</span></div>
+                        <div class="word-chip"><span class="ar">نَفْعَلُ</span><span class="trans">naf'alu</span><span class="meaning">We deal / We do</span></div>
+                        <div class="word-chip"><span class="ar">بِالْمُجْرِمِينَ</span><span class="trans">bil-mujrimin</span><span class="meaning">With the criminals</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is how We deal with criminals. "Al-Mujrimin" comes from "jurm" meaning crime, and it refers to those who commit the ultimate crime: denying Allah and His messengers. Ibn Kathir explains that this is a general statement of Allah's way: all criminals throughout history face the same justice. As-Sa'di notes that "kadhalika" (thus, in this way) means the pattern is consistent and predictable. There is no special treatment, no exceptions, no escape route for those who persist in denial. This is Allah's unchanging law.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The refrain returns for the second time. After presenting the evidence that Allah destroyed previous denying nations and will do the same to later ones, the warning is repeated. Ibn Kathir notes that each repetition of this refrain intensifies the message. As-Sa'di explains that the repetition serves a psychological purpose: it drives the point deeper with each occurrence, like a hammer driving a nail. Those who deny despite seeing what happened to others are especially deserving of this warning.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">أَلَمْ نَخْلُقكُّم مِّن مَّاءٍ مَّهِينٍ</div>
+                    <div class="verse-transliteration">Alam nakhluqkum min ma'in mahin</div>
+                    <div class="verse-translation">Did We not create you from a liquid disdained?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَمْ</span><span class="trans">alam</span><span class="meaning">Did We not</span></div>
+                        <div class="word-chip"><span class="ar">نَخْلُقكُّم</span><span class="trans">nakhluqkum</span><span class="meaning">Create you</span></div>
+                        <div class="word-chip"><span class="ar">مِّن مَّاءٍ</span><span class="trans">min ma'in</span><span class="meaning">From a liquid / fluid</span></div>
+                        <div class="word-chip"><span class="ar">مَّهِينٍ</span><span class="trans">mahin</span><span class="meaning">Disdained / worthless</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the argument shifts to human creation. Did We not create you from a despised, lowly fluid? "Ma'in mahin" refers to the reproductive fluid, described as "mahin" meaning worthless, insignificant, contemptible. Ibn Kathir explains this is a reminder to the arrogant denier: you came from something you would be embarrassed to even mention. How can you be arrogant when your origin is so humble? As-Sa'di notes that this verse and the ones following establish a logical proof: the One who created you from nothing can certainly recreate you for the Day of Judgment.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">فَجَعَلْنَاهُ فِي قَرَارٍ مَّكِينٍ</div>
+                    <div class="verse-transliteration">Faja'alnahu fi qararin makin</div>
+                    <div class="verse-translation">And We placed it in a firm lodging [i.e., the womb].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَجَعَلْنَاهُ</span><span class="trans">faja'alnahu</span><span class="meaning">And We placed it</span></div>
+                        <div class="word-chip"><span class="ar">فِي قَرَارٍ</span><span class="trans">fi qararin</span><span class="meaning">In a lodging / resting place</span></div>
+                        <div class="word-chip"><span class="ar">مَّكِينٍ</span><span class="trans">makin</span><span class="meaning">Firm / secure / well-established</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>We placed that fluid in a secure resting place: the mother's womb. "Qarar" means a place of settlement and stability, and "makin" means firm, secure, well-protected. Ibn Kathir explains that the womb is perfectly designed to protect and nurture the developing human: it is warm, secure, cushioned, and provides everything the embryo needs. As-Sa'di notes the contrast between "mahin" (worthless fluid) and "makin" (firm, established place). Allah takes something lowly and places it in something noble, and from that combination creates a human being. This is a sign of His infinite power and wisdom.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">إِلَىٰ قَدَرٍ مَّعْلُومٍ</div>
+                    <div class="verse-transliteration">Ila qadarin ma'lum</div>
+                    <div class="verse-translation">For a known extent [of time].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">Until / for</span></div>
+                        <div class="word-chip"><span class="ar">قَدَرٍ</span><span class="trans">qadarin</span><span class="meaning">A measure / extent</span></div>
+                        <div class="word-chip"><span class="ar">مَّعْلُومٍ</span><span class="trans">ma'lum</span><span class="meaning">Known / determined</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>For a precisely determined period of time. "Qadar" means measure, and "ma'lum" means known. The pregnancy has a known duration, approximately nine months, which is decreed and known by Allah. Ibn Kathir explains that Allah determines the exact time each child will spend in the womb, the exact moment of birth, and every detail of that process. As-Sa'di notes that "ma'lum" means known to Allah, even though each pregnancy varies slightly. Allah knows the exact moment of every birth before it happens. This precision in creation is yet another proof of Allah's perfect knowledge and power.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">فَقَدَرْنَا فَنِعْمَ الْقَادِرُونَ</div>
+                    <div class="verse-transliteration">Faqadarna fani'mal-qadirun</div>
+                    <div class="verse-translation">And We determined [it]; and excellent [are We] to determine.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَقَدَرْنَا</span><span class="trans">faqadarna</span><span class="meaning">And We determined / measured</span></div>
+                        <div class="word-chip"><span class="ar">فَنِعْمَ</span><span class="trans">fani'ma</span><span class="meaning">And how excellent</span></div>
+                        <div class="word-chip"><span class="ar">الْقَادِرُونَ</span><span class="trans">al-qadirun</span><span class="meaning">Are those who determine / the capable ones</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>We determined everything, and how excellent is Our ability to determine! "Qadarna" means We measured, decreed, and determined with perfect precision. "Ni'ma" is a word of praise meaning "how excellent." Ibn Kathir explains that Allah praises His own ability: He designed the human body with its organs, senses, limbs, and faculties with perfect precision. As-Sa'di notes that "Al-Qadirun" can mean both "those who determine" and "those with power." Allah is both the One who decrees and the One with the power to execute that decree. His design of the human being is a masterpiece that no creation can replicate.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The third appearance of the refrain. This time it follows the proof of human creation: you were made from a despised fluid, placed in a secure womb, for a precise duration, with perfect design. After all this evidence of Allah's power, you still deny? Ibn Kathir notes that the argument is: if Allah can create you the first time from nothing, He can certainly bring you back for judgment. As-Sa'di explains that denying resurrection after seeing the miracle of your own creation is the height of irrationality.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">أَلَمْ نَجْعَلِ الْأَرْضَ كِفَاتًا</div>
+                    <div class="verse-transliteration">Alam naj'alil-arda kifata</div>
+                    <div class="verse-translation">Have We not made the earth a container?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَمْ</span><span class="trans">alam</span><span class="meaning">Have We not</span></div>
+                        <div class="word-chip"><span class="ar">نَجْعَلِ</span><span class="trans">naj'ali</span><span class="meaning">Made</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرْضَ</span><span class="trans">al-arda</span><span class="meaning">The earth</span></div>
+                        <div class="word-chip"><span class="ar">كِفَاتًا</span><span class="trans">kifata</span><span class="meaning">A container / a gathering place</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Have We not made the earth a container that holds everything? "Kifat" means something that gathers and holds things within itself. Ibn Kathir explains that the earth contains all living and dead things. It is a home for the living on its surface and a resting place for the dead within it. As-Sa'di notes that "kifat" is a comprehensive word: the earth holds humans, animals, plants, water, minerals, and everything else. It is a perfectly designed vessel for life, and this design points directly to a Designer.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">أَحْيَاءً وَأَمْوَاتًا</div>
+                    <div class="verse-transliteration">Ahya'an wa amwata</div>
+                    <div class="verse-translation">[For] the living and the dead.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَحْيَاءً</span><span class="trans">ahya'an</span><span class="meaning">The living</span></div>
+                        <div class="word-chip"><span class="ar">وَأَمْوَاتًا</span><span class="trans">wa amwata</span><span class="meaning">And the dead</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The earth contains both the living and the dead. "Ahya'" is the plural of "hayy" (living), and "amwat" is the plural of "mayyit" (dead). Ibn Kathir explains that the earth serves as a home for the living on its surface and as a burial place for the dead within it. It nurtures life and receives death. As-Sa'di notes the profound dual nature of the earth: the same soil that grows your food will one day consume your body. This is a reminder that life and death are inseparable, and both are under Allah's control.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">وَجَعَلْنَا فِيهَا رَوَاسِيَ شَامِخَاتٍ وَأَسْقَيْنَاكُم مَّاءً فُرَاتًا</div>
+                    <div class="verse-transliteration">Wa ja'alna fiha rawasiya shamikhat, wa asqaynakum ma'an furata</div>
+                    <div class="verse-translation">And We placed therein lofty, firmly set mountains and have given you to drink sweet water.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَجَعَلْنَا</span><span class="trans">wa ja'alna</span><span class="meaning">And We placed</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Therein</span></div>
+                        <div class="word-chip"><span class="ar">رَوَاسِيَ</span><span class="trans">rawasiya</span><span class="meaning">Mountains / anchors</span></div>
+                        <div class="word-chip"><span class="ar">شَامِخَاتٍ</span><span class="trans">shamikhat</span><span class="meaning">Lofty / towering</span></div>
+                        <div class="word-chip"><span class="ar">وَأَسْقَيْنَاكُم</span><span class="trans">wa asqaynakum</span><span class="meaning">And We gave you to drink</span></div>
+                        <div class="word-chip"><span class="ar">مَّاءً</span><span class="trans">ma'an</span><span class="meaning">Water</span></div>
+                        <div class="word-chip"><span class="ar">فُرَاتًا</span><span class="trans">furata</span><span class="meaning">Sweet / fresh</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>We placed towering mountains on it and gave you fresh, sweet water to drink. "Rawasiya" are mountains that anchor the earth like pegs, and "shamikhat" means tall, lofty, and imposing. "Furat" means sweet, fresh, pleasant-tasting water. Ibn Kathir explains that the mountains stabilize the earth and the fresh water sustains life, both are blessings from Allah that humans take for granted. As-Sa'di notes that these two provisions, stability (mountains) and sustenance (water), are the foundation of life on earth. Without either one, human life would be impossible. Yet the deniers enjoy these blessings daily without acknowledging their Provider.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The fourth repetition of the refrain. This time it follows the evidence of the earth: its function as a container for the living and dead, its towering mountains, and its sweet water. All of these are gifts from the Creator. After seeing how Allah designed the earth to sustain your life, you still deny Him? Ibn Kathir and As-Sa'di both note that each "woe" becomes heavier because the evidence becomes stronger. The deniers' position becomes more and more indefensible with each proof.</p></div>
+                </div>
+
+                <!-- Verse 29 -->
+                <div class="verse-card"><div class="verse-number">29</div>
+                    <div class="verse-arabic">انطَلِقُوا إِلَىٰ مَا كُنتُم بِهِ تُكَذِّبُونَ</div>
+                    <div class="verse-transliteration">Intaliqu ila ma kuntum bihi tukadhdhibun</div>
+                    <div class="verse-translation">[They will be told], "Proceed to that which you used to deny."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">انطَلِقُوا</span><span class="trans">intaliqu</span><span class="meaning">Proceed / go forth</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ مَا</span><span class="trans">ila ma</span><span class="meaning">To that which</span></div>
+                        <div class="word-chip"><span class="ar">كُنتُم</span><span class="trans">kuntum</span><span class="meaning">You used to</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">In it</span></div>
+                        <div class="word-chip"><span class="ar">تُكَذِّبُونَ</span><span class="trans">tukadhdhibun</span><span class="meaning">Deny</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>On the Day of Judgment, the deniers will be commanded: go toward the very thing you used to deny! "Intaliqu" is an imperative meaning proceed, move forward, go. This is said with harshness and contempt. Ibn Kathir explains they are being told to walk toward the Hellfire they used to mock and deny. They used to laugh at warnings of Hell; now they are being marched directly into it. As-Sa'di notes the devastating irony: what they dismissed as a fairy tale is now their inescapable reality. There is no going back, no second chance, no appeal.</p></div>
+                </div>
+
+                <!-- Verse 30 -->
+                <div class="verse-card"><div class="verse-number">30</div>
+                    <div class="verse-arabic">انطَلِقُوا إِلَىٰ ظِلٍّ ذِي ثَلَاثِ شُعَبٍ</div>
+                    <div class="verse-transliteration">Intaliqu ila zillin dhi thalathi shu'ab</div>
+                    <div class="verse-translation">[Proceed to] a shadow [of smoke] having three columns.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">انطَلِقُوا</span><span class="trans">intaliqu</span><span class="meaning">Proceed / go forth</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ ظِلٍّ</span><span class="trans">ila zillin</span><span class="meaning">To a shadow</span></div>
+                        <div class="word-chip"><span class="ar">ذِي</span><span class="trans">dhi</span><span class="meaning">Having / possessing</span></div>
+                        <div class="word-chip"><span class="ar">ثَلَاثِ</span><span class="trans">thalathi</span><span class="meaning">Three</span></div>
+                        <div class="word-chip"><span class="ar">شُعَبٍ</span><span class="trans">shu'ab</span><span class="meaning">Columns / branches</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Go toward a "shadow" of smoke that splits into three columns. The word "zill" (shadow) is used with bitter irony. Normally, a shadow provides relief from heat. But this "shadow" is the black smoke rising from Hellfire, splitting into three massive columns. Ibn Kathir explains that the smoke of Hell is so vast it divides into three branches, surrounding the deniers from all sides. As-Sa'di notes that calling it a "shadow" is a mockery of their hopes: you wanted shade and comfort? Here is your shade, made of the smoke of the fire you denied.</p></div>
+                </div>
+
+                <!-- Verse 31 -->
+                <div class="verse-card"><div class="verse-number">31</div>
+                    <div class="verse-arabic">لَّا ظَلِيلٍ وَلَا يُغْنِي مِنَ اللَّهَبِ</div>
+                    <div class="verse-transliteration">La zalilin wa la yughni minal-lahab</div>
+                    <div class="verse-translation">[But providing] no shade and no protection from the flames.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَّا</span><span class="trans">la</span><span class="meaning">Neither / not</span></div>
+                        <div class="word-chip"><span class="ar">ظَلِيلٍ</span><span class="trans">zalilin</span><span class="meaning">Giving shade / cooling</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And nor</span></div>
+                        <div class="word-chip"><span class="ar">يُغْنِي</span><span class="trans">yughni</span><span class="meaning">Does it avail / protect</span></div>
+                        <div class="word-chip"><span class="ar">مِنَ اللَّهَبِ</span><span class="trans">minal-lahab</span><span class="meaning">From the flames</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This "shadow" provides no actual shade and no protection whatsoever from the flames. It is shade in name only. "Zalilin" means something that gives cool, comfortable shade, and this smoke has none of that quality. "Yughni" means to benefit, avail, or protect. Ibn Kathir explains this is the complete opposite of what a shadow should be: instead of relief, it adds to the torment. The smoke is hot, suffocating, and provides no escape from the flames beneath. As-Sa'di notes the double negation (la...wa la) emphasizes total deprivation: no shade AND no protection. It is the worst of both worlds.</p></div>
+                </div>
+
+                <!-- Verse 32 -->
+                <div class="verse-card"><div class="verse-number">32</div>
+                    <div class="verse-arabic">إِنَّهَا تَرْمِي بِشَرَرٍ كَالْقَصْرِ</div>
+                    <div class="verse-transliteration">Innaha tarmi bi-shararin kal-qasr</div>
+                    <div class="verse-translation">Indeed, it throws sparks [as huge] as a fortress.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّهَا</span><span class="trans">innaha</span><span class="meaning">Indeed, it</span></div>
+                        <div class="word-chip"><span class="ar">تَرْمِي</span><span class="trans">tarmi</span><span class="meaning">Throws / hurls</span></div>
+                        <div class="word-chip"><span class="ar">بِشَرَرٍ</span><span class="trans">bi-shararin</span><span class="meaning">With sparks</span></div>
+                        <div class="word-chip"><span class="ar">كَالْقَصْرِ</span><span class="trans">kal-qasr</span><span class="meaning">Like a fortress / palace</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The fire throws sparks as massive as fortresses or palaces. "Sharar" are sparks and embers, and "qasr" means a palace or fortress. Ibn Kathir explains that the sparks flying from this fire are not tiny like sparks from a campfire; each spark is the size of a building. Imagine a fire so enormous that its flying embers are as large as palaces. As-Sa'di notes that this imagery is meant to terrify and wake people up. We can barely endure a tiny spark landing on our skin; what of a spark the size of a fortress?</p></div>
+                </div>
+
+                <!-- Verse 33 -->
+                <div class="verse-card"><div class="verse-number">33</div>
+                    <div class="verse-arabic">كَأَنَّهُ جِمَالَتٌ صُفْرٌ</div>
+                    <div class="verse-transliteration">Ka'annahu jimalatun sufr</div>
+                    <div class="verse-translation">As if they were yellowish [black] camels.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَأَنَّهُ</span><span class="trans">ka'annahu</span><span class="meaning">As if they were</span></div>
+                        <div class="word-chip"><span class="ar">جِمَالَتٌ</span><span class="trans">jimalatun</span><span class="meaning">Camels</span></div>
+                        <div class="word-chip"><span class="ar">صُفْرٌ</span><span class="trans">sufr</span><span class="meaning">Yellow / tawny / dark</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Another vivid comparison: the sparks are like yellow or tawny camels. "Jimalat" is the plural of "jamal" (camel), and "sufr" means yellow or dark tawny. Ibn Kathir explains that the Arabs would have understood this image instantly: large, dark, fast-moving camels stampeding in herds. The sparks fly from the fire like herds of camels, massive and countless. As-Sa'di notes that "sufr" can also mean black, as the Arabs sometimes used "asfar" for very dark colors. The image is of enormous, dark projectiles raining down continuously from the inferno.</p></div>
+                </div>
+
+                <!-- Verse 34 -->
+                <div class="verse-card"><div class="verse-number">34</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The fifth repetition of the refrain, this time after the terrifying description of the fire: its useless "shadow" of smoke, its sparks the size of buildings, flying like herds of dark camels. After seeing this picture, woe to those who still deny. Ibn Kathir notes that the imagery of Hellfire is presented so vividly precisely so that people take warning and change course while they still can. As-Sa'di explains that the increasing intensity of the descriptions matched with the repeated refrain creates a crescendo of warning.</p></div>
+                </div>
+
+                <!-- Verse 35 -->
+                <div class="verse-card"><div class="verse-number">35</div>
+                    <div class="verse-arabic">هَٰذَا يَوْمُ لَا يَنطِقُونَ</div>
+                    <div class="verse-transliteration">Hadha yawmu la yantiqun</div>
+                    <div class="verse-translation">This is a Day they will not speak.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">هَٰذَا</span><span class="trans">hadha</span><span class="meaning">This is</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمُ</span><span class="trans">yawmu</span><span class="meaning">A Day</span></div>
+                        <div class="word-chip"><span class="ar">لَا</span><span class="trans">la</span><span class="meaning">Not</span></div>
+                        <div class="word-chip"><span class="ar">يَنطِقُونَ</span><span class="trans">yantiqun</span><span class="meaning">They will speak</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is a Day when they will not be able to speak. "Yantiqun" comes from "nutq" meaning speech, articulate expression. Ibn Kathir explains that the deniers will be so overwhelmed with terror and despair that they will be unable to utter a word. In this world, they had plenty to say in mockery of the truth. On that Day, their mouths will be sealed. As-Sa'di notes that this does not contradict other verses where the disbelievers speak on Judgment Day; rather, the Day of Judgment has many stages, and in some stages they will speak, and in others they will be silenced.</p></div>
+                </div>
+
+                <!-- Verse 36 -->
+                <div class="verse-card"><div class="verse-number">36</div>
+                    <div class="verse-arabic">وَلَا يُؤْذَنُ لَهُمْ فَيَعْتَذِرُونَ</div>
+                    <div class="verse-transliteration">Wa la yu'dhanu lahum faya'tadhirun</div>
+                    <div class="verse-translation">Nor will it be permitted for them to make an excuse.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">يُؤْذَنُ</span><span class="trans">yu'dhanu</span><span class="meaning">Will be permitted</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">For them</span></div>
+                        <div class="word-chip"><span class="ar">فَيَعْتَذِرُونَ</span><span class="trans">faya'tadhirun</span><span class="meaning">So they could make excuses</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>They will not even be given permission to make excuses. "Ya'tadhirun" comes from "'udhr" meaning excuse or apology. In this world, people can hire lawyers, spin narratives, and make excuses. On that Day, the deniers will not even be allowed to open their mouths in self-defense. Ibn Kathir explains that their excuses would be useless anyway because their own limbs will testify against them. As-Sa'di notes the double deprivation: they cannot speak (verse 35) AND they are not permitted to make excuses. Every avenue of escape is sealed shut.</p></div>
+                </div>
+
+                <!-- Verse 37 -->
+                <div class="verse-card"><div class="verse-number">37</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The sixth repetition. After being told they cannot speak and cannot make excuses, woe to the deniers. In this world, the tongue was their weapon: they mocked, they argued, they denied, they made excuses. On that Day, even that weapon is taken from them. Ibn Kathir and As-Sa'di both emphasize that this stripping away of the ability to speak is one of the most humiliating aspects of their punishment. The arrogant talkers are reduced to silence.</p></div>
+                </div>
+
+                <!-- Verse 38 -->
+                <div class="verse-card"><div class="verse-number">38</div>
+                    <div class="verse-arabic">هَٰذَا يَوْمُ الْفَصْلِ ۖ جَمَعْنَاكُمْ وَالْأَوَّلِينَ</div>
+                    <div class="verse-transliteration">Hadha yawmul-fasli jama'nakum wal-awwalin</div>
+                    <div class="verse-translation">This is the Day of Judgement; We will have assembled you and the former peoples.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">هَٰذَا</span><span class="trans">hadha</span><span class="meaning">This is</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمُ الْفَصْلِ</span><span class="trans">yawmul-fasl</span><span class="meaning">The Day of Judgement</span></div>
+                        <div class="word-chip"><span class="ar">جَمَعْنَاكُمْ</span><span class="trans">jama'nakum</span><span class="meaning">We have assembled you</span></div>
+                        <div class="word-chip"><span class="ar">وَالْأَوَّلِينَ</span><span class="trans">wal-awwalin</span><span class="meaning">And the former peoples</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the Day of Separation, and We have gathered you together with all the former peoples. "Jama'nakum" means We have assembled you all. Every human who ever lived, from the first to the last, is gathered on this Day. Ibn Kathir explains that the gathering includes all of humanity from Adam to the last person born before the Hour. No one is left out, no one is forgotten. As-Sa'di notes that gathering the later people with the earlier ones means everyone faces the same court, the same Judge, and the same standard of justice. History does not provide immunity.</p></div>
+                </div>
+
+                <!-- Verse 39 -->
+                <div class="verse-card"><div class="verse-number">39</div>
+                    <div class="verse-arabic">فَإِن كَانَ لَكُمْ كَيْدٌ فَكِيدُونِ</div>
+                    <div class="verse-transliteration">Fa-in kana lakum kaydun fakidun</div>
+                    <div class="verse-translation">So if you have a plan, then plan against Me.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَإِن</span><span class="trans">fa-in</span><span class="meaning">So if</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ لَكُمْ</span><span class="trans">kana lakum</span><span class="meaning">You have</span></div>
+                        <div class="word-chip"><span class="ar">كَيْدٌ</span><span class="trans">kaydun</span><span class="meaning">A plan / scheme</span></div>
+                        <div class="word-chip"><span class="ar">فَكِيدُونِ</span><span class="trans">fakidun</span><span class="meaning">Then plan against Me</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A devastating challenge: if you have any plan, any scheme, any trick, then go ahead and use it against Me! "Kayd" means plot, scheme, or strategy. This is Allah challenging the deniers with supreme authority. Ibn Kathir explains this is the ultimate humiliation: in this world, they plotted against the prophets, schemed against the believers, and thought they were clever. Now Allah says: try your schemes here. Of course, they have nothing. As-Sa'di notes that this challenge exposes their total helplessness. All their worldly power, wealth, alliances, and strategies are worthless before Allah.</p></div>
+                </div>
+
+                <!-- Verse 40 -->
+                <div class="verse-card"><div class="verse-number">40</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The seventh repetition follows the ultimate challenge: plan against Me if you can. They cannot. They are utterly powerless. After being challenged and having nothing to respond with, the refrain strikes again. Ibn Kathir notes that this is the point where the deniers' arrogance is completely shattered. They had plans and schemes in this world; now they have absolutely nothing. As-Sa'di explains that each "woe" is not just a warning but an actual description of what awaits: destruction, ruin, and eternal loss.</p></div>
+                </div>
+
+                <!-- Verse 41 -->
+                <div class="verse-card"><div class="verse-number">41</div>
+                    <div class="verse-arabic">إِنَّ الْمُتَّقِينَ فِي ظِلَالٍ وَعُيُونٍ</div>
+                    <div class="verse-transliteration">Innal-muttaqina fi zilalin wa 'uyun</div>
+                    <div class="verse-translation">Indeed, the righteous will be among shades and springs.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">الْمُتَّقِينَ</span><span class="trans">al-muttaqina</span><span class="meaning">The righteous / God-conscious</span></div>
+                        <div class="word-chip"><span class="ar">فِي ظِلَالٍ</span><span class="trans">fi zilalin</span><span class="meaning">In shades</span></div>
+                        <div class="word-chip"><span class="ar">وَعُيُونٍ</span><span class="trans">wa 'uyun</span><span class="meaning">And springs</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the contrast: while the deniers are in smoke and fire, the righteous are in real shade and flowing springs. "Al-Muttaqin" are those who were God-conscious, who lived their lives aware of Allah's presence and obeyed Him. "Zilal" is genuine, cool, pleasant shade, unlike the mock "shadow" of smoke described earlier. "Uyun" are flowing springs of water. Ibn Kathir explains this is the reward of Paradise: true comfort, not the false comfort the deniers received in worldly life. As-Sa'di notes the powerful contrast with verses 30-31: the deniers get smoke that provides no shade, while the believers get real shade and fresh water.</p></div>
+                </div>
+
+                <!-- Verse 42 -->
+                <div class="verse-card"><div class="verse-number">42</div>
+                    <div class="verse-arabic">وَفَوَاكِهَ مِمَّا يَشْتَهُونَ</div>
+                    <div class="verse-transliteration">Wa fawakiha mimma yashtahun</div>
+                    <div class="verse-translation">And fruits from whatever they desire.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَفَوَاكِهَ</span><span class="trans">wa fawakiha</span><span class="meaning">And fruits</span></div>
+                        <div class="word-chip"><span class="ar">مِمَّا</span><span class="trans">mimma</span><span class="meaning">From whatever</span></div>
+                        <div class="word-chip"><span class="ar">يَشْتَهُونَ</span><span class="trans">yashtahun</span><span class="meaning">They desire</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>And fruits, whatever they desire! "Fawakiha" are fruits of every kind, and "yashtahun" means they crave or desire. In Paradise, the believers get whatever fruit they want, whenever they want, in whatever amount they want. Ibn Kathir explains that the fruits of Paradise are unlike anything in this world: they are more delicious, more varied, and available without end. As-Sa'di notes that "mimma yashtahun" (from whatever they desire) means there are no limitations. Whatever your heart desires is immediately available. This is the opposite of worldly life, where desire always exceeds what is available.</p></div>
+                </div>
+
+                <!-- Verse 43 -->
+                <div class="verse-card"><div class="verse-number">43</div>
+                    <div class="verse-arabic">كُلُوا وَاشْرَبُوا هَنِيئًا بِمَا كُنتُمْ تَعْمَلُونَ</div>
+                    <div class="verse-transliteration">Kulu washrabu hani'an bima kuntum ta'malun</div>
+                    <div class="verse-translation">[Being told], "Eat and drink in satisfaction for what you used to do."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كُلُوا</span><span class="trans">kulu</span><span class="meaning">Eat</span></div>
+                        <div class="word-chip"><span class="ar">وَاشْرَبُوا</span><span class="trans">washrabu</span><span class="meaning">And drink</span></div>
+                        <div class="word-chip"><span class="ar">هَنِيئًا</span><span class="trans">hani'an</span><span class="meaning">In satisfaction / pleasantly</span></div>
+                        <div class="word-chip"><span class="ar">بِمَا</span><span class="trans">bima</span><span class="meaning">For what</span></div>
+                        <div class="word-chip"><span class="ar">كُنتُمْ</span><span class="trans">kuntum</span><span class="meaning">You used to</span></div>
+                        <div class="word-chip"><span class="ar">تَعْمَلُونَ</span><span class="trans">ta'malun</span><span class="meaning">Do</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Eat and drink with complete satisfaction because of what you used to do. "Hani'an" means with pleasure, without any worry, guilt, or side effects. In this world, eating and drinking come with concerns: health, cost, scarcity, consequences. In Paradise, all of that is gone. Ibn Kathir explains that "bima kuntum ta'malun" (because of what you used to do) means their good deeds in this world earned them this reward. As-Sa'di notes that the word "hani'an" removes all anxiety from the enjoyment. There is no fear of it running out, no health concerns, and no guilt. Pure, unrestricted enjoyment.</p></div>
+                </div>
+
+                <!-- Verse 44 -->
+                <div class="verse-card"><div class="verse-number">44</div>
+                    <div class="verse-arabic">إِنَّا كَذَٰلِكَ نَجْزِي الْمُحْسِنِينَ</div>
+                    <div class="verse-transliteration">Inna kadhalika najzil-muhsinin</div>
+                    <div class="verse-translation">Indeed, We thus reward the doers of good.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">كَذَٰلِكَ</span><span class="trans">kadhalika</span><span class="meaning">Thus / in this way</span></div>
+                        <div class="word-chip"><span class="ar">نَجْزِي</span><span class="trans">najzi</span><span class="meaning">We reward</span></div>
+                        <div class="word-chip"><span class="ar">الْمُحْسِنِينَ</span><span class="trans">al-muhsinin</span><span class="meaning">The doers of good / those who excel</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is how We reward those who do good. "Al-Muhsinun" are those who practice ihsan: doing good in the best possible way, worshipping Allah as if they see Him. Ibn Kathir explains that "muhsin" is a higher level than just "mu'min" (believer). A muhsin not only believes and does good deeds but does them with excellence, sincerity, and awareness of Allah. As-Sa'di notes that "kadhalika" (thus, in this way) means this is Allah's consistent practice. He always rewards goodness with goodness, but His reward far exceeds what the person deserves. A few decades of good deeds earn an eternity of pleasure.</p></div>
+                </div>
+
+                <!-- Verse 45 -->
+                <div class="verse-card"><div class="verse-number">45</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The eighth repetition. This time the refrain comes after the description of Paradise: shades, springs, fruits, eating and drinking in bliss. The contrast is devastating. The believers enjoy all of this, while the deniers get smoke, fire, and sparks the size of buildings. The placement after the Paradise description makes the "woe" even more painful: you could have had this, but you chose denial. Ibn Kathir and As-Sa'di both note that describing Paradise right before the refrain adds the pain of loss to the pain of punishment.</p></div>
+                </div>
+
+                <!-- Verse 46 -->
+                <div class="verse-card"><div class="verse-number">46</div>
+                    <div class="verse-arabic">كُلُوا وَتَمَتَّعُوا قَلِيلًا إِنَّكُم مُّجْرِمُونَ</div>
+                    <div class="verse-transliteration">Kulu wa tamatta'u qalilan innakum mujrimun</div>
+                    <div class="verse-translation">[O disbelievers], eat and enjoy yourselves a little; indeed, you are criminals.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كُلُوا</span><span class="trans">kulu</span><span class="meaning">Eat</span></div>
+                        <div class="word-chip"><span class="ar">وَتَمَتَّعُوا</span><span class="trans">wa tamatta'u</span><span class="meaning">And enjoy yourselves</span></div>
+                        <div class="word-chip"><span class="ar">قَلِيلًا</span><span class="trans">qalilan</span><span class="meaning">A little</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّكُم</span><span class="trans">innakum</span><span class="meaning">Indeed, you are</span></div>
+                        <div class="word-chip"><span class="ar">مُّجْرِمُونَ</span><span class="trans">mujrimun</span><span class="meaning">Criminals</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the address shifts back to the deniers in this world: eat and enjoy yourselves for a little while, because you are criminals. "Tamatta'u" means to enjoy, to take pleasure, and "qalilan" means a little, briefly, for a short time. This is dripping with sarcasm. Ibn Kathir explains that their worldly enjoyment is temporary and will be followed by eternal punishment. The word "qalilan" is key: no matter how long you live, your life is "a little" compared to eternity. As-Sa'di notes that calling them "mujrimun" (criminals) while they eat and enjoy is a reminder that their comfort is borrowed time before their sentence is carried out.</p></div>
+                </div>
+
+                <!-- Verse 47 -->
+                <div class="verse-card"><div class="verse-number">47</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The ninth repetition. After being told that their worldly enjoyment is "a little" and that they are criminals, the refrain strikes again. Ibn Kathir notes that this near-final repetition carries the weight of everything that came before it: all the cosmic signs, the historical destruction, the creation proofs, the fire descriptions, the Paradise they will miss, and the brevity of their worldly pleasure. All of it leads to this one conclusion: woe to those who deny. As-Sa'di explains that the cumulative effect of nine repetitions is meant to be overwhelming, leaving no room in the heart for doubt.</p></div>
+                </div>
+
+                <!-- Verse 48 -->
+                <div class="verse-card"><div class="verse-number">48</div>
+                    <div class="verse-arabic">وَإِذَا قِيلَ لَهُمُ ارْكَعُوا لَا يَرْكَعُونَ</div>
+                    <div class="verse-transliteration">Wa idha qila lahumurka'u la yarka'un</div>
+                    <div class="verse-translation">And when it is said to them, "Bow [in prayer]," they do not bow.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">قِيلَ</span><span class="trans">qila</span><span class="meaning">It is said</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمُ</span><span class="trans">lahumu</span><span class="meaning">To them</span></div>
+                        <div class="word-chip"><span class="ar">ارْكَعُوا</span><span class="trans">irka'u</span><span class="meaning">Bow down / pray</span></div>
+                        <div class="word-chip"><span class="ar">لَا</span><span class="trans">la</span><span class="meaning">Not</span></div>
+                        <div class="word-chip"><span class="ar">يَرْكَعُونَ</span><span class="trans">yarka'un</span><span class="meaning">They bow / pray</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>When they are told to bow in prayer, they refuse to bow. "Irka'u" is an imperative meaning bow, submit, pray. "La yarka'un" means they do not bow. Ibn Kathir explains this could refer to this world (they are told to pray and they refuse) or to the Day of Judgment (they will be called to prostrate but their backs will be stiffened and they will be unable to bow). In a hadith in Sahih al-Bukhari, the Prophet (peace be upon him) described how on the Day of Judgment, the shin of Allah will be uncovered and people will be called to prostrate, but the hypocrites and deniers will try to bow and will not be able to. As-Sa'di notes that their refusal to bow in this world is the root cause of their punishment in the next.</p></div>
+                </div>
+
+                <!-- Verse 49 -->
+                <div class="verse-card"><div class="verse-number">49</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Waylun yawma'idhin lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The tenth and final repetition of the refrain. It follows the refusal to bow in prayer, which is the ultimate act of arrogance: refusing to submit to the One who created you. Ibn Kathir explains that this final "woe" is the climax of the entire surah. Every argument has been made, every proof presented, every warning delivered. And after all of it, they still refuse to bow. As-Sa'di notes that the ten repetitions form a complete cycle of warning: from cosmic signs to historical precedent, from human creation to earthly blessings, from hellfire descriptions to paradise descriptions, from worldly indulgence to refusal to pray. Every angle has been covered.</p></div>
+                </div>
+
+                <!-- Verse 50 -->
+                <div class="verse-card"><div class="verse-number">50</div>
+                    <div class="verse-arabic">فَبِأَيِّ حَدِيثٍ بَعْدَهُ يُؤْمِنُونَ</div>
+                    <div class="verse-transliteration">Fabi-ayyi hadithin ba'dahu yu'minun</div>
+                    <div class="verse-translation">Then in what message after it [i.e., the Quran] will they believe?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَبِأَيِّ</span><span class="trans">fabi-ayyi</span><span class="meaning">Then in what</span></div>
+                        <div class="word-chip"><span class="ar">حَدِيثٍ</span><span class="trans">hadithin</span><span class="meaning">Message / narration / speech</span></div>
+                        <div class="word-chip"><span class="ar">بَعْدَهُ</span><span class="trans">ba'dahu</span><span class="meaning">After it</span></div>
+                        <div class="word-chip"><span class="ar">يُؤْمِنُونَ</span><span class="trans">yu'minun</span><span class="meaning">Will they believe</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah ends with a haunting, rhetorical question that echoes into eternity: then in what message after the Quran will they believe? "Hadith" here means message, speech, or narration. If the Quran, with all its proofs, warnings, descriptions of Hell and Paradise, stories of destroyed nations, and reminders of creation, cannot make you believe, then what possibly could? Ibn Kathir explains that this verse declares the Quran as the ultimate and final argument. There is no book after it, no messenger after Muhammad (peace be upon him), and no additional proof to be given. As-Sa'di notes that this question is not seeking an answer; it is a declaration that the case is closed. The evidence is complete. The choice is yours, and so are the consequences.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>The Day of Judgment is absolutely certain.</strong> The surah opens with powerful oaths and ends with a devastating question. Between them, every conceivable proof is presented. The Day of Separation is coming, and nothing in the heavens or earth can prevent it.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Denial has consequences that never change.</strong> Allah destroyed previous nations for denial, and He will do the same to later ones. His way (sunnah) does not change. History is full of examples, and the deniers of every era follow the same path to the same end.</div></li>
+                    <li><span class="bullet">03</span><div><strong>Your own creation is proof of resurrection.</strong> You were made from a worthless fluid, placed in a womb, and developed into a complex human being. The One who did this the first time can certainly do it again. Denying resurrection while being a living proof of Allah's creative power is deeply irrational.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Every blessing is a proof against the denier.</strong> The earth that holds you, the mountains that stabilize it, the water that sustains you: all are gifts from the One you deny. Every sip of water is evidence for the prosecution on the Day of Judgment.</div></li>
+                    <li><span class="bullet">05</span><div><strong>Worldly enjoyment without faith is borrowed time.</strong> "Eat and enjoy a little" is not a compliment; it is a warning. The pleasures of this world are brief, and without faith, they are the last good thing you will ever experience before eternal punishment.</div></li>
+                    <li><span class="bullet">06</span><div><strong>The Quran is the final argument.</strong> If the Quran cannot convince you, nothing will. This is the most powerful, most eloquent, most comprehensive message ever delivered to humanity. Rejecting it means rejecting all evidence, all logic, and all mercy.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih al-Bukhari (Hadith 1830 - revelation of Al-Mursalat in the cave at Mina), Sahih Muslim (2234), Sahih al-Bukhari (the Day when the Shin shall be laid bare). All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 77, totalVerses: 50 });
+    }
+    </script>
+</body>
+</html>

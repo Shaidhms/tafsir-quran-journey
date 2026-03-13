@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Nuh - Noah | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 71 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ نُوحٍ</div>
+        <h1>Surah Nuh</h1>
+        <p>Noah - 28 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">71</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">28</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">227</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">Noah</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Nuh's Da'wah & His People's Rejection</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Nuh is one of the most emotionally powerful surahs in the Quran. It is entirely dedicated to the story of <span class="highlight">Prophet Nuh (peace be upon him) and his tireless da'wah to his people</span>. Unlike other surahs that mention Nuh briefly, this surah lets us hear his voice directly as he pours out his heart to Allah, recounting the decades of effort, rejection, and heartbreak he endured.</p>
+                <p>Nuh was sent to his people with a simple message: <span class="highlight">worship Allah alone, fear Him, and obey me</span>. In return, Allah would forgive their sins and delay their punishment. But his people refused. They blocked their ears, covered their faces, and persisted in arrogance. Nuh tried every approach: he called them openly and privately, by night and by day, but nothing worked.</p>
+                <div class="important">
+                    <p>Ibn Kathir reports that Prophet Nuh (peace be upon him) is considered the first messenger sent to the people of the earth. He called his people for 950 years, as mentioned in Surah Al-Ankabut (29:14). Despite this incredibly long mission, only a handful believed in him. His patience and perseverance make him one of the five Prophets of firm resolve (Ulul-Azm).</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Introduction to Surah Nuh; Surah Al-Ankabut 29:14</p>
+                </div>
+                <p>In the middle section, Nuh uses <span class="highlight">a beautiful da'wah strategy</span>, appealing to their self-interest. He tells them: seek forgiveness from Allah, and He will send rain, give you wealth and children, and make gardens and rivers for you. This connects repentance to worldly blessings, a profound lesson that istighfar (seeking forgiveness) is a key to rizq (provision).</p>
+                <p>He then points them to <span class="highlight">the signs of Allah in creation</span>: the seven heavens in layers, the moon as a light, the sun as a lamp, how Allah grew humans from the earth like plants. Despite all of this, they stubbornly clung to their idols: Wadd, Suwa', Yaghuth, Ya'uq, and Nasr. The surah ends with Nuh's du'a against the disbelievers and his plea for forgiveness for himself, his parents, and the believers.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">إِنَّا أَرْسَلْنَا نُوحًا إِلَىٰ قَوْمِهِ أَنْ أَنذِرْ قَوْمَكَ مِن قَبْلِ أَن يَأْتِيَهُمْ عَذَابٌ أَلِيمٌ</div>
+                    <div class="verse-transliteration">Inna arsalna Nuhan ila qawmihi an andhir qawmaka min qabli an ya'tiyahum 'adhabun alim</div>
+                    <div class="verse-translation">Indeed, We sent Nuh to his people, [saying], "Warn your people before there comes to them a painful punishment."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">أَرْسَلْنَا</span><span class="trans">arsalna</span><span class="meaning">Sent</span></div>
+                        <div class="word-chip"><span class="ar">نُوحًا</span><span class="trans">Nuhan</span><span class="meaning">Nuh (Noah)</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ قَوْمِهِ</span><span class="trans">ila qawmihi</span><span class="meaning">To his people</span></div>
+                        <div class="word-chip"><span class="ar">أَنْ أَنذِرْ</span><span class="trans">an andhir</span><span class="meaning">That warn</span></div>
+                        <div class="word-chip"><span class="ar">قَوْمَكَ</span><span class="trans">qawmaka</span><span class="meaning">Your people</span></div>
+                        <div class="word-chip"><span class="ar">مِن قَبْلِ</span><span class="trans">min qabli</span><span class="meaning">Before</span></div>
+                        <div class="word-chip"><span class="ar">أَن يَأْتِيَهُمْ</span><span class="trans">an ya'tiyahum</span><span class="meaning">There comes to them</span></div>
+                        <div class="word-chip"><span class="ar">عَذَابٌ</span><span class="trans">'adhabun</span><span class="meaning">A punishment</span></div>
+                        <div class="word-chip"><span class="ar">أَلِيمٌ</span><span class="trans">alim</span><span class="meaning">Painful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah opens with Allah declaring that He sent Nuh to his people with a clear mission: warn them before a painful punishment arrives. Ibn Kathir explains that "inna" (indeed) at the beginning emphasizes the certainty and importance of this divine mission. Nuh is the first messenger sent to humanity after they deviated from Tawhid (monotheism). As-Sa'di notes that the warning came "before" the punishment, showing Allah's mercy. He does not punish a people without first sending them a warner. The word "alim" (painful) describes a punishment that reaches into the depths of the soul.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">قَالَ يَا قَوْمِ إِنِّي لَكُمْ نَذِيرٌ مُّبِينٌ</div>
+                    <div class="verse-transliteration">Qala ya qawmi inni lakum nadhirun mubin</div>
+                    <div class="verse-translation">He said, "O my people, indeed I am to you a clear warner."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قَالَ</span><span class="trans">qala</span><span class="meaning">He said</span></div>
+                        <div class="word-chip"><span class="ar">يَا قَوْمِ</span><span class="trans">ya qawmi</span><span class="meaning">O my people</span></div>
+                        <div class="word-chip"><span class="ar">إِنِّي</span><span class="trans">inni</span><span class="meaning">Indeed I am</span></div>
+                        <div class="word-chip"><span class="ar">لَكُمْ</span><span class="trans">lakum</span><span class="meaning">To you</span></div>
+                        <div class="word-chip"><span class="ar">نَذِيرٌ</span><span class="trans">nadhirun</span><span class="meaning">A warner</span></div>
+                        <div class="word-chip"><span class="ar">مُّبِينٌ</span><span class="trans">mubin</span><span class="meaning">Clear</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh begins his address with "ya qawmi" (O my people), a term of endearment and belonging. He does not distance himself from them. He identifies himself as a "nadhir mubin," a clear warner. Ibn Kathir explains that "mubin" means his warning is clear, plain, and leaves no room for confusion. As-Sa'di notes that Nuh's approach is gentle. He calls them "my people," establishing a bond before delivering the difficult message. This is a model of da'wah: connect first, then convey. He does not call them enemies or strangers; he reminds them that he is one of them and cares about them.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">أَنِ اعْبُدُوا اللَّهَ وَاتَّقُوهُ وَأَطِيعُونِ</div>
+                    <div class="verse-transliteration">Ani'budul-laha wattaquhu wa ati'un</div>
+                    <div class="verse-translation">[Saying], "Worship Allah, fear Him, and obey me."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَنِ</span><span class="trans">ani</span><span class="meaning">That</span></div>
+                        <div class="word-chip"><span class="ar">اعْبُدُوا</span><span class="trans">u'budu</span><span class="meaning">Worship</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهَ</span><span class="trans">Allaha</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">وَاتَّقُوهُ</span><span class="trans">wattaquhu</span><span class="meaning">And fear Him</span></div>
+                        <div class="word-chip"><span class="ar">وَأَطِيعُونِ</span><span class="trans">wa ati'un</span><span class="meaning">And obey me</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the core message of every prophet: worship Allah alone, have taqwa (consciousness of Allah and fear of His punishment), and obey the messenger. Ibn Kathir explains that these three commands summarize the entire religion. "U'budu" (worship) is about directing all acts of worship to Allah alone. "Ittaquhu" (fear Him) is about avoiding sins and disobedience. "Ati'un" (obey me) is about following the guidance the messenger brings. As-Sa'di adds that obedience to the messenger is linked to obedience to Allah because the messenger only conveys what Allah commands.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">يَغْفِرْ لَكُم مِّن ذُنُوبِكُمْ وَيُؤَخِّرْكُمْ إِلَىٰ أَجَلٍ مُّسَمًّى ۚ إِنَّ أَجَلَ اللَّهِ إِذَا جَاءَ لَا يُؤَخَّرُ ۖ لَوْ كُنتُمْ تَعْلَمُونَ</div>
+                    <div class="verse-transliteration">Yaghfir lakum min dhunubikum wa yu'akhkhirkum ila ajalin musamman. Inna ajalal-lahi idha ja'a la yu'akhkhar, law kuntum ta'lamun</div>
+                    <div class="verse-translation">He will forgive you of your sins and delay you for a specified term. Indeed, the time [set by] Allah, when it comes, will not be delayed, if you only knew.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَغْفِرْ</span><span class="trans">yaghfir</span><span class="meaning">He will forgive</span></div>
+                        <div class="word-chip"><span class="ar">لَكُم</span><span class="trans">lakum</span><span class="meaning">For you</span></div>
+                        <div class="word-chip"><span class="ar">مِّن ذُنُوبِكُمْ</span><span class="trans">min dhunubikum</span><span class="meaning">Of your sins</span></div>
+                        <div class="word-chip"><span class="ar">وَيُؤَخِّرْكُمْ</span><span class="trans">wa yu'akhkhirkum</span><span class="meaning">And delay you</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ أَجَلٍ</span><span class="trans">ila ajalin</span><span class="meaning">Until a term</span></div>
+                        <div class="word-chip"><span class="ar">مُّسَمًّى</span><span class="trans">musamman</span><span class="meaning">Specified / appointed</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ أَجَلَ اللَّهِ</span><span class="trans">inna ajalal-lahi</span><span class="meaning">Indeed Allah's term</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا جَاءَ</span><span class="trans">idha ja'a</span><span class="meaning">When it comes</span></div>
+                        <div class="word-chip"><span class="ar">لَا يُؤَخَّرُ</span><span class="trans">la yu'akhkhar</span><span class="meaning">Will not be delayed</span></div>
+                        <div class="word-chip"><span class="ar">لَوْ كُنتُمْ</span><span class="trans">law kuntum</span><span class="meaning">If you</span></div>
+                        <div class="word-chip"><span class="ar">تَعْلَمُونَ</span><span class="trans">ta'lamun</span><span class="meaning">Only knew</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh presents the reward of obedience: forgiveness of sins and an extended lifespan. Then he warns: once Allah's appointed time comes, there is no delay. Ibn Kathir explains that "min dhunubikum" (of your sins) uses "min" which some scholars interpret as meaning "all your sins" (min here being explanatory, not partitive). As-Sa'di explains that the "specified term" refers to their natural lifespan. If they believe, Allah will let them live out their full term. If they refuse, He may cut it short through punishment. The closing phrase "if you only knew" is a powerful nudge: if they truly understood the urgency, they would rush to believe.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">قَالَ رَبِّ إِنِّي دَعَوْتُ قَوْمِي لَيْلًا وَنَهَارًا</div>
+                    <div class="verse-transliteration">Qala rabbi inni da'awtu qawmi laylan wa nahara</div>
+                    <div class="verse-translation">He said, "My Lord, indeed I invited my people [to truth] night and day."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قَالَ</span><span class="trans">qala</span><span class="meaning">He said</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّ</span><span class="trans">rabbi</span><span class="meaning">My Lord</span></div>
+                        <div class="word-chip"><span class="ar">إِنِّي</span><span class="trans">inni</span><span class="meaning">Indeed I</span></div>
+                        <div class="word-chip"><span class="ar">دَعَوْتُ</span><span class="trans">da'awtu</span><span class="meaning">Invited / called</span></div>
+                        <div class="word-chip"><span class="ar">قَوْمِي</span><span class="trans">qawmi</span><span class="meaning">My people</span></div>
+                        <div class="word-chip"><span class="ar">لَيْلًا</span><span class="trans">laylan</span><span class="meaning">Night</span></div>
+                        <div class="word-chip"><span class="ar">وَنَهَارًا</span><span class="trans">wa nahara</span><span class="meaning">And day</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now Nuh turns to Allah and reports his efforts. He did not call his people occasionally or half-heartedly. He called them "laylan wa nahara" (night and day), meaning continuously, without break. Ibn Kathir explains that this verse begins Nuh's complaint to his Lord, not out of despair, but as a report of his tireless efforts. As-Sa'di notes that mentioning both night and day shows the completeness of his effort. He used every possible time. This is the model of a dedicated da'i (caller to Allah): persistent, consistent, never giving up despite rejection.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">فَلَمْ يَزِدْهُمْ دُعَائِي إِلَّا فِرَارًا</div>
+                    <div class="verse-transliteration">Falam yazidhum du'a'i illa firara</div>
+                    <div class="verse-translation">"But my invitation increased them not except in flight [from the truth]."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَلَمْ</span><span class="trans">falam</span><span class="meaning">But not</span></div>
+                        <div class="word-chip"><span class="ar">يَزِدْهُمْ</span><span class="trans">yazidhum</span><span class="meaning">It increased them</span></div>
+                        <div class="word-chip"><span class="ar">دُعَائِي</span><span class="trans">du'a'i</span><span class="meaning">My invitation</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except in</span></div>
+                        <div class="word-chip"><span class="ar">فِرَارًا</span><span class="trans">firara</span><span class="meaning">Flight / fleeing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The heartbreaking result: the more Nuh called them, the more they ran away. "Firara" comes from "farra" meaning to flee, to run away. They did not just ignore him; they actively fled from the truth. Ibn Kathir explains that this is one of the saddest statements in the Quran. A prophet dedicates his entire life to his people, and the result is the opposite of what he hoped for. As-Sa'di notes that the problem was not Nuh's method but the hardness of their hearts. When hearts are sealed, even the most eloquent da'wah only drives them further away.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">وَإِنِّي كُلَّمَا دَعَوْتُهُمْ لِتَغْفِرَ لَهُمْ جَعَلُوا أَصَابِعَهُمْ فِي آذَانِهِمْ وَاسْتَغْشَوْا ثِيَابَهُمْ وَأَصَرُّوا وَاسْتَكْبَرُوا اسْتِكْبَارًا</div>
+                    <div class="verse-transliteration">Wa inni kullama da'awtuhum litaghfira lahum ja'alu asabi'ahum fi adhanihim wastagshaw thiyabahum wa asarru wastakbarus-tikbara</div>
+                    <div class="verse-translation">"And indeed, every time I invited them that You may forgive them, they put their fingers in their ears, covered themselves with their garments, persisted, and were arrogant with [great] arrogance."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِنِّي</span><span class="trans">wa inni</span><span class="meaning">And indeed I</span></div>
+                        <div class="word-chip"><span class="ar">كُلَّمَا</span><span class="trans">kullama</span><span class="meaning">Every time</span></div>
+                        <div class="word-chip"><span class="ar">دَعَوْتُهُمْ</span><span class="trans">da'awtuhum</span><span class="meaning">I invited them</span></div>
+                        <div class="word-chip"><span class="ar">لِتَغْفِرَ لَهُمْ</span><span class="trans">litaghfira lahum</span><span class="meaning">That You may forgive them</span></div>
+                        <div class="word-chip"><span class="ar">جَعَلُوا</span><span class="trans">ja'alu</span><span class="meaning">They put</span></div>
+                        <div class="word-chip"><span class="ar">أَصَابِعَهُمْ</span><span class="trans">asabi'ahum</span><span class="meaning">Their fingers</span></div>
+                        <div class="word-chip"><span class="ar">فِي آذَانِهِمْ</span><span class="trans">fi adhanihim</span><span class="meaning">In their ears</span></div>
+                        <div class="word-chip"><span class="ar">وَاسْتَغْشَوْا</span><span class="trans">wastagshaw</span><span class="meaning">And covered themselves</span></div>
+                        <div class="word-chip"><span class="ar">ثِيَابَهُمْ</span><span class="trans">thiyabahum</span><span class="meaning">With their garments</span></div>
+                        <div class="word-chip"><span class="ar">وَأَصَرُّوا</span><span class="trans">wa asarru</span><span class="meaning">And persisted</span></div>
+                        <div class="word-chip"><span class="ar">وَاسْتَكْبَرُوا</span><span class="trans">wastakbaru</span><span class="meaning">And were arrogant</span></div>
+                        <div class="word-chip"><span class="ar">اسْتِكْبَارًا</span><span class="trans">istikbara</span><span class="meaning">With [great] arrogance</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse paints a vivid picture of their rejection. They physically blocked their ears with their fingers and pulled their clothes over their heads so they could neither hear nor see Nuh. Then they persisted in their disbelief and became arrogant. Ibn Kathir explains that "istighsha' thiyabahum" (covering with garments) means they covered their faces and heads so they would not see Nuh or hear his words. "Asarru" means they became stubborn and determined in their rejection. "Istakbaru istikbara" uses the cognate accusative (maf'ul mutlaq), emphasizing the extreme degree of their arrogance. As-Sa'di notes the escalation: first blocking ears (refusing to listen), then covering themselves (refusing to see), then persisting (refusing to change), then arrogance (actively opposing). Each stage is worse than the last.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">ثُمَّ إِنِّي دَعَوْتُهُمْ جِهَارًا</div>
+                    <div class="verse-transliteration">Thumma inni da'awtuhum jihara</div>
+                    <div class="verse-translation">"Then I invited them publicly."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">إِنِّي</span><span class="trans">inni</span><span class="meaning">Indeed I</span></div>
+                        <div class="word-chip"><span class="ar">دَعَوْتُهُمْ</span><span class="trans">da'awtuhum</span><span class="meaning">Invited them</span></div>
+                        <div class="word-chip"><span class="ar">جِهَارًا</span><span class="trans">jihara</span><span class="meaning">Publicly / openly</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh did not give up. When private calling failed, he switched to public proclamation. "Jihara" means openly, loudly, in public gatherings. Ibn Kathir explains that Nuh used public forums and gatherings to deliver his message so it could reach the maximum number of people. As-Sa'di notes that this shows a wise da'i adapts his methods. When one approach does not work, he tries another. Nuh's shift from private to public shows he was strategic, not just repetitive.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">ثُمَّ إِنِّي أَعْلَنتُ لَهُمْ وَأَسْرَرْتُ لَهُمْ إِسْرَارًا</div>
+                    <div class="verse-transliteration">Thumma inni a'lantu lahum wa asrartu lahum israra</div>
+                    <div class="verse-translation">"Then I announced to them and [also] confided to them secretly."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">إِنِّي</span><span class="trans">inni</span><span class="meaning">Indeed I</span></div>
+                        <div class="word-chip"><span class="ar">أَعْلَنتُ</span><span class="trans">a'lantu</span><span class="meaning">Announced publicly</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">To them</span></div>
+                        <div class="word-chip"><span class="ar">وَأَسْرَرْتُ</span><span class="trans">wa asrartu</span><span class="meaning">And confided secretly</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">To them</span></div>
+                        <div class="word-chip"><span class="ar">إِسْرَارًا</span><span class="trans">israra</span><span class="meaning">Secretly / in private</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh combined both approaches: public announcements and private, one-on-one conversations. "A'lantu" is public proclamation and "asrartu" is private, confidential advice. Ibn Kathir explains that Nuh left no method untried. He spoke publicly in gatherings and also approached individuals privately, hoping that a personal touch might soften their hearts. As-Sa'di adds that "israra" (with the cognate accusative) emphasizes the thoroughness of his private efforts. Some people are more receptive in private, away from the peer pressure of the crowd. Nuh understood this and adapted. This is a masterclass in da'wah methodology.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">فَقُلْتُ اسْتَغْفِرُوا رَبَّكُمْ إِنَّهُ كَانَ غَفَّارًا</div>
+                    <div class="verse-transliteration">Faqultus-taghfiru rabbakum innahu kana ghaffara</div>
+                    <div class="verse-translation">"And said, 'Ask forgiveness of your Lord. Indeed, He is ever a Perpetual Forgiver.'"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَقُلْتُ</span><span class="trans">faqultu</span><span class="meaning">And I said</span></div>
+                        <div class="word-chip"><span class="ar">اسْتَغْفِرُوا</span><span class="trans">istaghfiru</span><span class="meaning">Ask forgiveness of</span></div>
+                        <div class="word-chip"><span class="ar">رَبَّكُمْ</span><span class="trans">rabbakum</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّهُ</span><span class="trans">innahu</span><span class="meaning">Indeed He</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Is ever</span></div>
+                        <div class="word-chip"><span class="ar">غَفَّارًا</span><span class="trans">ghaffara</span><span class="meaning">A Perpetual Forgiver</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh shifts his approach. Instead of only warning about punishment, he appeals to their desires. Start with istighfar (seeking forgiveness), because Allah is "Ghaffar," an intensive form meaning He forgives abundantly, repeatedly, and always. Ibn Kathir explains that this verse begins one of the most famous passages in the Quran about the benefits of istighfar. "Ghaffar" is a sighah mubalaghah (intensive form) meaning Allah's forgiveness is not limited or occasional. He forgives continuously and abundantly. As-Sa'di notes that Nuh first established Allah's attribute of forgiveness so his people would feel hope, not despair. No matter how many sins they had committed, Allah's forgiveness could cover them all.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">يُرْسِلِ السَّمَاءَ عَلَيْكُم مِّدْرَارًا</div>
+                    <div class="verse-transliteration">Yursilis-sama'a 'alaykum midrara</div>
+                    <div class="verse-translation">"He will send rain from the sky upon you in [continuing] showers."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يُرْسِلِ</span><span class="trans">yursil</span><span class="meaning">He will send</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءَ</span><span class="trans">as-sama'a</span><span class="meaning">The sky / rain</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْكُم</span><span class="trans">'alaykum</span><span class="meaning">Upon you</span></div>
+                        <div class="word-chip"><span class="ar">مِّدْرَارًا</span><span class="trans">midrara</span><span class="meaning">In abundant showers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The first worldly benefit of istighfar: rain. "Midrara" means abundant, continuous rain, not just a drizzle but showers that bring life to the land. Ibn Kathir explains that "as-sama'" here refers to rain (as the sky is the source of rain). "Midrara" is an intensive form meaning the rain will come abundantly and continuously. As-Sa'di connects this to a profound principle: istighfar (seeking forgiveness) is a direct cause of provision and blessings. When a community turns to Allah in repentance, He opens the gates of His mercy upon them. This is why scholars often recommend istighfar for those facing drought, financial hardship, or any difficulty.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">وَيُمْدِدْكُم بِأَمْوَالٍ وَبَنِينَ وَيَجْعَل لَّكُمْ جَنَّاتٍ وَيَجْعَل لَّكُمْ أَنْهَارًا</div>
+                    <div class="verse-transliteration">Wa yumdidkum bi-amwalin wa banina wa yaj'al lakum jannatin wa yaj'al lakum anhara</div>
+                    <div class="verse-translation">"And give you increase in wealth and children and provide for you gardens and provide for you rivers."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيُمْدِدْكُم</span><span class="trans">wa yumdidkum</span><span class="meaning">And give you increase</span></div>
+                        <div class="word-chip"><span class="ar">بِأَمْوَالٍ</span><span class="trans">bi-amwalin</span><span class="meaning">In wealth</span></div>
+                        <div class="word-chip"><span class="ar">وَبَنِينَ</span><span class="trans">wa banina</span><span class="meaning">And children</span></div>
+                        <div class="word-chip"><span class="ar">وَيَجْعَل لَّكُمْ</span><span class="trans">wa yaj'al lakum</span><span class="meaning">And provide for you</span></div>
+                        <div class="word-chip"><span class="ar">جَنَّاتٍ</span><span class="trans">jannatin</span><span class="meaning">Gardens</span></div>
+                        <div class="word-chip"><span class="ar">وَيَجْعَل لَّكُمْ</span><span class="trans">wa yaj'al lakum</span><span class="meaning">And provide for you</span></div>
+                        <div class="word-chip"><span class="ar">أَنْهَارًا</span><span class="trans">anhara</span><span class="meaning">Rivers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>More benefits of istighfar: wealth, children, gardens, and rivers. Nuh promises them everything they desire in this world as a result of turning to Allah. Ibn Kathir explains that "yumdidkum" means Allah will reinforce and increase them. Wealth and children were the two things most valued by the Arabs. Gardens and rivers represent prosperity and abundance. As-Sa'di notes the comprehensive nature of these blessings: rain for agriculture (verse 11), wealth for trade and livelihood, children for legacy and strength, gardens for beauty and sustenance, and rivers for water and irrigation. All of this comes from one simple act: istighfar. This passage is frequently cited by scholars as evidence that seeking forgiveness brings both spiritual and material blessings.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">مَّا لَكُمْ لَا تَرْجُونَ لِلَّهِ وَقَارًا</div>
+                    <div class="verse-transliteration">Ma lakum la tarjuna lillahi waqara</div>
+                    <div class="verse-translation">"What is [the matter] with you that you do not attribute to Allah [due] grandeur?"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">مَّا لَكُمْ</span><span class="trans">ma lakum</span><span class="meaning">What is with you</span></div>
+                        <div class="word-chip"><span class="ar">لَا تَرْجُونَ</span><span class="trans">la tarjuna</span><span class="meaning">You do not attribute / expect</span></div>
+                        <div class="word-chip"><span class="ar">لِلَّهِ</span><span class="trans">lillahi</span><span class="meaning">To Allah</span></div>
+                        <div class="word-chip"><span class="ar">وَقَارًا</span><span class="trans">waqara</span><span class="meaning">Grandeur / dignity</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh expresses astonishment: what is wrong with you that you do not recognize Allah's greatness? "Waqar" means grandeur, dignity, and reverence. Ibn Kathir explains that "tarjuna" here carries the meaning of recognizing, expecting, and hoping. The question is rhetorical, expressing disbelief at their attitude. Ibn Abbas (may Allah be pleased with him) interpreted this as: "What is wrong with you that you do not glorify Allah as He deserves to be glorified?" As-Sa'di explains that this verse rebukes their lack of awe before Allah. How can someone who sees the heavens, the earth, and all of creation not feel a sense of reverence for the One who created it all?</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">وَقَدْ خَلَقَكُمْ أَطْوَارًا</div>
+                    <div class="verse-transliteration">Wa qad khalaqakum atwara</div>
+                    <div class="verse-translation">"While He has created you in stages."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَقَدْ</span><span class="trans">wa qad</span><span class="meaning">While certainly</span></div>
+                        <div class="word-chip"><span class="ar">خَلَقَكُمْ</span><span class="trans">khalaqakum</span><span class="meaning">He created you</span></div>
+                        <div class="word-chip"><span class="ar">أَطْوَارًا</span><span class="trans">atwara</span><span class="meaning">In stages</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah created humans through stages: a drop of fluid, a clinging clot, a lump of flesh, then bones, then clothed with flesh, then a new creation. "Atwara" is the plural of "tawr" meaning a stage or phase. Ibn Kathir explains that this refers to the stages of creation in the womb: nutfah (sperm-drop), alaqah (clot), mudghah (lump), then formation of bones, flesh, and spirit. As-Sa'di points out that the fact that Allah created you through these intricate, progressive stages is itself proof of His power and wisdom. Each stage is a miracle. How can you witness this and still not acknowledge His grandeur?</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">أَلَمْ تَرَوْا كَيْفَ خَلَقَ اللَّهُ سَبْعَ سَمَاوَاتٍ طِبَاقًا</div>
+                    <div class="verse-transliteration">Alam taraw kayfa khalaqal-lahu sab'a samawatin tibaqa</div>
+                    <div class="verse-translation">"Do you not see how Allah has created seven heavens in layers?"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَمْ تَرَوْا</span><span class="trans">alam taraw</span><span class="meaning">Do you not see</span></div>
+                        <div class="word-chip"><span class="ar">كَيْفَ</span><span class="trans">kayfa</span><span class="meaning">How</span></div>
+                        <div class="word-chip"><span class="ar">خَلَقَ اللَّهُ</span><span class="trans">khalaqal-lahu</span><span class="meaning">Allah has created</span></div>
+                        <div class="word-chip"><span class="ar">سَبْعَ</span><span class="trans">sab'a</span><span class="meaning">Seven</span></div>
+                        <div class="word-chip"><span class="ar">سَمَاوَاتٍ</span><span class="trans">samawatin</span><span class="meaning">Heavens</span></div>
+                        <div class="word-chip"><span class="ar">طِبَاقًا</span><span class="trans">tibaqa</span><span class="meaning">In layers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh now directs their attention to the cosmos. "Tibaqa" means layered one on top of another, perfectly aligned. Ibn Kathir explains that the seven heavens are stacked in layers, each one above the other, with a vast distance between them. This is a sign of Allah's immense power: creating structures of such magnitude and perfection. As-Sa'di notes that Nuh uses the rhetorical question "alam taraw" (do you not see?) to make them look up and think. The evidence is right above their heads. Seven heavens, perfectly constructed, without any flaw or crack. This is not random; it is the work of an all-powerful Creator.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">وَجَعَلَ الْقَمَرَ فِيهِنَّ نُورًا وَجَعَلَ الشَّمْسَ سِرَاجًا</div>
+                    <div class="verse-transliteration">Wa ja'alal-qamara fihinna nuran wa ja'alash-shamsa siraja</div>
+                    <div class="verse-translation">"And made the moon therein a [reflected] light and made the sun a burning lamp."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَجَعَلَ</span><span class="trans">wa ja'ala</span><span class="meaning">And He made</span></div>
+                        <div class="word-chip"><span class="ar">الْقَمَرَ</span><span class="trans">al-qamara</span><span class="meaning">The moon</span></div>
+                        <div class="word-chip"><span class="ar">فِيهِنَّ</span><span class="trans">fihinna</span><span class="meaning">Therein / among them</span></div>
+                        <div class="word-chip"><span class="ar">نُورًا</span><span class="trans">nuran</span><span class="meaning">A light</span></div>
+                        <div class="word-chip"><span class="ar">وَجَعَلَ</span><span class="trans">wa ja'ala</span><span class="meaning">And He made</span></div>
+                        <div class="word-chip"><span class="ar">الشَّمْسَ</span><span class="trans">ash-shamsa</span><span class="meaning">The sun</span></div>
+                        <div class="word-chip"><span class="ar">سِرَاجًا</span><span class="trans">siraja</span><span class="meaning">A burning lamp</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The moon is described as "nur" (light) and the sun as "siraj" (lamp). These are two different Arabic words with distinct meanings. Ibn Kathir explains that "nur" refers to reflected, cool light, while "siraj" refers to a blazing, self-generating light source. Remarkably, modern science confirms that the moon reflects light while the sun generates its own. As-Sa'di notes that the precision of Quranic language is itself a miracle. The Quran never calls the moon a "siraj" or the sun a "nur." Each word is chosen with divine precision. The moon lights up the night gently for travelers and worshippers, while the sun provides heat and energy for life during the day.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">وَاللَّهُ أَنبَتَكُم مِّنَ الْأَرْضِ نَبَاتًا</div>
+                    <div class="verse-transliteration">Wallahu anbatakum minal-ardi nabata</div>
+                    <div class="verse-translation">"And Allah has caused you to grow from the earth a [progressive] growth."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاللَّهُ</span><span class="trans">wallahu</span><span class="meaning">And Allah</span></div>
+                        <div class="word-chip"><span class="ar">أَنبَتَكُم</span><span class="trans">anbatakum</span><span class="meaning">Caused you to grow</span></div>
+                        <div class="word-chip"><span class="ar">مِّنَ الْأَرْضِ</span><span class="trans">minal-ardi</span><span class="meaning">From the earth</span></div>
+                        <div class="word-chip"><span class="ar">نَبَاتًا</span><span class="trans">nabata</span><span class="meaning">A [progressive] growth</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah caused humans to grow from the earth like plants grow from soil. "Anbatakum" uses the verb for plant growth applied to humans. Ibn Kathir explains that this refers to the creation of Adam (peace be upon him) from clay/earth, and by extension all of humanity, since our sustenance comes from the earth. The food we eat comes from the soil, becomes part of us, and forms the very cells of our bodies. As-Sa'di notes the beautiful metaphor: just as plants grow from the earth through stages (seed, sprout, stem, leaves, fruit), humans also grow through stages. The earth is our origin and our sustenance. This should make us humble.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">ثُمَّ يُعِيدُكُمْ فِيهَا وَيُخْرِجُكُمْ إِخْرَاجًا</div>
+                    <div class="verse-transliteration">Thumma yu'idukum fiha wa yukhrijukum ikhraja</div>
+                    <div class="verse-translation">"Then He will return you into it and extract you [another] extraction."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">يُعِيدُكُمْ</span><span class="trans">yu'idukum</span><span class="meaning">He will return you</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Into it (the earth)</span></div>
+                        <div class="word-chip"><span class="ar">وَيُخْرِجُكُمْ</span><span class="trans">wa yukhrijukum</span><span class="meaning">And extract you</span></div>
+                        <div class="word-chip"><span class="ar">إِخْرَاجًا</span><span class="trans">ikhraja</span><span class="meaning">An [another] extraction</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The cycle of life: from the earth you came, to the earth you return (burial), and from the earth you will be brought out again (resurrection). Ibn Kathir explains that "yu'idukum fiha" refers to burial after death, and "yukhrijukum" refers to resurrection on the Day of Judgment. "Ikhraja" (with the cognate accusative) emphasizes the certainty and completeness of this extraction. As-Sa'di notes the beautiful symmetry: earth is our origin, our temporary resting place, and the place from which we will be resurrected. This three-stage connection to the earth reminds us that we are not permanent residents of this world. We are travelers passing through.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَاللَّهُ جَعَلَ لَكُمُ الْأَرْضَ بِسَاطًا</div>
+                    <div class="verse-transliteration">Wallahu ja'ala lakumul-arda bisata</div>
+                    <div class="verse-translation">"And Allah has made for you the earth an expanse."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاللَّهُ</span><span class="trans">wallahu</span><span class="meaning">And Allah</span></div>
+                        <div class="word-chip"><span class="ar">جَعَلَ لَكُمُ</span><span class="trans">ja'ala lakum</span><span class="meaning">Has made for you</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرْضَ</span><span class="trans">al-arda</span><span class="meaning">The earth</span></div>
+                        <div class="word-chip"><span class="ar">بِسَاطًا</span><span class="trans">bisata</span><span class="meaning">An expanse / spread out</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah spread the earth out like a carpet for humans to live on. "Bisata" comes from "basat" meaning to spread out, like spreading a carpet or a mat. Ibn Kathir explains that Allah made the earth stable and flat enough for human habitation. It is firm under your feet, not shaking or tilting, so you can build homes, plant crops, and travel. As-Sa'di notes that the earth being an "expanse" is a blessing we take for granted. Imagine if the earth were unstable, or too mountainous to traverse, or constantly shifting. Allah designed it perfectly for human life.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">لِّتَسْلُكُوا مِنْهَا سُبُلًا فِجَاجًا</div>
+                    <div class="verse-transliteration">Litasluku minha subulan fijaja</div>
+                    <div class="verse-translation">"That you may follow therein roads of passage."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِّتَسْلُكُوا</span><span class="trans">litasluku</span><span class="meaning">That you may follow</span></div>
+                        <div class="word-chip"><span class="ar">مِنْهَا</span><span class="trans">minha</span><span class="meaning">Therein / from it</span></div>
+                        <div class="word-chip"><span class="ar">سُبُلًا</span><span class="trans">subulan</span><span class="meaning">Roads / paths</span></div>
+                        <div class="word-chip"><span class="ar">فِجَاجًا</span><span class="trans">fijaja</span><span class="meaning">Wide / spacious passages</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The purpose of the earth being spread out: so you can travel through wide roads and passages. "Fijaj" means wide, spacious paths between mountains and valleys. Ibn Kathir explains that Allah placed natural pathways through mountains and between lands so people could travel for trade, pilgrimage, and seeking knowledge. As-Sa'di notes that "subul fijaja" (wide roads) highlights how Allah made travel possible and even comfortable. The earth is not just habitable; it is traversable. This is another blessing that points to Allah's care and planning for human needs.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">قَالَ نُوحٌ رَّبِّ إِنَّهُمْ عَصَوْنِي وَاتَّبَعُوا مَن لَّمْ يَزِدْهُ مَالُهُ وَوَلَدُهُ إِلَّا خَسَارًا</div>
+                    <div class="verse-transliteration">Qala Nuhur-rabbi innahum 'asawni wattaba'u man lam yazidhu maluhu wa waladuhu illa khasara</div>
+                    <div class="verse-translation">Nuh said, "My Lord, indeed they have disobeyed me and followed him whose wealth and children will not increase him except in loss."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قَالَ نُوحٌ</span><span class="trans">qala Nuh</span><span class="meaning">Nuh said</span></div>
+                        <div class="word-chip"><span class="ar">رَّبِّ</span><span class="trans">rabbi</span><span class="meaning">My Lord</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّهُمْ</span><span class="trans">innahum</span><span class="meaning">Indeed they</span></div>
+                        <div class="word-chip"><span class="ar">عَصَوْنِي</span><span class="trans">'asawni</span><span class="meaning">Disobeyed me</span></div>
+                        <div class="word-chip"><span class="ar">وَاتَّبَعُوا</span><span class="trans">wattaba'u</span><span class="meaning">And followed</span></div>
+                        <div class="word-chip"><span class="ar">مَن لَّمْ يَزِدْهُ</span><span class="trans">man lam yazidhu</span><span class="meaning">Him whose ... did not increase him</span></div>
+                        <div class="word-chip"><span class="ar">مَالُهُ</span><span class="trans">maluhu</span><span class="meaning">His wealth</span></div>
+                        <div class="word-chip"><span class="ar">وَوَلَدُهُ</span><span class="trans">wa waladuhu</span><span class="meaning">And his children</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا خَسَارًا</span><span class="trans">illa khasara</span><span class="meaning">Except in loss</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh reports to Allah: my people disobeyed me and followed wealthy leaders whose wealth and children only increased them in loss. "Khasar" means loss, ruin, destruction. Ibn Kathir explains that the common people followed the elite and wealthy among them, thinking their wealth and status meant they were on the right path. But in reality, their wealth and children only increased their arrogance and distanced them further from the truth. As-Sa'di notes a powerful lesson: wealth and children are not signs of Allah's pleasure. They can be a test that leads to ruin if they distract a person from Allah's obedience. The very things they thought were blessings became curses because they used them to oppose the truth.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">وَمَكَرُوا مَكْرًا كُبَّارًا</div>
+                    <div class="verse-transliteration">Wa makaru makran kubbara</div>
+                    <div class="verse-translation">"And they conspired an immense conspiracy."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَكَرُوا</span><span class="trans">wa makaru</span><span class="meaning">And they conspired</span></div>
+                        <div class="word-chip"><span class="ar">مَكْرًا</span><span class="trans">makran</span><span class="meaning">A conspiracy / plot</span></div>
+                        <div class="word-chip"><span class="ar">كُبَّارًا</span><span class="trans">kubbara</span><span class="meaning">Immense / enormous</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>They did not just passively reject; they actively plotted against Nuh and the message. "Kubbara" is an intensified form of "kabir" (big), meaning their conspiracy was enormous, far-reaching, and deeply rooted. Ibn Kathir explains that their "makr" (plotting) included threatening believers, spreading propaganda against Nuh, and using their social influence to prevent people from listening to him. As-Sa'di notes that "kubbara" is the most intensive form possible in Arabic, beyond "kabir" and even "akbar." This tells us their plotting was of the highest degree. They pulled out every trick to fight the truth.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">وَقَالُوا لَا تَذَرُنَّ آلِهَتَكُمْ وَلَا تَذَرُنَّ وَدًّا وَلَا سُوَاعًا وَلَا يَغُوثَ وَيَعُوقَ وَنَسْرًا</div>
+                    <div class="verse-transliteration">Wa qalu la tadharunna alihatakum wa la tadharunna Waddan wa la Suwa'an wa la Yaghuth wa Ya'uqa wa Nasra</div>
+                    <div class="verse-translation">"And said, 'Never leave your gods and never leave Wadd or Suwa' or Yaghuth and Ya'uq and Nasr.'"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَقَالُوا</span><span class="trans">wa qalu</span><span class="meaning">And they said</span></div>
+                        <div class="word-chip"><span class="ar">لَا تَذَرُنَّ</span><span class="trans">la tadharunna</span><span class="meaning">Never leave</span></div>
+                        <div class="word-chip"><span class="ar">آلِهَتَكُمْ</span><span class="trans">alihatakum</span><span class="meaning">Your gods</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا تَذَرُنَّ</span><span class="trans">wa la tadharunna</span><span class="meaning">And never leave</span></div>
+                        <div class="word-chip"><span class="ar">وَدًّا</span><span class="trans">Wadda</span><span class="meaning">Wadd</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا سُوَاعًا</span><span class="trans">wa la Suwa'a</span><span class="meaning">Nor Suwa'</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا يَغُوثَ</span><span class="trans">wa la Yaghuth</span><span class="meaning">Nor Yaghuth</span></div>
+                        <div class="word-chip"><span class="ar">وَيَعُوقَ</span><span class="trans">wa Ya'uq</span><span class="meaning">And Ya'uq</span></div>
+                        <div class="word-chip"><span class="ar">وَنَسْرًا</span><span class="trans">wa Nasra</span><span class="meaning">And Nasr</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The leaders rallied their people to never abandon their idols, naming five specific ones: Wadd, Suwa', Yaghuth, Ya'uq, and Nasr. Ibn Kathir narrates from Ibn Abbas (may Allah be pleased with him) that these were originally names of righteous people from the generation before Nuh. After they died, Shaytan whispered to the people to make images of them to "remember their worship." Over time, the next generation forgot the original purpose and began worshipping the statues themselves. This is reported in Sahih Al-Bukhari (Hadith 4920). As-Sa'di explains that this is the origin story of idol worship on earth. It began with exaggerating the status of righteous people, then making images of them, and finally worshipping those images. This is why Islam strictly forbids making images of prophets or righteous people.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">وَقَدْ أَضَلُّوا كَثِيرًا ۖ وَلَا تَزِدِ الظَّالِمِينَ إِلَّا ضَلَالًا</div>
+                    <div class="verse-transliteration">Wa qad adallu kathiran wa la tazidiz-zalimina illa dalala</div>
+                    <div class="verse-translation">"And already they have misled many. And, [my Lord], do not increase the wrongdoers except in error."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَقَدْ</span><span class="trans">wa qad</span><span class="meaning">And already</span></div>
+                        <div class="word-chip"><span class="ar">أَضَلُّوا</span><span class="trans">adallu</span><span class="meaning">They have misled</span></div>
+                        <div class="word-chip"><span class="ar">كَثِيرًا</span><span class="trans">kathira</span><span class="meaning">Many</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا تَزِدِ</span><span class="trans">wa la tazid</span><span class="meaning">And do not increase</span></div>
+                        <div class="word-chip"><span class="ar">الظَّالِمِينَ</span><span class="trans">az-zalimina</span><span class="meaning">The wrongdoers</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except in</span></div>
+                        <div class="word-chip"><span class="ar">ضَلَالًا</span><span class="trans">dalala</span><span class="meaning">Error / misguidance</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The idols (and the leaders who promoted them) have already misled many people. Nuh now makes a du'a against the wrongdoers: increase them only in misguidance. This is a du'a of a prophet who has exhausted every effort over centuries. Ibn Kathir explains that "adallu kathira" shows the idols were not a minor issue; they corrupted many generations. Nuh's du'a "do not increase them except in error" came after 950 years of patient da'wah. This was not a hasty curse but a considered plea after all hope of their guidance was lost. As-Sa'di explains that a prophet does not make such a du'a lightly. Nuh only made this du'a after Allah informed him that no more of his people would believe (as mentioned in Surah Hud 11:36).</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">مِّمَّا خَطِيئَاتِهِمْ أُغْرِقُوا فَأُدْخِلُوا نَارًا فَلَمْ يَجِدُوا لَهُم مِّن دُونِ اللَّهِ أَنصَارًا</div>
+                    <div class="verse-transliteration">Mimma khati'atihim ughriqu fa-udkhilu naran falam yajidu lahum min dunil-lahi ansara</div>
+                    <div class="verse-translation">"Because of their sins they were drowned and put into the Fire, and they found not for themselves besides Allah [any] helpers."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">مِّمَّا</span><span class="trans">mimma</span><span class="meaning">Because of</span></div>
+                        <div class="word-chip"><span class="ar">خَطِيئَاتِهِمْ</span><span class="trans">khati'atihim</span><span class="meaning">Their sins</span></div>
+                        <div class="word-chip"><span class="ar">أُغْرِقُوا</span><span class="trans">ughriqu</span><span class="meaning">They were drowned</span></div>
+                        <div class="word-chip"><span class="ar">فَأُدْخِلُوا</span><span class="trans">fa-udkhilu</span><span class="meaning">And were put into</span></div>
+                        <div class="word-chip"><span class="ar">نَارًا</span><span class="trans">nara</span><span class="meaning">A Fire</span></div>
+                        <div class="word-chip"><span class="ar">فَلَمْ يَجِدُوا</span><span class="trans">falam yajidu</span><span class="meaning">And they found not</span></div>
+                        <div class="word-chip"><span class="ar">لَهُم</span><span class="trans">lahum</span><span class="meaning">For themselves</span></div>
+                        <div class="word-chip"><span class="ar">مِّن دُونِ اللَّهِ</span><span class="trans">min dunil-lahi</span><span class="meaning">Besides Allah</span></div>
+                        <div class="word-chip"><span class="ar">أَنصَارًا</span><span class="trans">ansara</span><span class="meaning">Any helpers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The consequence: they were drowned in the flood and then entered the Fire. Note the swift transition from drowning to Fire, using "fa" (then immediately). Ibn Kathir explains that "ughriqu" (they were drowned) refers to the Great Flood that destroyed Nuh's people. "Fa-udkhilu nara" (then they were entered into Fire) refers to the punishment of the grave (Barzakh), which begins immediately after death. The use of past tense for future events indicates their certainty. As-Sa'di notes the devastating conclusion: "they found no helpers besides Allah." Their idols, their wealth, their leaders, their children, none of these could save them. When Allah's punishment came, every false support system collapsed.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">وَقَالَ نُوحٌ رَّبِّ لَا تَذَرْ عَلَى الْأَرْضِ مِنَ الْكَافِرِينَ دَيَّارًا</div>
+                    <div class="verse-transliteration">Wa qala Nuhur-rabbi la tadhar 'alal-ardi minal-kafirina dayyara</div>
+                    <div class="verse-translation">"And Nuh said, 'My Lord, do not leave upon the earth from among the disbelievers an inhabitant.'"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَقَالَ نُوحٌ</span><span class="trans">wa qala Nuh</span><span class="meaning">And Nuh said</span></div>
+                        <div class="word-chip"><span class="ar">رَّبِّ</span><span class="trans">rabbi</span><span class="meaning">My Lord</span></div>
+                        <div class="word-chip"><span class="ar">لَا تَذَرْ</span><span class="trans">la tadhar</span><span class="meaning">Do not leave</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى الْأَرْضِ</span><span class="trans">'alal-ardi</span><span class="meaning">Upon the earth</span></div>
+                        <div class="word-chip"><span class="ar">مِنَ الْكَافِرِينَ</span><span class="trans">minal-kafirina</span><span class="meaning">From among the disbelievers</span></div>
+                        <div class="word-chip"><span class="ar">دَيَّارًا</span><span class="trans">dayyara</span><span class="meaning">An inhabitant / a single one</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh makes the ultimate du'a: do not leave a single disbeliever alive on earth. "Dayyar" comes from "dar" (home) and means even a single dweller or inhabitant. Ibn Kathir explains that this du'a came only after Allah revealed to Nuh: "None of your people will believe except those who have already believed" (Hud 11:36). With this divine knowledge, Nuh knew that further da'wah would be futile and that the remaining disbelievers would only corrupt future generations. As-Sa'di adds that Nuh did not make this du'a out of personal anger but out of protective concern for the future of monotheism on earth, as he explains in the next verse.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">إِنَّكَ إِن تَذَرْهُمْ يُضِلُّوا عِبَادَكَ وَلَا يَلِدُوا إِلَّا فَاجِرًا كَفَّارًا</div>
+                    <div class="verse-transliteration">Innaka in tadharhum yudillu 'ibadaka wa la yalidu illa fajiran kaffara</div>
+                    <div class="verse-translation">"Indeed, if You leave them, they will mislead Your servants and not beget except [every] wicked one and [confirmed] disbeliever."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّكَ</span><span class="trans">innaka</span><span class="meaning">Indeed You</span></div>
+                        <div class="word-chip"><span class="ar">إِن تَذَرْهُمْ</span><span class="trans">in tadharhum</span><span class="meaning">If You leave them</span></div>
+                        <div class="word-chip"><span class="ar">يُضِلُّوا</span><span class="trans">yudillu</span><span class="meaning">They will mislead</span></div>
+                        <div class="word-chip"><span class="ar">عِبَادَكَ</span><span class="trans">'ibadaka</span><span class="meaning">Your servants</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا يَلِدُوا</span><span class="trans">wa la yalidu</span><span class="meaning">And they will not beget</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">فَاجِرًا</span><span class="trans">fajira</span><span class="meaning">Wicked / sinful</span></div>
+                        <div class="word-chip"><span class="ar">كَفَّارًا</span><span class="trans">kaffara</span><span class="meaning">Confirmed disbeliever</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Nuh explains his reasoning to Allah: if they are left alive, they will corrupt the believers and raise children who are sinful and deeply disbelieving. "Fajir" means immoral and sinful, "kaffar" is the intensive form of "kafir" meaning deeply, stubbornly disbelieving. Ibn Kathir explains that Nuh knew from Allah's revelation that no more people would believe, and that those who remained would actively work to mislead the few believers. Their children would be raised on shirk and kufr. As-Sa'di notes that Nuh's concern was not personal but for the ummah (community). He was protecting the future of Tawhid on earth. After 950 years, he knew this generation was beyond hope, and leaving them would only poison future generations.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">رَّبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِمَن دَخَلَ بَيْتِيَ مُؤْمِنًا وَلِلْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ وَلَا تَزِدِ الظَّالِمِينَ إِلَّا تَبَارًا</div>
+                    <div class="verse-transliteration">Rabbighfir li wa liwalidayya wa liman dakhala baytiya mu'minan wa lil-mu'minina wal-mu'minati wa la tazidiz-zalimina illa tabara</div>
+                    <div class="verse-translation">"My Lord, forgive me and my parents and whoever enters my house a believer and the believing men and believing women. And do not increase the wrongdoers except in destruction."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">رَّبِّ</span><span class="trans">rabbi</span><span class="meaning">My Lord</span></div>
+                        <div class="word-chip"><span class="ar">اغْفِرْ لِي</span><span class="trans">ighfir li</span><span class="meaning">Forgive me</span></div>
+                        <div class="word-chip"><span class="ar">وَلِوَالِدَيَّ</span><span class="trans">wa liwalidayya</span><span class="meaning">And my parents</span></div>
+                        <div class="word-chip"><span class="ar">وَلِمَن دَخَلَ</span><span class="trans">wa liman dakhala</span><span class="meaning">And whoever enters</span></div>
+                        <div class="word-chip"><span class="ar">بَيْتِيَ</span><span class="trans">baytiya</span><span class="meaning">My house</span></div>
+                        <div class="word-chip"><span class="ar">مُؤْمِنًا</span><span class="trans">mu'minan</span><span class="meaning">As a believer</span></div>
+                        <div class="word-chip"><span class="ar">وَلِلْمُؤْمِنِينَ</span><span class="trans">wa lil-mu'minina</span><span class="meaning">And the believing men</span></div>
+                        <div class="word-chip"><span class="ar">وَالْمُؤْمِنَاتِ</span><span class="trans">wal-mu'minati</span><span class="meaning">And the believing women</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا تَزِدِ</span><span class="trans">wa la tazid</span><span class="meaning">And do not increase</span></div>
+                        <div class="word-chip"><span class="ar">الظَّالِمِينَ</span><span class="trans">az-zalimina</span><span class="meaning">The wrongdoers</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except in</span></div>
+                        <div class="word-chip"><span class="ar">تَبَارًا</span><span class="trans">tabara</span><span class="meaning">Destruction / ruin</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah closes with one of the most comprehensive du'as in the Quran. Nuh asks forgiveness for himself first (showing humility even though he is a prophet), then his parents, then whoever enters his house as a believer, then all believing men and women until the Day of Judgment, and finally asks that the wrongdoers be increased only in destruction. Ibn Kathir explains that "baytiya" (my house) can mean his actual home, his masjid, or the ark (the ship that carried the believers). "Tabara" means complete destruction and ruin. As-Sa'di notes the beautiful structure of this du'a: it starts with the individual (himself), expands to family (parents), then to the immediate community (his household), then to the entire ummah of believers (all believing men and women of all time). This teaches us to include others in our du'as and to pray for all believers. The surah begins with a mission of mercy (warning before punishment) and ends with a du'a of mercy (forgiveness for believers) and justice (destruction for oppressors).</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>Patience in da'wah is a prophetic quality.</strong> Nuh called his people for 950 years without giving up. He tried every method: public, private, night, day, warnings, incentives. This is the ultimate model of persistence. If you are calling people to good, never measure success by immediate results.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Istighfar is the key to worldly and spiritual blessings.</strong> Verses 10-12 teach that seeking forgiveness from Allah brings rain, wealth, children, gardens, and rivers. Scholars throughout history have recommended istighfar for anyone facing difficulty, poverty, or drought. This is one of the most practical lessons in the entire Quran.</div></li>
+                    <li><span class="bullet">03</span><div><strong>Arrogance is the deadliest spiritual disease.</strong> Nuh's people did not reject the truth because of lack of evidence. They rejected it out of arrogance, stubbornly covering their ears and faces. Arrogance prevents a person from accepting the truth even when it is clear and obvious.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Wealth and status are not signs of truth.</strong> The people followed wealthy leaders whose riches only increased them in loss. In every age, people are tempted to follow the rich and powerful, assuming their success means they are right. This surah corrects that misconception.</div></li>
+                    <li><span class="bullet">05</span><div><strong>Idol worship began with exaggerating righteous people.</strong> The five idols mentioned were originally names of righteous men. Shaytan led people to make images of them, then to worship those images. This is why Islam prohibits making images of prophets and righteous people, and why excessive praise of anyone besides Allah is dangerous.</div></li>
+                    <li><span class="bullet">06</span><div><strong>Include all believers in your du'as.</strong> Nuh's final du'a includes himself, his parents, his household, and all believing men and women of all time. This teaches generosity in supplication and reminds us that we are part of a larger ummah that transcends time and place.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih Al-Bukhari (Hadith 4920 - origin of idol worship from Ibn Abbas), Surah Hud 11:36 (Allah's revelation to Nuh that no more would believe), Surah Al-Ankabut 29:14 (950 years of da'wah). All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 71, totalVerses: 28 });
+    }
+    </script>
+</body>
+</html>

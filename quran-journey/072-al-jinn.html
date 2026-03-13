@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Jinn - The Jinn | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 72 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْجِنِّ</div>
+        <h1>Surah Al-Jinn</h1>
+        <p>The Jinn - 28 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">72</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">28</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">286</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Jinn</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Jinn, Tawhid & The Unseen</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Jinn was revealed in Makkah and gives us a rare, direct window into the <span class="highlight">world of the jinn and their response to the Quran</span>. The name "Al-Jinn" refers to the unseen beings created from smokeless fire, who, like humans, have free will to believe or disbelieve. This surah records their testimony after hearing the Prophet Muhammad (peace be upon him) recite the Quran.</p>
+                <p>The surah opens with a divine instruction: <span class="highlight">"Say: It has been revealed to me that a group of jinn listened and said, 'We have heard a wonderful Quran.'"</span> The jinn were so moved by the Quran's message that they immediately believed and declared they would never associate partners with their Lord. They acknowledged that Allah has taken neither wife nor son, and that the foolish among them had been speaking outrageous lies about Allah.</p>
+                <div class="important">
+                    <p>Ibn Kathir narrates the background of this event: The Prophet (peace be upon him) was returning from Ta'if, where he had been rejected and stoned by the people. On his way back, he stopped at Nakhlah and prayed the night prayer (or recited Quran during Fajr). A group of jinn passed by, heard the recitation, and were deeply moved. They returned to their people as warners. This account is supported by narrations in Sahih Bukhari and Sahih Muslim from Ibn Abbas (may Allah be pleased with him).</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Introduction to Surah Al-Jinn; Sahih Bukhari, Sahih Muslim</p>
+                </div>
+                <p>The middle section reveals that <span class="highlight">some humans used to seek refuge with the jinn</span>, which only increased them in burden and sin. The jinn also reveal that they had tried to reach the heavens to eavesdrop on divine decrees but found it filled with stern guards and burning flames (shooting stars), indicating the coming of a new prophet.</p>
+                <p>The final section shifts to the Prophet (peace be upon him) being commanded to declare the core message of Tawhid: <span class="highlight">the mosques belong to Allah alone</span>, he possesses no power to harm or benefit anyone on his own, and the knowledge of the unseen belongs exclusively to Allah. The surah concludes with Allah's protection of His revelation through guardian angels sent before and behind His messengers.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">قُلْ أُوحِيَ إِلَيَّ أَنَّهُ اسْتَمَعَ نَفَرٌ مِّنَ الْجِنِّ فَقَالُوا إِنَّا سَمِعْنَا قُرْآنًا عَجَبًا</div>
+                    <div class="verse-transliteration">Qul uhiya ilayya annahu istama'a nafarun minal-jinni faqalu inna sami'na qur'anan 'ajaba</div>
+                    <div class="verse-translation">Say, [O Muhammad], "It has been revealed to me that a group of the jinn listened and said, 'Indeed, we have heard an amazing Quran.'"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
+                        <div class="word-chip"><span class="ar">أُوحِيَ</span><span class="trans">uhiya</span><span class="meaning">It has been revealed</span></div>
+                        <div class="word-chip"><span class="ar">إِلَيَّ</span><span class="trans">ilayya</span><span class="meaning">To me</span></div>
+                        <div class="word-chip"><span class="ar">أَنَّهُ</span><span class="trans">annahu</span><span class="meaning">That indeed</span></div>
+                        <div class="word-chip"><span class="ar">اسْتَمَعَ</span><span class="trans">istama'a</span><span class="meaning">Listened</span></div>
+                        <div class="word-chip"><span class="ar">نَفَرٌ</span><span class="trans">nafarun</span><span class="meaning">A group</span></div>
+                        <div class="word-chip"><span class="ar">مِّنَ الْجِنِّ</span><span class="trans">minal-jinni</span><span class="meaning">Of the jinn</span></div>
+                        <div class="word-chip"><span class="ar">فَقَالُوا</span><span class="trans">faqalu</span><span class="meaning">And they said</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed we</span></div>
+                        <div class="word-chip"><span class="ar">سَمِعْنَا</span><span class="trans">sami'na</span><span class="meaning">Have heard</span></div>
+                        <div class="word-chip"><span class="ar">قُرْآنًا</span><span class="trans">qur'anan</span><span class="meaning">A Quran</span></div>
+                        <div class="word-chip"><span class="ar">عَجَبًا</span><span class="trans">'ajaba</span><span class="meaning">Amazing / wonderful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah opens with Allah commanding the Prophet (peace be upon him) to share what was revealed to him: a group of jinn listened to his recitation and were astonished. The word "nafarun" refers to a small group, typically between three and ten. The word "'ajaba" means something wonderful, astounding, and unlike anything they had encountered before. Ibn Kathir explains that this incident occurred when the Prophet was praying at Nakhlah on his return from Ta'if. The jinn did not make themselves visible; the Prophet only learned of their presence through revelation. As-Sa'di notes that the jinn's immediate reaction was one of awe and recognition of the Quran's truth, showing that the Quran's power transcends the human realm.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">يَهْدِي إِلَى الرُّشْدِ فَآمَنَّا بِهِ وَلَن نُّشْرِكَ بِرَبِّنَا أَحَدًا</div>
+                    <div class="verse-transliteration">Yahdi ilar-rushdi fa-amanna bihi wa lan nushrika bi-rabbina ahada</div>
+                    <div class="verse-translation">It guides to the right course, and we have believed in it. And we will never associate with our Lord anyone.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَهْدِي</span><span class="trans">yahdi</span><span class="meaning">It guides</span></div>
+                        <div class="word-chip"><span class="ar">إِلَى الرُّشْدِ</span><span class="trans">ilar-rushdi</span><span class="meaning">To the right course</span></div>
+                        <div class="word-chip"><span class="ar">فَآمَنَّا</span><span class="trans">fa-amanna</span><span class="meaning">So we believed</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">In it</span></div>
+                        <div class="word-chip"><span class="ar">وَلَن</span><span class="trans">wa lan</span><span class="meaning">And never will we</span></div>
+                        <div class="word-chip"><span class="ar">نُّشْرِكَ</span><span class="trans">nushrika</span><span class="meaning">Associate</span></div>
+                        <div class="word-chip"><span class="ar">بِرَبِّنَا</span><span class="trans">bi-rabbina</span><span class="meaning">With our Lord</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدًا</span><span class="trans">ahada</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn explain why they believed: the Quran guides to "ar-rushd," which means the right path, correct guidance, and sound judgment. Their immediate response was faith and a firm commitment to Tawhid (monotheism). "Lan nushrika" uses "lan," the strongest form of negation in Arabic for the future, meaning they will absolutely never commit shirk again. Ibn Kathir explains that these jinn were previously upon misguidance, and the Quran transformed them instantly. As-Sa'di highlights that true faith always produces action: they heard, they believed, and they committed to pure monotheism in one moment.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَأَنَّهُ تَعَالَىٰ جَدُّ رَبِّنَا مَا اتَّخَذَ صَاحِبَةً وَلَا وَلَدًا</div>
+                    <div class="verse-transliteration">Wa annahu ta'ala jaddu rabbina mat-takhadha sahibatan wa la walada</div>
+                    <div class="verse-translation">And [it teaches] that exalted is the nobleness of our Lord; He has not taken a wife or a son.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّهُ</span><span class="trans">wa annahu</span><span class="meaning">And that indeed He</span></div>
+                        <div class="word-chip"><span class="ar">تَعَالَىٰ</span><span class="trans">ta'ala</span><span class="meaning">Exalted is</span></div>
+                        <div class="word-chip"><span class="ar">جَدُّ</span><span class="trans">jaddu</span><span class="meaning">The majesty / greatness</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّنَا</span><span class="trans">rabbina</span><span class="meaning">Of our Lord</span></div>
+                        <div class="word-chip"><span class="ar">مَا اتَّخَذَ</span><span class="trans">mat-takhadha</span><span class="meaning">He has not taken</span></div>
+                        <div class="word-chip"><span class="ar">صَاحِبَةً</span><span class="trans">sahibatan</span><span class="meaning">A wife / companion</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">وَلَدًا</span><span class="trans">walada</span><span class="meaning">A son / child</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn declare that Allah's majesty is far too exalted for Him to have a wife or son. The word "jaddu" means greatness, majesty, and grandeur. "Sahibatan" means a female companion or wife. This verse refutes the beliefs of those who attributed family relationships to Allah, whether the Arab polytheists who claimed the angels were daughters of Allah, or any other group. Ibn Kathir explains that the jinn are testifying to Allah's absolute transcendence above human-like attributes. As-Sa'di notes that the very concept of Allah needing a wife or child implies deficiency and need, which is incompatible with Allah's perfection and self-sufficiency.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">وَأَنَّهُ كَانَ يَقُولُ سَفِيهُنَا عَلَى اللَّهِ شَطَطًا</div>
+                    <div class="verse-transliteration">Wa annahu kana yaqulu safihuna 'alal-lahi shatata</div>
+                    <div class="verse-translation">And that our foolish one [i.e., Iblis] has been saying about Allah an excessive transgression.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّهُ</span><span class="trans">wa annahu</span><span class="meaning">And that indeed</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Used to</span></div>
+                        <div class="word-chip"><span class="ar">يَقُولُ</span><span class="trans">yaqulu</span><span class="meaning">Say</span></div>
+                        <div class="word-chip"><span class="ar">سَفِيهُنَا</span><span class="trans">safihuna</span><span class="meaning">The foolish among us</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى اللَّهِ</span><span class="trans">'alal-lahi</span><span class="meaning">About Allah</span></div>
+                        <div class="word-chip"><span class="ar">شَطَطًا</span><span class="trans">shatata</span><span class="meaning">An outrageous lie / excess</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn acknowledge that the foolish one among them, understood by many scholars to be Iblis (Satan) or those jinn who followed his path, had been saying outrageous lies about Allah. "Safih" means a foolish, ignorant person who lacks wisdom. "Shatata" means something excessively far from the truth, an outrageous transgression. Ibn Kathir explains that this refers to the lies of attributing partners, wife, or children to Allah. As-Sa'di notes that the believing jinn now recognize these claims as foolishness. Once the truth of the Quran reached them, they could clearly see how absurd and transgressive those old beliefs were.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">وَأَنَّا ظَنَنَّا أَن لَّن تَقُولَ الْإِنسُ وَالْجِنُّ عَلَى اللَّهِ كَذِبًا</div>
+                    <div class="verse-transliteration">Wa anna zananna an lan taqulal-insu wal-jinnu 'alal-lahi kadhiba</div>
+                    <div class="verse-translation">And we had thought that mankind and the jinn would never speak about Allah a lie.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">ظَنَنَّا</span><span class="trans">zananna</span><span class="meaning">Had thought / assumed</span></div>
+                        <div class="word-chip"><span class="ar">أَن لَّن</span><span class="trans">an lan</span><span class="meaning">That never would</span></div>
+                        <div class="word-chip"><span class="ar">تَقُولَ</span><span class="trans">taqula</span><span class="meaning">Speak / say</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسُ</span><span class="trans">al-insu</span><span class="meaning">Mankind</span></div>
+                        <div class="word-chip"><span class="ar">وَالْجِنُّ</span><span class="trans">wal-jinnu</span><span class="meaning">And the jinn</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى اللَّهِ</span><span class="trans">'alal-lahi</span><span class="meaning">About Allah</span></div>
+                        <div class="word-chip"><span class="ar">كَذِبًا</span><span class="trans">kadhiba</span><span class="meaning">A lie</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn confess their naivety: they had assumed that no one, whether human or jinn, would dare lie about Allah. They took the false claims at face value because they could not imagine someone fabricating lies about the Creator. Ibn Kathir explains that this shows how the jinn were deceived by blind trust. They followed the claims of their leaders without verifying them against the truth. As-Sa'di draws a powerful lesson: this is how misguidance spreads. People assume their leaders, elders, or religious figures would never lie about God, so they follow without questioning. The Quran shattered that assumption for the jinn.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">وَأَنَّهُ كَانَ رِجَالٌ مِّنَ الْإِنسِ يَعُوذُونَ بِرِجَالٍ مِّنَ الْجِنِّ فَزَادُوهُمْ رَهَقًا</div>
+                    <div class="verse-transliteration">Wa annahu kana rijalun minal-insi ya'udhuna bi-rijalin minal-jinni fazaduhum rahaqa</div>
+                    <div class="verse-translation">And there were men from mankind who sought refuge in men from the jinn, so they [only] increased them in burden.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّهُ</span><span class="trans">wa annahu</span><span class="meaning">And that indeed</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">There were</span></div>
+                        <div class="word-chip"><span class="ar">رِجَالٌ</span><span class="trans">rijalun</span><span class="meaning">Men</span></div>
+                        <div class="word-chip"><span class="ar">مِّنَ الْإِنسِ</span><span class="trans">minal-insi</span><span class="meaning">From mankind</span></div>
+                        <div class="word-chip"><span class="ar">يَعُوذُونَ</span><span class="trans">ya'udhuna</span><span class="meaning">Used to seek refuge</span></div>
+                        <div class="word-chip"><span class="ar">بِرِجَالٍ</span><span class="trans">bi-rijalin</span><span class="meaning">With men</span></div>
+                        <div class="word-chip"><span class="ar">مِّنَ الْجِنِّ</span><span class="trans">minal-jinni</span><span class="meaning">From the jinn</span></div>
+                        <div class="word-chip"><span class="ar">فَزَادُوهُمْ</span><span class="trans">fazaduhum</span><span class="meaning">So they increased them</span></div>
+                        <div class="word-chip"><span class="ar">رَهَقًا</span><span class="trans">rahaqa</span><span class="meaning">In burden / sin / fear</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse exposes a pre-Islamic practice where Arabs would seek protection from jinn when camping in desolate areas. They would say things like "I seek refuge with the master of this valley from the foolish among his subjects." The word "rahaqa" means overburdening, sin, and oppression. Ibn Kathir explains that when humans sought refuge with jinn instead of Allah, it gave the jinn a sense of power and superiority, making them more arrogant and the humans more fearful and dependent. As-Sa'di emphasizes that seeking protection from anyone other than Allah only increases a person's anxiety and distance from Allah's true protection. This is a fundamental lesson about Tawhid: refuge belongs to Allah alone.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">وَأَنَّهُمْ ظَنُّوا كَمَا ظَنَنتُمْ أَن لَّن يَبْعَثَ اللَّهُ أَحَدًا</div>
+                    <div class="verse-transliteration">Wa annahum zannu kama zanantum an lan yab'athal-lahu ahada</div>
+                    <div class="verse-translation">And they had thought, as you thought, that Allah would never send anyone [as a messenger].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّهُمْ</span><span class="trans">wa annahum</span><span class="meaning">And that they</span></div>
+                        <div class="word-chip"><span class="ar">ظَنُّوا</span><span class="trans">zannu</span><span class="meaning">Thought / assumed</span></div>
+                        <div class="word-chip"><span class="ar">كَمَا</span><span class="trans">kama</span><span class="meaning">Just as</span></div>
+                        <div class="word-chip"><span class="ar">ظَنَنتُمْ</span><span class="trans">zanantum</span><span class="meaning">You thought</span></div>
+                        <div class="word-chip"><span class="ar">أَن لَّن</span><span class="trans">an lan</span><span class="meaning">That never would</span></div>
+                        <div class="word-chip"><span class="ar">يَبْعَثَ</span><span class="trans">yab'atha</span><span class="meaning">Send / raise</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهُ</span><span class="trans">allahu</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدًا</span><span class="trans">ahada</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The disbelieving humans assumed, just as the disbelieving jinn assumed, that Allah would never send a messenger or resurrect anyone. "Yab'atha" can mean to send (a messenger) or to resurrect (the dead). Some scholars hold both meanings apply. Ibn Kathir explains that this verse shows how disbelief in prophethood and the afterlife was shared between humans and jinn alike. Both groups had convinced themselves there would be no accountability. As-Sa'di notes that this false assumption led to their moral corruption, because when a being believes there is no messenger to guide and no resurrection to account for, they feel free to live without limits.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وَأَنَّا لَمَسْنَا السَّمَاءَ فَوَجَدْنَاهَا مُلِئَتْ حَرَسًا شَدِيدًا وَشُهُبًا</div>
+                    <div class="verse-transliteration">Wa anna lamasnas-sama'a fawajadnaha muli'at harasan shadidan wa shuhuba</div>
+                    <div class="verse-translation">And we have sought [to reach] the heaven but found it filled with powerful guards and burning flames.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">لَمَسْنَا</span><span class="trans">lamasna</span><span class="meaning">Sought to reach / touched</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءَ</span><span class="trans">as-sama'a</span><span class="meaning">The heaven / sky</span></div>
+                        <div class="word-chip"><span class="ar">فَوَجَدْنَاهَا</span><span class="trans">fawajadnaha</span><span class="meaning">And we found it</span></div>
+                        <div class="word-chip"><span class="ar">مُلِئَتْ</span><span class="trans">muli'at</span><span class="meaning">Filled with</span></div>
+                        <div class="word-chip"><span class="ar">حَرَسًا</span><span class="trans">harasan</span><span class="meaning">Guards</span></div>
+                        <div class="word-chip"><span class="ar">شَدِيدًا</span><span class="trans">shadidan</span><span class="meaning">Powerful / stern</span></div>
+                        <div class="word-chip"><span class="ar">وَشُهُبًا</span><span class="trans">wa shuhuba</span><span class="meaning">And burning flames / shooting stars</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn reveal that they used to ascend toward the heavens to eavesdrop on angelic conversations about future events, but now they find the sky heavily guarded. "Lamasna" literally means "we touched" but here it means they attempted to reach. "Harasan shadidan" means stern, powerful guards (angels). "Shuhuba" refers to shooting stars or burning flames that chase away the jinn. Ibn Kathir explains that this increased guarding of the heavens coincided with the advent of Prophet Muhammad (peace be upon him), as Allah intensified the protection of divine revelation. As-Sa'di notes that this is a sign of the Quran's authenticity: the heavens were sealed to prevent the jinn from corrupting the revelation.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">وَأَنَّا كُنَّا نَقْعُدُ مِنْهَا مَقَاعِدَ لِلسَّمْعِ فَمَن يَسْتَمِعِ الْآنَ يَجِدْ لَهُ شِهَابًا رَّصَدًا</div>
+                    <div class="verse-transliteration">Wa anna kunna naq'udu minha maqa'ida lis-sam'i faman yastami'il-ana yajid lahu shihaban rasada</div>
+                    <div class="verse-translation">And we used to sit therein in positions for hearing, but whoever listens now will find a burning flame lying in wait for him.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">كُنَّا</span><span class="trans">kunna</span><span class="meaning">Used to</span></div>
+                        <div class="word-chip"><span class="ar">نَقْعُدُ</span><span class="trans">naq'udu</span><span class="meaning">Sit</span></div>
+                        <div class="word-chip"><span class="ar">مِنْهَا</span><span class="trans">minha</span><span class="meaning">In it / therein</span></div>
+                        <div class="word-chip"><span class="ar">مَقَاعِدَ</span><span class="trans">maqa'ida</span><span class="meaning">Positions / seats</span></div>
+                        <div class="word-chip"><span class="ar">لِلسَّمْعِ</span><span class="trans">lis-sam'i</span><span class="meaning">For hearing</span></div>
+                        <div class="word-chip"><span class="ar">فَمَن</span><span class="trans">faman</span><span class="meaning">But whoever</span></div>
+                        <div class="word-chip"><span class="ar">يَسْتَمِعِ</span><span class="trans">yastami'i</span><span class="meaning">Listens</span></div>
+                        <div class="word-chip"><span class="ar">الْآنَ</span><span class="trans">al-ana</span><span class="meaning">Now</span></div>
+                        <div class="word-chip"><span class="ar">يَجِدْ</span><span class="trans">yajid</span><span class="meaning">Will find</span></div>
+                        <div class="word-chip"><span class="ar">لَهُ</span><span class="trans">lahu</span><span class="meaning">For him</span></div>
+                        <div class="word-chip"><span class="ar">شِهَابًا</span><span class="trans">shihaban</span><span class="meaning">A burning flame</span></div>
+                        <div class="word-chip"><span class="ar">رَّصَدًا</span><span class="trans">rasada</span><span class="meaning">Lying in wait / ambush</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn describe how things have changed. They used to have "seats" in the sky from which they could eavesdrop on the angels' conversations. But now, anyone who tries to listen will find a "shihab rasad," a shooting star specifically targeting them, lying in ambush. Ibn Kathir explains that before the Prophet's mission, the jinn could sometimes steal fragments of heavenly news and pass them to fortune-tellers, mixing one truth with a hundred lies. After the Quran began to be revealed, this was completely blocked. As-Sa'di notes that "rasad" implies an intelligent, targeted pursuit, not random shooting stars, but missiles aimed at specific intruders.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَأَنَّا لَا نَدْرِي أَشَرٌّ أُرِيدَ بِمَن فِي الْأَرْضِ أَمْ أَرَادَ بِهِمْ رَبُّهُمْ رَشَدًا</div>
+                    <div class="verse-transliteration">Wa anna la nadri asharrun urida biman fil-ardi am arada bihim rabbuhum rashada</div>
+                    <div class="verse-translation">And we do not know [therefore] whether evil is intended for those on earth or whether their Lord intends for them a right course.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">لَا نَدْرِي</span><span class="trans">la nadri</span><span class="meaning">Do not know</span></div>
+                        <div class="word-chip"><span class="ar">أَشَرٌّ</span><span class="trans">asharrun</span><span class="meaning">Whether evil</span></div>
+                        <div class="word-chip"><span class="ar">أُرِيدَ</span><span class="trans">urida</span><span class="meaning">Is intended</span></div>
+                        <div class="word-chip"><span class="ar">بِمَن فِي الْأَرْضِ</span><span class="trans">biman fil-ardi</span><span class="meaning">For those on earth</span></div>
+                        <div class="word-chip"><span class="ar">أَمْ</span><span class="trans">am</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">أَرَادَ بِهِمْ</span><span class="trans">arada bihim</span><span class="meaning">Intends for them</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّهُمْ</span><span class="trans">rabbuhum</span><span class="meaning">Their Lord</span></div>
+                        <div class="word-chip"><span class="ar">رَشَدًا</span><span class="trans">rashada</span><span class="meaning">Right guidance</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn honestly admit their ignorance about Allah's plan for the people of earth. They wonder: does the increased guarding of the heavens mean something terrible is coming, or does Allah intend guidance and good for them? This is a beautiful display of humility. Ibn Kathir notes that the jinn, despite being unseen beings with abilities beyond humans, acknowledge the limits of their knowledge. They cannot fathom Allah's decree. As-Sa'di points out that this verse teaches us proper etiquette with Allah's will: when we do not know the wisdom behind events, we should acknowledge our ignorance rather than speculate recklessly.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">وَأَنَّا مِنَّا الصَّالِحُونَ وَمِنَّا دُونَ ذَٰلِكَ كُنَّا طَرَائِقَ قِدَدًا</div>
+                    <div class="verse-transliteration">Wa anna minnas-salihuna wa minna duna dhalika kunna tara'iqa qidada</div>
+                    <div class="verse-translation">And among us are the righteous, and among us are [others] not so; we were [of] divided ways.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">مِنَّا</span><span class="trans">minna</span><span class="meaning">Among us</span></div>
+                        <div class="word-chip"><span class="ar">الصَّالِحُونَ</span><span class="trans">as-salihuna</span><span class="meaning">The righteous</span></div>
+                        <div class="word-chip"><span class="ar">وَمِنَّا</span><span class="trans">wa minna</span><span class="meaning">And among us</span></div>
+                        <div class="word-chip"><span class="ar">دُونَ ذَٰلِكَ</span><span class="trans">duna dhalika</span><span class="meaning">Less than that / other than that</span></div>
+                        <div class="word-chip"><span class="ar">كُنَّا</span><span class="trans">kunna</span><span class="meaning">We were</span></div>
+                        <div class="word-chip"><span class="ar">طَرَائِقَ</span><span class="trans">tara'iqa</span><span class="meaning">Paths / ways</span></div>
+                        <div class="word-chip"><span class="ar">قِدَدًا</span><span class="trans">qidada</span><span class="meaning">Divided / different</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn reveal that they are not a monolithic group. Among them are righteous believers and among them are those who fall short. "Tara'iqa qidada" means different paths, sects, and ways. The word "qidada" comes from "qidda" meaning to cut into pieces, suggesting deep fragmentation. Ibn Kathir explains that just like humans, jinn have Muslims, Christians, Jews, and idol-worshippers among them, with many different sects and beliefs. As-Sa'di highlights the important theological point: jinn have free will and moral responsibility. They are not all evil as some people assume. They, like humans, will be judged according to their choices.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">وَأَنَّا ظَنَنَّا أَن لَّن نُّعْجِزَ اللَّهَ فِي الْأَرْضِ وَلَن نُّعْجِزَهُ هَرَبًا</div>
+                    <div class="verse-transliteration">Wa anna zananna an lan nu'jizal-laha fil-ardi wa lan nu'jizahu haraba</div>
+                    <div class="verse-translation">And we have become certain that we will never cause failure to Allah upon earth, nor can we escape Him by fleeing.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">ظَنَنَّا</span><span class="trans">zananna</span><span class="meaning">Have become certain</span></div>
+                        <div class="word-chip"><span class="ar">أَن لَّن</span><span class="trans">an lan</span><span class="meaning">That never will we</span></div>
+                        <div class="word-chip"><span class="ar">نُّعْجِزَ</span><span class="trans">nu'jiza</span><span class="meaning">Cause failure to / escape</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهَ</span><span class="trans">allaha</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">فِي الْأَرْضِ</span><span class="trans">fil-ardi</span><span class="meaning">Upon the earth</span></div>
+                        <div class="word-chip"><span class="ar">وَلَن</span><span class="trans">wa lan</span><span class="meaning">And never will we</span></div>
+                        <div class="word-chip"><span class="ar">نُّعْجِزَهُ</span><span class="trans">nu'jizahu</span><span class="meaning">Escape Him</span></div>
+                        <div class="word-chip"><span class="ar">هَرَبًا</span><span class="trans">haraba</span><span class="meaning">By fleeing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn express their absolute certainty that they cannot escape Allah's power, whether they stay on earth or try to flee. "Nu'jiza" means to cause someone to fail, to render powerless, or to outrun. "Haraba" means fleeing or running away. Here "zanna" is used in the meaning of certainty (yaqin), not doubt. Ibn Kathir explains that the jinn recognize that Allah's power encompasses everything; no creature can escape Him regardless of their abilities. As-Sa'di notes that despite the jinn's supernatural abilities to travel vast distances and move unseen, they acknowledge that none of this can help them escape Allah's decree. This is true humility before the Creator.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">وَأَنَّا لَمَّا سَمِعْنَا الْهُدَىٰ آمَنَّا بِهِ فَمَن يُؤْمِن بِرَبِّهِ فَلَا يَخَافُ بَخْسًا وَلَا رَهَقًا</div>
+                    <div class="verse-transliteration">Wa anna lamma sami'nal-huda amanna bihi faman yu'min bi-rabbihi fala yakhafu bakhsan wa la rahaqa</div>
+                    <div class="verse-translation">And when we heard the guidance, we believed in it. And whoever believes in his Lord will not fear deprivation or burden.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">لَمَّا</span><span class="trans">lamma</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">سَمِعْنَا</span><span class="trans">sami'na</span><span class="meaning">We heard</span></div>
+                        <div class="word-chip"><span class="ar">الْهُدَىٰ</span><span class="trans">al-huda</span><span class="meaning">The guidance</span></div>
+                        <div class="word-chip"><span class="ar">آمَنَّا بِهِ</span><span class="trans">amanna bihi</span><span class="meaning">We believed in it</span></div>
+                        <div class="word-chip"><span class="ar">فَمَن</span><span class="trans">faman</span><span class="meaning">So whoever</span></div>
+                        <div class="word-chip"><span class="ar">يُؤْمِن</span><span class="trans">yu'min</span><span class="meaning">Believes</span></div>
+                        <div class="word-chip"><span class="ar">بِرَبِّهِ</span><span class="trans">bi-rabbihi</span><span class="meaning">In his Lord</span></div>
+                        <div class="word-chip"><span class="ar">فَلَا يَخَافُ</span><span class="trans">fala yakhafu</span><span class="meaning">Will not fear</span></div>
+                        <div class="word-chip"><span class="ar">بَخْسًا</span><span class="trans">bakhsan</span><span class="meaning">Deprivation / loss</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا رَهَقًا</span><span class="trans">wa la rahaqa</span><span class="meaning">Nor burden / oppression</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A beautiful promise: whoever believes in their Lord has nothing to fear. "Bakhs" means to be shortchanged, to have your reward reduced or taken away. "Rahaq" means to be burdened with injustice or oppression. The believer will never have their good deeds diminished, nor will they be punished for something they did not do. Ibn Kathir explains that this is one of the greatest assurances in the Quran: Allah is perfectly just, and the believer's reward is secure. As-Sa'di adds that faith removes the two fundamental fears: fear of losing what you deserve (bakhs) and fear of being burdened unjustly (rahaq). When you trust Allah, these anxieties dissolve.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">وَأَنَّا مِنَّا الْمُسْلِمُونَ وَمِنَّا الْقَاسِطُونَ فَمَنْ أَسْلَمَ فَأُولَٰئِكَ تَحَرَّوْا رَشَدًا</div>
+                    <div class="verse-transliteration">Wa anna minnal-muslimuna wa minnal-qasituna faman aslama fa-ula'ika taharraw rashada</div>
+                    <div class="verse-translation">And among us are Muslims [in submission to Allah], and among us are the unjust. And whoever has accepted Islam has sought out the right course.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّا</span><span class="trans">wa anna</span><span class="meaning">And that we</span></div>
+                        <div class="word-chip"><span class="ar">مِنَّا</span><span class="trans">minna</span><span class="meaning">Among us</span></div>
+                        <div class="word-chip"><span class="ar">الْمُسْلِمُونَ</span><span class="trans">al-muslimuna</span><span class="meaning">The Muslims / those who submit</span></div>
+                        <div class="word-chip"><span class="ar">وَمِنَّا</span><span class="trans">wa minna</span><span class="meaning">And among us</span></div>
+                        <div class="word-chip"><span class="ar">الْقَاسِطُونَ</span><span class="trans">al-qasituna</span><span class="meaning">The unjust / deviators</span></div>
+                        <div class="word-chip"><span class="ar">فَمَنْ</span><span class="trans">faman</span><span class="meaning">So whoever</span></div>
+                        <div class="word-chip"><span class="ar">أَسْلَمَ</span><span class="trans">aslama</span><span class="meaning">Has submitted (to Islam)</span></div>
+                        <div class="word-chip"><span class="ar">فَأُولَٰئِكَ</span><span class="trans">fa-ula'ika</span><span class="meaning">Then those</span></div>
+                        <div class="word-chip"><span class="ar">تَحَرَّوْا</span><span class="trans">taharraw</span><span class="meaning">Have sought / pursued</span></div>
+                        <div class="word-chip"><span class="ar">رَشَدًا</span><span class="trans">rashada</span><span class="meaning">Right guidance</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The jinn divide themselves into two clear groups: Muslims (those who submit to Allah) and "qasitun" (those who deviate from justice). Note the important Arabic distinction: "qasitun" (with a short 'a') means the unjust and deviant, while "muqsitun" (with 'mu-' prefix) means the just. "Taharraw" means they carefully sought and pursued the right path. Ibn Kathir explains that choosing Islam is an active, deliberate choice to seek truth. It is not passive or accidental. As-Sa'di emphasizes that the word "taharraw" implies effort, investigation, and careful pursuit of the right path, not mere blind following.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">وَأَمَّا الْقَاسِطُونَ فَكَانُوا لِجَهَنَّمَ حَطَبًا</div>
+                    <div class="verse-transliteration">Wa ammal-qasituna fakanu li-jahannama hataba</div>
+                    <div class="verse-translation">But as for the unjust, they will be, for Hell, firewood.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَمَّا</span><span class="trans">wa amma</span><span class="meaning">But as for</span></div>
+                        <div class="word-chip"><span class="ar">الْقَاسِطُونَ</span><span class="trans">al-qasituna</span><span class="meaning">The unjust / deviators</span></div>
+                        <div class="word-chip"><span class="ar">فَكَانُوا</span><span class="trans">fakanu</span><span class="meaning">They will be</span></div>
+                        <div class="word-chip"><span class="ar">لِجَهَنَّمَ</span><span class="trans">li-jahannama</span><span class="meaning">For Hell</span></div>
+                        <div class="word-chip"><span class="ar">حَطَبًا</span><span class="trans">hataba</span><span class="meaning">Firewood / fuel</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A stark, terrifying fate for the unjust: they will be firewood for Hell. "Hatab" is the word for dry wood used as fuel for fire. This means the disbelievers among the jinn (and by extension, humans) will not merely be punished by the Fire; they will be its fuel, feeding its flames. Ibn Kathir explains that this is consistent with other Quranic verses like "fuel of which is men and stones" (2:24). The image is deeply unsettling by design. As-Sa'di notes that the surah presents a clear binary: those who submit to Allah find guidance, while those who deviate become fuel for eternal fire. There is no middle ground in the afterlife.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">وَأَن لَّوِ اسْتَقَامُوا عَلَى الطَّرِيقَةِ لَأَسْقَيْنَاهُم مَّاءً غَدَقًا</div>
+                    <div class="verse-transliteration">Wa al-lawis-taqamu 'alat-tariqati la-asqaynahum ma'an ghadaqa</div>
+                    <div class="verse-translation">And [Allah revealed] that if they had remained straight on the way, We would have given them abundant provision.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَن لَّوِ</span><span class="trans">wa al-law</span><span class="meaning">And that if</span></div>
+                        <div class="word-chip"><span class="ar">اسْتَقَامُوا</span><span class="trans">istaqamu</span><span class="meaning">They had remained straight</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى الطَّرِيقَةِ</span><span class="trans">'alat-tariqati</span><span class="meaning">On the way / path</span></div>
+                        <div class="word-chip"><span class="ar">لَأَسْقَيْنَاهُم</span><span class="trans">la-asqaynahum</span><span class="meaning">We would have given them drink</span></div>
+                        <div class="word-chip"><span class="ar">مَّاءً</span><span class="trans">ma'an</span><span class="meaning">Water</span></div>
+                        <div class="word-chip"><span class="ar">غَدَقًا</span><span class="trans">ghadaqa</span><span class="meaning">Abundant / plentiful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah declares that if the jinn (or humans, as scholars differ) had remained on the straight path, He would have blessed them with abundant provision, symbolized by "ma'an ghadaqa" (abundant water). In the Arabian context, water was the most precious resource, so this metaphor represents all forms of abundance and blessing. Ibn Kathir mentions two scholarly views: some say "at-tariqah" means the path of truth (Islam), meaning obedience brings worldly and spiritual blessings. Others say it refers to the path of disbelief, meaning they would be tested with wealth as a trial. As-Sa'di favors the first interpretation: steadfastness on Allah's path opens the doors of provision from every direction, as promised in Surah Nuh (71:10-12) as well.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">لِّنَفْتِنَهُمْ فِيهِ وَمَن يُعْرِضْ عَن ذِكْرِ رَبِّهِ يَسْلُكْهُ عَذَابًا صَعَدًا</div>
+                    <div class="verse-transliteration">Li-naftinahum fihi wa man yu'rid 'an dhikri rabbihi yasluk-hu 'adhaban sa'ada</div>
+                    <div class="verse-translation">So We might test them therein. And whoever turns away from the remembrance of his Lord, He will put into arduous punishment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِّنَفْتِنَهُمْ</span><span class="trans">li-naftinahum</span><span class="meaning">So that We might test them</span></div>
+                        <div class="word-chip"><span class="ar">فِيهِ</span><span class="trans">fihi</span><span class="meaning">Therein / through it</span></div>
+                        <div class="word-chip"><span class="ar">وَمَن</span><span class="trans">wa man</span><span class="meaning">And whoever</span></div>
+                        <div class="word-chip"><span class="ar">يُعْرِضْ</span><span class="trans">yu'rid</span><span class="meaning">Turns away</span></div>
+                        <div class="word-chip"><span class="ar">عَن ذِكْرِ</span><span class="trans">'an dhikri</span><span class="meaning">From the remembrance of</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّهِ</span><span class="trans">rabbihi</span><span class="meaning">His Lord</span></div>
+                        <div class="word-chip"><span class="ar">يَسْلُكْهُ</span><span class="trans">yasluk-hu</span><span class="meaning">He will put him into</span></div>
+                        <div class="word-chip"><span class="ar">عَذَابًا</span><span class="trans">'adhaban</span><span class="meaning">A punishment</span></div>
+                        <div class="word-chip"><span class="ar">صَعَدًا</span><span class="trans">sa'ada</span><span class="meaning">Arduous / ever-increasing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah explains the purpose of provision: it is a test (fitnah). Wealth and ease are not signs of Allah's pleasure; they are tests of gratitude and obedience. "Sa'ada" means something that climbs, ascends, and becomes increasingly severe. It describes a punishment that keeps getting worse with no relief. Ibn Kathir explains that turning away from "dhikr" (remembrance of Allah) includes abandoning the Quran, prayer, and all forms of remembrance. The punishment for this is uniquely severe: it escalates continuously. As-Sa'di emphasizes the connection: abundant provision is a test, and those who become ungrateful and turn away from Allah's remembrance will face the severest consequence.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">وَأَنَّ الْمَسَاجِدَ لِلَّهِ فَلَا تَدْعُوا مَعَ اللَّهِ أَحَدًا</div>
+                    <div class="verse-transliteration">Wa annal-masajida lillahi fala tad'u ma'al-lahi ahada</div>
+                    <div class="verse-translation">And [He revealed] that the mosques are for Allah, so do not invoke with Allah anyone.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّ</span><span class="trans">wa anna</span><span class="meaning">And that</span></div>
+                        <div class="word-chip"><span class="ar">الْمَسَاجِدَ</span><span class="trans">al-masajida</span><span class="meaning">The mosques / places of prostration</span></div>
+                        <div class="word-chip"><span class="ar">لِلَّهِ</span><span class="trans">lillahi</span><span class="meaning">Are for Allah</span></div>
+                        <div class="word-chip"><span class="ar">فَلَا</span><span class="trans">fala</span><span class="meaning">So do not</span></div>
+                        <div class="word-chip"><span class="ar">تَدْعُوا</span><span class="trans">tad'u</span><span class="meaning">Invoke / call upon</span></div>
+                        <div class="word-chip"><span class="ar">مَعَ اللَّهِ</span><span class="trans">ma'al-lahi</span><span class="meaning">With Allah / alongside Allah</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدًا</span><span class="trans">ahada</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>One of the most powerful verses on Tawhid in the entire Quran. "Masajid" comes from "sujud" (prostration) and can mean mosques, places of worship, or the act of prostration itself. Some scholars say it also refers to the bodily parts used in prostration (forehead, hands, knees, feet). All of these belong to Allah alone. Ibn Kathir explains that this verse prohibits calling upon anyone alongside Allah in places of worship, whether saints, angels, jinn, or any other creation. As-Sa'di makes a broader point: since the mosques and prostration belong exclusively to Allah, then all worship in all its forms must be directed to Him alone. This is the essence of Islam.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَأَنَّهُ لَمَّا قَامَ عَبْدُ اللَّهِ يَدْعُوهُ كَادُوا يَكُونُونَ عَلَيْهِ لِبَدًا</div>
+                    <div class="verse-transliteration">Wa annahu lamma qama 'abdul-lahi yad'uhu kadu yakununa 'alayhi libada</div>
+                    <div class="verse-translation">And that when the Servant of Allah stood up supplicating Him, they almost became about him a compacted mass.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَنَّهُ</span><span class="trans">wa annahu</span><span class="meaning">And that when</span></div>
+                        <div class="word-chip"><span class="ar">لَمَّا</span><span class="trans">lamma</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">قَامَ</span><span class="trans">qama</span><span class="meaning">Stood up</span></div>
+                        <div class="word-chip"><span class="ar">عَبْدُ اللَّهِ</span><span class="trans">'abdul-lahi</span><span class="meaning">The Servant of Allah</span></div>
+                        <div class="word-chip"><span class="ar">يَدْعُوهُ</span><span class="trans">yad'uhu</span><span class="meaning">Calling upon Him / supplicating</span></div>
+                        <div class="word-chip"><span class="ar">كَادُوا</span><span class="trans">kadu</span><span class="meaning">They almost</span></div>
+                        <div class="word-chip"><span class="ar">يَكُونُونَ</span><span class="trans">yakununa</span><span class="meaning">Became</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِ</span><span class="trans">'alayhi</span><span class="meaning">Upon him</span></div>
+                        <div class="word-chip"><span class="ar">لِبَدًا</span><span class="trans">libada</span><span class="meaning">A compacted mass / layers upon layers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>When the Prophet Muhammad (peace be upon him), referred to by the honored title "'Abdul-lah" (the Servant of Allah), stood up to pray and recite the Quran, the jinn crowded around him in amazement, almost piling on top of each other. "Libada" means layers stacked upon layers, a compacted mass pressing together. Ibn Kathir explains that this describes the jinn's overwhelming eagerness to hear the Quran. They were so captivated that they pressed together like layers of felt. As-Sa'di notes that the Prophet is given the highest title here: "the Servant of Allah." This is the most honorable description a human can have, showing that true greatness comes from servitude to Allah, not from worldly status.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">قُلْ إِنَّمَا أَدْعُو رَبِّي وَلَا أُشْرِكُ بِهِ أَحَدًا</div>
+                    <div class="verse-transliteration">Qul innama ad'u rabbi wa la ushriku bihi ahada</div>
+                    <div class="verse-translation">Say, "I only invoke my Lord and do not associate with Him anyone."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّمَا</span><span class="trans">innama</span><span class="meaning">I only / indeed only</span></div>
+                        <div class="word-chip"><span class="ar">أَدْعُو</span><span class="trans">ad'u</span><span class="meaning">I invoke / call upon</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّي</span><span class="trans">rabbi</span><span class="meaning">My Lord</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And I do not</span></div>
+                        <div class="word-chip"><span class="ar">أُشْرِكُ</span><span class="trans">ushriku</span><span class="meaning">Associate</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">With Him</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدًا</span><span class="trans">ahada</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Prophet is commanded to declare his mission in the simplest possible terms: he calls upon Allah alone and associates no one with Him. "Innama" is a restrictive particle meaning "only" or "nothing but." It limits his worship exclusively to Allah. This is the response to the Quraysh's demand that he worship their gods. Ibn Kathir explains that this verse is the Prophet's declaration of pure monotheism to all who oppose him. As-Sa'di notes the beauty of this statement: the Prophet does not argue, debate, or philosophize. He simply states the truth. His entire mission can be summarized in these few words: I worship Allah alone.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">قُلْ إِنِّي لَا أَمْلِكُ لَكُمْ ضَرًّا وَلَا رَشَدًا</div>
+                    <div class="verse-transliteration">Qul inni la amliku lakum darran wa la rashada</div>
+                    <div class="verse-translation">Say, "Indeed, I do not possess for you [the power of] harm or right direction."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
+                        <div class="word-chip"><span class="ar">إِنِّي</span><span class="trans">inni</span><span class="meaning">Indeed I</span></div>
+                        <div class="word-chip"><span class="ar">لَا أَمْلِكُ</span><span class="trans">la amliku</span><span class="meaning">Do not possess / control</span></div>
+                        <div class="word-chip"><span class="ar">لَكُمْ</span><span class="trans">lakum</span><span class="meaning">For you</span></div>
+                        <div class="word-chip"><span class="ar">ضَرًّا</span><span class="trans">darran</span><span class="meaning">Harm</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">رَشَدًا</span><span class="trans">rashada</span><span class="meaning">Right direction / guidance</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Prophet is commanded to make his human limitations absolutely clear: he does not have the power to harm anyone or to guide anyone on his own. "Amliku" means to own, possess, or control. "Darr" is harm or damage, and "rashad" is right guidance. Ibn Kathir explains that this verse crushes any tendency to deify the Prophet. He cannot independently harm or benefit anyone. Only Allah holds that power. As-Sa'di emphasizes that even the greatest of all creation, the Prophet Muhammad (peace be upon him), does not possess independent power. This is a fundamental lesson in Tawhid: no created being, no matter how honored, shares in Allah's divine attributes.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">قُلْ إِنِّي لَن يُجِيرَنِي مِنَ اللَّهِ أَحَدٌ وَلَنْ أَجِدَ مِن دُونِهِ مُلْتَحَدًا</div>
+                    <div class="verse-transliteration">Qul inni lan yujeerani minal-lahi ahadun wa lan ajida min dunihi multahada</div>
+                    <div class="verse-translation">Say, "Indeed, there will never protect me from Allah anyone [if I should disobey], nor will I find in other than Him a refuge."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
+                        <div class="word-chip"><span class="ar">إِنِّي</span><span class="trans">inni</span><span class="meaning">Indeed I</span></div>
+                        <div class="word-chip"><span class="ar">لَن</span><span class="trans">lan</span><span class="meaning">Never will</span></div>
+                        <div class="word-chip"><span class="ar">يُجِيرَنِي</span><span class="trans">yujeerani</span><span class="meaning">Protect me / grant me refuge</span></div>
+                        <div class="word-chip"><span class="ar">مِنَ اللَّهِ</span><span class="trans">minal-lahi</span><span class="meaning">From Allah</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدٌ</span><span class="trans">ahadun</span><span class="meaning">Anyone</span></div>
+                        <div class="word-chip"><span class="ar">وَلَنْ</span><span class="trans">wa lan</span><span class="meaning">And never will I</span></div>
+                        <div class="word-chip"><span class="ar">أَجِدَ</span><span class="trans">ajida</span><span class="meaning">Find</span></div>
+                        <div class="word-chip"><span class="ar">مِن دُونِهِ</span><span class="trans">min dunihi</span><span class="meaning">Other than Him / besides Him</span></div>
+                        <div class="word-chip"><span class="ar">مُلْتَحَدًا</span><span class="trans">multahada</span><span class="meaning">A refuge / shelter</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Even the Prophet himself cannot be protected from Allah by anyone, nor can he find any refuge other than Allah. "Yujeerani" comes from "ijara" meaning to grant protection or asylum. "Multahad" comes from "lahada" meaning to lean toward, to take shelter in. It implies a cave or hiding place. Ibn Kathir explains that if even the Prophet has no protector against Allah and no hiding place from Him, then how can any lesser being? As-Sa'di draws out the powerful implication: if the most honored human being is entirely dependent on Allah, then every other creation is even more so. This verse eliminates all intermediaries between the servant and Allah.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">إِلَّا بَلَاغًا مِّنَ اللَّهِ وَرِسَالَاتِهِ وَمَن يَعْصِ اللَّهَ وَرَسُولَهُ فَإِنَّ لَهُ نَارَ جَهَنَّمَ خَالِدِينَ فِيهَا أَبَدًا</div>
+                    <div class="verse-transliteration">Illa balaghan minal-lahi wa risalatihi wa man ya'sil-laha wa rasulahu fa-inna lahu nara jahannama khalidina fiha abada</div>
+                    <div class="verse-translation">[It is] only a notification from Allah and His messages. And whoever disobeys Allah and His Messenger, then indeed, for him is the fire of Hell; they will abide therein forever.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except / only</span></div>
+                        <div class="word-chip"><span class="ar">بَلَاغًا</span><span class="trans">balaghan</span><span class="meaning">A notification / conveyance</span></div>
+                        <div class="word-chip"><span class="ar">مِّنَ اللَّهِ</span><span class="trans">minal-lahi</span><span class="meaning">From Allah</span></div>
+                        <div class="word-chip"><span class="ar">وَرِسَالَاتِهِ</span><span class="trans">wa risalatihi</span><span class="meaning">And His messages</span></div>
+                        <div class="word-chip"><span class="ar">وَمَن</span><span class="trans">wa man</span><span class="meaning">And whoever</span></div>
+                        <div class="word-chip"><span class="ar">يَعْصِ</span><span class="trans">ya'si</span><span class="meaning">Disobeys</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهَ</span><span class="trans">allaha</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">وَرَسُولَهُ</span><span class="trans">wa rasulahu</span><span class="meaning">And His Messenger</span></div>
+                        <div class="word-chip"><span class="ar">فَإِنَّ لَهُ</span><span class="trans">fa-inna lahu</span><span class="meaning">Then indeed for him</span></div>
+                        <div class="word-chip"><span class="ar">نَارَ جَهَنَّمَ</span><span class="trans">nara jahannama</span><span class="meaning">The fire of Hell</span></div>
+                        <div class="word-chip"><span class="ar">خَالِدِينَ</span><span class="trans">khalidina</span><span class="meaning">Abiding</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">Therein</span></div>
+                        <div class="word-chip"><span class="ar">أَبَدًا</span><span class="trans">abada</span><span class="meaning">Forever</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Prophet clarifies his role: he possesses nothing except the ability to convey Allah's message. "Balagh" means to convey, deliver, and communicate. This is the Prophet's one task: to deliver the message faithfully. The consequence for those who reject is explicitly stated: the fire of Hell, forever. "Khalidina fiha abada" uses two words for permanence: "khalidina" (dwelling permanently) and "abada" (forever, for eternity). Ibn Kathir explains that the Prophet's duty is only to convey; he cannot force belief. As-Sa'di notes that this verse connects the Prophet's humility (he only delivers) with divine authority (the consequence is eternal). The message is from Allah; rejecting it means rejecting Allah Himself.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">حَتَّىٰ إِذَا رَأَوْا مَا يُوعَدُونَ فَسَيَعْلَمُونَ مَنْ أَضْعَفُ نَاصِرًا وَأَقَلُّ عَدَدًا</div>
+                    <div class="verse-transliteration">Hatta idha ra'aw ma yu'aduna fasaya'lamuna man ad'afu nasiran wa aqallu 'adada</div>
+                    <div class="verse-translation">Until, when they see that which they are promised, then they will know who is weaker in helpers and less in number.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">حَتَّىٰ</span><span class="trans">hatta</span><span class="meaning">Until</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">رَأَوْا</span><span class="trans">ra'aw</span><span class="meaning">They see</span></div>
+                        <div class="word-chip"><span class="ar">مَا يُوعَدُونَ</span><span class="trans">ma yu'aduna</span><span class="meaning">What they are promised</span></div>
+                        <div class="word-chip"><span class="ar">فَسَيَعْلَمُونَ</span><span class="trans">fasaya'lamuna</span><span class="meaning">Then they will know</span></div>
+                        <div class="word-chip"><span class="ar">مَنْ</span><span class="trans">man</span><span class="meaning">Who is</span></div>
+                        <div class="word-chip"><span class="ar">أَضْعَفُ</span><span class="trans">ad'afu</span><span class="meaning">Weaker</span></div>
+                        <div class="word-chip"><span class="ar">نَاصِرًا</span><span class="trans">nasiran</span><span class="meaning">In helpers</span></div>
+                        <div class="word-chip"><span class="ar">وَأَقَلُّ</span><span class="trans">wa aqallu</span><span class="meaning">And less / fewer</span></div>
+                        <div class="word-chip"><span class="ar">عَدَدًا</span><span class="trans">'adada</span><span class="meaning">In number</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The disbelievers used to mock the Prophet and his small group of followers, boasting about their own numbers and strength. This verse is a devastating reversal: when they finally see what they were promised (the Day of Judgment or the punishment), they will discover who was truly weaker in helpers and fewer in number. It was them all along. Ibn Kathir explains that the Quraysh's arrogance about their numbers and allies will be shattered on that Day when they find themselves utterly helpless. As-Sa'di notes the rhetorical power: using their own insult against them. They mocked the believers' small numbers, but on the Day of Judgment, no quantity of helpers will save the disbelievers from Allah's decree.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">قُلْ إِنْ أَدْرِي أَقَرِيبٌ مَّا تُوعَدُونَ أَمْ يَجْعَلُ لَهُ رَبِّي أَمَدًا</div>
+                    <div class="verse-transliteration">Qul in adri aqaribun ma tu'aduna am yaj'alu lahu rabbi amada</div>
+                    <div class="verse-translation">Say, "I do not know if what you are promised is near or if my Lord will grant for it a [long] period."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قُلْ</span><span class="trans">qul</span><span class="meaning">Say</span></div>
+                        <div class="word-chip"><span class="ar">إِنْ</span><span class="trans">in</span><span class="meaning">Not / whether</span></div>
+                        <div class="word-chip"><span class="ar">أَدْرِي</span><span class="trans">adri</span><span class="meaning">I know</span></div>
+                        <div class="word-chip"><span class="ar">أَقَرِيبٌ</span><span class="trans">aqaribun</span><span class="meaning">Is near</span></div>
+                        <div class="word-chip"><span class="ar">مَّا تُوعَدُونَ</span><span class="trans">ma tu'aduna</span><span class="meaning">What you are promised</span></div>
+                        <div class="word-chip"><span class="ar">أَمْ</span><span class="trans">am</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">يَجْعَلُ</span><span class="trans">yaj'alu</span><span class="meaning">Will grant / make</span></div>
+                        <div class="word-chip"><span class="ar">لَهُ</span><span class="trans">lahu</span><span class="meaning">For it</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّي</span><span class="trans">rabbi</span><span class="meaning">My Lord</span></div>
+                        <div class="word-chip"><span class="ar">أَمَدًا</span><span class="trans">amada</span><span class="meaning">A [long] period / term</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Prophet is instructed to be honest about what he does not know: the timing of the promised punishment or the Day of Judgment. "Amad" means a distant period of time, a long stretch. The disbelievers used to mockingly ask when the punishment would come, and the Prophet is told to say: I do not know the timing. It could be imminent or far away. That knowledge belongs to Allah alone. Ibn Kathir explains this as a demonstration of prophetic honesty: the Prophet does not claim knowledge of the unseen beyond what Allah reveals to him. As-Sa'di notes that the uncertainty of timing should increase, not decrease, the urgency to prepare. When you do not know when something will arrive, wisdom demands you be ready at all times.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">عَالِمُ الْغَيْبِ فَلَا يُظْهِرُ عَلَىٰ غَيْبِهِ أَحَدًا</div>
+                    <div class="verse-transliteration">'Alimul-ghaybi fala yuzhiru 'ala ghaybihi ahada</div>
+                    <div class="verse-translation">[He is] Knower of the unseen, and He does not disclose His [knowledge of the] unseen to anyone.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَالِمُ</span><span class="trans">'alimu</span><span class="meaning">Knower of</span></div>
+                        <div class="word-chip"><span class="ar">الْغَيْبِ</span><span class="trans">al-ghaybi</span><span class="meaning">The unseen</span></div>
+                        <div class="word-chip"><span class="ar">فَلَا</span><span class="trans">fala</span><span class="meaning">And He does not</span></div>
+                        <div class="word-chip"><span class="ar">يُظْهِرُ</span><span class="trans">yuzhiru</span><span class="meaning">Disclose / reveal</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">To / upon</span></div>
+                        <div class="word-chip"><span class="ar">غَيْبِهِ</span><span class="trans">ghaybihi</span><span class="meaning">His unseen</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدًا</span><span class="trans">ahada</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah is the sole Knower of the unseen (al-ghayb), and He does not reveal this knowledge to just anyone. "Ghayb" encompasses everything hidden from human perception: the future, the angels, Paradise, Hell, the souls of the dead, and all that lies beyond our senses. "Yuzhiru" means to make apparent, to disclose, to grant access. Ibn Kathir explains that this is one of the most important verses on the topic of ghayb: it establishes that knowledge of the unseen is exclusively Allah's domain. No fortune-teller, astrologer, or soothsayer has access to it. As-Sa'di notes that this verse is a death blow to all claims of knowing the future through means other than divine revelation.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">إِلَّا مَنِ ارْتَضَىٰ مِن رَّسُولٍ فَإِنَّهُ يَسْلُكُ مِن بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِ رَصَدًا</div>
+                    <div class="verse-transliteration">Illa manir-tada min rasulin fa-innahu yasluku min bayni yadayhi wa min khalfihi rasada</div>
+                    <div class="verse-translation">Except whom He has approved of messengers, and indeed, He sends before him and behind him observers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">مَنِ</span><span class="trans">man</span><span class="meaning">Whom</span></div>
+                        <div class="word-chip"><span class="ar">ارْتَضَىٰ</span><span class="trans">irtada</span><span class="meaning">He has approved / chosen</span></div>
+                        <div class="word-chip"><span class="ar">مِن رَّسُولٍ</span><span class="trans">min rasulin</span><span class="meaning">Of a messenger</span></div>
+                        <div class="word-chip"><span class="ar">فَإِنَّهُ</span><span class="trans">fa-innahu</span><span class="meaning">Then indeed He</span></div>
+                        <div class="word-chip"><span class="ar">يَسْلُكُ</span><span class="trans">yasluku</span><span class="meaning">Sends / dispatches</span></div>
+                        <div class="word-chip"><span class="ar">مِن بَيْنِ يَدَيْهِ</span><span class="trans">min bayni yadayhi</span><span class="meaning">Before him</span></div>
+                        <div class="word-chip"><span class="ar">وَمِنْ خَلْفِهِ</span><span class="trans">wa min khalfihi</span><span class="meaning">And behind him</span></div>
+                        <div class="word-chip"><span class="ar">رَصَدًا</span><span class="trans">rasada</span><span class="meaning">Observers / guardian angels</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The one exception to the rule of verse 26: Allah reveals some knowledge of the unseen to His chosen messengers. But even then, He sends guardian angels before and behind the messenger to protect the revelation from any corruption or interference by devils. "Irtada" means to approve, to be pleased with, to select. "Rasad" means observers, watchers, guards placed in ambush. Ibn Kathir explains that Allah protects His messengers and their revelation through angelic guards who prevent the jinn from intercepting or distorting the message. As-Sa'di highlights the beautiful system of divine protection: the message comes from Allah, is delivered to the messenger, and is guarded at every step of the way by angels.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">لِّيَعْلَمَ أَن قَدْ أَبْلَغُوا رِسَالَاتِ رَبِّهِمْ وَأَحَاطَ بِمَا لَدَيْهِمْ وَأَحْصَىٰ كُلَّ شَيْءٍ عَدَدًا</div>
+                    <div class="verse-transliteration">Li-ya'lama an qad ablaghu risalati rabbihim wa ahata bima ladayhim wa ahsa kulla shay'in 'adada</div>
+                    <div class="verse-translation">That he may know that they have conveyed the messages of their Lord; and He has encompassed whatever is with them and has enumerated all things in number.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِّيَعْلَمَ</span><span class="trans">li-ya'lama</span><span class="meaning">That He may know / verify</span></div>
+                        <div class="word-chip"><span class="ar">أَن قَدْ</span><span class="trans">an qad</span><span class="meaning">That indeed</span></div>
+                        <div class="word-chip"><span class="ar">أَبْلَغُوا</span><span class="trans">ablaghu</span><span class="meaning">They have conveyed</span></div>
+                        <div class="word-chip"><span class="ar">رِسَالَاتِ</span><span class="trans">risalati</span><span class="meaning">The messages of</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّهِمْ</span><span class="trans">rabbihim</span><span class="meaning">Their Lord</span></div>
+                        <div class="word-chip"><span class="ar">وَأَحَاطَ</span><span class="trans">wa ahata</span><span class="meaning">And He has encompassed</span></div>
+                        <div class="word-chip"><span class="ar">بِمَا لَدَيْهِمْ</span><span class="trans">bima ladayhim</span><span class="meaning">Whatever is with them</span></div>
+                        <div class="word-chip"><span class="ar">وَأَحْصَىٰ</span><span class="trans">wa ahsa</span><span class="meaning">And has enumerated</span></div>
+                        <div class="word-chip"><span class="ar">كُلَّ شَيْءٍ</span><span class="trans">kulla shay'in</span><span class="meaning">All things / everything</span></div>
+                        <div class="word-chip"><span class="ar">عَدَدًا</span><span class="trans">'adada</span><span class="meaning">In number</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah closes with a magnificent statement about Allah's absolute knowledge. The guardian angels ensure the messengers convey the message faithfully, and Allah has encompassed everything with His knowledge and has counted everything in precise number. "Ahata" means to surround, encompass, and know completely from every angle. "Ahsa" means to count precisely, to enumerate with exactness. Ibn Kathir explains that "li-ya'lama" can mean "so that He may make known" or "so that the messenger may know" that the message reached its destination intact. Allah already knows all things. As-Sa'di concludes that this final verse establishes the ultimate comfort: nothing escapes Allah's knowledge. Every atom, every event, every intention has been counted and recorded. This is the foundation of accountability and the source of the believer's peace.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>The Quran's power transcends creation.</strong> The jinn, beings of an entirely different realm, were moved to faith by simply hearing the Quran. This confirms the Quran is not a human product. Its impact crosses the boundaries of species, language, and dimension. If jinn could recognize its truth, what excuse do humans have?</div></li>
+                    <li><span class="bullet">02</span><div><strong>Tawhid is the core message.</strong> Every section of this surah returns to the same point: Allah alone deserves worship, Allah alone has power, Allah alone knows the unseen. The jinn understood this immediately. The mosques belong to Allah alone. The Prophet only calls upon his Lord. No one can protect anyone from Allah.</div></li>
+                    <li><span class="bullet">03</span><div><strong>Seeking refuge in anything other than Allah increases your burden.</strong> The pre-Islamic practice of seeking protection from jinn is a timeless lesson. Whenever we depend on something other than Allah for security, whether it is superstition, astrology, or blind trust in created beings, we only increase our anxiety and distance from true protection.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Blind following leads to misguidance.</strong> The jinn confess they assumed no one would lie about Allah. This is how falsehood spreads: people trust their leaders, elders, or culture without verifying against divine truth. The Quran teaches us to think critically, verify claims, and hold even our deepest assumptions up to the light of revelation.</div></li>
+                    <li><span class="bullet">05</span><div><strong>The unseen belongs to Allah alone.</strong> Fortune-tellers, horoscopes, and all forms of claiming to know the future are directly contradicted by this surah. Allah only reveals aspects of the unseen to His chosen messengers, and even that is guarded by angels. This should liberate us from the anxiety of trying to predict what only Allah controls.</div></li>
+                    <li><span class="bullet">06</span><div><strong>The Prophet's role is to convey, not to compel.</strong> The Prophet himself declared he has no independent power to harm or benefit anyone. His task is to deliver Allah's message faithfully. This teaches us to respect the limits of human authority and to direct all ultimate dependence toward Allah alone.</div></li>
+                    <li><span class="bullet">07</span><div><strong>Provision is a test, not a reward.</strong> Abundance of wealth and resources is explicitly described as a test (fitnah). Those who remain grateful and steadfast on Allah's path are blessed, while those who turn away from His remembrance face ever-increasing punishment. Worldly success is never proof of divine approval.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih Bukhari (narrations of Ibn Abbas about the jinn listening to the Prophet at Nakhlah), Sahih Muslim, At-Tirmidhi. All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 72, totalVerses: 28 });
+    }
+    </script>
+</body>
+</html>

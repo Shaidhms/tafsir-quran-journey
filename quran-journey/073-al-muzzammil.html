@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Muzzammil - The Enshrouded One | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 73 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْمُزَّمِّلِ</div>
+        <h1>Surah Al-Muzzammil</h1>
+        <p>The Enshrouded One - 20 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">73</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">20</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">200</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Enshrouded One</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Night Prayer & Reliance on Allah</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Muzzammil was revealed in the early Makkan period and is one of the earliest surahs revealed to the Prophet Muhammad (peace be upon him). The name "Al-Muzzammil" means <span class="highlight">"The One Wrapped in Garments" or "The Enshrouded One,"</span> referring to the Prophet who would wrap himself in his cloak during the night. This surah establishes the foundational spiritual practice that would sustain the Prophet and his companions through the intense trials ahead: the night prayer (Qiyam al-Layl).</p>
+                <p>The surah opens with a tender yet commanding address: <span class="highlight">"O you who wraps himself [in clothing], arise [to pray] the night, except for a little."</span> Allah is preparing His Messenger for the enormous task of carrying the Quran to humanity. Before the mission comes the training, and that training is standing before Allah in the stillness of the night, reciting His words slowly and deliberately (tarteel).</p>
+                <div class="important">
+                    <p>Ibn Kathir reports that the early Muslims took the night prayer so seriously that when this surah was first revealed, the companions would stand in prayer until their feet swelled. They prayed for nearly a year in this manner until verse 20 was revealed, lightening the obligation. The Prophet (peace be upon him) said: "The best prayer after the obligatory prayers is the night prayer." (Sahih Muslim, 1163)</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Introduction to Surah Al-Muzzammil; Sahih Muslim</p>
+                </div>
+                <p>The middle portion shifts to <span class="highlight">patience and reliance on Allah</span>. The Prophet is told to be patient over the insults of the disbelievers, to leave their judgment to Allah, and to take Allah alone as his Wakeel (Disposer of affairs). The surah warns the deniers of chains, choking food, and a Day when the earth and mountains will convulse.</p>
+                <p>The final verse (verse 20) is remarkably long and represents <span class="highlight">Allah's mercy in lightening the night prayer obligation</span>. Knowing that some believers would be ill, traveling, or fighting in His cause, Allah reduced the requirement and instead emphasized: establish the regular prayer, give zakah, and lend Allah a goodly loan through charity. Whatever good you send ahead for yourselves, you will find it with Allah, better and greater in reward.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">يَا أَيُّهَا الْمُزَّمِّلُ</div>
+                    <div class="verse-transliteration">Ya ayyuhal-muzzammil</div>
+                    <div class="verse-translation">O you who wraps himself [in clothing].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَا أَيُّهَا</span><span class="trans">ya ayyuha</span><span class="meaning">O you</span></div>
+                        <div class="word-chip"><span class="ar">الْمُزَّمِّلُ</span><span class="trans">al-muzzammil</span><span class="meaning">The one who wraps himself</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah addresses His Prophet with a gentle, intimate title. "Muzzammil" comes from "tazammala" meaning to wrap oneself in garments. The Prophet (peace be upon him) would wrap himself in his cloak at night. Ibn Kathir explains that this was one of the earliest revelations, when the Prophet was still adjusting to receiving divine communication. He would wrap himself seeking comfort and warmth. As-Sa'di notes that by addressing him this way, Allah is using a description of his state rather than his name, which conveys tenderness and closeness. It is as if Allah is saying: "You who seeks comfort in your garments, rise and seek true comfort in standing before Me."</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">قُمِ اللَّيْلَ إِلَّا قَلِيلًا</div>
+                    <div class="verse-transliteration">Qumil-layla illa qalila</div>
+                    <div class="verse-translation">Arise [to pray] the night, except for a little.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قُمِ</span><span class="trans">qumi</span><span class="meaning">Arise / Stand</span></div>
+                        <div class="word-chip"><span class="ar">اللَّيْلَ</span><span class="trans">al-layla</span><span class="meaning">The night</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">قَلِيلًا</span><span class="trans">qalila</span><span class="meaning">A little</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The command to stand in prayer at night. "Qum" is an imperative verb meaning "stand up" or "arise." The night prayer (Qiyam al-Layl) is established here as one of the first commands given to the Prophet. Ibn Kathir explains that "except a little" means you do not have to pray the entire night, but most of it. As-Sa'di notes that the night was chosen because it is the time of stillness, when distractions fade and the heart can focus entirely on connecting with Allah. The night prayer was initially obligatory for the Prophet and his companions before being lightened in verse 20.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">نِّصْفَهُ أَوِ انقُصْ مِنْهُ قَلِيلًا</div>
+                    <div class="verse-transliteration">Nisfahu awi-nqus minhu qalila</div>
+                    <div class="verse-translation">Half of it, or subtract from it a little.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">نِّصْفَهُ</span><span class="trans">nisfahu</span><span class="meaning">Half of it</span></div>
+                        <div class="word-chip"><span class="ar">أَوِ</span><span class="trans">awi</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">انقُصْ</span><span class="trans">inqus</span><span class="meaning">Subtract / reduce</span></div>
+                        <div class="word-chip"><span class="ar">مِنْهُ</span><span class="trans">minhu</span><span class="meaning">From it</span></div>
+                        <div class="word-chip"><span class="ar">قَلِيلًا</span><span class="trans">qalila</span><span class="meaning">A little</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah specifies the amount: pray half the night, or a little less than half. "Nisf" means half, and "inqus" means to reduce or subtract. Ibn Kathir explains that this gives flexibility. The minimum is about a third of the night. As-Sa'di notes the wisdom here: Allah does not burden His servants beyond their capacity. He gives a range, not a rigid rule. You can pray half the night, or reduce it slightly to about a third. This flexibility is a mercy, allowing the worshiper to find their own sustainable rhythm of night worship.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">أَوْ زِدْ عَلَيْهِ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا</div>
+                    <div class="verse-transliteration">Aw zid 'alayhi wa rattilil-Qur'ana tartila</div>
+                    <div class="verse-translation">Or add to it, and recite the Quran with measured recitation (tarteel).</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَوْ</span><span class="trans">aw</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">زِدْ</span><span class="trans">zid</span><span class="meaning">Add / increase</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِ</span><span class="trans">'alayhi</span><span class="meaning">Upon it</span></div>
+                        <div class="word-chip"><span class="ar">وَرَتِّلِ</span><span class="trans">wa rattili</span><span class="meaning">And recite slowly</span></div>
+                        <div class="word-chip"><span class="ar">الْقُرْآنَ</span><span class="trans">al-Qur'ana</span><span class="meaning">The Quran</span></div>
+                        <div class="word-chip"><span class="ar">تَرْتِيلًا</span><span class="trans">tartila</span><span class="meaning">With measured recitation</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Or increase beyond half the night, and recite the Quran with tarteel. "Zid" means add more. "Rattil" means to recite slowly, clearly, and beautifully, giving each letter its due. "Tarteel" is the noun form emphasizing this quality. Ibn Kathir explains that tarteel means to recite at a measured, deliberate pace, not rushing through the words. Ali ibn Abi Talib (may Allah be pleased with him) defined tarteel as "making the letters clear and knowing where to stop." As-Sa'di says the purpose of tarteel is reflection and understanding. The Quran is not meant to be speed-read but savored. Every word carries meaning, and tarteel allows the heart to absorb it.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">إِنَّا سَنُلْقِي عَلَيْكَ قَوْلًا ثَقِيلًا</div>
+                    <div class="verse-transliteration">Inna sanulqi 'alayka qawlan thaqila</div>
+                    <div class="verse-translation">Indeed, We will cast upon you a heavy word.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">سَنُلْقِي</span><span class="trans">sanulqi</span><span class="meaning">Will cast / send down</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْكَ</span><span class="trans">'alayka</span><span class="meaning">Upon you</span></div>
+                        <div class="word-chip"><span class="ar">قَوْلًا</span><span class="trans">qawlan</span><span class="meaning">A word / speech</span></div>
+                        <div class="word-chip"><span class="ar">ثَقِيلًا</span><span class="trans">thaqila</span><span class="meaning">Heavy / weighty</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is one of the most profound descriptions of the Quran in the entire Quran itself. "Qawlan thaqila" means a heavy, weighty word. Ibn Kathir explains that the Quran is "heavy" in multiple senses: heavy in its obligations and commandments, heavy in its meaning and depth, and physically heavy when it descended upon the Prophet. When revelation came, the Prophet would sweat profusely even on cold days, and if he was riding a camel, the animal would be forced to sit down under the weight. As-Sa'di adds that the "heaviness" also refers to the gravity of its message. The Quran carries the weight of divine law, guidance for all humanity, and the distinction between truth and falsehood. The night prayer is the preparation needed to carry this weight.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">إِنَّ نَاشِئَةَ اللَّيْلِ هِيَ أَشَدُّ وَطْئًا وَأَقْوَمُ قِيلًا</div>
+                    <div class="verse-transliteration">Inna nashi'atal-layli hiya ashaddu wat'an wa aqwamu qila</div>
+                    <div class="verse-translation">Indeed, the hours of the night are more effective for concurrence [of heart and tongue] and more suitable for words.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">نَاشِئَةَ</span><span class="trans">nashi'ata</span><span class="meaning">The rising / hours</span></div>
+                        <div class="word-chip"><span class="ar">اللَّيْلِ</span><span class="trans">al-layli</span><span class="meaning">Of the night</span></div>
+                        <div class="word-chip"><span class="ar">هِيَ</span><span class="trans">hiya</span><span class="meaning">It is</span></div>
+                        <div class="word-chip"><span class="ar">أَشَدُّ</span><span class="trans">ashaddu</span><span class="meaning">More effective / stronger</span></div>
+                        <div class="word-chip"><span class="ar">وَطْئًا</span><span class="trans">wat'an</span><span class="meaning">In impression / concurrence</span></div>
+                        <div class="word-chip"><span class="ar">وَأَقْوَمُ</span><span class="trans">wa aqwamu</span><span class="meaning">And more suitable / upright</span></div>
+                        <div class="word-chip"><span class="ar">قِيلًا</span><span class="trans">qila</span><span class="meaning">For words / speech</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The night hours are the best time for worship because the heart and tongue are in harmony. "Nashi'ah" refers to the hours of the night when one rises from sleep to pray. "Ashaddu wat'an" means stronger in impact, where the heart, eyes, ears, and tongue all align together. Ibn Kathir explains that at night, there are no distractions: no visitors, no noise, no worldly business. The heart is free to focus entirely on Allah. "Aqwamu qila" means the words spoken at night are more correct and clear. As-Sa'di adds that during the day, a person is busy with worldly affairs, but at night, the soul is calm, the environment is still, and the recitation has its deepest effect on the heart. This is why the greatest scholars and worshipers throughout Islamic history treasured the night prayer above all voluntary worship.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">إِنَّ لَكَ فِي النَّهَارِ سَبْحًا طَوِيلًا</div>
+                    <div class="verse-transliteration">Inna laka fin-nahari sabhan tawila</div>
+                    <div class="verse-translation">Indeed, for you by day is prolonged occupation.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">لَكَ</span><span class="trans">laka</span><span class="meaning">For you</span></div>
+                        <div class="word-chip"><span class="ar">فِي النَّهَارِ</span><span class="trans">fin-nahari</span><span class="meaning">During the day</span></div>
+                        <div class="word-chip"><span class="ar">سَبْحًا</span><span class="trans">sabhan</span><span class="meaning">Occupation / movement</span></div>
+                        <div class="word-chip"><span class="ar">طَوِيلًا</span><span class="trans">tawila</span><span class="meaning">Prolonged / long</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>During the day, you are occupied with many responsibilities. "Sabhan" comes from "sabaha" which means to move about, to be engaged in activity. "Tawila" means long or extended. Ibn Kathir explains that the daytime is filled with the demands of spreading the message, dealing with people, and attending to worldly needs, so the night becomes the special time for deep worship. As-Sa'di notes the beautiful balance Allah sets here: the day is for your duties among people, and the night is for your private connection with your Lord. This teaches us that Islam does not demand we abandon the world, but rather that we balance worldly engagement with spiritual devotion.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وَاذْكُرِ اسْمَ رَبِّكَ وَتَبَتَّلْ إِلَيْهِ تَبْتِيلًا</div>
+                    <div class="verse-transliteration">Wadhkuris-ma rabbika wa tabattal ilayhi tabtila</div>
+                    <div class="verse-translation">And remember the name of your Lord and devote yourself to Him with [complete] devotion.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاذْكُرِ</span><span class="trans">wadhkur</span><span class="meaning">And remember / mention</span></div>
+                        <div class="word-chip"><span class="ar">اسْمَ</span><span class="trans">isma</span><span class="meaning">The name of</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">وَتَبَتَّلْ</span><span class="trans">wa tabattal</span><span class="meaning">And devote yourself</span></div>
+                        <div class="word-chip"><span class="ar">إِلَيْهِ</span><span class="trans">ilayhi</span><span class="meaning">To Him</span></div>
+                        <div class="word-chip"><span class="ar">تَبْتِيلًا</span><span class="trans">tabtila</span><span class="meaning">With complete devotion</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Remember Allah's name constantly and devote yourself entirely to Him. "Udhkur" means to remember, mention, and keep in mind. "Tabattal" comes from "batala" meaning to cut off. It means to cut yourself off from everything else and devote yourself completely to Allah. Ibn Kathir explains that "tabattul" means to dedicate your worship, your heart, and your focus entirely to Allah, turning away from all distractions. As-Sa'di adds that this does not mean abandoning worldly responsibilities (monasticism), but rather making Allah the center of everything. Your work, your rest, your relationships should all orbit around your consciousness of Allah. True tabattul is when your heart is with Allah even while your hands are busy with the world.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">رَّبُّ الْمَشْرِقِ وَالْمَغْرِبِ لَا إِلَٰهَ إِلَّا هُوَ فَاتَّخِذْهُ وَكِيلًا</div>
+                    <div class="verse-transliteration">Rabbul-mashriqi wal-maghribi la ilaha illa Huwa fattakhidhhu Wakila</div>
+                    <div class="verse-translation">[He is] the Lord of the East and the West; there is no deity except Him, so take Him as Disposer of [your] affairs.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">رَّبُّ</span><span class="trans">rabbu</span><span class="meaning">Lord of</span></div>
+                        <div class="word-chip"><span class="ar">الْمَشْرِقِ</span><span class="trans">al-mashriqi</span><span class="meaning">The East</span></div>
+                        <div class="word-chip"><span class="ar">وَالْمَغْرِبِ</span><span class="trans">wal-maghribi</span><span class="meaning">And the West</span></div>
+                        <div class="word-chip"><span class="ar">لَا إِلَٰهَ إِلَّا هُوَ</span><span class="trans">la ilaha illa Huwa</span><span class="meaning">There is no god except Him</span></div>
+                        <div class="word-chip"><span class="ar">فَاتَّخِذْهُ</span><span class="trans">fattakhidhhu</span><span class="meaning">So take Him</span></div>
+                        <div class="word-chip"><span class="ar">وَكِيلًا</span><span class="trans">Wakila</span><span class="meaning">As Disposer of affairs / Trustee</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>He is the Lord of the East and the West. There is no god but Him, so take Him as your Wakeel. "Mashriqi" (East) is where the sun rises, and "Maghribi" (West) is where it sets, meaning Allah controls everything between them, the entire world. "Wakeel" means the one you entrust your affairs to, your guardian, manager, and protector. Ibn Kathir explains the logical flow: since He alone is Lord of everything and there is no god beside Him, it only makes sense to rely on Him alone. As-Sa'di adds that tawakkul (reliance on Allah) is not passive. It means you do your best, then trust the outcome entirely to Allah. This verse is the foundation of inner peace: when you take Allah as your Wakeel, you stop carrying the weight of the world on your shoulders.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَاصْبِرْ عَلَىٰ مَا يَقُولُونَ وَاهْجُرْهُمْ هَجْرًا جَمِيلًا</div>
+                    <div class="verse-transliteration">Wasbir 'ala ma yaquluna wahjurhum hajran jamila</div>
+                    <div class="verse-translation">And be patient over what they say and avoid them with gracious avoidance.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاصْبِرْ</span><span class="trans">wasbir</span><span class="meaning">And be patient</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ مَا</span><span class="trans">'ala ma</span><span class="meaning">Over what</span></div>
+                        <div class="word-chip"><span class="ar">يَقُولُونَ</span><span class="trans">yaquluna</span><span class="meaning">They say</span></div>
+                        <div class="word-chip"><span class="ar">وَاهْجُرْهُمْ</span><span class="trans">wahjurhum</span><span class="meaning">And avoid them</span></div>
+                        <div class="word-chip"><span class="ar">هَجْرًا</span><span class="trans">hajran</span><span class="meaning">An avoidance</span></div>
+                        <div class="word-chip"><span class="ar">جَمِيلًا</span><span class="trans">jamila</span><span class="meaning">Gracious / beautiful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Be patient with the hurtful words of the disbelievers and distance yourself from them gracefully. "Isbir" is the command for patience (sabr). "Uhjurhum" means to leave them, distance yourself. "Hajran jamila" is a beautiful concept: gracious avoidance. Not avoidance with anger, bitterness, or revenge, but with dignity and grace. Ibn Kathir explains this was revealed when the Quraysh were mocking and insulting the Prophet. He was told not to retaliate but to maintain his composure. As-Sa'di notes that "hajr jameel" means you leave without creating a scene, without cursing them back, without harboring hatred. You simply walk away with dignity. This is one of the highest forms of character. The Prophet embodied this throughout his life in Makkah.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">وَذَرْنِي وَالْمُكَذِّبِينَ أُولِي النَّعْمَةِ وَمَهِّلْهُمْ قَلِيلًا</div>
+                    <div class="verse-transliteration">Wa dharnee wal-mukadhdhibina ulin-na'mati wa mahhilhum qalila</div>
+                    <div class="verse-translation">And leave Me with [the matter of] the deniers, those of ease [in life], and allow them respite a little.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَذَرْنِي</span><span class="trans">wa dharnee</span><span class="meaning">And leave Me</span></div>
+                        <div class="word-chip"><span class="ar">وَالْمُكَذِّبِينَ</span><span class="trans">wal-mukadhdhibina</span><span class="meaning">And the deniers</span></div>
+                        <div class="word-chip"><span class="ar">أُولِي</span><span class="trans">ulee</span><span class="meaning">Possessors of</span></div>
+                        <div class="word-chip"><span class="ar">النَّعْمَةِ</span><span class="trans">an-na'mati</span><span class="meaning">Ease / luxury</span></div>
+                        <div class="word-chip"><span class="ar">وَمَهِّلْهُمْ</span><span class="trans">wa mahhilhum</span><span class="meaning">And allow them respite</span></div>
+                        <div class="word-chip"><span class="ar">قَلِيلًا</span><span class="trans">qalila</span><span class="meaning">A little</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Leave the matter of the wealthy deniers to Me, and give them just a little more time. "Dharnee" is a powerful word: "Leave Me alone with them," as if Allah is saying, "Step aside, I will handle them." "Mukadhdhibeen" are those who actively deny the truth. "Ulee an-na'mah" means possessors of luxury and ease. Ibn Kathir explains that their wealth and comfort made them arrogant enough to deny the truth. They felt they did not need God because they had everything. "Mahhilhum" means grant them a brief delay. As-Sa'di notes the terrifying implication: the respite is short, and what comes after it is severe. Allah's patience has a limit. Their luxury was not a sign of Allah's approval but a test, and their time was running out.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">إِنَّ لَدَيْنَا أَنكَالًا وَجَحِيمًا</div>
+                    <div class="verse-transliteration">Inna ladayna ankalan wa jaheema</div>
+                    <div class="verse-translation">Indeed, with Us [for them] are shackles and burning fire.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">لَدَيْنَا</span><span class="trans">ladayna</span><span class="meaning">With Us</span></div>
+                        <div class="word-chip"><span class="ar">أَنكَالًا</span><span class="trans">ankalan</span><span class="meaning">Shackles / chains</span></div>
+                        <div class="word-chip"><span class="ar">وَجَحِيمًا</span><span class="trans">wa jaheema</span><span class="meaning">And blazing fire</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>With Us are heavy chains and a blazing fire for them. "Ankal" is the plural of "nikl" meaning heavy iron shackles or fetters that bind the hands and feet. "Jaheem" is one of the names of Hellfire, referring to its intense blazing heat. Ibn Kathir explains that these are prepared for the wealthy deniers mentioned in the previous verse. Their luxury in this world will be replaced by chains in the next. As-Sa'di notes the sharp contrast: in this life, they enjoyed freedom and ease. In the next, they will be bound in chains and surrounded by fire. The punishment matches the crime of arrogance: those who refused to be bound by Allah's laws will be physically bound in the Hereafter.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">وَطَعَامًا ذَا غُصَّةٍ وَعَذَابًا أَلِيمًا</div>
+                    <div class="verse-transliteration">Wa ta'aman dha ghussatin wa 'adhaban aleema</div>
+                    <div class="verse-translation">And food that chokes and a painful punishment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَطَعَامًا</span><span class="trans">wa ta'aman</span><span class="meaning">And food</span></div>
+                        <div class="word-chip"><span class="ar">ذَا</span><span class="trans">dha</span><span class="meaning">Possessing / of</span></div>
+                        <div class="word-chip"><span class="ar">غُصَّةٍ</span><span class="trans">ghussatin</span><span class="meaning">Choking</span></div>
+                        <div class="word-chip"><span class="ar">وَعَذَابًا</span><span class="trans">wa 'adhaban</span><span class="meaning">And a punishment</span></div>
+                        <div class="word-chip"><span class="ar">أَلِيمًا</span><span class="trans">aleema</span><span class="meaning">Painful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>And food that sticks in the throat and causes choking, and a painful punishment. "Ghussah" refers to something that gets stuck in the throat and cannot be swallowed or expelled. It causes intense discomfort and choking. Ibn Kathir explains this refers to the thorny zaqqum tree and other food of Hellfire that is so repulsive it lodges in the throat. The inhabitants of Hell will be forced to eat yet unable to swallow. As-Sa'di notes the horrifying detail: in this world, these people ate the finest foods while ignoring Allah's commands. In the Hereafter, their food will be a source of torment, not nourishment. "Adhaban aleema" means a punishment that is excruciatingly painful, affecting every fiber of their being.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">يَوْمَ تَرْجُفُ الْأَرْضُ وَالْجِبَالُ وَكَانَتِ الْجِبَالُ كَثِيبًا مَّهِيلًا</div>
+                    <div class="verse-transliteration">Yawma tarjuful-ardu wal-jibalu wa kanatil-jibalu katheeban maheela</div>
+                    <div class="verse-translation">On the Day the earth and the mountains will convulse and the mountains will become a heap of sand pouring down.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَوْمَ</span><span class="trans">yawma</span><span class="meaning">On the Day</span></div>
+                        <div class="word-chip"><span class="ar">تَرْجُفُ</span><span class="trans">tarjufu</span><span class="meaning">Will convulse / tremble</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرْضُ</span><span class="trans">al-ardu</span><span class="meaning">The earth</span></div>
+                        <div class="word-chip"><span class="ar">وَالْجِبَالُ</span><span class="trans">wal-jibalu</span><span class="meaning">And the mountains</span></div>
+                        <div class="word-chip"><span class="ar">وَكَانَتِ</span><span class="trans">wa kanatil</span><span class="meaning">And will become</span></div>
+                        <div class="word-chip"><span class="ar">الْجِبَالُ</span><span class="trans">al-jibalu</span><span class="meaning">The mountains</span></div>
+                        <div class="word-chip"><span class="ar">كَثِيبًا</span><span class="trans">katheeban</span><span class="meaning">A heap of sand</span></div>
+                        <div class="word-chip"><span class="ar">مَّهِيلًا</span><span class="trans">maheela</span><span class="meaning">Pouring down / loose</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>On that Day, the earth and mountains will shake violently and the mountains will crumble into loose, flowing sand. "Tarjufu" means to convulse and tremble with great violence. "Katheeb" is a sand dune, and "maheel" means loose, flowing, pouring. Ibn Kathir explains that the mighty mountains, which seem so permanent and unshakeable, will be reduced to nothing more than flowing sand dunes. This imagery would have been vivid for the Arabs who knew how easily sand dunes shift and collapse. As-Sa'di notes that if the mountains, the most solid and immovable structures on earth, are destroyed on that Day, what chance does a frail human being have? This verse shatters any illusion of worldly permanence and security.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">إِنَّا أَرْسَلْنَا إِلَيْكُمْ رَسُولًا شَاهِدًا عَلَيْكُمْ كَمَا أَرْسَلْنَا إِلَىٰ فِرْعَوْنَ رَسُولًا</div>
+                    <div class="verse-transliteration">Inna arsalna ilaykum rasulan shahidan 'alaykum kama arsalna ila Fir'awna rasula</div>
+                    <div class="verse-translation">Indeed, We have sent to you a Messenger as a witness upon you just as We sent to Pharaoh a messenger.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّا</span><span class="trans">inna</span><span class="meaning">Indeed, We</span></div>
+                        <div class="word-chip"><span class="ar">أَرْسَلْنَا</span><span class="trans">arsalna</span><span class="meaning">Have sent</span></div>
+                        <div class="word-chip"><span class="ar">إِلَيْكُمْ</span><span class="trans">ilaykum</span><span class="meaning">To you</span></div>
+                        <div class="word-chip"><span class="ar">رَسُولًا</span><span class="trans">rasulan</span><span class="meaning">A messenger</span></div>
+                        <div class="word-chip"><span class="ar">شَاهِدًا</span><span class="trans">shahidan</span><span class="meaning">As a witness</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْكُمْ</span><span class="trans">'alaykum</span><span class="meaning">Upon you</span></div>
+                        <div class="word-chip"><span class="ar">كَمَا</span><span class="trans">kama</span><span class="meaning">Just as</span></div>
+                        <div class="word-chip"><span class="ar">أَرْسَلْنَا</span><span class="trans">arsalna</span><span class="meaning">We sent</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ فِرْعَوْنَ</span><span class="trans">ila Fir'awna</span><span class="meaning">To Pharaoh</span></div>
+                        <div class="word-chip"><span class="ar">رَسُولًا</span><span class="trans">rasula</span><span class="meaning">A messenger</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>We have sent you a Messenger who will be a witness over you, just as We sent Musa (Moses) to Pharaoh. "Shahid" means witness. On the Day of Judgment, the Prophet Muhammad will testify about his nation: who accepted his message and who rejected it. Ibn Kathir explains that the comparison to Pharaoh is a direct warning to the Quraysh. Just as Pharaoh had a messenger sent to him, you too have a messenger. The question is: will you respond like Pharaoh or will you respond with faith? As-Sa'di notes that mentioning Pharaoh is deliberate because the Quraysh knew his story and knew his terrible end. The implicit message is devastating: "Do you want to end up like Pharaoh?"</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">فَعَصَىٰ فِرْعَوْنُ الرَّسُولَ فَأَخَذْنَاهُ أَخْذًا وَبِيلًا</div>
+                    <div class="verse-transliteration">Fa'asa Fir'awnur-Rasula fa-akhadhnaahu akhdhan wabeela</div>
+                    <div class="verse-translation">But Pharaoh disobeyed the messenger, so We seized him with a ruinous seizure.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَعَصَىٰ</span><span class="trans">fa'asa</span><span class="meaning">But disobeyed</span></div>
+                        <div class="word-chip"><span class="ar">فِرْعَوْنُ</span><span class="trans">Fir'awnu</span><span class="meaning">Pharaoh</span></div>
+                        <div class="word-chip"><span class="ar">الرَّسُولَ</span><span class="trans">ar-Rasula</span><span class="meaning">The messenger</span></div>
+                        <div class="word-chip"><span class="ar">فَأَخَذْنَاهُ</span><span class="trans">fa-akhadhnaahu</span><span class="meaning">So We seized him</span></div>
+                        <div class="word-chip"><span class="ar">أَخْذًا</span><span class="trans">akhdhan</span><span class="meaning">A seizure</span></div>
+                        <div class="word-chip"><span class="ar">وَبِيلًا</span><span class="trans">wabeela</span><span class="meaning">Ruinous / severe</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Pharaoh disobeyed the messenger (Musa), so We destroyed him with a devastating punishment. "Asa" means to disobey and rebel. "Akhadhnahu" means We seized him, grabbed him. "Akhdhan wabeela" means a seizure that was crushing, severe, and destructive. Ibn Kathir explains that Pharaoh's punishment was drowning in the Red Sea, one of the most dramatic and well-known destructions in history. Despite all his power, army, and wealth, he was helpless before Allah's punishment. As-Sa'di draws the lesson clearly: disobeying the messenger always leads to destruction. The Quraysh are being warned that they face the same fate if they follow Pharaoh's path of rejection and arrogance.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">فَكَيْفَ تَتَّقُونَ إِن كَفَرْتُمْ يَوْمًا يَجْعَلُ الْوِلْدَانَ شِيبًا</div>
+                    <div class="verse-transliteration">Fakayfa tattaquna in kafartum yawman yaj'alul-wildana sheeba</div>
+                    <div class="verse-translation">Then how can you fear, if you disbelieve, a Day that will make the children white-haired?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَكَيْفَ</span><span class="trans">fakayfa</span><span class="meaning">Then how</span></div>
+                        <div class="word-chip"><span class="ar">تَتَّقُونَ</span><span class="trans">tattaquna</span><span class="meaning">Can you fear / protect yourselves</span></div>
+                        <div class="word-chip"><span class="ar">إِن كَفَرْتُمْ</span><span class="trans">in kafartum</span><span class="meaning">If you disbelieve</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمًا</span><span class="trans">yawman</span><span class="meaning">A Day</span></div>
+                        <div class="word-chip"><span class="ar">يَجْعَلُ</span><span class="trans">yaj'alu</span><span class="meaning">That will make</span></div>
+                        <div class="word-chip"><span class="ar">الْوِلْدَانَ</span><span class="trans">al-wildana</span><span class="meaning">The children</span></div>
+                        <div class="word-chip"><span class="ar">شِيبًا</span><span class="trans">sheeba</span><span class="meaning">White-haired / grey</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>If you persist in disbelief, how will you protect yourselves from a Day so terrifying it turns children's hair grey? "Tattaquna" comes from "taqwa" meaning to protect oneself, to be conscious and fearful. "Wildaan" are young children, and "sheeba" means white-haired, grey-haired from old age. Ibn Kathir explains this is a metaphor for the extreme horror of that Day. When even young children, who have no sins and no worries, will turn grey from sheer terror, what will happen to adults burdened with sins? As-Sa'di notes this is an unanswerable rhetorical question. There is no way to protect yourself from that Day except through faith and good deeds. Disbelief leaves you completely exposed and defenseless.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">السَّمَاءُ مُنفَطِرٌ بِهِ ۚ كَانَ وَعْدُهُ مَفْعُولًا</div>
+                    <div class="verse-transliteration">As-sama'u munfatirun bihi, kana wa'duhu maf'ula</div>
+                    <div class="verse-translation">The heaven will break apart therefrom; ever is His promise fulfilled.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">السَّمَاءُ</span><span class="trans">as-sama'u</span><span class="meaning">The heaven / sky</span></div>
+                        <div class="word-chip"><span class="ar">مُنفَطِرٌ</span><span class="trans">munfatirun</span><span class="meaning">Will break apart</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">Therefrom / because of it</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Ever is</span></div>
+                        <div class="word-chip"><span class="ar">وَعْدُهُ</span><span class="trans">wa'duhu</span><span class="meaning">His promise</span></div>
+                        <div class="word-chip"><span class="ar">مَفْعُولًا</span><span class="trans">maf'ula</span><span class="meaning">Fulfilled / accomplished</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The sky itself will split apart on that Day. Allah's promise is always fulfilled. "Munfatir" means splitting, bursting, breaking apart. "Bihi" refers to the weight and terror of that Day. "Maf'ula" means done, accomplished, completed. Ibn Kathir explains that the sky cracking open is one of the recurring descriptions of the Day of Judgment in the Quran (also in Surahs 82 and 84). The sky, which seems so strong and eternal, will shatter. "Kana wa'duhu maf'ula" is a powerful closing statement: Allah's promise has always been fulfilled and will always be fulfilled. As-Sa'di adds that this phrase should give both hope to believers (Allah's promise of reward is certain) and terror to disbelievers (Allah's promise of punishment is equally certain).</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">إِنَّ هَٰذِهِ تَذْكِرَةٌ ۖ فَمَن شَاءَ اتَّخَذَ إِلَىٰ رَبِّهِ سَبِيلًا</div>
+                    <div class="verse-transliteration">Inna hadhihi tadhkiratun faman sha'at-takhadha ila Rabbihi sabeela</div>
+                    <div class="verse-translation">Indeed, this is a reminder, so whoever wills may take to his Lord a way.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">هَٰذِهِ</span><span class="trans">hadhihi</span><span class="meaning">This</span></div>
+                        <div class="word-chip"><span class="ar">تَذْكِرَةٌ</span><span class="trans">tadhkiratun</span><span class="meaning">A reminder</span></div>
+                        <div class="word-chip"><span class="ar">فَمَن</span><span class="trans">faman</span><span class="meaning">So whoever</span></div>
+                        <div class="word-chip"><span class="ar">شَاءَ</span><span class="trans">sha'a</span><span class="meaning">Wills</span></div>
+                        <div class="word-chip"><span class="ar">اتَّخَذَ</span><span class="trans">ittakhadha</span><span class="meaning">May take</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ رَبِّهِ</span><span class="trans">ila Rabbihi</span><span class="meaning">To his Lord</span></div>
+                        <div class="word-chip"><span class="ar">سَبِيلًا</span><span class="trans">sabeela</span><span class="meaning">A way / path</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This entire surah is a reminder. Whoever chooses can take a path to his Lord. "Tadhkirah" means a reminder, an admonition. "Sabeel" means a path, a way. Ibn Kathir explains that Allah has laid out the evidence, the warnings, the promises, and the guidance. Now the choice is yours. "Faman sha'a" means whoever wills. Allah does not force faith on anyone. The path to Allah is open, the guidance has been given, and the reminder has been delivered. As-Sa'di notes that this verse establishes human free will and responsibility. You cannot blame anyone else for your choices. The reminder came to you. If you choose to walk toward Allah, you will find the path. If you choose to turn away, you bear the consequences.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَيِ اللَّيْلِ وَنِصْفَهُ وَثُلُثَهُ وَطَائِفَةٌ مِّنَ الَّذِينَ مَعَكَ ۚ وَاللَّهُ يُقَدِّرُ اللَّيْلَ وَالنَّهَارَ ۚ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ ۖ فَاقْرَءُوا مَا تَيَسَّرَ مِنَ الْقُرْآنِ ۚ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ ۙ وَآخَرُونَ يَضْرِبُونَ فِي الْأَرْضِ يَبْتَغُونَ مِن فَضْلِ اللَّهِ ۙ وَآخَرُونَ يُقَاتِلُونَ فِي سَبِيلِ اللَّهِ ۖ فَاقْرَءُوا مَا تَيَسَّرَ مِنْهُ ۚ وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ وَأَقْرِضُوا اللَّهَ قَرْضًا حَسَنًا ۚ وَمَا تُقَدِّمُوا لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ اللَّهِ هُوَ خَيْرًا وَأَعْظَمَ أَجْرًا ۚ وَاسْتَغْفِرُوا اللَّهَ ۖ إِنَّ اللَّهَ غَفُورٌ رَّحِيمٌ</div>
+                    <div class="verse-transliteration">Inna Rabbaka ya'lamu annaka taqumu adna min thuluthayil-layli wa nisfahu wa thuluthahu wa ta'ifatun minal-ladhina ma'ak. Wallahu yuqaddirul-layla wan-nahar. 'Alima an lan tuhsuhu fataba 'alaykum. Faqra'u ma tayassara minal-Qur'an. 'Alima an sayakunu minkum marda wa akharuna yadribuna fil-ardi yabtaghuna min fadlillahi wa akharuna yuqatiluna fi sabilillah. Faqra'u ma tayassara minhu wa aqimus-salata wa atuz-zakata wa aqridullaha qardan hasana. Wa ma tuqaddimu li-anfusikum min khayrin tajiduhu 'indallahi huwa khayran wa a'dhama ajra. Wastaghfirullaha innallaha Ghafurun Raheem.</div>
+                    <div class="verse-translation">Indeed, your Lord knows that you stand [in prayer] almost two thirds of the night or half of it or a third of it, and [so do] a group of those with you. And Allah determines the night and the day. He has known that you will not be able to keep up with it, so He has turned to you in forgiveness. So recite what is easy [for you] of the Quran. He has known that there will be among you those who are ill and others traveling through the land seeking [something] of the bounty of Allah, and others fighting for the cause of Allah. So recite what is easy from it and establish prayer and give zakah and loan Allah a goodly loan. And whatever good you put forward for yourselves, you will find it with Allah. It is better and greater in reward. And seek forgiveness of Allah. Indeed, Allah is Forgiving and Merciful.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ رَبَّكَ</span><span class="trans">inna Rabbaka</span><span class="meaning">Indeed, your Lord</span></div>
+                        <div class="word-chip"><span class="ar">يَعْلَمُ</span><span class="trans">ya'lamu</span><span class="meaning">Knows</span></div>
+                        <div class="word-chip"><span class="ar">أَنَّكَ تَقُومُ</span><span class="trans">annaka taqumu</span><span class="meaning">That you stand</span></div>
+                        <div class="word-chip"><span class="ar">أَدْنَىٰ مِن</span><span class="trans">adna min</span><span class="meaning">Less than / close to</span></div>
+                        <div class="word-chip"><span class="ar">ثُلُثَيِ اللَّيْلِ</span><span class="trans">thuluthayil-layli</span><span class="meaning">Two thirds of the night</span></div>
+                        <div class="word-chip"><span class="ar">وَنِصْفَهُ</span><span class="trans">wa nisfahu</span><span class="meaning">And half of it</span></div>
+                        <div class="word-chip"><span class="ar">وَثُلُثَهُ</span><span class="trans">wa thuluthahu</span><span class="meaning">And a third of it</span></div>
+                        <div class="word-chip"><span class="ar">وَطَائِفَةٌ</span><span class="trans">wa ta'ifatun</span><span class="meaning">And a group</span></div>
+                        <div class="word-chip"><span class="ar">مِّنَ الَّذِينَ مَعَكَ</span><span class="trans">minal-ladhina ma'ak</span><span class="meaning">Of those with you</span></div>
+                        <div class="word-chip"><span class="ar">وَاللَّهُ يُقَدِّرُ</span><span class="trans">Wallahu yuqaddiru</span><span class="meaning">And Allah determines</span></div>
+                        <div class="word-chip"><span class="ar">اللَّيْلَ وَالنَّهَارَ</span><span class="trans">al-layla wan-nahar</span><span class="meaning">The night and the day</span></div>
+                        <div class="word-chip"><span class="ar">عَلِمَ</span><span class="trans">'alima</span><span class="meaning">He has known</span></div>
+                        <div class="word-chip"><span class="ar">أَن لَّن تُحْصُوهُ</span><span class="trans">an lan tuhsuhu</span><span class="meaning">That you will not keep up</span></div>
+                        <div class="word-chip"><span class="ar">فَتَابَ عَلَيْكُمْ</span><span class="trans">fataba 'alaykum</span><span class="meaning">So He turned to you (in mercy)</span></div>
+                        <div class="word-chip"><span class="ar">فَاقْرَءُوا</span><span class="trans">faqra'u</span><span class="meaning">So recite</span></div>
+                        <div class="word-chip"><span class="ar">مَا تَيَسَّرَ</span><span class="trans">ma tayassara</span><span class="meaning">What is easy</span></div>
+                        <div class="word-chip"><span class="ar">مِنَ الْقُرْآنِ</span><span class="trans">minal-Qur'an</span><span class="meaning">Of the Quran</span></div>
+                        <div class="word-chip"><span class="ar">مَّرْضَىٰ</span><span class="trans">marda</span><span class="meaning">Those who are ill</span></div>
+                        <div class="word-chip"><span class="ar">يَضْرِبُونَ فِي الْأَرْضِ</span><span class="trans">yadribuna fil-ard</span><span class="meaning">Traveling through the land</span></div>
+                        <div class="word-chip"><span class="ar">يَبْتَغُونَ</span><span class="trans">yabtaghuna</span><span class="meaning">Seeking</span></div>
+                        <div class="word-chip"><span class="ar">مِن فَضْلِ اللَّهِ</span><span class="trans">min fadlillah</span><span class="meaning">Of Allah's bounty</span></div>
+                        <div class="word-chip"><span class="ar">يُقَاتِلُونَ</span><span class="trans">yuqatiluna</span><span class="meaning">Fighting</span></div>
+                        <div class="word-chip"><span class="ar">فِي سَبِيلِ اللَّهِ</span><span class="trans">fi sabilillah</span><span class="meaning">In the cause of Allah</span></div>
+                        <div class="word-chip"><span class="ar">وَأَقِيمُوا الصَّلَاةَ</span><span class="trans">wa aqimus-salata</span><span class="meaning">And establish prayer</span></div>
+                        <div class="word-chip"><span class="ar">وَآتُوا الزَّكَاةَ</span><span class="trans">wa atuz-zakata</span><span class="meaning">And give zakah</span></div>
+                        <div class="word-chip"><span class="ar">وَأَقْرِضُوا اللَّهَ</span><span class="trans">wa aqridullaha</span><span class="meaning">And loan Allah</span></div>
+                        <div class="word-chip"><span class="ar">قَرْضًا حَسَنًا</span><span class="trans">qardan hasana</span><span class="meaning">A goodly loan</span></div>
+                        <div class="word-chip"><span class="ar">وَمَا تُقَدِّمُوا</span><span class="trans">wa ma tuqaddimu</span><span class="meaning">And whatever you put forward</span></div>
+                        <div class="word-chip"><span class="ar">لِأَنفُسِكُم</span><span class="trans">li-anfusikum</span><span class="meaning">For yourselves</span></div>
+                        <div class="word-chip"><span class="ar">مِّنْ خَيْرٍ</span><span class="trans">min khayr</span><span class="meaning">Of good</span></div>
+                        <div class="word-chip"><span class="ar">تَجِدُوهُ عِندَ اللَّهِ</span><span class="trans">tajiduhu 'indallah</span><span class="meaning">You will find it with Allah</span></div>
+                        <div class="word-chip"><span class="ar">هُوَ خَيْرًا</span><span class="trans">huwa khayran</span><span class="meaning">It is better</span></div>
+                        <div class="word-chip"><span class="ar">وَأَعْظَمَ أَجْرًا</span><span class="trans">wa a'dhama ajra</span><span class="meaning">And greater in reward</span></div>
+                        <div class="word-chip"><span class="ar">وَاسْتَغْفِرُوا اللَّهَ</span><span class="trans">wastaghfirullah</span><span class="meaning">And seek forgiveness of Allah</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ اللَّهَ</span><span class="trans">innallaha</span><span class="meaning">Indeed, Allah</span></div>
+                        <div class="word-chip"><span class="ar">غَفُورٌ</span><span class="trans">Ghafurun</span><span class="meaning">Is Forgiving</span></div>
+                        <div class="word-chip"><span class="ar">رَّحِيمٌ</span><span class="trans">Raheem</span><span class="meaning">Merciful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the longest verse in the surah and one of the most merciful passages in the Quran. It was revealed much later than the rest of the surah (some scholars say about a year later, during the Madinan period). Ibn Kathir narrates that after the initial command to pray most of the night, the Prophet and his companions would stand in prayer until their feet swelled. They did this for about a year, and Allah, out of His mercy, lightened the obligation with this verse.</p><p>Allah acknowledges their effort: "Your Lord knows that you stand almost two-thirds of the night, or half of it, or a third of it, and so do a group of those with you." Then comes the relief: "He knew that you would not be able to sustain it, so He has turned to you in forgiveness." The word "fataba" (He turned) shows this lightening is an act of divine mercy and forgiveness, not a concession of weakness.</p><p>The new instruction: "Recite what is easy for you of the Quran." Then Allah lists the legitimate excuses: illness, travel for livelihood, and fighting in His cause. For all these situations, the lighter obligation applies.</p><p>As-Sa'di explains the four remaining commands: (1) Establish the obligatory prayer; (2) Give zakah; (3) Loan Allah a goodly loan (charity beyond zakah); and (4) Seek forgiveness. The "goodly loan" is a beautiful metaphor: when you give charity, you are lending to Allah, and He will repay you with something far greater. The verse closes with a promise and a comfort: whatever good you send ahead, you will find it with Allah, better and greater. And seek Allah's forgiveness, for He is truly Forgiving, truly Merciful. This ending wraps the entire surah in a blanket of hope and mercy.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>The night prayer is the believer's secret weapon.</strong> Before any great mission comes great preparation. Allah prepared His Prophet for carrying the Quran to humanity through Qiyam al-Layl. The night prayer aligns the heart, tongue, and mind in a way no daytime worship can match. If you want spiritual strength, the night is where you build it.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Recite the Quran slowly and with reflection (tarteel).</strong> Speed-reading the Quran misses the point. Every word is heavy with meaning. Tarteel means giving each letter its due, pausing to reflect, and allowing the words to penetrate the heart. Quality of recitation matters more than quantity.</div></li>
+                    <li><span class="bullet">03</span><div><strong>The Quran is a heavy word that requires preparation.</strong> Living by the Quran is not easy. It demands changes in character, habits, priorities, and relationships. The night prayer is the training ground that builds the spiritual muscle needed to carry this weight.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Take Allah as your Wakeel (Disposer of affairs).</strong> When you truly rely on Allah, anxiety loses its grip. He is the Lord of the East and the West. Nothing is outside His control. Do your best, then hand the results over to Him. This is the essence of tawakkul.</div></li>
+                    <li><span class="bullet">05</span><div><strong>Respond to harm with gracious avoidance, not revenge.</strong> "Hajran jamila" (gracious avoidance) is a masterclass in dignity. When people attack you, you do not sink to their level. You walk away with your character intact. This is strength, not weakness.</div></li>
+                    <li><span class="bullet">06</span><div><strong>Allah's mercy lightens the burden when He sees your sincere effort.</strong> The companions pushed themselves to their limits in night prayer, and Allah responded with mercy, reducing the obligation. This shows that Allah does not want to burden you. He wants to see your sincere effort, and then He makes things easier.</div></li>
+                    <li><span class="bullet">07</span><div><strong>Whatever good you send ahead, you will find it with Allah, multiplied.</strong> Every charity, every prayer, every good deed is a deposit in your account with Allah. And unlike worldly investments, this one is guaranteed by the Creator of the universe to be returned better and greater.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih Muslim (hadith on night prayer being the best voluntary prayer, 1163), Sahih Bukhari (physical effects of revelation on the Prophet). All explanations are based on authentic scholarly interpretations. Ali ibn Abi Talib's definition of tarteel is reported by Ibn Kathir. The lightening of night prayer obligation is well-documented in both tafsir works. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 73, totalVerses: 20 });
+    }
+    </script>
+</body>
+</html>

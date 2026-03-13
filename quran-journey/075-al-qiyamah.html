@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Qiyamah - The Resurrection | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 75 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْقِيَامَةِ</div>
+        <h1>Surah Al-Qiyamah</h1>
+        <p>The Resurrection - 40 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">75</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">40</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">164</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Resurrection</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Day of Resurrection & the Soul</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Qiyamah was revealed in Makkah and is one of the most powerful surahs addressing the <span class="highlight">reality of the Day of Resurrection</span>. The name "Al-Qiyamah" means "The Resurrection," referring to the Day when all of humanity will be raised from their graves to stand before Allah. This surah confronts the deniers head-on, demolishing their doubts with logic, oaths, and vivid imagery.</p>
+                <p>The surah opens with a striking double oath: <span class="highlight">Allah swears by the Day of Resurrection and by the self-reproaching soul</span>. This pairing is deeply significant. The Day of Resurrection is the ultimate external reality, while the self-reproaching soul (an-nafs al-lawwamah) is the internal conscience that every human being carries. Together, they represent the two witnesses against denial: the universe outside and the conscience inside.</p>
+                <div class="important">
+                    <p>Ibn Kathir explains that the "self-reproaching soul" (an-nafs al-lawwamah) refers to the soul that constantly blames itself. Al-Hasan al-Basri said: "The believer, by Allah, you will never see him except blaming himself: 'What did I intend by my words? What did I intend by my eating? What did I intend by my thought?' But the sinner goes ahead and never blames himself." This soul is honored by Allah swearing by it because self-accountability is one of the highest virtues.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Introduction to Surah Al-Qiyamah; Al-Hasan al-Basri's statement narrated by Ibn Jarir</p>
+                </div>
+                <p>The middle section contains a remarkable passage about <span class="highlight">the Prophet receiving revelation</span>. Allah instructs the Prophet (peace be upon him) not to move his tongue hastily to memorize the Quran as it is being revealed. Allah Himself guarantees its collection, recitation, and explanation. This passage, though seemingly parenthetical, connects deeply to the surah's theme: just as Allah has the power to preserve His Word, He has the power to resurrect the dead.</p>
+                <p>The surah's final section paints the <span class="highlight">scene of death itself</span>: when the soul reaches the collarbones, when people ask "who can cure him?", when the dying person realizes it is the moment of departure. It contrasts two types of faces on the Day of Judgment: radiant faces looking at their Lord, and distressed faces knowing that a great calamity is about to strike them. The surah closes with a powerful rhetorical question that silences all doubt: <span class="highlight">"Is not He who is able to do that, able to give life to the dead?"</span></p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">لَا أُقْسِمُ بِيَوْمِ الْقِيَامَةِ</div>
+                    <div class="verse-transliteration">La uqsimu bi-yawmil-qiyamah</div>
+                    <div class="verse-translation">I swear by the Day of Resurrection.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَا</span><span class="trans">la</span><span class="meaning">Nay / Indeed</span></div>
+                        <div class="word-chip"><span class="ar">أُقْسِمُ</span><span class="trans">uqsimu</span><span class="meaning">I swear</span></div>
+                        <div class="word-chip"><span class="ar">بِيَوْمِ</span><span class="trans">bi-yawmi</span><span class="meaning">By the Day of</span></div>
+                        <div class="word-chip"><span class="ar">الْقِيَامَةِ</span><span class="trans">al-qiyamah</span><span class="meaning">The Resurrection</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah opens with an oath by the Day of Resurrection. The word "la" here is not negation but rather an emphatic particle used to strengthen the oath, meaning "Indeed, I do swear." Ibn Kathir explains that "la" is used as an introductory emphasis, and the meaning is: "I swear by the Day of Resurrection." Allah swears by this Day to affirm its certainty and its tremendous importance. As-Sa'di notes that when Allah swears by something, it elevates its status and draws attention to its significance. The Day of Resurrection is so momentous that Allah Himself swears by it.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وَلَا أُقْسِمُ بِالنَّفْسِ اللَّوَّامَةِ</div>
+                    <div class="verse-transliteration">Wa la uqsimu bin-nafsil-lawwamah</div>
+                    <div class="verse-translation">And I swear by the self-reproaching soul.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And indeed</span></div>
+                        <div class="word-chip"><span class="ar">أُقْسِمُ</span><span class="trans">uqsimu</span><span class="meaning">I swear</span></div>
+                        <div class="word-chip"><span class="ar">بِالنَّفْسِ</span><span class="trans">bin-nafsi</span><span class="meaning">By the soul</span></div>
+                        <div class="word-chip"><span class="ar">اللَّوَّامَةِ</span><span class="trans">al-lawwamah</span><span class="meaning">The self-reproaching</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The second oath is by the self-reproaching soul (an-nafs al-lawwamah). "Lawwamah" comes from "lawm" meaning to blame or reproach. This is the soul that constantly questions itself, feels guilt over sins, and never settles into complacency. Ibn Kathir cites Al-Hasan al-Basri who said the believer is always blaming himself: "What did I intend? Why did I do that?" The sinner, by contrast, never looks back. As-Sa'di explains that Allah swears by this soul because it is noble. The soul that blames itself is on the path to improvement. It is the opposite of the soul that is content with evil. This verse establishes that human beings have an innate moral compass.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">أَيَحْسَبُ الْإِنسَانُ أَلَّن نَّجْمَعَ عِظَامَهُ</div>
+                    <div class="verse-transliteration">Ayahsabul-insanu al-lan najma'a 'izamah</div>
+                    <div class="verse-translation">Does man think that We will not assemble his bones?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَيَحْسَبُ</span><span class="trans">a-yahsabu</span><span class="meaning">Does he think</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">أَلَّن</span><span class="trans">al-lan</span><span class="meaning">That never will</span></div>
+                        <div class="word-chip"><span class="ar">نَّجْمَعَ</span><span class="trans">najma'a</span><span class="meaning">We assemble</span></div>
+                        <div class="word-chip"><span class="ar">عِظَامَهُ</span><span class="trans">'izamahu</span><span class="meaning">His bones</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is a rhetorical question that exposes the absurdity of denying resurrection. The disbelievers argued that once they die and their bones turn to dust, there is no way they can be brought back to life. The question "a-yahsabu" (does he think?) is filled with astonishment and rebuke. Ibn Kathir explains that this was a common argument of the Quraysh: they would hold up old, decayed bones and say, "Who can bring this back to life?" As-Sa'di notes that the question implies: "How foolish is this assumption! The One who created you from nothing the first time can certainly reassemble you."</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">بَلَىٰ قَادِرِينَ عَلَىٰ أَن نُّسَوِّيَ بَنَانَهُ</div>
+                    <div class="verse-transliteration">Bala qadirina 'ala an nusawwiya bananah</div>
+                    <div class="verse-translation">Yes. [We are] Able [even] to proportion his fingertips.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بَلَىٰ</span><span class="trans">bala</span><span class="meaning">Yes, indeed</span></div>
+                        <div class="word-chip"><span class="ar">قَادِرِينَ</span><span class="trans">qadirina</span><span class="meaning">[We are] Able</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">To / upon</span></div>
+                        <div class="word-chip"><span class="ar">أَن نُّسَوِّيَ</span><span class="trans">an nusawwiya</span><span class="meaning">To proportion / restore</span></div>
+                        <div class="word-chip"><span class="ar">بَنَانَهُ</span><span class="trans">bananahu</span><span class="meaning">His fingertips</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is one of the most scientifically remarkable verses in the Quran. Allah responds: "Yes! We can even reconstruct his fingertips." Why fingertips specifically? Because every human being has unique fingerprints. This was revealed 1400 years ago, long before fingerprint science was discovered in the 19th century. Ibn Kathir explains that "banan" refers to the tips of the fingers, and "nusawwiya" means to make them exactly as they were. Allah is saying: not only can We reassemble the large bones, We can even recreate the most minute and unique details. As-Sa'di adds that this is the ultimate proof of Allah's power: if He can recreate something so small and intricate, how can anyone doubt He can resurrect the entire body?</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">بَلْ يُرِيدُ الْإِنسَانُ لِيَفْجُرَ أَمَامَهُ</div>
+                    <div class="verse-transliteration">Bal yuridul-insanu li-yafjura amamah</div>
+                    <div class="verse-translation">But man desires to continue in sin ahead of him.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بَلْ</span><span class="trans">bal</span><span class="meaning">Rather / But</span></div>
+                        <div class="word-chip"><span class="ar">يُرِيدُ</span><span class="trans">yuridu</span><span class="meaning">Desires / wants</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">لِيَفْجُرَ</span><span class="trans">li-yafjura</span><span class="meaning">To sin / to be wicked</span></div>
+                        <div class="word-chip"><span class="ar">أَمَامَهُ</span><span class="trans">amamahu</span><span class="meaning">Ahead of him / in his future</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse exposes the real reason behind denial of resurrection: it is not intellectual doubt but moral convenience. The human being denies the Day of Judgment because he wants to continue sinning freely without accountability. "Yafjura" comes from "fujur" meaning wickedness, immorality, and open sinning. "Amamahu" means "what is ahead of him," referring to his remaining life. Ibn Kathir explains that man denies the resurrection so he can give himself a blank check to sin. As-Sa'di notes the profound psychological insight: denial of the afterlife is not a conclusion of reason but a desire of the ego. The person first wants to sin, then constructs intellectual excuses to justify it.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">يَسْأَلُ أَيَّانَ يَوْمُ الْقِيَامَةِ</div>
+                    <div class="verse-transliteration">Yas'alu ayyana yawmul-qiyamah</div>
+                    <div class="verse-translation">He asks, "When is the Day of Resurrection?"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَسْأَلُ</span><span class="trans">yas'alu</span><span class="meaning">He asks</span></div>
+                        <div class="word-chip"><span class="ar">أَيَّانَ</span><span class="trans">ayyana</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمُ</span><span class="trans">yawmu</span><span class="meaning">Day of</span></div>
+                        <div class="word-chip"><span class="ar">الْقِيَامَةِ</span><span class="trans">al-qiyamah</span><span class="meaning">The Resurrection</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The denier mockingly asks: "When is this Day of Resurrection?" This question is not asked out of genuine curiosity but out of mockery and disbelief. "Ayyana" is a word used to ask about something considered remote or unlikely. Ibn Kathir explains that this was the typical challenge of the Quraysh polytheists: demanding a specific date for the Day of Judgment as a way of denying it. As-Sa'di points out that the question itself reveals arrogance. Instead of preparing for the Day, they challenge its timing, as if they have power over it. Allah responds in the next verses with signs that will answer their question definitively.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">فَإِذَا بَرِقَ الْبَصَرُ</div>
+                    <div class="verse-transliteration">Fa-idha bariqal-basar</div>
+                    <div class="verse-translation">So when vision is dazzled.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَإِذَا</span><span class="trans">fa-idha</span><span class="meaning">So when</span></div>
+                        <div class="word-chip"><span class="ar">بَرِقَ</span><span class="trans">bariqa</span><span class="meaning">Is dazzled / stunned</span></div>
+                        <div class="word-chip"><span class="ar">الْبَصَرُ</span><span class="trans">al-basaru</span><span class="meaning">The vision / eyesight</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now Allah answers their mocking question by describing what will happen. "Bariqa" means to be dazzled, stunned, or fixed in a state of terror. The eyes will be wide open, unable to blink, frozen in horror at what they see. Ibn Kathir explains that this refers to the moment of death or the Day of Resurrection when the eyes become fixated with terror at the overwhelming sights. As-Sa'di says the vision becomes "bariqa" because it sees such terrifying things that it cannot look away or close. This is the beginning of the answer to their question: you asked "when?" Here is what will happen when that Day comes.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وَخَسَفَ الْقَمَرُ</div>
+                    <div class="verse-transliteration">Wa khasafal-qamar</div>
+                    <div class="verse-translation">And the moon darkens.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَخَسَفَ</span><span class="trans">wa khasafa</span><span class="meaning">And darkens / eclipses</span></div>
+                        <div class="word-chip"><span class="ar">الْقَمَرُ</span><span class="trans">al-qamaru</span><span class="meaning">The moon</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The moon will lose its light completely. "Khasafa" means to eclipse, to lose light, to be swallowed up in darkness. The moon, which has illuminated the night sky since the beginning of time, will go dark permanently. Ibn Kathir explains that this is not a temporary eclipse like what we experience in this world, but a permanent extinguishing of the moon's light. As-Sa'di notes that the moon's darkening is a sign that the entire system of the universe is being dismantled. The celestial bodies that seemed eternal and unchanging are now being destroyed, showing that only Allah is truly eternal.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">وَجُمِعَ الشَّمْسُ وَالْقَمَرُ</div>
+                    <div class="verse-transliteration">Wa jumi'ash-shamsu wal-qamar</div>
+                    <div class="verse-translation">And the sun and the moon are joined.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَجُمِعَ</span><span class="trans">wa jumi'a</span><span class="meaning">And are joined together</span></div>
+                        <div class="word-chip"><span class="ar">الشَّمْسُ</span><span class="trans">ash-shamsu</span><span class="meaning">The sun</span></div>
+                        <div class="word-chip"><span class="ar">وَالْقَمَرُ</span><span class="trans">wal-qamaru</span><span class="meaning">And the moon</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The sun and moon, which have always maintained their separate orbits and alternated between day and night, will be brought together. "Jumi'a" means to be collected or merged together. Ibn Kathir explains that both will lose their light and be thrown together, both darkened. This is the collapse of the cosmic order that humans took for granted. As-Sa'di notes the significance: the sun and moon were created as separate signs, one for the day and one for the night. Their merging signals the end of time itself, for there will be no more day or night, no more counting of months or years. The entire structure of worldly time ceases to exist.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">يَقُولُ الْإِنسَانُ يَوْمَئِذٍ أَيْنَ الْمَفَرُّ</div>
+                    <div class="verse-transliteration">Yaqulul-insanu yawma'idhin aynal-mafarr</div>
+                    <div class="verse-translation">Man will say on that Day, "Where is the [place of] escape?"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَقُولُ</span><span class="trans">yaqulu</span><span class="meaning">Will say</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">On that Day</span></div>
+                        <div class="word-chip"><span class="ar">أَيْنَ</span><span class="trans">ayna</span><span class="meaning">Where is</span></div>
+                        <div class="word-chip"><span class="ar">الْمَفَرُّ</span><span class="trans">al-mafarru</span><span class="meaning">The escape / refuge</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The same person who mocked and asked "when is the Day of Resurrection?" now desperately cries, "Where can I escape?" "Al-mafarr" comes from "farra" meaning to flee. The scoffer becomes the terrified fugitive. Ibn Kathir explains that on that Day, every human being will be looking for a way out, a place to run, but there will be none. As-Sa'di notes the powerful contrast: in the worldly life, this person boldly denied the Day; now that it has arrived, all his arrogance has evaporated and he is consumed by panic. This is the consequence of denial: not being prepared when the inevitable arrives.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">كَلَّا لَا وَزَرَ</div>
+                    <div class="verse-transliteration">Kalla la wazar</div>
+                    <div class="verse-translation">No! There is no refuge.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Never!</span></div>
+                        <div class="word-chip"><span class="ar">لَا</span><span class="trans">la</span><span class="meaning">There is no</span></div>
+                        <div class="word-chip"><span class="ar">وَزَرَ</span><span class="trans">wazar</span><span class="meaning">Refuge / shelter</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The answer comes immediately and devastatingly: "No! There is no refuge." "Kalla" is a strong particle of denial and rebuke. "Wazar" originally means a mountain or fortress where one seeks shelter. On that Day, there will be no mountain to hide behind, no fortress to enter, no person to protect you. Ibn Kathir explains that "wazar" refers to any place of protection or escape, and Allah categorically denies its existence on that Day. As-Sa'di adds that in the world, a person can flee from one land to another, hide behind wealth or power, or seek protection from allies. On the Day of Judgment, all of these vanish. There is only Allah, and there is nowhere to hide from Him.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">إِلَىٰ رَبِّكَ يَوْمَئِذٍ الْمُسْتَقَرُّ</div>
+                    <div class="verse-transliteration">Ila rabbika yawma'idhinil-mustaqarr</div>
+                    <div class="verse-translation">To your Lord, that Day, is the [place of] permanence.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">To</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">الْمُسْتَقَرُّ</span><span class="trans">al-mustaqarr</span><span class="meaning">The place of permanence / settlement</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The final destination is with Allah alone. "Al-mustaqarr" means the place of settlement, the final stop, the permanent abode. There is no other destination. Ibn Kathir explains that everyone will end up before Allah for judgment. Whether willing or unwilling, every soul will be brought before its Lord. As-Sa'di notes that this verse carries both a warning and a comfort. For the disbeliever, it is a terrifying reality: they cannot escape Allah's judgment. For the believer, it is reassuring: their final abode is with their Lord, who is Merciful, Compassionate, and Just. The destination is the same, but the experience will be vastly different.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">يُنَبَّأُ الْإِنسَانُ يَوْمَئِذٍ بِمَا قَدَّمَ وَأَخَّرَ</div>
+                    <div class="verse-transliteration">Yunabba'ul-insanu yawma'idhin bima qaddama wa akhkhar</div>
+                    <div class="verse-translation">Man will be informed that Day of what he sent ahead and kept back.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يُنَبَّأُ</span><span class="trans">yunabba'u</span><span class="meaning">Will be informed</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">بِمَا</span><span class="trans">bima</span><span class="meaning">Of what</span></div>
+                        <div class="word-chip"><span class="ar">قَدَّمَ</span><span class="trans">qaddama</span><span class="meaning">He sent ahead</span></div>
+                        <div class="word-chip"><span class="ar">وَأَخَّرَ</span><span class="trans">wa akhkhara</span><span class="meaning">And kept back</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>On that Day, every human will be told exactly what they did and what they left behind. "Qaddama" means what he sent ahead: his deeds, both good and bad. "Akhkhara" means what he delayed or left behind: the obligations he neglected, the good he failed to do, and the legacy he left. Ibn Kathir explains that "qaddama" includes all actions done during one's lifetime, and "akhkhara" includes both what one postponed doing and the effects of one's actions that continued after death (like ongoing charity or harmful traditions). As-Sa'di notes this is a complete accounting: nothing is missed. Every good deed, every sin, every missed opportunity will be presented in full.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">بَلِ الْإِنسَانُ عَلَىٰ نَفْسِهِ بَصِيرَةٌ</div>
+                    <div class="verse-transliteration">Balil-insanu 'ala nafsihi basirah</div>
+                    <div class="verse-translation">Rather, man, against himself, will be a witness.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بَلِ</span><span class="trans">bal</span><span class="meaning">Rather / In fact</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">Against / upon</span></div>
+                        <div class="word-chip"><span class="ar">نَفْسِهِ</span><span class="trans">nafsihi</span><span class="meaning">Himself</span></div>
+                        <div class="word-chip"><span class="ar">بَصِيرَةٌ</span><span class="trans">basirah</span><span class="meaning">A witness / insight</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Man is his own witness against himself. "Basirah" means one who has clear insight or evidence. A person knows, deep inside, what he truly did. No external witness is even needed. Ibn Kathir explains that on the Day of Judgment, man's own limbs will testify against him, his hands, his feet, his skin. But even beyond that, the person himself knows the truth of his actions. As-Sa'di notes this verse connects back to verse 2 and the self-reproaching soul. The human being has been given self-awareness. He cannot genuinely claim ignorance of his own deeds. Even if he denies before others, he knows the truth about himself.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">وَلَوْ أَلْقَىٰ مَعَاذِيرَهُ</div>
+                    <div class="verse-transliteration">Wa law alqa ma'adhirah</div>
+                    <div class="verse-translation">Even if he presents his excuses.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلَوْ</span><span class="trans">wa law</span><span class="meaning">Even if</span></div>
+                        <div class="word-chip"><span class="ar">أَلْقَىٰ</span><span class="trans">alqa</span><span class="meaning">He presents / throws</span></div>
+                        <div class="word-chip"><span class="ar">مَعَاذِيرَهُ</span><span class="trans">ma'adhirahu</span><span class="meaning">His excuses</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Even if the person throws out every excuse he can think of, it will not help him. "Ma'adhir" is the plural of "ma'dhirah," meaning excuse or justification. "Alqa" means to throw or cast, suggesting the person desperately flings out excuse after excuse. Ibn Kathir explains that no excuse will be accepted on that Day because the person's own body and soul are witnesses against him. How can you deny what your own limbs testify to? As-Sa'di adds that this applies in this world too: a person may fool others with excuses, but he can never fool himself. And on the Day of Judgment, he cannot even fool others, because everything is laid bare.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">لَا تُحَرِّكْ بِهِ لِسَانَكَ لِتَعْجَلَ بِهِ</div>
+                    <div class="verse-transliteration">La tuharrik bihi lisanaka li-ta'jala bih</div>
+                    <div class="verse-translation">[O Muhammad], do not move your tongue with it to hasten with it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَا</span><span class="trans">la</span><span class="meaning">Do not</span></div>
+                        <div class="word-chip"><span class="ar">تُحَرِّكْ</span><span class="trans">tuharrik</span><span class="meaning">Move</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">With it</span></div>
+                        <div class="word-chip"><span class="ar">لِسَانَكَ</span><span class="trans">lisanaka</span><span class="meaning">Your tongue</span></div>
+                        <div class="word-chip"><span class="ar">لِتَعْجَلَ</span><span class="trans">li-ta'jala</span><span class="meaning">To hasten</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">With it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This begins a parenthetical passage addressed directly to Prophet Muhammad (peace be upon him). When Jibreel would bring revelation, the Prophet would hurriedly repeat the words with his tongue, anxious not to forget anything. Allah reassures him: do not rush. Ibn Kathir narrates from Ibn Abbas (reported in Sahih Bukhari) that the Prophet used to move his lips quickly when receiving revelation, fearing he would forget it. So Allah revealed these verses to calm him. As-Sa'di explains the connection to the surah's theme: just as Allah guarantees the preservation of His Word, He guarantees the resurrection of the dead. Both demonstrate Allah's absolute power and control.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">إِنَّ عَلَيْنَا جَمْعَهُ وَقُرْآنَهُ</div>
+                    <div class="verse-transliteration">Inna 'alayna jam'ahu wa qur'anah</div>
+                    <div class="verse-translation">Indeed, upon Us is its collection [in your heart] and [to make possible] its recitation.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْنَا</span><span class="trans">'alayna</span><span class="meaning">Upon Us</span></div>
+                        <div class="word-chip"><span class="ar">جَمْعَهُ</span><span class="trans">jam'ahu</span><span class="meaning">Its collection</span></div>
+                        <div class="word-chip"><span class="ar">وَقُرْآنَهُ</span><span class="trans">wa qur'anahu</span><span class="meaning">And its recitation</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah takes personal responsibility for two things: collecting the Quran in the Prophet's heart (jam'ahu) and enabling him to recite it (qur'anahu). "Jam'" means to gather and collect, and "qur'an" here is used in its linguistic meaning of recitation. Ibn Kathir explains that Allah guaranteed the Prophet that the Quran would be preserved in his chest and he would be able to recite it perfectly. As-Sa'di notes the word "alayna" (upon Us) is a divine guarantee. When Allah says something is upon Him, it is absolutely certain. This verse is also one of the strongest proofs of the Quran's preservation, as it connects to the parallel theme of verses 3-4: the God who can reassemble fingertips can certainly preserve His Book.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">فَإِذَا قَرَأْنَاهُ فَاتَّبِعْ قُرْآنَهُ</div>
+                    <div class="verse-transliteration">Fa-idha qara'nahu fattabi' qur'anah</div>
+                    <div class="verse-translation">So when We have recited it [through Jibreel], then follow its recitation.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَإِذَا</span><span class="trans">fa-idha</span><span class="meaning">So when</span></div>
+                        <div class="word-chip"><span class="ar">قَرَأْنَاهُ</span><span class="trans">qara'nahu</span><span class="meaning">We have recited it</span></div>
+                        <div class="word-chip"><span class="ar">فَاتَّبِعْ</span><span class="trans">fattabi'</span><span class="meaning">Then follow</span></div>
+                        <div class="word-chip"><span class="ar">قُرْآنَهُ</span><span class="trans">qur'anahu</span><span class="meaning">Its recitation</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The instruction is clear: when Jibreel recites the revelation to you, listen silently and then follow the recitation. "Ittabi'" means to follow, to come after. The Prophet is told to be a listener first, then a reciter. Ibn Kathir narrates from Ibn Abbas that after this verse was revealed, the Prophet would listen silently when Jibreel came, and after Jibreel departed, he would recite it, and it would be perfectly preserved in his heart. As-Sa'di draws a practical lesson: when receiving knowledge or guidance, listen first and do not rush. The urge to speak before fully hearing leads to mistakes. Patience in learning is a prophetic quality.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">ثُمَّ إِنَّ عَلَيْنَا بَيَانَهُ</div>
+                    <div class="verse-transliteration">Thumma inna 'alayna bayanah</div>
+                    <div class="verse-translation">Then upon Us is its clarification [to you].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْنَا</span><span class="trans">'alayna</span><span class="meaning">Upon Us</span></div>
+                        <div class="word-chip"><span class="ar">بَيَانَهُ</span><span class="trans">bayanahu</span><span class="meaning">Its clarification / explanation</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah adds a third guarantee: not only will He collect it and enable its recitation, but He will also clarify its meanings. "Bayan" means explanation, clarification, making clear. Ibn Kathir explains that Allah undertook to explain to the Prophet the meanings and rulings of the Quran. The Prophet did not need to worry about understanding it; Allah would make it clear through further revelation, through Jibreel's explanations, and through inspired understanding. As-Sa'di notes the three-part guarantee: collection (memorization), recitation (ability to read it), and explanation (understanding its meaning). This covers preservation of the text, the ability to transmit it, and comprehension of its message.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">كَلَّا بَلْ تُحِبُّونَ الْعَاجِلَةَ</div>
+                    <div class="verse-transliteration">Kalla bal tuhibbunal-'ajilah</div>
+                    <div class="verse-translation">No! But you love the immediate [life].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Never!</span></div>
+                        <div class="word-chip"><span class="ar">بَلْ</span><span class="trans">bal</span><span class="meaning">Rather / But</span></div>
+                        <div class="word-chip"><span class="ar">تُحِبُّونَ</span><span class="trans">tuhibbuna</span><span class="meaning">You love</span></div>
+                        <div class="word-chip"><span class="ar">الْعَاجِلَةَ</span><span class="trans">al-'ajilah</span><span class="meaning">The immediate (worldly life)</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah returns to its main theme with a sharp rebuke. "Kalla" again is emphatic rejection. "Al-'ajilah" means the immediate, the hastened, referring to this worldly life. The fundamental problem is exposed: people love the immediate gratification of this world and neglect the eternal afterlife. Ibn Kathir explains that this is addressed to those who deny the resurrection. Their denial is rooted not in logic but in their love of this world. They want to enjoy the present without worrying about consequences. As-Sa'di notes the word "tuhibbuna" (you love) reveals the issue is in the heart, not the mind. It is an emotional attachment to the temporary, not an intellectual argument against the eternal.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">وَتَذَرُونَ الْآخِرَةَ</div>
+                    <div class="verse-transliteration">Wa tadharunal-akhirah</div>
+                    <div class="verse-translation">And leave [neglect] the Hereafter.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَتَذَرُونَ</span><span class="trans">wa tadharuna</span><span class="meaning">And you leave / neglect</span></div>
+                        <div class="word-chip"><span class="ar">الْآخِرَةَ</span><span class="trans">al-akhirah</span><span class="meaning">The Hereafter</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Tadharuna" means to leave, abandon, or neglect. "Al-akhirah" is the Hereafter, the eternal life to come. The contrast is devastating: they love what is temporary and abandon what is permanent. Ibn Kathir explains that people neglect preparing for the Hereafter because they are consumed by worldly pursuits. They invest all their energy in what will eventually disappear and ignore what will last forever. As-Sa'di points out that this is the greatest miscalculation a human being can make. The worldly life, no matter how long, is finite. The Hereafter is infinite. To prefer the finite over the infinite is the very definition of short-sightedness and loss.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">وُجُوهٌ يَوْمَئِذٍ نَّاضِرَةٌ</div>
+                    <div class="verse-transliteration">Wujuhun yawma'idhin nadirah</div>
+                    <div class="verse-translation">[Some] faces, that Day, will be radiant.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وُجُوهٌ</span><span class="trans">wujuhun</span><span class="meaning">Faces</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">نَّاضِرَةٌ</span><span class="trans">nadirah</span><span class="meaning">Radiant / bright</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the surah contrasts two types of faces on the Day of Judgment. The first group has faces that are "nadirah," meaning radiant, bright, glowing with beauty and joy. "Nadirah" comes from "nadrah" which means freshness, beauty, and glow. Ibn Kathir explains that these are the faces of the believers, shining with the joy of knowing they are safe and that Allah is pleased with them. Their faces reflect the light of their faith and good deeds. As-Sa'di notes the choice of "wujuh" (faces) because the face is the most expressive part of the body. On the Day of Judgment, a person's inner state will be written plainly on their face for all to see.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">إِلَىٰ رَبِّهَا نَاظِرَةٌ</div>
+                    <div class="verse-transliteration">Ila rabbiha nazirah</div>
+                    <div class="verse-translation">Looking at their Lord.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">At / toward</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّهَا</span><span class="trans">rabbiha</span><span class="meaning">Their Lord</span></div>
+                        <div class="word-chip"><span class="ar">نَاظِرَةٌ</span><span class="trans">nazirah</span><span class="meaning">Looking / gazing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is one of the most magnificent verses in the entire Quran. The believers will look at Allah directly. "Nazirah" means gazing, looking with one's eyes. This is the ultimate reward of Paradise: to see the Face of Allah. Ibn Kathir cites the hadith from Sahih Muslim where the Prophet (peace be upon him) said: "You will see your Lord as you see the full moon; you will have no difficulty in seeing Him." This is the greatest blessing of Paradise, greater than every other pleasure combined. As-Sa'di explains that the scholars of Ahlus-Sunnah wal-Jama'ah are unanimously agreed that the believers will see Allah in the Hereafter, and this verse is one of the strongest proofs. The joy of seeing Allah will make every other pleasure seem insignificant.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">وَوُجُوهٌ يَوْمَئِذٍ بَاسِرَةٌ</div>
+                    <div class="verse-transliteration">Wa wujuhun yawma'idhin basirah</div>
+                    <div class="verse-translation">And [some] faces, that Day, will be contorted [with distress].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَوُجُوهٌ</span><span class="trans">wa wujuhun</span><span class="meaning">And faces</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">بَاسِرَةٌ</span><span class="trans">basirah</span><span class="meaning">Contorted / distressed / frowning</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The contrast is immediate and stark. While the believers' faces glow with radiance, the disbelievers' faces are "basirah," meaning contorted, gloomy, frowning, and darkened with distress. "Basirah" comes from "busur" meaning to frown severely, to look miserable and dejected. Ibn Kathir explains that these faces show the inner anguish and terror of knowing what awaits them. As-Sa'di notes the powerful literary structure: verse 22 mentions radiant faces, verse 23 explains why (looking at Allah), verse 24 mentions distressed faces, and verse 25 will explain why. The two groups are placed side by side so the reader can see the contrast clearly and choose which group they want to belong to.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">تَظُنُّ أَن يُفْعَلَ بِهَا فَاقِرَةٌ</div>
+                    <div class="verse-transliteration">Tazunnu an yuf'ala biha faqirah</div>
+                    <div class="verse-translation">Expecting that there will be done to them [something] backbreaking.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">تَظُنُّ</span><span class="trans">tazunnu</span><span class="meaning">Expecting / thinking</span></div>
+                        <div class="word-chip"><span class="ar">أَن</span><span class="trans">an</span><span class="meaning">That</span></div>
+                        <div class="word-chip"><span class="ar">يُفْعَلَ</span><span class="trans">yuf'ala</span><span class="meaning">Will be done</span></div>
+                        <div class="word-chip"><span class="ar">بِهَا</span><span class="trans">biha</span><span class="meaning">To them</span></div>
+                        <div class="word-chip"><span class="ar">فَاقِرَةٌ</span><span class="trans">faqirah</span><span class="meaning">A backbreaking calamity</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The reason for their distressed faces: they know a catastrophic punishment is coming. "Faqirah" is a devastating word. It comes from "faqr" which relates to the spine being broken. It means a disaster so severe it breaks a person's back, a calamity beyond endurance. Ibn Kathir explains that "faqirah" refers to a crushing punishment that will enter the Hellfire. As-Sa'di notes the word "tazunnu" (they think/expect) is used because their punishment is not yet happening, but they can sense it coming. The anticipation of punishment is itself a punishment. While the believers look forward with joy to seeing their Lord, the disbelievers look forward with dread to destruction.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">كَلَّا إِذَا بَلَغَتِ التَّرَاقِيَ</div>
+                    <div class="verse-transliteration">Kalla idha balaghatit-taraqi</div>
+                    <div class="verse-translation">No! When it [the soul] has reached the collarbones.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Beware!</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">بَلَغَتِ</span><span class="trans">balaghat</span><span class="meaning">It has reached</span></div>
+                        <div class="word-chip"><span class="ar">التَّرَاقِيَ</span><span class="trans">at-taraqi</span><span class="meaning">The collarbones</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah now shifts to the moment of death. "Kalla" here is a word of warning. "At-taraqi" is the plural of "tarquwah," meaning the collarbone. When the soul reaches the collarbones during its departure from the body, death is imminent and irreversible. Ibn Kathir explains that the soul is gradually pulled out from the body, starting from the feet and moving upward. When it reaches the collarbones (near the throat), the dying person is at the point of no return. There is no going back. As-Sa'di notes that this vivid description makes death tangible and real. It is not an abstract concept but a physical experience that every person will go through, and the surah forces the reader to confront it.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">وَقِيلَ مَنْ ۜ رَاقٍ</div>
+                    <div class="verse-transliteration">Wa qila man raq</div>
+                    <div class="verse-translation">And it is said, "Who will cure [him]?"</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَقِيلَ</span><span class="trans">wa qila</span><span class="meaning">And it is said</span></div>
+                        <div class="word-chip"><span class="ar">مَنْ</span><span class="trans">man</span><span class="meaning">Who</span></div>
+                        <div class="word-chip"><span class="ar">رَاقٍ</span><span class="trans">raqin</span><span class="meaning">Can cure / a healer</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The people around the dying person desperately ask: "Is there anyone who can cure him? Is there a healer, a doctor, a spiritual healer (raqi) who can save him?" "Raq" comes from "ruqyah" (spiritual healing) or "raqiy" (one who ascends/heals). Ibn Kathir mentions two interpretations: (1) the people around the dying person asking for a healer, and (2) the angels asking whether the angels of mercy or the angels of punishment should take his soul. As-Sa'di prefers the first interpretation: the family, in despair, searches for any means to save their loved one. But at this point, no medicine, no doctor, and no ruqyah can help. Death has arrived, and only Allah has power over it.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">وَظَنَّ أَنَّهُ الْفِرَاقُ</div>
+                    <div class="verse-transliteration">Wa zanna annahu-l-firaq</div>
+                    <div class="verse-translation">And he [the dying person] is certain that it is the [time of] parting.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَظَنَّ</span><span class="trans">wa zanna</span><span class="meaning">And he is certain / realizes</span></div>
+                        <div class="word-chip"><span class="ar">أَنَّهُ</span><span class="trans">annahu</span><span class="meaning">That it is</span></div>
+                        <div class="word-chip"><span class="ar">الْفِرَاقُ</span><span class="trans">al-firaq</span><span class="meaning">The parting / separation</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The dying person himself realizes that this is the final separation from the world. "Zanna" here means certainty, not doubt. "Al-firaq" means the parting, the final farewell. He is leaving behind everything: his family, his wealth, his home, his body itself. Ibn Kathir explains that at the moment of death, the reality of the afterlife becomes undeniable. Even the denier, in his final moments, knows the truth. As-Sa'di notes that "al-firaq" is one of the most emotional words in the Arabic language. It means separation from everything loved. The dying person separates from this world forever, and there is no return. This verse forces every reader to imagine their own moment of departure.</p></div>
+                </div>
+
+                <!-- Verse 29 -->
+                <div class="verse-card"><div class="verse-number">29</div>
+                    <div class="verse-arabic">وَالْتَفَّتِ السَّاقُ بِالسَّاقِ</div>
+                    <div class="verse-transliteration">Waltaffatis-saqu bis-saq</div>
+                    <div class="verse-translation">And the leg is wound about the [other] leg.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَالْتَفَّتِ</span><span class="trans">waltaffat</span><span class="meaning">And is wound / wrapped</span></div>
+                        <div class="word-chip"><span class="ar">السَّاقُ</span><span class="trans">as-saqu</span><span class="meaning">The leg / shin</span></div>
+                        <div class="word-chip"><span class="ar">بِالسَّاقِ</span><span class="trans">bis-saqi</span><span class="meaning">With the [other] leg</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The legs wrap around each other in the agony of death. "Iltaffat" means to intertwine, wrap around, or cling together. "As-saq" means the shin or leg. Ibn Kathir mentions two interpretations: (1) the physical legs of the dying person wrapping together as the body seizes in the throes of death, and (2) metaphorically, the hardship of this world's ending meets the hardship of the afterlife's beginning. One calamity wraps around another. As-Sa'di favors the combined meaning: the difficulty of death in this world joins with the difficulty of what comes after death. The dying person faces distress from both sides simultaneously. It is a moment of ultimate helplessness that no human can avoid.</p></div>
+                </div>
+
+                <!-- Verse 30 -->
+                <div class="verse-card"><div class="verse-number">30</div>
+                    <div class="verse-arabic">إِلَىٰ رَبِّكَ يَوْمَئِذٍ الْمَسَاقُ</div>
+                    <div class="verse-transliteration">Ila rabbika yawma'idhinil-masaq</div>
+                    <div class="verse-translation">To your Lord, that Day, will be the procession.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">To</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">الْمَسَاقُ</span><span class="trans">al-masaq</span><span class="meaning">The driving / procession</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The soul will be driven to Allah. "Al-masaq" comes from "sawq" meaning to drive, to herd, to propel forward. Just as cattle are driven to their destination, the soul is driven toward its Lord. There is no choice and no resistance. Ibn Kathir explains that the soul is taken to Allah whether it wants to go or not. The angels drive it forward to its final judgment. As-Sa'di notes the repetition of "ila rabbika" (to your Lord), echoing verse 12. The message is hammered home: your destination is Allah. You are heading there whether you acknowledge it or not. The question is only whether you arrive as one who was prepared or one who was heedless.</p></div>
+                </div>
+
+                <!-- Verse 31 -->
+                <div class="verse-card"><div class="verse-number">31</div>
+                    <div class="verse-arabic">فَلَا صَدَّقَ وَلَا صَلَّىٰ</div>
+                    <div class="verse-transliteration">Fala saddaqa wa la salla</div>
+                    <div class="verse-translation">And he [the disbeliever] had not believed, nor had he prayed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَلَا</span><span class="trans">fa-la</span><span class="meaning">And not / he did not</span></div>
+                        <div class="word-chip"><span class="ar">صَدَّقَ</span><span class="trans">saddaqa</span><span class="meaning">Believe / affirm the truth</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">صَلَّىٰ</span><span class="trans">salla</span><span class="meaning">Prayed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the surah describes the specific crimes of the denier. He did not believe (saddaqa) and did not pray (salla). These are the two pillars: belief in the heart and prayer as action. "Saddaqa" means to affirm the truth, to believe with conviction. "Salla" means to perform the ritual prayer. Ibn Kathir explains that this person rejected the truth brought by the Prophet and refused to pray to Allah. These are the two most fundamental obligations: faith and prayer. As-Sa'di notes that mentioning these two together shows that Islam requires both inner conviction and outward action. One without the other is incomplete. The disbeliever lacked both, which is the worst possible state.</p></div>
+                </div>
+
+                <!-- Verse 32 -->
+                <div class="verse-card"><div class="verse-number">32</div>
+                    <div class="verse-arabic">وَلَٰكِن كَذَّبَ وَتَوَلَّىٰ</div>
+                    <div class="verse-transliteration">Wa lakin kadhdhaba wa tawalla</div>
+                    <div class="verse-translation">But [instead], he denied and turned away.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلَٰكِن</span><span class="trans">wa lakin</span><span class="meaning">But instead</span></div>
+                        <div class="word-chip"><span class="ar">كَذَّبَ</span><span class="trans">kadhdhaba</span><span class="meaning">He denied / rejected</span></div>
+                        <div class="word-chip"><span class="ar">وَتَوَلَّىٰ</span><span class="trans">wa tawalla</span><span class="meaning">And turned away</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Instead of believing and praying, he did the exact opposite: he denied and turned away. "Kadhdhaba" means to declare something a lie, to actively reject the truth. "Tawalla" means to turn one's back, to walk away arrogantly. These are the opposites of saddaqa and salla. Ibn Kathir explains the four-part contrast: he should have believed but instead he denied; he should have prayed but instead he turned away. It is not merely that he failed to do good; he actively chose evil. As-Sa'di notes that "tawalla" implies arrogance, not just indifference. The person actively and deliberately turned his back on the truth after it was made clear to him.</p></div>
+                </div>
+
+                <!-- Verse 33 -->
+                <div class="verse-card"><div class="verse-number">33</div>
+                    <div class="verse-arabic">ثُمَّ ذَهَبَ إِلَىٰ أَهْلِهِ يَتَمَطَّىٰ</div>
+                    <div class="verse-transliteration">Thumma dhahaba ila ahlihi yatamatta</div>
+                    <div class="verse-translation">Then he went to his people, swaggering [in pride].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">ذَهَبَ</span><span class="trans">dhahaba</span><span class="meaning">He went</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">To</span></div>
+                        <div class="word-chip"><span class="ar">أَهْلِهِ</span><span class="trans">ahlihi</span><span class="meaning">His people / family</span></div>
+                        <div class="word-chip"><span class="ar">يَتَمَطَّىٰ</span><span class="trans">yatamatta</span><span class="meaning">Swaggering / walking proudly</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After denying the truth, he walks back to his people swaggering with pride. "Yatamatta" means to walk with an arrogant, self-important gait, swinging one's body boastfully. Ibn Kathir explains that this describes the leaders of Quraysh, particularly Abu Jahl, who would walk away from the Prophet with exaggerated pride, showing off to his people that he had rejected the message. As-Sa'di notes the complete picture of the denier: he does not believe, does not pray, actively rejects the truth, turns away, and then walks back to his people full of pride as if he has done something praiseworthy. This is the opposite of the humble, self-reproaching soul mentioned in verse 2.</p></div>
+                </div>
+
+                <!-- Verse 34 -->
+                <div class="verse-card"><div class="verse-number">34</div>
+                    <div class="verse-arabic">أَوْلَىٰ لَكَ فَأَوْلَىٰ</div>
+                    <div class="verse-transliteration">Awla laka fa-awla</div>
+                    <div class="verse-translation">Woe to you, and woe!</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَوْلَىٰ</span><span class="trans">awla</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">لَكَ</span><span class="trans">laka</span><span class="meaning">To you</span></div>
+                        <div class="word-chip"><span class="ar">فَأَوْلَىٰ</span><span class="trans">fa-awla</span><span class="meaning">Then woe</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is a severe threat and warning repeated for emphasis. "Awla" is a word of doom, meaning destruction is most befitting for you, or woe and ruin are closest to you. The repetition doubles the intensity. Ibn Kathir explains that this is a threat from Allah to the arrogant denier: destruction is approaching you, and then more destruction. Qatadah said: "It is a threat upon a threat." As-Sa'di notes that this is one of the most severe warnings in the Quran. The person who swaggers in pride after denying Allah's truth deserves this double warning. It is reported that the Prophet (peace be upon him) once grabbed Abu Jahl by his collar and said these words to him.</p></div>
+                </div>
+
+                <!-- Verse 35 -->
+                <div class="verse-card"><div class="verse-number">35</div>
+                    <div class="verse-arabic">ثُمَّ أَوْلَىٰ لَكَ فَأَوْلَىٰ</div>
+                    <div class="verse-transliteration">Thumma awla laka fa-awla</div>
+                    <div class="verse-translation">Then woe to you, and woe!</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then / Again</span></div>
+                        <div class="word-chip"><span class="ar">أَوْلَىٰ</span><span class="trans">awla</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">لَكَ</span><span class="trans">laka</span><span class="meaning">To you</span></div>
+                        <div class="word-chip"><span class="ar">فَأَوْلَىٰ</span><span class="trans">fa-awla</span><span class="meaning">Then woe</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The warning is repeated a second time, making it four-fold: "awla" appears four times across these two verses. This extreme repetition emphasizes the severity of the punishment awaiting the arrogant denier. Ibn Kathir explains that repetition in the Quran is used for emphasis and to show the gravity of the matter. The threat is not casual; it is the most severe kind of divine warning. As-Sa'di notes that the double repetition of the verse itself serves as both a warning about punishment in this world and punishment in the Hereafter, or punishment in the grave and punishment on the Day of Judgment. Every stage of the afterlife holds doom for the arrogant denier.</p></div>
+                </div>
+
+                <!-- Verse 36 -->
+                <div class="verse-card"><div class="verse-number">36</div>
+                    <div class="verse-arabic">أَيَحْسَبُ الْإِنسَانُ أَن يُتْرَكَ سُدًى</div>
+                    <div class="verse-transliteration">Ayahsabul-insanu an yutraka suda</div>
+                    <div class="verse-translation">Does man think that he will be left neglected?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَيَحْسَبُ</span><span class="trans">a-yahsabu</span><span class="meaning">Does he think</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human being</span></div>
+                        <div class="word-chip"><span class="ar">أَن</span><span class="trans">an</span><span class="meaning">That</span></div>
+                        <div class="word-chip"><span class="ar">يُتْرَكَ</span><span class="trans">yutraka</span><span class="meaning">He will be left</span></div>
+                        <div class="word-chip"><span class="ar">سُدًى</span><span class="trans">suda</span><span class="meaning">Neglected / without purpose</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This rhetorical question strikes at the core of atheistic and nihilistic thinking. "Suda" means neglected, aimless, without purpose, without being commanded or held accountable. Does man really think he was created for nothing? That there are no commands, no prohibitions, no reckoning? Ibn Kathir explains that "suda" means to be left without obligations and without resurrection. The answer is emphatically no. As-Sa'di delivers a powerful argument: look at the purpose and design in everything Allah created. The heavens, the earth, the sun, the moon, all have a purpose. Is it conceivable that the most honored creation, the human being, was created without any purpose? This is logically absurd, and the next verses will prove it further.</p></div>
+                </div>
+
+                <!-- Verse 37 -->
+                <div class="verse-card"><div class="verse-number">37</div>
+                    <div class="verse-arabic">أَلَمْ يَكُ نُطْفَةً مِّن مَّنِيٍّ يُمْنَىٰ</div>
+                    <div class="verse-transliteration">Alam yaku nutfatan min maniyyin yumna</div>
+                    <div class="verse-translation">Had he not been a sperm-drop from semen emitted?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَمْ</span><span class="trans">alam</span><span class="meaning">Had not</span></div>
+                        <div class="word-chip"><span class="ar">يَكُ</span><span class="trans">yaku</span><span class="meaning">He been</span></div>
+                        <div class="word-chip"><span class="ar">نُطْفَةً</span><span class="trans">nutfatan</span><span class="meaning">A sperm-drop</span></div>
+                        <div class="word-chip"><span class="ar">مِّن مَّنِيٍّ</span><span class="trans">min maniyyin</span><span class="meaning">From semen</span></div>
+                        <div class="word-chip"><span class="ar">يُمْنَىٰ</span><span class="trans">yumna</span><span class="meaning">Emitted</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah reminds man of his humble origin. "Nutfah" means a tiny drop, and "maniyy" means seminal fluid. "Yumna" means poured forth or emitted. This is where every human being started: as an insignificant drop of fluid. Ibn Kathir explains that Allah is making an argument by analogy: if Allah created you from this tiny, insignificant drop and transformed it into a complete human being with bones, flesh, sight, hearing, and intellect, is it difficult for Him to recreate you after death? As-Sa'di notes the deliberate humbling: the person who swaggers with pride (verse 33) started as a drop of fluid. Where does his arrogance come from? He did not create himself; he was created.</p></div>
+                </div>
+
+                <!-- Verse 38 -->
+                <div class="verse-card"><div class="verse-number">38</div>
+                    <div class="verse-arabic">ثُمَّ كَانَ عَلَقَةً فَخَلَقَ فَسَوَّىٰ</div>
+                    <div class="verse-transliteration">Thumma kana 'alaqatan fakhalaqa fasawwa</div>
+                    <div class="verse-translation">Then he was a clinging clot, and [Allah] created [his form] and proportioned [him].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">He was</span></div>
+                        <div class="word-chip"><span class="ar">عَلَقَةً</span><span class="trans">'alaqatan</span><span class="meaning">A clinging clot</span></div>
+                        <div class="word-chip"><span class="ar">فَخَلَقَ</span><span class="trans">fa-khalaqa</span><span class="meaning">Then He created</span></div>
+                        <div class="word-chip"><span class="ar">فَسَوَّىٰ</span><span class="trans">fa-sawwa</span><span class="meaning">And proportioned</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The drop became a clinging clot ('alaqah), and then Allah created and proportioned the human form from it. "'Alaqah" refers to the embryonic stage where the fertilized egg clings to the uterine wall, resembling a leech-like clot. "Khalaqa" means Allah actively created, and "sawwa" means He proportioned and perfected the form. Ibn Kathir explains that this progression from nutfah to 'alaqah to a fully formed human is one of the greatest miracles. Each stage is more complex than the last. As-Sa'di notes that "sawwa" implies perfection and balance. Allah did not just create; He proportioned every limb, every organ, every system in perfect harmony. This is the work of an All-Wise Creator.</p></div>
+                </div>
+
+                <!-- Verse 39 -->
+                <div class="verse-card"><div class="verse-number">39</div>
+                    <div class="verse-arabic">فَجَعَلَ مِنْهُ الزَّوْجَيْنِ الذَّكَرَ وَالْأُنثَىٰ</div>
+                    <div class="verse-transliteration">Faja'ala minhuz-zawjayni-dhdhakara wal-untha</div>
+                    <div class="verse-translation">And made of him two mates, the male and the female.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَجَعَلَ</span><span class="trans">fa-ja'ala</span><span class="meaning">And He made</span></div>
+                        <div class="word-chip"><span class="ar">مِنْهُ</span><span class="trans">minhu</span><span class="meaning">From him / from it</span></div>
+                        <div class="word-chip"><span class="ar">الزَّوْجَيْنِ</span><span class="trans">az-zawjayni</span><span class="meaning">The two mates / pairs</span></div>
+                        <div class="word-chip"><span class="ar">الذَّكَرَ</span><span class="trans">adh-dhakara</span><span class="meaning">The male</span></div>
+                        <div class="word-chip"><span class="ar">وَالْأُنثَىٰ</span><span class="trans">wal-untha</span><span class="meaning">And the female</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>From the same type of fluid, Allah creates two distinct types: male and female. "Az-zawjayn" means the two pairs or mates. "Adh-dhakar" is the male and "al-untha" is the female. From a single origin, Allah produces two complementary creations. Ibn Kathir explains that this is another proof of Allah's power and wisdom. The same nutfah can become either a boy or a girl, and this determination is entirely in Allah's hands. As-Sa'di notes this verse builds the argument further: the God who creates male and female from a single drop, who determines gender and destiny before birth, certainly has the power to resurrect the dead. Each verse in this closing section adds another proof of Allah's ability.</p></div>
+                </div>
+
+                <!-- Verse 40 -->
+                <div class="verse-card"><div class="verse-number">40</div>
+                    <div class="verse-arabic">أَلَيْسَ ذَٰلِكَ بِقَادِرٍ عَلَىٰ أَن يُحْيِيَ الْمَوْتَىٰ</div>
+                    <div class="verse-transliteration">Alaysa dhalika bi-qadirin 'ala an yuhyiyal-mawta</div>
+                    <div class="verse-translation">Is not that [Creator] Able to give life to the dead?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَيْسَ</span><span class="trans">a-laysa</span><span class="meaning">Is not</span></div>
+                        <div class="word-chip"><span class="ar">ذَٰلِكَ</span><span class="trans">dhalika</span><span class="meaning">That [Creator]</span></div>
+                        <div class="word-chip"><span class="ar">بِقَادِرٍ</span><span class="trans">bi-qadirin</span><span class="meaning">Able</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">To / upon</span></div>
+                        <div class="word-chip"><span class="ar">أَن يُحْيِيَ</span><span class="trans">an yuhyiya</span><span class="meaning">To give life to</span></div>
+                        <div class="word-chip"><span class="ar">الْمَوْتَىٰ</span><span class="trans">al-mawta</span><span class="meaning">The dead</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah concludes with the most powerful rhetorical question imaginable. After listing proof after proof of Allah's creative power, from fingerprints to embryology to the creation of male and female, the question demands an answer: "Is not He who did all of this able to bring the dead back to life?" The answer is so obvious it need not be stated. Ibn Kathir narrates that the Prophet (peace be upon him) would say "Subhanaka! Bala!" (Glory be to You! Of course!) whenever he recited this verse, as reported by Abu Dawud and At-Tirmidhi. As-Sa'di explains that this verse is the culmination of the entire surah. Every argument, every scene, every proof has been building to this final, undeniable conclusion: the God who created you the first time can create you again. Resurrection is not only possible; it is certain.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>The self-reproaching soul is a gift.</strong> The conscience that makes you feel guilty after sinning is not a burden; it is a mercy from Allah. It is the inner alarm system that keeps you on the right path. The person who ignores this voice silences it over time, until they can sin freely without remorse. That is the true loss.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Denial of the afterlife is driven by desire, not reason.</strong> Verse 5 exposes the real motivation behind denying resurrection: the desire to sin freely. Every intellectual objection to the afterlife is, at its root, a moral objection. The person does not want accountability, so they construct arguments against it.</div></li>
+                    <li><span class="bullet">03</span><div><strong>Allah's creative power proves resurrection.</strong> The God who creates unique fingerprints, transforms a fluid drop into a fully proportioned human being, and determines male and female, certainly has the power to raise the dead. The first creation is harder than the second, yet no one denies the first.</div></li>
+                    <li><span class="bullet">04</span><div><strong>You are a witness against yourself.</strong> No matter how many excuses you make to others, you know the truth about your own actions. This self-awareness is both a blessing and a responsibility. Use it to hold yourself accountable before you are held accountable.</div></li>
+                    <li><span class="bullet">05</span><div><strong>Seeing Allah is the greatest reward.</strong> Verse 23 describes the ultimate joy of Paradise: looking at the Face of Allah. This is greater than every other pleasure of Paradise combined. The believer's life is a journey toward this moment.</div></li>
+                    <li><span class="bullet">06</span><div><strong>Death is real and it is coming.</strong> The description of the soul reaching the collarbones, the desperate search for a healer, the realization that this is the final parting: these are not metaphors. Every single person will experience this. The wise person prepares now.</div></li>
+                    <li><span class="bullet">07</span><div><strong>Human life has purpose.</strong> You were not created to be left without guidance, commands, or accountability. The very design of your creation, from embryo to fully formed human, testifies to a purposeful Creator. To live without purpose is to deny your own nature.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih Bukhari (narration of Ibn Abbas regarding verses 16-19 about the Prophet moving his tongue), Sahih Muslim (hadith about seeing Allah like the full moon), Abu Dawud and At-Tirmidhi (the Prophet saying "Subhanaka! Bala!" after verse 40), Ibn Jarir (statement of Al-Hasan al-Basri on the self-reproaching soul). All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 75, totalVerses: 40 });
+    }
+    </script>
+</body>
+</html>
