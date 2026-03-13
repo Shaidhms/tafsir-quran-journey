@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Fajr - The Dawn | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .verse-arabic { font-size: 1.8em; } .section { padding: 20px; } .word-chip { min-width: 75px; padding: 10px 12px; } .word-chip .ar { font-size: 1.3em; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 89 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْفَجْرِ</div>
+        <h1>Surah Al-Fajr</h1>
+        <p>The Dawn - 30 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">89</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">30</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">139</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Dawn</div></div>
+                    <div class="fact-card"><div class="label">Connected To</div><div class="value" style="font-size:0.9em">Surah Al-Balad</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Fajr is one of the most powerful early Makkan surahs. It was revealed at a time when the Quraysh were deeply attached to their <span class="highlight">wealth, power, and worldly status</span>, and they saw these as signs of Allah's favor. If someone was rich, they assumed Allah loved them. If someone was poor, they assumed Allah had humiliated them.</p>
+                <p>Allah begins with a series of majestic oaths: by the <span class="highlight">dawn, the ten sacred nights, the even and the odd, and the night as it passes</span>. These oaths set the stage for a powerful message about the rise and fall of nations and the true nature of Allah's tests.</p>
+                <div class="important">
+                    <p>The "ten nights" referenced in verse 2 are understood by Ibn Abbas, Ibn Zubayr, Mujahid, and others to be the first ten nights of Dhul Hijjah. The Prophet (peace be upon him) said: "There are no days in which righteous deeds are more beloved to Allah than these ten days." They said: "Not even jihad for the sake of Allah?" He said: "Not even jihad for the sake of Allah, except for a man who goes out with his self and his wealth and does not return with anything."</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih Bukhari 969</p>
+                </div>
+                <p>The surah then recounts the <span class="highlight">destruction of three mighty civilizations</span>: the people of Ad (who built Iram of the pillars), the people of Thamud (who carved homes into mountains), and Pharaoh (who ruled with tyranny). Despite their immense power and resources, all were destroyed when they transgressed beyond limits.</p>
+                <p>The surah then addresses a fundamental flaw in human thinking: mistaking worldly blessings for divine approval and worldly hardship for divine punishment. Allah corrects this: <span class="highlight">wealth is a test, not a reward. Poverty is a test, not a punishment.</span> The surah ends with one of the most beautiful passages in the Quran, addressing the "nafs al-mutma'innah" (the peaceful, content soul) and inviting it to return to its Lord, pleased and pleasing.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">وَالْفَجْرِ</div>
+                    <div class="verse-transliteration">Wal-fajr</div>
+                    <div class="verse-translation">By the dawn.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">By (oath)</span></div>
+                        <div class="word-chip"><span class="ar">الْفَجْرِ</span><span class="trans">al-fajr</span><span class="meaning">The dawn</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah begins by swearing an oath by the dawn (fajr). The dawn is a powerful symbol: it is that moment when darkness gives way to light, when a new day begins. Ibn Kathir explains this refers to the dawn in general, representing hope and renewal. Some scholars say it specifically refers to the dawn of Dhul Hijjah (the 10th day, Eid al-Adha). Allah swears by His creation to draw our attention to its significance.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وَلَيَالٍ عَشْرٍ</div>
+                    <div class="verse-transliteration">Wa layalin 'ashr</div>
+                    <div class="verse-translation">And [by] ten nights.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">لَيَالٍ</span><span class="trans">layalin</span><span class="meaning">Nights</span></div>
+                        <div class="word-chip"><span class="ar">عَشْرٍ</span><span class="trans">'ashr</span><span class="meaning">Ten</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The majority of scholars, including Ibn Abbas, say these are the first ten nights of Dhul Hijjah, the most sacred days in the Islamic calendar. These are the days leading up to Eid al-Adha, days of immense worship, sacrifice, and remembrance of Allah. The Prophet (peace be upon him) emphasized the virtue of good deeds in these ten days above all other days (Sahih Bukhari 969). Allah swears by them to highlight their weight.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَالشَّفْعِ وَالْوَتْرِ</div>
+                    <div class="verse-transliteration">Wash-shaf'i wal-watr</div>
+                    <div class="verse-translation">And [by] the even and the odd.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">الشَّفْعِ</span><span class="trans">ash-shaf'i</span><span class="meaning">The even</span></div>
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And</span></div>
+                        <div class="word-chip"><span class="ar">الْوَتْرِ</span><span class="trans">al-watr</span><span class="meaning">The odd</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Scholars have different views on what "the even and the odd" refer to. Some say the even refers to the Day of Sacrifice (10th Dhul Hijjah) and the odd refers to the Day of Arafah (9th Dhul Hijjah). Others say it refers to all of Allah's creation which exists in pairs (even) while Allah Himself is One (odd/witr). As-Sa'di suggests it points to the prayers: some are even in their units, some are odd (like Witr prayer). The depth of meaning in these two words shows the richness of the Quran.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">وَاللَّيْلِ إِذَا يَسْرِ</div>
+                    <div class="verse-transliteration">Wal-layli idha yasr</div>
+                    <div class="verse-translation">And [by] the night when it passes.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">اللَّيْلِ</span><span class="trans">al-layli</span><span class="meaning">The night</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">يَسْرِ</span><span class="trans">yasr</span><span class="meaning">It passes / moves on</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The word "yasri" means to travel or move on. The night passes, it doesn't stay forever. This is a profound reminder: no matter how long and dark the night feels, it is always moving toward its end. Ibn Kathir notes this could also mean the night as it comes and covers everything, emphasizing Allah's control over the cycle of time. Both meanings carry comfort: darkness is temporary by design.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">هَلْ فِي ذَٰلِكَ قَسَمٌ لِّذِي حِجْرٍ</div>
+                    <div class="verse-transliteration">Hal fi dhalika qasamun li-dhi hijr</div>
+                    <div class="verse-translation">Is there [not] in [all] that an oath [sufficient] for one of perception?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">هَلْ</span><span class="trans">hal</span><span class="meaning">Is there</span></div>
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                        <div class="word-chip"><span class="ar">ذَٰلِكَ</span><span class="trans">dhalika</span><span class="meaning">That</span></div>
+                        <div class="word-chip"><span class="ar">قَسَمٌ</span><span class="trans">qasamun</span><span class="meaning">An oath</span></div>
+                        <div class="word-chip"><span class="ar">لِّذِي</span><span class="trans">li-dhi</span><span class="meaning">For one of</span></div>
+                        <div class="word-chip"><span class="ar">حِجْرٍ</span><span class="trans">hijr</span><span class="meaning">Perception / intellect</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After four powerful oaths, Allah asks: "Is this not sufficient for a person of sound intellect?" The word "hijr" literally means a barrier or restraint, referring to the intellect that restrains a person from foolishness. This is a rhetorical question challenging the listener: if you have any sense at all, these oaths should be enough to wake you up. The signs of Allah are everywhere for those who think.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِعَادٍ</div>
+                    <div class="verse-transliteration">Alam tara kayfa fa'ala rabbuka bi-'Ad</div>
+                    <div class="verse-translation">Have you not considered how your Lord dealt with Ad?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَمْ</span><span class="trans">alam</span><span class="meaning">Have not</span></div>
+                        <div class="word-chip"><span class="ar">تَرَ</span><span class="trans">tara</span><span class="meaning">You seen</span></div>
+                        <div class="word-chip"><span class="ar">كَيْفَ</span><span class="trans">kayfa</span><span class="meaning">How</span></div>
+                        <div class="word-chip"><span class="ar">فَعَلَ</span><span class="trans">fa'ala</span><span class="meaning">Dealt / did</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّكَ</span><span class="trans">rabbuka</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">بِعَادٍ</span><span class="trans">bi-'Ad</span><span class="meaning">With Ad</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah now begins recounting the stories of destroyed nations, starting with Ad. The people of Ad were an ancient Arabian tribe known for their enormous physical strength and advanced civilization. They lived in the region of southern Arabia (modern-day Yemen/Oman). The question "have you not seen?" is asked to make the listener reflect on historical evidence that power alone cannot save you from Allah's punishment.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">إِرَمَ ذَاتِ الْعِمَادِ</div>
+                    <div class="verse-transliteration">Irama dhatil-'imad</div>
+                    <div class="verse-translation">[With] Iram, who had lofty pillars.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِرَمَ</span><span class="trans">Irama</span><span class="meaning">Iram (their city)</span></div>
+                        <div class="word-chip"><span class="ar">ذَاتِ</span><span class="trans">dhati</span><span class="meaning">Of / possessing</span></div>
+                        <div class="word-chip"><span class="ar">الْعِمَادِ</span><span class="trans">al-'imad</span><span class="meaning">The lofty pillars</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Iram was the legendary city of the people of Ad, described as having towering pillars and magnificent architecture. Ibn Kathir explains that "al-'imad" (pillars) refers either to their tall, pillar-like buildings, or to the tall stature and strength of the people themselves. Some scholars say "Iram" is a reference to their ancestor. Either way, the point is clear: they built something extraordinary, yet it could not protect them from Allah. Their civilization became a lesson for all of humanity.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">الَّتِي لَمْ يُخْلَقْ مِثْلُهَا فِي الْبِلَادِ</div>
+                    <div class="verse-transliteration">Allati lam yukhlaq mithluha fil-bilad</div>
+                    <div class="verse-translation">The likes of whom had never been created in the land.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">الَّتِي</span><span class="trans">allati</span><span class="meaning">Which</span></div>
+                        <div class="word-chip"><span class="ar">لَمْ</span><span class="trans">lam</span><span class="meaning">Had not</span></div>
+                        <div class="word-chip"><span class="ar">يُخْلَقْ</span><span class="trans">yukhlaq</span><span class="meaning">Been created</span></div>
+                        <div class="word-chip"><span class="ar">مِثْلُهَا</span><span class="trans">mithluha</span><span class="meaning">The like of it</span></div>
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                        <div class="word-chip"><span class="ar">الْبِلَادِ</span><span class="trans">al-bilad</span><span class="meaning">The lands</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah Himself testifies that nothing like Ad's civilization had ever been created on earth. They were unmatched in their strength, their buildings, and their achievements. This is not just praise; it is a warning. If the most powerful civilization ever to exist could be completely erased by Allah, what chance does anyone else have who defies Him? Power, wealth, and innovation mean nothing without obedience to Allah.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">وَثَمُودَ الَّذِينَ جَابُوا الصَّخْرَ بِالْوَادِ</div>
+                    <div class="verse-transliteration">Wa Thamudal-ladhina jabus-sakhra bil-wad</div>
+                    <div class="verse-translation">And [with] Thamud, who carved out the rocks in the valley.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَثَمُودَ</span><span class="trans">wa Thamuda</span><span class="meaning">And Thamud</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">جَابُوا</span><span class="trans">jabu</span><span class="meaning">Carved out</span></div>
+                        <div class="word-chip"><span class="ar">الصَّخْرَ</span><span class="trans">as-sakhra</span><span class="meaning">The rocks</span></div>
+                        <div class="word-chip"><span class="ar">بِالْوَادِ</span><span class="trans">bil-wad</span><span class="meaning">In the valley</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The people of Thamud lived in the area of Al-Hijr (modern-day Mada'in Salih in Saudi Arabia). Their remarkable skill was carving massive homes and structures directly from solid rock in the mountainous valleys. The word "jabu" means to cut through or carve. Prophet Salih was sent to them. They demanded a she-camel as a miracle, and when it appeared, they killed it in arrogance. Their rock-carved homes could not save them from Allah's punishment.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَفِرْعَوْنَ ذِي الْأَوْتَادِ</div>
+                    <div class="verse-transliteration">Wa Fir'awna dhil-awtad</div>
+                    <div class="verse-translation">And [with] Pharaoh, owner of the stakes.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَفِرْعَوْنَ</span><span class="trans">wa Fir'awna</span><span class="meaning">And Pharaoh</span></div>
+                        <div class="word-chip"><span class="ar">ذِي</span><span class="trans">dhi</span><span class="meaning">Owner of</span></div>
+                        <div class="word-chip"><span class="ar">الْأَوْتَادِ</span><span class="trans">al-awtad</span><span class="meaning">The stakes / pegs</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Pharaoh is described as "dhi al-awtad" (owner of stakes/pegs). Scholars give different explanations: Ibn Kathir mentions that Pharaoh would torture people by staking them to the ground with pegs. Others say it refers to the pyramids, which are like pegs driven into the earth. Some say it refers to the vastness of his armies, which were as firmly established as stakes. Regardless of interpretation, Pharaoh represented the height of political tyranny, yet even he could not escape Allah's grasp.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">الَّذِينَ طَغَوْا فِي الْبِلَادِ</div>
+                    <div class="verse-transliteration">Alladhina taghaw fil-bilad</div>
+                    <div class="verse-translation">Those who transgressed within the lands.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">طَغَوْا</span><span class="trans">taghaw</span><span class="meaning">Transgressed</span></div>
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                        <div class="word-chip"><span class="ar">الْبِلَادِ</span><span class="trans">al-bilad</span><span class="meaning">The lands</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The word "taghaw" comes from "tughyan" meaning to cross all limits, to rebel against Allah's boundaries. All three nations shared this common trait: they went beyond bounds in the land. Their power made them arrogant, and their arrogance made them oppressors. This is a universal pattern: when people feel invincible, they start acting as if there are no rules. But Allah's rules always apply, no matter how powerful you think you are.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">فَأَكْثَرُوا فِيهَا الْفَسَادَ</div>
+                    <div class="verse-transliteration">Fa'aktharu fihal-fasad</div>
+                    <div class="verse-translation">And increased therein the corruption.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَأَكْثَرُوا</span><span class="trans">fa'aktharu</span><span class="meaning">And they increased</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">fiha</span><span class="meaning">In it (the land)</span></div>
+                        <div class="word-chip"><span class="ar">الْفَسَادَ</span><span class="trans">al-fasad</span><span class="meaning">The corruption</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Fasad" means corruption, mischief, and spreading evil. They didn't just transgress once; they kept increasing ("aktharu") the corruption in the land. This is the spiral of sin: it starts small and grows if unchecked. They corrupted morality, justice, and social order. As-Sa'di points out that their corruption included oppressing the weak, denying Allah's messengers, and destroying the fabric of righteous society.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">فَصَبَّ عَلَيْهِمْ رَبُّكَ سَوْطَ عَذَابٍ</div>
+                    <div class="verse-transliteration">Fasabba 'alayhim rabbuka sawta 'adhab</div>
+                    <div class="verse-translation">So your Lord poured upon them a scourge of punishment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَصَبَّ</span><span class="trans">fasabba</span><span class="meaning">So He poured</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">Upon them</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّكَ</span><span class="trans">rabbuka</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">سَوْطَ</span><span class="trans">sawta</span><span class="meaning">A scourge / whip</span></div>
+                        <div class="word-chip"><span class="ar">عَذَابٍ</span><span class="trans">'adhab</span><span class="meaning">Of punishment</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The word "sabba" means to pour down heavily, and "sawt" literally means a whip or lash. The image is of punishment being poured down upon them like a torrential downpour of pain. Each nation received its own form of destruction: Ad was destroyed by a furious wind, Thamud by a terrible scream, and Pharaoh was drowned in the sea. Despite their different forms, the punishment was unified in its source: it came from Allah, the Lord of all worlds.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">إِنَّ رَبَّكَ لَبِالْمِرْصَادِ</div>
+                    <div class="verse-transliteration">Inna rabbaka labil-mirsad</div>
+                    <div class="verse-translation">Indeed, your Lord is in observation.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">رَبَّكَ</span><span class="trans">rabbaka</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">لَبِالْمِرْصَادِ</span><span class="trans">labil-mirsad</span><span class="meaning">Is ever watching</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-mirsad" comes from "rasada" meaning to watch and observe. The word evokes the image of someone stationed at a watchtower, letting nothing pass unnoticed. Allah is watching every deed, every oppression, every act of transgression. No one escapes His observation. Ibn Kathir says: "All creatures will pass before Him, and He will recompense each person according to their deeds." This verse is both a warning to tyrants and a comfort to the oppressed: Allah sees everything.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">فَأَمَّا الْإِنسَانُ إِذَا مَا ابْتَلَاهُ رَبُّهُ فَأَكْرَمَهُ وَنَعَّمَهُ فَيَقُولُ رَبِّي أَكْرَمَنِ</div>
+                    <div class="verse-transliteration">Fa'ammal-insanu idha mab-talahu rabbuhu fa'akramahu wa na''amahu fayaqulu rabbi akraman</div>
+                    <div class="verse-translation">And as for man, when his Lord tries him and [thus] is generous to him and favors him, he says, "My Lord has honored me."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَأَمَّا</span><span class="trans">fa'amma</span><span class="meaning">So as for</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا مَا</span><span class="trans">idha ma</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">ابْتَلَاهُ</span><span class="trans">ibtalahu</span><span class="meaning">Tests him</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّهُ</span><span class="trans">rabbuhu</span><span class="meaning">His Lord</span></div>
+                        <div class="word-chip"><span class="ar">فَأَكْرَمَهُ</span><span class="trans">fa'akramahu</span><span class="meaning">And honors him</span></div>
+                        <div class="word-chip"><span class="ar">وَنَعَّمَهُ</span><span class="trans">wa na''amahu</span><span class="meaning">And blesses him</span></div>
+                        <div class="word-chip"><span class="ar">فَيَقُولُ</span><span class="trans">fayaqulu</span><span class="meaning">Then he says</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّي أَكْرَمَنِ</span><span class="trans">rabbi akraman</span><span class="meaning">My Lord has honored me</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse exposes a fundamental flaw in human thinking. When Allah gives someone wealth, health, and comfort, that person assumes: "Allah must love me! I'm special! I deserve this!" But notice the key word here: "ibtala" (tested). Allah says the wealth IS a test. The honor is not a sign of divine approval; it is a trial to see what you will do with it. Will you be grateful or arrogant? Will you share or hoard? The Quraysh made this exact mistake, equating wealth with divine favor.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">وَأَمَّا إِذَا مَا ابْتَلَاهُ فَقَدَرَ عَلَيْهِ رِزْقَهُ فَيَقُولُ رَبِّي أَهَانَنِ</div>
+                    <div class="verse-transliteration">Wa amma idha mab-talahu faqadara 'alayhi rizqahu fayaqulu rabbi ahanan</div>
+                    <div class="verse-translation">But when He tries him and restricts his provision, he says, "My Lord has humiliated me."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَمَّا</span><span class="trans">wa amma</span><span class="meaning">But as for</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا مَا</span><span class="trans">idha ma</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">ابْتَلَاهُ</span><span class="trans">ibtalahu</span><span class="meaning">He tests him</span></div>
+                        <div class="word-chip"><span class="ar">فَقَدَرَ</span><span class="trans">faqadara</span><span class="meaning">And restricts</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِ</span><span class="trans">'alayhi</span><span class="meaning">Upon him</span></div>
+                        <div class="word-chip"><span class="ar">رِزْقَهُ</span><span class="trans">rizqahu</span><span class="meaning">His provision</span></div>
+                        <div class="word-chip"><span class="ar">فَيَقُولُ</span><span class="trans">fayaqulu</span><span class="meaning">Then he says</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّي أَهَانَنِ</span><span class="trans">rabbi ahanan</span><span class="meaning">My Lord has humiliated me</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The flip side: when provision is restricted, the same person says, "Allah has humiliated me! He doesn't care about me!" Again, the word "ibtala" (tested) appears. Poverty is ALSO a test. It is not proof that Allah is displeased. As-Sa'di explains: both wealth and poverty are tests from Allah. The correct response to wealth is gratitude and generosity. The correct response to hardship is patience and trust. Neither situation is an indicator of your worth in Allah's eyes.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">كَلَّا ۖ بَل لَّا تُكْرِمُونَ الْيَتِيمَ</div>
+                    <div class="verse-transliteration">Kalla bal la tukrimunal-yatim</div>
+                    <div class="verse-translation">No! But you do not honor the orphan.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Not at all!</span></div>
+                        <div class="word-chip"><span class="ar">بَل</span><span class="trans">bal</span><span class="meaning">Rather</span></div>
+                        <div class="word-chip"><span class="ar">لَّا</span><span class="trans">la</span><span class="meaning">Not</span></div>
+                        <div class="word-chip"><span class="ar">تُكْرِمُونَ</span><span class="trans">tukrimu-na</span><span class="meaning">You honor</span></div>
+                        <div class="word-chip"><span class="ar">الْيَتِيمَ</span><span class="trans">al-yatim</span><span class="meaning">The orphan</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Kalla!" is a strong rebuke meaning "Absolutely not! You have it all wrong!" Allah rejects their entire framework of thinking about wealth and poverty. Then He shifts to what actually matters: your ACTIONS. The real problem isn't whether you're rich or poor; it's that you don't honor the orphan. Notice the shift from singular "insan" (one person's thinking) to plural "tukrimu-na" (you all). This is a societal failure, not just an individual one.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">وَلَا تَحَاضُّونَ عَلَىٰ طَعَامِ الْمِسْكِينِ</div>
+                    <div class="verse-transliteration">Wa la tahadduna 'ala ta'amil-miskin</div>
+                    <div class="verse-translation">And you do not encourage one another to feed the poor.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">تَحَاضُّونَ</span><span class="trans">tahadduna</span><span class="meaning">You encourage one another</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">Upon / to</span></div>
+                        <div class="word-chip"><span class="ar">طَعَامِ</span><span class="trans">ta'ami</span><span class="meaning">Feeding</span></div>
+                        <div class="word-chip"><span class="ar">الْمِسْكِينِ</span><span class="trans">al-miskin</span><span class="meaning">The poor / needy</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The word "tahadduna" is powerful. It doesn't just say "you don't feed the poor." It says "you don't even encourage EACH OTHER to feed the poor." It's not enough to give charity yourself; a righteous society actively promotes and encourages generosity. When people stop reminding each other to care for the needy, the entire community fails. This verse holds society accountable as a collective, not just as individuals.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَتَأْكُلُونَ التُّرَاثَ أَكْلًا لَّمًّا</div>
+                    <div class="verse-transliteration">Wa ta'kulunat-turatha aklan lamma</div>
+                    <div class="verse-translation">And you consume inheritance, devouring [it] altogether.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَتَأْكُلُونَ</span><span class="trans">wa ta'kuluna</span><span class="meaning">And you consume</span></div>
+                        <div class="word-chip"><span class="ar">التُّرَاثَ</span><span class="trans">at-turath</span><span class="meaning">The inheritance</span></div>
+                        <div class="word-chip"><span class="ar">أَكْلًا</span><span class="trans">aklan</span><span class="meaning">Consuming</span></div>
+                        <div class="word-chip"><span class="ar">لَّمًّا</span><span class="trans">lamma</span><span class="meaning">Greedily / altogether</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>In pre-Islamic Arabia, women and children were often denied their rightful inheritance. The powerful men would consume everything, taking shares that didn't belong to them. "Lamma" means to gather everything together and devour it all, leaving nothing for the rightful heirs. This was a form of institutionalized injustice. Islam later corrected this by establishing clear inheritance laws that protect the rights of women, children, and all relatives.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">وَتُحِبُّونَ الْمَالَ حُبًّا جَمًّا</div>
+                    <div class="verse-transliteration">Wa tuhibbunal-mala hubban jamma</div>
+                    <div class="verse-translation">And you love wealth with immense love.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَتُحِبُّونَ</span><span class="trans">wa tuhibbuna</span><span class="meaning">And you love</span></div>
+                        <div class="word-chip"><span class="ar">الْمَالَ</span><span class="trans">al-mala</span><span class="meaning">The wealth</span></div>
+                        <div class="word-chip"><span class="ar">حُبًّا</span><span class="trans">hubban</span><span class="meaning">A love</span></div>
+                        <div class="word-chip"><span class="ar">جَمًّا</span><span class="trans">jamma</span><span class="meaning">Immense / excessive</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Jamma" means overwhelming, excessive, all-consuming. The problem isn't having wealth; it's loving it excessively. When the love of money becomes the driving force of your life, it corrupts everything: your relationships, your ethics, your worship, your humanity. As-Sa'di explains that this excessive love of wealth is what leads to all the social evils mentioned: neglecting orphans, ignoring the poor, and consuming others' inheritance. Wealth should be a tool, not an idol.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">كَلَّا إِذَا دُكَّتِ الْأَرْضُ دَكًّا دَكًّا</div>
+                    <div class="verse-transliteration">Kalla idha dukkatil-ardu dakkan dakka</div>
+                    <div class="verse-translation">No! When the earth has been leveled, pounded and crushed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Beware!</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">دُكَّتِ</span><span class="trans">dukkati</span><span class="meaning">Is leveled</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرْضُ</span><span class="trans">al-ardu</span><span class="meaning">The earth</span></div>
+                        <div class="word-chip"><span class="ar">دَكًّا دَكًّا</span><span class="trans">dakkan dakka</span><span class="meaning">Pounding after pounding</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah now shifts to the Day of Judgment. "Kalla" again serves as a sharp wake-up call. The repetition of "dakkan dakka" (pounding upon pounding) creates a powerful auditory image of the earth being completely flattened and crushed. Everything that people built, all the mountains, cities, and monuments, will be reduced to nothing. The Iram of the pillars, the rock-carved homes of Thamud, the pyramids of Pharaoh, all turned to dust. This is the ultimate equalizer.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">وَجَاءَ رَبُّكَ وَالْمَلَكُ صَفًّا صَفًّا</div>
+                    <div class="verse-transliteration">Wa ja'a rabbuka wal-malaku saffan saffa</div>
+                    <div class="verse-translation">And your Lord has come and the angels, rank upon rank.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَجَاءَ</span><span class="trans">wa ja'a</span><span class="meaning">And comes</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّكَ</span><span class="trans">rabbuka</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">وَالْمَلَكُ</span><span class="trans">wal-malaku</span><span class="meaning">And the angels</span></div>
+                        <div class="word-chip"><span class="ar">صَفًّا صَفًّا</span><span class="trans">saffan saffa</span><span class="meaning">Rank upon rank</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>On the Day of Judgment, Allah will come in a manner befitting His majesty (we affirm this without asking "how" as per the way of Ahl us-Sunnah), and the angels will stand in rows upon rows. Ibn Kathir explains that the angels will descend and surround all of creation in concentric ranks. The image is awe-inspiring and terrifying: all of creation gathered, the earth flattened, the angels in perfect formation, and Allah presiding over the judgment. Nothing will be hidden on that day.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">وَجِيءَ يَوْمَئِذٍ بِجَهَنَّمَ ۚ يَوْمَئِذٍ يَتَذَكَّرُ الْإِنسَانُ وَأَنَّىٰ لَهُ الذِّكْرَىٰ</div>
+                    <div class="verse-transliteration">Wa ji'a yawma'idhin bi-Jahannam, yawma'idhin yatadhakkarul-insanu wa anna lahudh-dhikra</div>
+                    <div class="verse-translation">And brought [within view], that Day, is Hell. That Day, man will remember, but what good to him will the remembrance be?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَجِيءَ</span><span class="trans">wa ji'a</span><span class="meaning">And is brought</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">بِجَهَنَّمَ</span><span class="trans">bi-Jahannam</span><span class="meaning">Hell</span></div>
+                        <div class="word-chip"><span class="ar">يَتَذَكَّرُ</span><span class="trans">yatadhakkaru</span><span class="meaning">Will remember</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">The human</span></div>
+                        <div class="word-chip"><span class="ar">وَأَنَّىٰ</span><span class="trans">wa anna</span><span class="meaning">But what good</span></div>
+                        <div class="word-chip"><span class="ar">لَهُ</span><span class="trans">lahu</span><span class="meaning">To him</span></div>
+                        <div class="word-chip"><span class="ar">الذِّكْرَىٰ</span><span class="trans">adh-dhikra</span><span class="meaning">The remembrance</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Prophet (peace be upon him) said: "Hell will be brought on that Day with seventy thousand reins, each rein held by seventy thousand angels" (Sahih Muslim 2842). When a person sees this, suddenly everything becomes clear. They will remember every warning, every chance they had to repent. But it will be too late. "Anna lahudh-dhikra" (what good is remembering NOW?) is the most painful question. The time for action was in this life. Regret on that Day will bring no benefit.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">يَقُولُ يَا لَيْتَنِي قَدَّمْتُ لِحَيَاتِي</div>
+                    <div class="verse-transliteration">Yaqulu ya laytani qaddamtu lihayati</div>
+                    <div class="verse-translation">He will say, "Oh, I wish I had sent ahead [some good] for my life."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَقُولُ</span><span class="trans">yaqulu</span><span class="meaning">He will say</span></div>
+                        <div class="word-chip"><span class="ar">يَا لَيْتَنِي</span><span class="trans">ya laytani</span><span class="meaning">Oh, I wish I had</span></div>
+                        <div class="word-chip"><span class="ar">قَدَّمْتُ</span><span class="trans">qaddamtu</span><span class="meaning">Sent ahead</span></div>
+                        <div class="word-chip"><span class="ar">لِحَيَاتِي</span><span class="trans">lihayati</span><span class="meaning">For my life</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Notice he says "lihayati" (for MY life), meaning the real life, the eternal life of the Hereafter. In that moment, the person realizes that the worldly life was not the real life at all. The real life is what comes after. "Qaddamtu" means to send ahead, to prepare in advance. Every act of worship, every charity, every kindness was something "sent ahead" for that real life. This is the ultimate regret: realizing too late that you spent all your effort on the temporary and neglected the permanent.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">فَيَوْمَئِذٍ لَّا يُعَذِّبُ عَذَابَهُ أَحَدٌ</div>
+                    <div class="verse-transliteration">Fayawma'idhil-la yu'adhdhibu 'adhabahu ahad</div>
+                    <div class="verse-translation">So on that Day, none will punish [as severely] as His punishment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَيَوْمَئِذٍ</span><span class="trans">fayawma'idhin</span><span class="meaning">So on that Day</span></div>
+                        <div class="word-chip"><span class="ar">لَّا يُعَذِّبُ</span><span class="trans">la yu'adhdhibu</span><span class="meaning">None will punish</span></div>
+                        <div class="word-chip"><span class="ar">عَذَابَهُ</span><span class="trans">'adhabahu</span><span class="meaning">His punishment</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدٌ</span><span class="trans">ahad</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>No one can punish the way Allah punishes on that Day. All the tyrants of history, all the oppressors who thought they were powerful, will realize that their punishments were nothing compared to Allah's. This verse shows that ultimate justice belongs to Allah alone. The Pharaohs and Nimrods of this world may seem frightening, but their power is nothing before Allah's. For the oppressed, this is a source of comfort: true justice will come.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">وَلَا يُوثِقُ وَثَاقَهُ أَحَدٌ</div>
+                    <div class="verse-transliteration">Wa la yuthiqu wathaqahu ahad</div>
+                    <div class="verse-translation">And none will bind [as severely] as His binding.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And none</span></div>
+                        <div class="word-chip"><span class="ar">يُوثِقُ</span><span class="trans">yuthiqu</span><span class="meaning">Will bind</span></div>
+                        <div class="word-chip"><span class="ar">وَثَاقَهُ</span><span class="trans">wathaqahu</span><span class="meaning">His binding</span></div>
+                        <div class="word-chip"><span class="ar">أَحَدٌ</span><span class="trans">ahad</span><span class="meaning">Anyone</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Just as no one can punish like Allah, no one can restrain or bind like He can. "Wathaq" means to bind, chain, or shackle. The disbelievers who once felt free to do whatever they pleased will be bound in a way no earthly prison could ever replicate. There will be no escape, no appeal, no negotiation. This pair of verses (25-26) creates a powerful contrast with the previous descriptions of Ad, Thamud, and Pharaoh, who thought they were beyond anyone's reach.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">يَا أَيَّتُهَا النَّفْسُ الْمُطْمَئِنَّةُ</div>
+                    <div class="verse-transliteration">Ya ayyatuhan-nafsul-mutma'innah</div>
+                    <div class="verse-translation">O reassured soul!</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَا</span><span class="trans">ya</span><span class="meaning">O</span></div>
+                        <div class="word-chip"><span class="ar">أَيَّتُهَا</span><span class="trans">ayyatuha</span><span class="meaning">(addressing)</span></div>
+                        <div class="word-chip"><span class="ar">النَّفْسُ</span><span class="trans">an-nafsu</span><span class="meaning">The soul</span></div>
+                        <div class="word-chip"><span class="ar">الْمُطْمَئِنَّةُ</span><span class="trans">al-mutma'innah</span><span class="meaning">The reassured / at peace</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After the terrifying scenes of judgment, the tone shifts dramatically to one of the most tender and beautiful addresses in the entire Quran. "Al-mutma'innah" comes from "itmi'nan" meaning tranquility, peace, and contentment. This is the soul that found peace through remembering Allah, that remained firm during trials, that was content with Allah's decree in both ease and hardship. Ibn Kathir says it is the soul that is certain in faith, peaceful in worship, and undisturbed by worldly fluctuations. It is the highest state of the human soul.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">ارْجِعِي إِلَىٰ رَبِّكِ رَاضِيَةً مَّرْضِيَّةً</div>
+                    <div class="verse-transliteration">Irji'i ila rabbiki radiyatan mardiyyah</div>
+                    <div class="verse-translation">Return to your Lord, well-pleased and pleasing [to Him].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ارْجِعِي</span><span class="trans">irji'i</span><span class="meaning">Return</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">To</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكِ</span><span class="trans">rabbiki</span><span class="meaning">Your Lord</span></div>
+                        <div class="word-chip"><span class="ar">رَاضِيَةً</span><span class="trans">radiyatan</span><span class="meaning">Well-pleased</span></div>
+                        <div class="word-chip"><span class="ar">مَّرْضِيَّةً</span><span class="trans">mardiyyah</span><span class="meaning">Pleasing (to Him)</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Two beautiful words define this return: "radiyah" (you are pleased with Allah) and "mardiyyah" (Allah is pleased with you). It's a mutual pleasure. You spent your life content with whatever Allah decreed, and now Allah is content with you. "Irji'i" (return) is in the feminine form because "nafs" (soul) is grammatically feminine in Arabic. This is an invitation, not a command of fear, but one of love and honor. It is the homecoming every believer hopes for.</p></div>
+                </div>
+
+                <!-- Verse 29 -->
+                <div class="verse-card"><div class="verse-number">29</div>
+                    <div class="verse-arabic">فَادْخُلِي فِي عِبَادِي</div>
+                    <div class="verse-transliteration">Fadkhuli fi 'ibadi</div>
+                    <div class="verse-translation">And enter among My [righteous] servants.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَادْخُلِي</span><span class="trans">fadkhuli</span><span class="meaning">So enter</span></div>
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">Among</span></div>
+                        <div class="word-chip"><span class="ar">عِبَادِي</span><span class="trans">'ibadi</span><span class="meaning">My servants</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah says "'ibadi" (MY servants) with the possessive "my," showing honor and closeness. Being called a servant of Allah is the highest title a human can carry. You will join the ranks of the prophets, the truthful, the martyrs, and the righteous. After a lifetime of striving, you are welcomed into this noble company. This is the ultimate sense of belonging: being among those whom Allah Himself claims as His own.</p></div>
+                </div>
+
+                <!-- Verse 30 -->
+                <div class="verse-card"><div class="verse-number">30</div>
+                    <div class="verse-arabic">وَادْخُلِي جَنَّتِي</div>
+                    <div class="verse-transliteration">Wadkhuli jannati</div>
+                    <div class="verse-translation">And enter My Paradise.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَادْخُلِي</span><span class="trans">wadkhuli</span><span class="meaning">And enter</span></div>
+                        <div class="word-chip"><span class="ar">جَنَّتِي</span><span class="trans">jannati</span><span class="meaning">My Paradise</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah ends with the most beautiful invitation in existence: "Enter MY Paradise." Again, "jannati" (MY Paradise) carries the possessive. Allah doesn't say "enter Paradise" but "enter MY Paradise," as if it was prepared personally for you. After all the warnings about destroyed nations, the rebuke of materialism, and the terrifying Day of Judgment, the surah concludes with pure mercy, warmth, and welcome. This is where the journey of the mutma'innah soul ends: in eternal bliss, in the company of the righteous, in the garden of the Most Merciful.</p></div>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Fajr</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Wealth is a test, not a reward. Poverty is a test, not a punishment.</strong><p style="color: #999; font-size: 0.95em;">Allah corrects the most common human misconception: equating worldly blessings with divine approval. Both wealth and hardship are tests. What matters is how you respond to each.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">No civilization is too powerful for Allah's punishment.</strong><p style="color: #999; font-size: 0.95em;">Ad built the unmatched Iram, Thamud carved mountains, Pharaoh ruled empires. All were destroyed when they transgressed. Power without submission to Allah is a path to ruin.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Allah is always watching (bil-mirsad).</strong><p style="color: #999; font-size: 0.95em;">No deed goes unnoticed. This is a warning for oppressors and a comfort for the oppressed. Justice may be delayed, but it is never denied.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Social responsibility is a collective duty.</strong><p style="color: #999; font-size: 0.95em;">Honoring orphans, feeding the poor, and protecting inheritance rights are not optional acts of kindness. They are obligations. A society that fails in these fails entirely.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The "real life" is the Hereafter.</strong><p style="color: #999; font-size: 0.95em;">On the Day of Judgment, people will wish they had "sent ahead" good deeds for their real life. Every moment of this world is an opportunity to invest in eternity.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The ultimate goal: becoming a "nafs al-mutma'innah."</strong><p style="color: #999; font-size: 0.95em;">The peaceful soul that is content with Allah in every situation. This is the soul that will hear the most beautiful invitation: "Enter My Paradise." This state comes through remembrance, patience, gratitude, and trust in Allah's plan.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on Tafsir Ibn Kathir, Tafsir As-Sa'di, and authentic hadith from Sahih Bukhari and Sahih Muslim. The hadith about the ten days of Dhul Hijjah is from Sahih Bukhari (969). The hadith about Hell being brought with seventy thousand reins is from Sahih Muslim (2842). While care has been taken to ensure accuracy, this is a learning aid. Always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>

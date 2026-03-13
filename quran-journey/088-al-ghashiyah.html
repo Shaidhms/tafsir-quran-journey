@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Ghashiyah - The Overwhelming | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 88 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْغَاشِيَةِ</div>
+        <h1>Surah Al-Ghashiyah</h1>
+        <p>The Overwhelming - 26 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">88</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">26</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">92</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Overwhelming</div></div>
+                    <div class="fact-card"><div class="label">Connected To</div><div class="value" style="font-size:0.9em">Surah Al-A'la</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Ghashiyah takes its name from the very first verse, which asks about <span class="highlight">"Al-Ghashiyah" - the Overwhelming Event</span> that will cover and engulf everything. This refers to the Day of Judgment, an event so massive and all-encompassing that it will overwhelm every soul.</p>
+                <p>This surah was revealed in Makkah during a time when the Quraysh denied the resurrection and the afterlife. Allah responds to their denial with a <span class="highlight">vivid, powerful contrast</span> between two groups of people on that Day: those whose faces are humiliated and exhausted from the torment of the Fire, and those whose faces are radiant and pleased in the gardens of Paradise.</p>
+                <div class="important">
+                    <p>Ibn Kathir explains that Al-Ghashiyah is one of the names of the Day of Judgment because it will "ghasha" (overwhelm and cover) all of creation. No one will escape it. The surah's structure moves from the terrifying to the beautiful, from punishment to reward, then to the signs in creation that prove Allah's power, and finally to the Prophet's role as a reminder.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Tafsir As-Sa'di</p>
+                </div>
+                <p>After the contrast between the two groups, Allah then turns the listener's attention to <span class="highlight">four signs in creation</span>: the camel (how it was created), the sky (how it was raised), the mountains (how they were set firm), and the earth (how it was spread out). These are not random examples. They are things the Arabs of Makkah saw every single day, yet they failed to reflect on the Creator behind them.</p>
+                <p>The surah concludes by defining the Prophet's role: <span class="highlight">he is a reminder, not a controller</span>. He cannot force faith upon anyone. But everyone will return to Allah, and Allah will call them to account. This is a powerful combination of mercy in da'wah and certainty of the final reckoning.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">هَلْ أَتَاكَ حَدِيثُ الْغَاشِيَةِ</div>
+                    <div class="verse-transliteration">Hal ataaka hadithul-ghashiyah</div>
+                    <div class="verse-translation">Has there reached you the report of the Overwhelming [event]?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">هَلْ</span><span class="trans">hal</span><span class="meaning">Has / Did</span></div>
+                        <div class="word-chip"><span class="ar">أَتَاكَ</span><span class="trans">ataaka</span><span class="meaning">Reached you</span></div>
+                        <div class="word-chip"><span class="ar">حَدِيثُ</span><span class="trans">hadithu</span><span class="meaning">The report / news of</span></div>
+                        <div class="word-chip"><span class="ar">الْغَاشِيَةِ</span><span class="trans">al-ghashiyah</span><span class="meaning">The Overwhelming</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah opens with a gripping rhetorical question to the Prophet (peace be upon him): "Has the news of the Overwhelming Event reached you?" This is not asking whether he knows - it's a dramatic way to draw attention. "Al-Ghashiyah" comes from the root "ghasha" meaning to cover, engulf, and overwhelm. The Day of Judgment is called this because its terror will overwhelm everything and everyone. No one will be able to escape or ignore it.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وُجُوهٌ يَوْمَئِذٍ خَاشِعَةٌ</div>
+                    <div class="verse-transliteration">Wujoohun yawma'idhin khashi'ah</div>
+                    <div class="verse-translation">[Some] faces, that Day, will be humbled.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وُجُوهٌ</span><span class="trans">wujoohun</span><span class="meaning">Faces</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">خَاشِعَةٌ</span><span class="trans">khashi'ah</span><span class="meaning">Humbled / humiliated</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now Allah describes the first group. "Khashi'ah" means humbled, humiliated, and cast down in disgrace. These are faces that were arrogant in this world, that refused to bow to Allah or acknowledge His signs. On that Day, the arrogance is gone. Their faces show nothing but shame and humiliation. The face reveals the inner state - and their inner state is one of utter defeat.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">عَامِلَةٌ نَّاصِبَةٌ</div>
+                    <div class="verse-transliteration">'Aamilatun naasibah</div>
+                    <div class="verse-translation">Working [hard] and exhausted.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَامِلَةٌ</span><span class="trans">'aamilatun</span><span class="meaning">Working / laboring</span></div>
+                        <div class="word-chip"><span class="ar">نَّاصِبَةٌ</span><span class="trans">naasibah</span><span class="meaning">Exhausted / fatigued</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Ibn Kathir and As-Sa'di explain this verse in two ways. Some scholars say it describes their state in the Hellfire - they are laboring and exhausted from dragging chains and climbing only to fall back. Others say it describes their worldly life - they worked hard in acts of worship that were not accepted because they were done without sincerity or upon misguidance. Either way, the lesson is stark: effort without correct guidance leads to exhaustion without reward.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">تَصْلَىٰ نَارًا حَامِيَةً</div>
+                    <div class="verse-transliteration">Tasla naaran haamiyah</div>
+                    <div class="verse-translation">They will [enter to] burn in an intensely hot Fire.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">تَصْلَىٰ</span><span class="trans">tasla</span><span class="meaning">They will burn in</span></div>
+                        <div class="word-chip"><span class="ar">نَارًا</span><span class="trans">naaran</span><span class="meaning">A fire</span></div>
+                        <div class="word-chip"><span class="ar">حَامِيَةً</span><span class="trans">haamiyah</span><span class="meaning">Intensely hot</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Tasla" means to enter and be surrounded by fire, to feel its full burning heat. "Hamiyah" means extremely hot, blazing, at its most intense. This is not a metaphor. Allah is describing the actual punishment that awaits those who reject the truth. The fire of the Hereafter is incomparably hotter than any fire in this world. The Prophet (peace be upon him) said: "Your fire is one-seventieth part of the Fire of Hell." (Sahih Bukhari 3265)</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">تُسْقَىٰ مِنْ عَيْنٍ آنِيَةٍ</div>
+                    <div class="verse-transliteration">Tusqa min 'aynin aaniyah</div>
+                    <div class="verse-translation">They will be given drink from a boiling spring.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">تُسْقَىٰ</span><span class="trans">tusqa</span><span class="meaning">They will be given to drink</span></div>
+                        <div class="word-chip"><span class="ar">مِنْ</span><span class="trans">min</span><span class="meaning">From</span></div>
+                        <div class="word-chip"><span class="ar">عَيْنٍ</span><span class="trans">'aynin</span><span class="meaning">A spring</span></div>
+                        <div class="word-chip"><span class="ar">آنِيَةٍ</span><span class="trans">aaniyah</span><span class="meaning">Boiling hot</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>When they are burning with thirst and desperately seeking relief, they will be given a drink - but not cool water. They will be given boiling water from a spring that has reached its maximum heat ("aaniyah" means it has reached the peak of boiling). Instead of quenching their thirst, it will scald them from the inside. This is the opposite of what a "spring" usually represents - life and refreshment. Everything in the Hellfire is an inversion of comfort.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">لَّيْسَ لَهُمْ طَعَامٌ إِلَّا مِن ضَرِيعٍ</div>
+                    <div class="verse-transliteration">Laysa lahum ta'aamun illa min daree'</div>
+                    <div class="verse-translation">For them there will be no food except from a poisonous, thorny plant.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَّيْسَ</span><span class="trans">laysa</span><span class="meaning">There is not</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">For them</span></div>
+                        <div class="word-chip"><span class="ar">طَعَامٌ</span><span class="trans">ta'aamun</span><span class="meaning">Food</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">مِن</span><span class="trans">min</span><span class="meaning">From</span></div>
+                        <div class="word-chip"><span class="ar">ضَرِيعٍ</span><span class="trans">daree'</span><span class="meaning">A thorny, poisonous plant</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Dari'" is a dry, thorny, bitter plant that even animals refuse to eat. Ibn Abbas said it is a plant in the Hellfire with thorns. It is foul, bitter, and provides no nutrition at all. The Arabs knew this plant - even their camels would avoid it. So imagine that being your only food. It cannot satisfy hunger, it cannot nourish, it only adds to the torment. The next verse confirms this.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">لَّا يُسْمِنُ وَلَا يُغْنِي مِن جُوعٍ</div>
+                    <div class="verse-transliteration">La yusminu wa la yughni min joo'</div>
+                    <div class="verse-translation">Which neither nourishes nor avails against hunger.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَّا</span><span class="trans">la</span><span class="meaning">Not / Neither</span></div>
+                        <div class="word-chip"><span class="ar">يُسْمِنُ</span><span class="trans">yusminu</span><span class="meaning">It nourishes / fattens</span></div>
+                        <div class="word-chip"><span class="ar">وَلَا</span><span class="trans">wa la</span><span class="meaning">And nor</span></div>
+                        <div class="word-chip"><span class="ar">يُغْنِي</span><span class="trans">yughni</span><span class="meaning">It avails / suffices</span></div>
+                        <div class="word-chip"><span class="ar">مِن</span><span class="trans">min</span><span class="meaning">From / against</span></div>
+                        <div class="word-chip"><span class="ar">جُوعٍ</span><span class="trans">joo'</span><span class="meaning">Hunger</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse drives the point home: their food is completely useless. "La yusminu" - it doesn't nourish or strengthen the body. "Wa la yughni min joo'" - and it doesn't even satisfy hunger. So they eat but remain starving, drink but remain burning with thirst. Every basic human need that we take for granted - food, water, comfort - is inverted in the Hellfire. This should make us grateful for every simple meal we have today.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وُجُوهٌ يَوْمَئِذٍ نَّاعِمَةٌ</div>
+                    <div class="verse-transliteration">Wujoohun yawma'idhin naa'imah</div>
+                    <div class="verse-translation">[Other] faces, that Day, will show pleasure.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وُجُوهٌ</span><span class="trans">wujoohun</span><span class="meaning">Faces</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">نَّاعِمَةٌ</span><span class="trans">naa'imah</span><span class="meaning">Showing pleasure / radiant</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now comes the beautiful contrast. "Na'imah" comes from "na'im" meaning bliss, comfort, and delight. These faces are glowing with pleasure and happiness. While the first group's faces are humiliated and exhausted, this group's faces radiate joy. The face reflects the soul's state - and their souls are at peace because they lived for Allah's pleasure in this world. What a contrast from just one verse ago!</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">لِّسَعْيِهَا رَاضِيَةٌ</div>
+                    <div class="verse-transliteration">Lisa'yiha raadiyah</div>
+                    <div class="verse-translation">With their effort [they are] satisfied.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِّسَعْيِهَا</span><span class="trans">lisa'yiha</span><span class="meaning">With their effort / striving</span></div>
+                        <div class="word-chip"><span class="ar">رَاضِيَةٌ</span><span class="trans">raadiyah</span><span class="meaning">Satisfied / pleased</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Sa'y" means effort, striving, and hard work. "Radiyah" means satisfied and pleased. These people are satisfied with their efforts because they see the reward. Every prayer they prayed, every fast they kept, every act of charity, every moment of patience - it all paid off beyond imagination. In this world, you sometimes wonder: "Is my worship enough? Will it count?" This verse answers: yes, and you will be fully satisfied with what you get in return.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">فِي جَنَّةٍ عَالِيَةٍ</div>
+                    <div class="verse-transliteration">Fee jannatin 'aaliyah</div>
+                    <div class="verse-translation">In an elevated garden.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fee</span><span class="meaning">In</span></div>
+                        <div class="word-chip"><span class="ar">جَنَّةٍ</span><span class="trans">jannatin</span><span class="meaning">A garden (Paradise)</span></div>
+                        <div class="word-chip"><span class="ar">عَالِيَةٍ</span><span class="trans">'aaliyah</span><span class="meaning">Elevated / lofty</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Jannah" means a garden so lush and dense with trees that the ground is hidden. "'Aaliyah" means elevated, high, and lofty - both in physical location and in rank and status. As-Sa'di explains that it is elevated in its buildings, its levels, and its pleasures. Everything in it is high, noble, and superior. The higher the garden, the more beautiful the view, the fresher the air, the more exclusive the company.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">لَّا تَسْمَعُ فِيهَا لَاغِيَةً</div>
+                    <div class="verse-transliteration">La tasma'u feeha laaghiyah</div>
+                    <div class="verse-translation">Wherein they will hear no unsuitable speech.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَّا</span><span class="trans">la</span><span class="meaning">Not</span></div>
+                        <div class="word-chip"><span class="ar">تَسْمَعُ</span><span class="trans">tasma'u</span><span class="meaning">You will hear</span></div>
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">feeha</span><span class="meaning">In it</span></div>
+                        <div class="word-chip"><span class="ar">لَاغِيَةً</span><span class="trans">laaghiyah</span><span class="meaning">Vain / idle / unsuitable talk</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Laghiyah" means idle, vain, false, or hurtful speech. In Paradise, there is no gossip, no backbiting, no arguments, no lies, no hurtful words. Think about how much pain is caused by words in this world - insults, rumors, harsh criticism. In Jannah, all of that is removed. Every word spoken there is beautiful, peaceful, and meaningful. This is one of the most underappreciated blessings of Paradise - perfect peace of mind.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">فِيهَا عَيْنٌ جَارِيَةٌ</div>
+                    <div class="verse-transliteration">Feeha 'aynun jaariyah</div>
+                    <div class="verse-translation">Within it is a flowing spring.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">feeha</span><span class="meaning">In it</span></div>
+                        <div class="word-chip"><span class="ar">عَيْنٌ</span><span class="trans">'aynun</span><span class="meaning">A spring</span></div>
+                        <div class="word-chip"><span class="ar">جَارِيَةٌ</span><span class="trans">jaariyah</span><span class="meaning">Flowing / running</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Notice the contrast with verse 5. The people of the Fire are given boiling water from a spring ("'aynin aaniyah"). The people of Paradise have a flowing spring ("'aynun jaariyah") - cool, fresh, and constantly flowing. The Arabic word "jaariyah" means continuously running, never stopping, never drying up. In the desert climate of Arabia, a flowing spring was the ultimate luxury. In Jannah, it's just one of many blessings.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">فِيهَا سُرُرٌ مَّرْفُوعَةٌ</div>
+                    <div class="verse-transliteration">Feeha sururun marfoo'ah</div>
+                    <div class="verse-translation">Within it are couches raised high.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فِيهَا</span><span class="trans">feeha</span><span class="meaning">In it</span></div>
+                        <div class="word-chip"><span class="ar">سُرُرٌ</span><span class="trans">sururun</span><span class="meaning">Couches / thrones</span></div>
+                        <div class="word-chip"><span class="ar">مَّرْفُوعَةٌ</span><span class="trans">marfoo'ah</span><span class="meaning">Raised high / elevated</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Surur" is the plural of "sarir" - a couch, throne, or reclining seat. "Marfu'ah" means raised high and elevated. These are not ordinary seats. They are elevated thrones from which the people of Paradise can overlook the beauty of their surroundings. Ibn Kathir says they are raised so that when the people of Paradise sit on them, they can see all the blessings Allah has prepared for them. It's a position of honor and royalty.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">وَأَكْوَابٌ مَّوْضُوعَةٌ</div>
+                    <div class="verse-transliteration">Wa akwaabun mawdoo'ah</div>
+                    <div class="verse-translation">And cups put in place.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And</span></div>
+                        <div class="word-chip"><span class="ar">أَكْوَابٌ</span><span class="trans">akwaabun</span><span class="meaning">Cups / goblets</span></div>
+                        <div class="word-chip"><span class="ar">مَّوْضُوعَةٌ</span><span class="trans">mawdoo'ah</span><span class="meaning">Put in place / set ready</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Akwab" are cups without handles - elegant drinking vessels. "Mawdu'ah" means placed, set out, and ready to be used. They are already prepared and waiting. You don't have to ask, you don't have to wait, you don't have to serve yourself. Everything is arranged for you in advance. This paints a picture of ultimate hospitality - a banquet where the host has thought of every detail before the guest even arrives.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">وَنَمَارِقُ مَصْفُوفَةٌ</div>
+                    <div class="verse-transliteration">Wa namaariqu masfoofah</div>
+                    <div class="verse-translation">And cushions lined up.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And</span></div>
+                        <div class="word-chip"><span class="ar">نَمَارِقُ</span><span class="trans">namaariqu</span><span class="meaning">Cushions / pillows</span></div>
+                        <div class="word-chip"><span class="ar">مَصْفُوفَةٌ</span><span class="trans">masfoofah</span><span class="meaning">Lined up / arranged in rows</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Namariq" are luxurious cushions or pillows used for leaning and reclining. "Masfoofah" means arranged in rows, lined up beautifully. Picture the most luxurious gathering you've ever seen - cushions everywhere, arranged perfectly, inviting you to sit and relax. This is the atmosphere of Paradise: comfort, beauty, and order. No stress, no rush, no discomfort. Just pure ease and relaxation in the company of the righteous.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">وَزَرَابِيُّ مَبْثُوثَةٌ</div>
+                    <div class="verse-transliteration">Wa zaraabiyyu mabthuthah</div>
+                    <div class="verse-translation">And carpets spread around.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And</span></div>
+                        <div class="word-chip"><span class="ar">زَرَابِيُّ</span><span class="trans">zaraabiyyu</span><span class="meaning">Rich carpets / rugs</span></div>
+                        <div class="word-chip"><span class="ar">مَبْثُوثَةٌ</span><span class="trans">mabthuthah</span><span class="meaning">Spread out / scattered</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Zarabiyy" are rich, luxurious carpets - the finest quality. "Mabthuthah" means spread out everywhere, scattered abundantly. Not just in one room, but everywhere you look. The picture is now complete: elevated thrones, ready cups, lined-up cushions, and rich carpets spread across the ground. Allah uses things the Arabs understood as symbols of wealth and comfort, but the reality of Paradise is far beyond anything we can imagine. These descriptions are just to give us a taste.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">أَفَلَا يَنظُرُونَ إِلَى الْإِبِلِ كَيْفَ خُلِقَتْ</div>
+                    <div class="verse-transliteration">Afala yanzuroona ilal-ibili kayfa khuliqat</div>
+                    <div class="verse-translation">Then do they not look at the camels - how they are created?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَفَلَا</span><span class="trans">afala</span><span class="meaning">Then do they not</span></div>
+                        <div class="word-chip"><span class="ar">يَنظُرُونَ</span><span class="trans">yanzuroona</span><span class="meaning">Look / reflect</span></div>
+                        <div class="word-chip"><span class="ar">إِلَى</span><span class="trans">ila</span><span class="meaning">At / upon</span></div>
+                        <div class="word-chip"><span class="ar">الْإِبِلِ</span><span class="trans">al-ibili</span><span class="meaning">The camels</span></div>
+                        <div class="word-chip"><span class="ar">كَيْفَ</span><span class="trans">kayfa</span><span class="meaning">How</span></div>
+                        <div class="word-chip"><span class="ar">خُلِقَتْ</span><span class="trans">khuliqat</span><span class="meaning">They were created</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After describing the Hereafter, Allah now shifts to creation. Why the camel? Because for the Arabs, the camel was the most important and remarkable animal in their daily life. It can survive days without water, carry heavy loads across scorching deserts, provide milk, meat, leather, and transportation. Its design is extraordinary: padded feet for sand, the ability to close its nostrils against sandstorms, fat stored in its hump, and the ability to drink huge amounts of water at once. All of this points to a Designer who created it with purpose.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">وَإِلَى السَّمَاءِ كَيْفَ رُفِعَتْ</div>
+                    <div class="verse-transliteration">Wa ilas-samaa'i kayfa rufi'at</div>
+                    <div class="verse-translation">And at the sky - how it is raised?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِلَى</span><span class="trans">wa ila</span><span class="meaning">And at</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءِ</span><span class="trans">as-samaa'i</span><span class="meaning">The sky</span></div>
+                        <div class="word-chip"><span class="ar">كَيْفَ</span><span class="trans">kayfa</span><span class="meaning">How</span></div>
+                        <div class="word-chip"><span class="ar">رُفِعَتْ</span><span class="trans">rufi'at</span><span class="meaning">It was raised</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>From looking down at the camel, Allah directs our gaze upward. Look at the sky - how it was raised without any pillars you can see. It's a vast, immense canopy that doesn't fall, doesn't crack, and doesn't collapse. Every day we look at the sky and take it for granted. But who raised it? Who maintains it? The sky with its stars, clouds, rain, and perfect balance is one of the most visible signs of Allah's power. All you have to do is look up and reflect.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَإِلَى الْجِبَالِ كَيْفَ نُصِبَتْ</div>
+                    <div class="verse-transliteration">Wa ilal-jibaali kayfa nusibat</div>
+                    <div class="verse-translation">And at the mountains - how they are erected?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِلَى</span><span class="trans">wa ila</span><span class="meaning">And at</span></div>
+                        <div class="word-chip"><span class="ar">الْجِبَالِ</span><span class="trans">al-jibaali</span><span class="meaning">The mountains</span></div>
+                        <div class="word-chip"><span class="ar">كَيْفَ</span><span class="trans">kayfa</span><span class="meaning">How</span></div>
+                        <div class="word-chip"><span class="ar">نُصِبَتْ</span><span class="trans">nusibat</span><span class="meaning">They were erected / set firm</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Nusibat" means firmly planted, erected, and established. Mountains are not just piles of rock. They are deeply rooted structures - modern geology confirms they have roots extending deep into the earth, stabilizing the ground. The Quran calls them "pegs" (awatad) in Surah An-Naba. For the Arabs traveling through desert and mountain terrain, these massive structures were a daily reminder of a power far greater than themselves. Who set these enormous structures in place? Who keeps the earth stable?</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">وَإِلَى الْأَرْضِ كَيْفَ سُطِحَتْ</div>
+                    <div class="verse-transliteration">Wa ilal-ardi kayfa sutihat</div>
+                    <div class="verse-translation">And at the earth - how it is spread out?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِلَى</span><span class="trans">wa ila</span><span class="meaning">And at</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرْضِ</span><span class="trans">al-ardi</span><span class="meaning">The earth</span></div>
+                        <div class="word-chip"><span class="ar">كَيْفَ</span><span class="trans">kayfa</span><span class="meaning">How</span></div>
+                        <div class="word-chip"><span class="ar">سُطِحَتْ</span><span class="trans">sutihat</span><span class="meaning">It was spread out</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Sutihat" means spread out, made flat and accessible for living. This refers to how the earth's surface is made livable - smooth enough to walk on, build on, farm on, and travel across. Despite the earth being a sphere, its surface appears spread out and flat from our perspective, making life possible. These four signs (camel, sky, mountains, earth) form a complete picture: look at the animals around you, the sky above you, the mountains beside you, and the ground beneath you. All point to one Creator.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">فَذَكِّرْ إِنَّمَا أَنتَ مُذَكِّرٌ</div>
+                    <div class="verse-transliteration">Fadhakkir innama anta mudhakkir</div>
+                    <div class="verse-translation">So remind, [O Muhammad]; you are only a reminder.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَذَكِّرْ</span><span class="trans">fadhakkir</span><span class="meaning">So remind</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّمَا</span><span class="trans">innama</span><span class="meaning">Indeed only</span></div>
+                        <div class="word-chip"><span class="ar">أَنتَ</span><span class="trans">anta</span><span class="meaning">You are</span></div>
+                        <div class="word-chip"><span class="ar">مُذَكِّرٌ</span><span class="trans">mudhakkir</span><span class="meaning">A reminder / one who reminds</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After presenting the evidence of the Hereafter (verses 1-16) and the evidence in creation (verses 17-20), Allah now tells the Prophet: your job is to remind. "Fadhakkir" - just keep reminding. "Innama anta mudhakkir" - you are ONLY a reminder. You don't control hearts. You can't force anyone to believe. Your role is to deliver the message, not to guarantee the outcome. This is a profound lesson for anyone doing da'wah: present the truth with sincerity, but leave the result to Allah.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">لَّسْتَ عَلَيْهِم بِمُصَيْطِرٍ</div>
+                    <div class="verse-transliteration">Lasta 'alayhim bimusaytir</div>
+                    <div class="verse-translation">You are not over them a controller.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَّسْتَ</span><span class="trans">lasta</span><span class="meaning">You are not</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِم</span><span class="trans">'alayhim</span><span class="meaning">Over them</span></div>
+                        <div class="word-chip"><span class="ar">بِمُصَيْطِرٍ</span><span class="trans">bimusaytir</span><span class="meaning">A controller / dictator</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Musaytir" means a controller, a dictator, someone who forces others. Allah is clearly stating: you have no authority to force anyone into faith. This verse establishes one of the most important principles in Islam - there is no compulsion in religion. Faith must come from the heart willingly. The Prophet's role (and by extension, the role of every Muslim) is to invite, remind, and present the truth. The rest is between each person and Allah.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">إِلَّا مَن تَوَلَّىٰ وَكَفَرَ</div>
+                    <div class="verse-transliteration">Illa man tawalla wa kafar</div>
+                    <div class="verse-translation">However, he who turns away and disbelieves -</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except / However</span></div>
+                        <div class="word-chip"><span class="ar">مَن</span><span class="trans">man</span><span class="meaning">He who</span></div>
+                        <div class="word-chip"><span class="ar">تَوَلَّىٰ</span><span class="trans">tawalla</span><span class="meaning">Turns away</span></div>
+                        <div class="word-chip"><span class="ar">وَكَفَرَ</span><span class="trans">wa kafar</span><span class="meaning">And disbelieves</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>While the Prophet cannot force anyone, that doesn't mean there are no consequences. "Tawalla" means to turn away, to deliberately walk away from the truth after it has been presented. "Kafar" means to disbelieve, to reject and cover the truth. This describes someone who has heard the message, seen the signs, been reminded - and still deliberately turns their back and rejects it. This is not about someone who never heard the message. This is about active, deliberate rejection after knowing the truth.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">فَيُعَذِّبُهُ اللَّهُ الْعَذَابَ الْأَكْبَرَ</div>
+                    <div class="verse-transliteration">Fayu'adhdhibuhullahul-'adhabal-akbar</div>
+                    <div class="verse-translation">Then Allah will punish him with the greatest punishment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَيُعَذِّبُهُ</span><span class="trans">fayu'adhdhibuhu</span><span class="meaning">Then He will punish him</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهُ</span><span class="trans">Allahu</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">الْعَذَابَ</span><span class="trans">al-'adhaba</span><span class="meaning">The punishment</span></div>
+                        <div class="word-chip"><span class="ar">الْأَكْبَرَ</span><span class="trans">al-akbar</span><span class="meaning">The greatest</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-'adhab al-akbar" - the GREATEST punishment. Ibn Kathir explains this refers to the punishment of the Hellfire in the Hereafter, as opposed to any minor punishment in this world. Even though the Prophet cannot force faith, Allah Himself will hold every person accountable. The fact that Allah gives people freedom to choose does not mean choices have no consequences. Freedom comes with responsibility, and the ultimate reckoning is with Allah alone.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">إِنَّ إِلَيْنَا إِيَابَهُمْ</div>
+                    <div class="verse-transliteration">Inna ilayna iyaabahum</div>
+                    <div class="verse-translation">Indeed, to Us is their return.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed / Surely</span></div>
+                        <div class="word-chip"><span class="ar">إِلَيْنَا</span><span class="trans">ilayna</span><span class="meaning">To Us</span></div>
+                        <div class="word-chip"><span class="ar">إِيَابَهُمْ</span><span class="trans">iyaabahum</span><span class="meaning">Their return</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Iyab" means return, coming back. Everyone returns to Allah - believer and disbeliever, obedient and disobedient. There is no escaping this return. No matter how far someone runs from the truth in this world, the journey always ends at the same destination: back to Allah. This verse reassures the Prophet: don't stress about those who reject. They will come back to Us. And it warns the deniers: you may turn away now, but you WILL return.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">ثُمَّ إِنَّ عَلَيْنَا حِسَابَهُمْ</div>
+                    <div class="verse-transliteration">Thumma inna 'alayna hisaabahum</div>
+                    <div class="verse-translation">Then indeed, upon Us is their account.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْنَا</span><span class="trans">'alayna</span><span class="meaning">Upon Us</span></div>
+                        <div class="word-chip"><span class="ar">حِسَابَهُمْ</span><span class="trans">hisaabahum</span><span class="meaning">Their account / reckoning</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah ends with a powerful closing statement: "Upon Us is their hisab (reckoning/account)." Allah takes the responsibility of judgment upon Himself. Not the Prophet, not any human, not any angel - Allah alone will judge. "Hisab" means a detailed, precise accounting of every deed, word, and intention. This final verse brings everything full circle: the Overwhelming Event (verse 1) is the Day when this account will be settled. The surah began with a question about that Day and ends with the certainty that it will happen, and Allah Himself will be the Judge.</p></div>
+                </div>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons from Surah Al-Ghashiyah</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The Day of Judgment is real and overwhelming.</strong><p style="color: #999; font-size: 0.95em;">It will cover and engulf everything. No one can escape it, ignore it, or deny it forever. The surah opens with this reality to shake us out of heedlessness and complacency.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Effort without guidance leads to exhaustion without reward.</strong><p style="color: #999; font-size: 0.95em;">The description of "working hard and exhausted" (verse 3) is a warning: it's not just about working hard, but about working on the right things with the right intention. Sincerity and correct belief are essential.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Every blessing of Paradise contrasts with a torment of the Fire.</strong><p style="color: #999; font-size: 0.95em;">Boiling springs vs. flowing springs. Thorny food vs. abundant feasts. Humiliated faces vs. radiant faces. This contrast is meant to motivate us toward the right path while there is still time.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">The signs of Allah are all around us - we just need to look.</strong><p style="color: #999; font-size: 0.95em;">The camel, the sky, the mountains, the earth - these are not hidden signs. They are right in front of us, every single day. Reflection on creation is one of the most powerful forms of worship.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Our role is to remind, not to control.</strong><p style="color: #999; font-size: 0.95em;">Even the Prophet (peace be upon him) was told he is only a reminder, not a controller. We present the truth with wisdom and kindness, and leave the results to Allah. There is no compulsion in faith.</p></div></li>
+                    <li><span class="bullet">&#9670;</span><div><strong style="color: #e0e0e0;">Everyone returns to Allah, and the account is with Him alone.</strong><p style="color: #999; font-size: 0.95em;">No matter what happens in this world, the final reckoning is with Allah. This should give us patience when we see injustice, and urgency to prepare for the Day when every detail will be accounted for.</p></div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources & Authenticity Note:</strong> The explanations in this page are based on Tafsir Ibn Kathir and Tafsir As-Sa'di. The hadith about the fire of this world compared to Hellfire is from Sahih Bukhari (3265). While care has been taken to ensure accuracy using authentic sources, this is a learning aid - always verify with qualified scholars.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <a href="index.html">Tafsir - Quran Journey</a> &middot; A project by <a href="https://shaid360.com" target="_blank">Shaid</a><br>
+        This is a learning aid, not a scholarly work. Always verify with qualified scholars.
+    </footer>
+
+    <script>
+        function showView(view) {
+            const carousel = document.getElementById('carousel-view');
+            const deepDive = document.getElementById('deep-dive-view');
+            const buttons = document.querySelectorAll('.view-toggle button');
+            if (view === 'carousel') {
+                carousel.classList.remove('hidden');
+                deepDive.classList.remove('visible');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                carousel.classList.add('hidden');
+                deepDive.classList.add('visible');
+                buttons[1].classList.add('active');
+                buttons[0].classList.remove('active');
+                setTimeout(setupScrollReveal, 100);
+            }
+        }
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .glow-line').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>
