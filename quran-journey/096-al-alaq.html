@@ -5,6 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surah Al-Alaq - 3D Cartoon Doodle | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -666,5 +667,6 @@
         function showView(v){const c=document.getElementById('carousel-view'),dd=document.getElementById('deep-dive-view'),b=document.querySelectorAll('.view-toggle button');if(v==='carousel'){c.classList.remove('hidden');dd.classList.remove('visible');b[0].classList.add('active');b[1].classList.remove('active');}else{c.classList.add('hidden');dd.classList.add('visible');b[1].classList.add('active');b[0].classList.remove('active');setTimeout(setupScrollReveal,100);}}
         function setupScrollReveal(){const o=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible');});},{threshold:0.1});document.querySelectorAll('.reveal, .glow-line').forEach(e=>o.observe(e));}
     </script>
+<script src="recitation.js"></script>
 </body>
 </html>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recitation POC - Surah Al-Ikhlas | Quran Journey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        .nav-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 30px; border-bottom: 1px solid #222;
+        }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; }
+
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .header .poc-badge {
+            display: inline-block; background: #c9a84c; color: #000; font-size: 0.7em;
+            padding: 3px 10px; border-radius: 20px; margin-top: 8px; font-weight: 600;
+        }
+
+        /* ===== RECITATION PLAYER ===== */
+        .recitation-section {
+            width: 100%; max-width: 900px; margin-top: 10px;
+        }
+
+        .reciter-selector {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+            margin-bottom: 20px;
+        }
+        .reciter-btn {
+            background: #1a1a1a; border: 2px solid #333; color: #ccc;
+            padding: 10px 20px; border-radius: 12px; cursor: pointer;
+            font-family: 'Inter', sans-serif; font-size: 0.9em;
+            transition: all 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .reciter-btn:hover { border-color: #c9a84c; color: #fff; }
+        .reciter-btn.active { background: rgba(201, 168, 76, 0.15); border-color: #c9a84c; color: #c9a84c; }
+        .reciter-btn .reciter-flag { font-size: 1.1em; }
+
+        .player-card {
+            background: #111; border: 1px solid #222; border-radius: 16px;
+            padding: 30px; margin-bottom: 20px;
+        }
+
+        .player-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px;
+        }
+        .player-title { font-family: 'Caveat', cursive; font-size: 1.4em; color: #c9a84c; }
+        .reciter-name { color: #888; font-size: 0.85em; }
+
+        /* Full surah play controls */
+        .surah-player {
+            display: flex; align-items: center; gap: 16px;
+            margin-bottom: 24px; padding: 16px; background: #1a1a1a;
+            border-radius: 12px; border: 1px solid #2a2a2a;
+        }
+        .play-btn {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: #c9a84c; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; flex-shrink: 0;
+        }
+        .play-btn:hover { background: #d4b35a; transform: scale(1.05); }
+        .play-btn svg { width: 22px; height: 22px; fill: #000; }
+
+        .progress-container { flex: 1; }
+        .progress-bar {
+            width: 100%; height: 6px; background: #333; border-radius: 3px;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #c9a84c, #e8c84c);
+            border-radius: 3px; width: 0%; transition: width 0.1s;
+        }
+        .progress-time {
+            display: flex; justify-content: space-between; margin-top: 6px;
+            font-size: 0.75em; color: #666;
+        }
+
+        /* Verse-by-verse list */
+        .verse-list { display: flex; flex-direction: column; gap: 8px; }
+
+        .verse-row {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px 18px; background: #1a1a1a; border-radius: 12px;
+            border: 1px solid #2a2a2a; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .verse-row:hover { border-color: #444; background: #222; }
+        .verse-row.playing {
+            border-color: #c9a84c; background: rgba(201, 168, 76, 0.08);
+        }
+        .verse-row.playing .verse-play-icon { color: #c9a84c; }
+
+        .verse-play-icon {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #222; border: 1px solid #333;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.3s; color: #888;
+        }
+        .verse-row:hover .verse-play-icon { border-color: #c9a84c; color: #c9a84c; }
+        .verse-play-icon svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .verse-num-circle {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #333; color: #888; font-size: 0.8em; font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .verse-row.playing .verse-num-circle { background: #c9a84c; color: #000; }
+
+        .verse-text-col { flex: 1; min-width: 0; }
+        .verse-arabic-line {
+            font-family: 'Amiri', serif; font-size: 1.4em; color: #fff;
+            direction: rtl; text-align: right; line-height: 1.6; margin-bottom: 2px;
+        }
+        .verse-translit-line { font-size: 0.8em; color: #666; font-style: italic; }
+
+        /* Waveform animation for playing verse */
+        .wave-bars {
+            display: none; gap: 2px; align-items: center; height: 20px;
+        }
+        .verse-row.playing .wave-bars { display: flex; }
+        .verse-row.playing .verse-play-icon svg.play-icon { display: none; }
+        .wave-bars span {
+            width: 3px; background: #c9a84c; border-radius: 2px;
+            animation: waveAnim 0.8s ease-in-out infinite;
+        }
+        .wave-bars span:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .wave-bars span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+        .wave-bars span:nth-child(3) { height: 10px; animation-delay: 0.3s; }
+        .wave-bars span:nth-child(4) { height: 16px; animation-delay: 0.1s; }
+        .wave-bars span:nth-child(5) { height: 6px; animation-delay: 0.25s; }
+
+        @keyframes waveAnim {
+            0%, 100% { transform: scaleY(0.4); }
+            50% { transform: scaleY(1); }
+        }
+
+        /* Repeat controls */
+        .repeat-controls {
+            display: flex; align-items: center; gap: 12px;
+            margin-top: 16px; padding-top: 16px; border-top: 1px solid #222;
+        }
+        .repeat-btn {
+            background: #1a1a1a; border: 1px solid #333; color: #888;
+            padding: 6px 14px; border-radius: 8px; cursor: pointer;
+            font-size: 0.8em; transition: all 0.3s;
+        }
+        .repeat-btn:hover { border-color: #c9a84c; color: #c9a84c; }
+        .repeat-btn.active { background: rgba(201, 168, 76, 0.15); border-color: #c9a84c; color: #c9a84c; }
+        .repeat-label { color: #666; font-size: 0.8em; }
+
+        /* Speed control */
+        .speed-selector {
+            display: flex; align-items: center; gap: 8px; margin-left: auto;
+        }
+        .speed-selector select {
+            background: #1a1a1a; border: 1px solid #333; color: #ccc;
+            padding: 4px 8px; border-radius: 6px; font-size: 0.8em; cursor: pointer;
+        }
+
+        /* Loading state */
+        .loading-spinner {
+            display: none; width: 20px; height: 20px;
+            border: 2px solid #333; border-top: 2px solid #c9a84c;
+            border-radius: 50%; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Error message */
+        .error-msg {
+            display: none; color: #e74c3c; font-size: 0.85em;
+            text-align: center; padding: 12px; background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px; margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.6em; }
+            .header .arabic-title { font-size: 1.8em; }
+            .reciter-btn { padding: 8px 14px; font-size: 0.8em; }
+            .verse-arabic-line { font-size: 1.2em; }
+            .surah-player { padding: 12px; gap: 12px; }
+            .play-btn { width: 44px; height: 44px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-bar">
+        <a href="index.html" class="logo">Quran Journey - Recitation POC</a>
+    </nav>
+
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْإِخْلَاصِ</div>
+        <h1>Surah Al-Ikhlas</h1>
+        <p>The Sincerity / Purity of Faith - 4 Verses - Makkan</p>
+        <div class="poc-badge">RECITATION POC</div>
+    </div>
+
+    <div class="recitation-section">
+        <!-- Reciter Selection -->
+        <div class="reciter-selector" id="reciterSelector">
+            <button class="reciter-btn active" data-reciter="Alafasy_128kbps" data-name="Mishary Rashid Alafasy">
+                <span class="reciter-flag">&#127472;&#127484;</span> Mishary Alafasy
+            </button>
+            <button class="reciter-btn" data-reciter="Abdul_Basit_Murattal_192kbps" data-name="Abdul Basit (Murattal)">
+                <span class="reciter-flag">&#127466;&#127468;</span> Abdul Basit
+            </button>
+            <button class="reciter-btn" data-reciter="Husary_128kbps" data-name="Mahmoud Khalil Al-Husary">
+                <span class="reciter-flag">&#127466;&#127468;</span> Al-Husary
+            </button>
+            <button class="reciter-btn" data-reciter="Minshawy_Murattal_128kbps" data-name="Mohamed Siddiq El-Minshawi">
+                <span class="reciter-flag">&#127466;&#127468;</span> Al-Minshawi
+            </button>
+            <button class="reciter-btn" data-reciter="Abdurrahmaan_As-Sudais_192kbps" data-name="Abdur-Rahman As-Sudais">
+                <span class="reciter-flag">&#127480;&#127462;</span> As-Sudais
+            </button>
+        </div>
+
+        <!-- Player Card -->
+        <div class="player-card">
+            <div class="player-header">
+                <div>
+                    <div class="player-title">Listen to Recitation</div>
+                    <div class="reciter-name" id="currentReciterName">Mishary Rashid Alafasy</div>
+                </div>
+                <div class="loading-spinner" id="loadingSpinner"></div>
+            </div>
+
+            <!-- Full Surah Player -->
+            <div class="surah-player">
+                <button class="play-btn" id="surahPlayBtn" onclick="toggleSurahPlay()">
+                    <svg viewBox="0 0 24 24" id="surahPlayIcon">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-time">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalTime">0:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verse-by-Verse List -->
+            <div class="verse-list" id="verseList"></div>
+
+            <!-- Repeat + Speed Controls -->
+            <div class="repeat-controls">
+                <span class="repeat-label">Repeat:</span>
+                <button class="repeat-btn" id="repeatNone" onclick="setRepeat('none')">Off</button>
+                <button class="repeat-btn active" id="repeatSurah" onclick="setRepeat('surah')">Surah</button>
+                <button class="repeat-btn" id="repeatVerse" onclick="setRepeat('verse')">Verse</button>
+                <div class="speed-selector">
+                    <span class="repeat-label">Speed:</span>
+                    <select id="speedSelect" onchange="setSpeed(this.value)">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="error-msg" id="errorMsg"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== SURAH CONFIG =====
+        const SURAH_NUM = 112;
+        const SURAH_PADDED = '112';
+        const verses = [
+            {
+                num: 1,
+                arabic: 'قُلْ هُوَ ٱللَّهُ أَحَدٌ',
+                translit: 'Qul huwa Allahu ahad'
+            },
+            {
+                num: 2,
+                arabic: 'ٱللَّهُ ٱلصَّمَدُ',
+                translit: 'Allahus-samad'
+            },
+            {
+                num: 3,
+                arabic: 'لَمْ يَلِدْ وَلَمْ يُولَدْ',
+                translit: 'Lam yalid wa lam yulad'
+            },
+            {
+                num: 4,
+                arabic: 'وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ',
+                translit: 'Wa lam yakun lahu kufuwan ahad'
+            }
+        ];
+
+        // ===== AUDIO STATE =====
+        let currentReciter = 'Alafasy_128kbps';
+        let audioElements = []; // One Audio per verse
+        let currentVerseIndex = -1;
+        let isPlaying = false;
+        let repeatMode = 'surah'; // 'none', 'surah', 'verse'
+        let playbackSpeed = 1;
+
+        // ===== AUDIO URL BUILDER =====
+        // everyayah.com serves verse-by-verse MP3s
+        function getAudioUrl(reciter, surahNum, verseNum) {
+            const s = String(surahNum).padStart(3, '0');
+            const v = String(verseNum).padStart(3, '0');
+            return `https://everyayah.com/data/${reciter}/${s}${v}.mp3`;
+        }
+
+        // ===== BUILD VERSE LIST UI =====
+        function buildVerseList() {
+            const container = document.getElementById('verseList');
+            container.innerHTML = '';
+            verses.forEach((v, i) => {
+                const row = document.createElement('div');
+                row.className = 'verse-row';
+                row.dataset.index = i;
+                row.onclick = () => playFromVerse(i);
+                row.innerHTML = `
+                    <div class="verse-play-icon">
+                        <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <div class="wave-bars">
+                            <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <div class="verse-num-circle">${v.num}</div>
+                    <div class="verse-text-col">
+                        <div class="verse-arabic-line">${v.arabic}</div>
+                        <div class="verse-translit-line">${v.translit}</div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // ===== PRELOAD AUDIO =====
+        function loadAudio() {
+            // Clean up old audio
+            audioElements.forEach(a => { a.pause(); a.src = ''; });
+            audioElements = [];
+
+            const spinner = document.getElementById('loadingSpinner');
+            spinner.style.display = 'block';
+            hideError();
+
+            let loaded = 0;
+            verses.forEach((v, i) => {
+                const audio = new Audio();
+                audio.preload = 'auto';
+                audio.playbackRate = playbackSpeed;
+                audio.src = getAudioUrl(currentReciter, SURAH_NUM, v.num);
+
+                audio.addEventListener('canplaythrough', () => {
+                    loaded++;
+                    if (loaded === verses.length) spinner.style.display = 'none';
+                }, { once: true });
+
+                audio.addEventListener('error', () => {
+                    spinner.style.display = 'none';
+                    showError('Could not load audio. The reciter may not be available for this surah.');
+                });
+
+                audio.addEventListener('ended', () => onVerseEnded(i));
+
+                audio.addEventListener('timeupdate', () => {
+                    if (i === currentVerseIndex) updateProgress();
+                });
+
+                audioElements.push(audio);
+            });
+        }
+
+        // ===== PLAYBACK CONTROLS =====
+        function toggleSurahPlay() {
+            if (isPlaying) {
+                pauseAll();
+            } else {
+                if (currentVerseIndex < 0) currentVerseIndex = 0;
+                playCurrentVerse();
+            }
+        }
+
+        function playFromVerse(index) {
+            pauseAll();
+            currentVerseIndex = index;
+            playCurrentVerse();
+        }
+
+        function playCurrentVerse() {
+            if (currentVerseIndex < 0 || currentVerseIndex >= audioElements.length) return;
+
+            const audio = audioElements[currentVerseIndex];
+            audio.playbackRate = playbackSpeed;
+            audio.play().then(() => {
+                isPlaying = true;
+                updatePlayButton();
+                highlightVerse(currentVerseIndex);
+            }).catch(err => {
+                showError('Playback failed. Try clicking again.');
+            });
+        }
+
+        function pauseAll() {
+            audioElements.forEach(a => a.pause());
+            isPlaying = false;
+            updatePlayButton();
+            // Keep highlight but stop wave animation
+            document.querySelectorAll('.verse-row.playing').forEach(r => {
+                // Don't remove playing class so user sees where they stopped
+            });
+        }
+
+        function onVerseEnded(index) {
+            if (repeatMode === 'verse') {
+                // Replay same verse
+                audioElements[index].currentTime = 0;
+                audioElements[index].play();
+                return;
+            }
+
+            const nextIndex = index + 1;
+            if (nextIndex < verses.length) {
+                currentVerseIndex = nextIndex;
+                playCurrentVerse();
+            } else {
+                // End of surah
+                if (repeatMode === 'surah') {
+                    currentVerseIndex = 0;
+                    audioElements.forEach(a => a.currentTime = 0);
+                    playCurrentVerse();
+                } else {
+                    isPlaying = false;
+                    updatePlayButton();
+                    highlightVerse(-1);
+                }
+            }
+        }
+
+        // ===== UI UPDATES =====
+        function updatePlayButton() {
+            const icon = document.getElementById('surahPlayIcon');
+            if (isPlaying) {
+                icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+            } else {
+                icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+            }
+        }
+
+        function highlightVerse(index) {
+            document.querySelectorAll('.verse-row').forEach((row, i) => {
+                row.classList.toggle('playing', i === index);
+            });
+        }
+
+        function updateProgress() {
+            const audio = audioElements[currentVerseIndex];
+            if (!audio || !audio.duration) return;
+
+            // Calculate total progress across all verses
+            let totalDuration = 0;
+            let elapsed = 0;
+            audioElements.forEach((a, i) => {
+                const dur = a.duration || 0;
+                totalDuration += dur;
+                if (i < currentVerseIndex) elapsed += dur;
+                if (i === currentVerseIndex) elapsed += a.currentTime;
+            });
+
+            const pct = totalDuration > 0 ? (elapsed / totalDuration) * 100 : 0;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('currentTime').textContent = formatTime(elapsed);
+            document.getElementById('totalTime').textContent = formatTime(totalDuration);
+        }
+
+        function seekAudio(e) {
+            const bar = document.getElementById('progressBar');
+            const rect = bar.getBoundingClientRect();
+            const pct = (e.clientX - rect.left) / rect.width;
+
+            let totalDuration = 0;
+            audioElements.forEach(a => totalDuration += (a.duration || 0));
+            const targetTime = pct * totalDuration;
+
+            // Find which verse this falls into
+            let accumulated = 0;
+            for (let i = 0; i < audioElements.length; i++) {
+                const dur = audioElements[i].duration || 0;
+                if (accumulated + dur > targetTime) {
+                    pauseAll();
+                    currentVerseIndex = i;
+                    audioElements[i].currentTime = targetTime - accumulated;
+                    playCurrentVerse();
+                    return;
+                }
+                accumulated += dur;
+            }
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        // ===== RECITER SELECTION =====
+        document.querySelectorAll('.reciter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.reciter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                currentReciter = btn.dataset.reciter;
+                document.getElementById('currentReciterName').textContent = btn.dataset.name;
+
+                pauseAll();
+                currentVerseIndex = -1;
+                highlightVerse(-1);
+                document.getElementById('progressFill').style.width = '0%';
+                document.getElementById('currentTime').textContent = '0:00';
+                document.getElementById('totalTime').textContent = '0:00';
+                loadAudio();
+            });
+        });
+
+        // ===== REPEAT MODE =====
+        function setRepeat(mode) {
+            repeatMode = mode;
+            ['repeatNone', 'repeatSurah', 'repeatVerse'].forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+            if (mode === 'none') document.getElementById('repeatNone').classList.add('active');
+            if (mode === 'surah') document.getElementById('repeatSurah').classList.add('active');
+            if (mode === 'verse') document.getElementById('repeatVerse').classList.add('active');
+        }
+
+        // ===== SPEED =====
+        function setSpeed(val) {
+            playbackSpeed = parseFloat(val);
+            audioElements.forEach(a => a.playbackRate = playbackSpeed);
+        }
+
+        // ===== ERROR HANDLING =====
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+        function hideError() {
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+
+        // ===== INIT =====
+        buildVerseList();
+        loadAudio();
+    </script>
+</body>
+</html>
