@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Mutaffifin - The Defrauders | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 83 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْمُطَفِّفِينَ</div>
+        <h1>Surah Al-Mutaffifin</h1>
+        <p>The Defrauders / Those Who Give Less - 36 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">83</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">36</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">169</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Defrauders</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Cheating, Records & Judgment</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Mutaffifin was revealed in Makkah and addresses one of the most practical and widespread sins: <span class="highlight">cheating in business transactions</span>. The word "mutaffifin" comes from "tatfif," meaning to give less than what is due. It refers to those who demand their full rights when buying but shortchange others when selling. This surah connects dishonest business practices directly to denial of the Day of Judgment.</p>
+                <p>The surah opens with a powerful warning: <span class="highlight">"Woe to the defrauders!"</span> This is not just about marketplace cheating. Scholars explain it covers every form of taking more than you deserve and giving less than what you owe, whether in business, relationships, or dealings with Allah Himself (taking His blessings but not fulfilling His commands).</p>
+                <div class="important">
+                    <p>Ibn Kathir reports that when the Prophet (peace be upon him) arrived in Madinah, the people there were among the worst in giving short measure. Then Allah revealed this surah, and they reformed their business practices. Some scholars consider this surah to be among the last Makkan revelations or early Madinan, as it addresses both the Makkan themes of resurrection and the Madinan concern with social justice.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Introduction to Surah Al-Mutaffifin; An-Nasa'i</p>
+                </div>
+                <p>The middle section introduces two profound concepts: <span class="highlight">Sijjin</span> (the record of the wicked, kept in the lowest place) and <span class="highlight">Illiyyun</span> (the record of the righteous, kept in the highest place). The wicked denied the Day of Judgment and are sealed off from their Lord, while the righteous are rewarded with luxury, reclining on couches and drinking sealed nectar.</p>
+                <p>The surah concludes with a stunning reversal: in this world, <span class="highlight">the disbelievers used to laugh at the believers</span>, mock them, and wink at each other in ridicule. But on the Day of Judgment, it is the believers who will be on couches, looking at the disbelievers and laughing. The final verse asks the rhetorical question: have the disbelievers been repaid for what they used to do? Justice is served, perfectly and completely.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">وَيْلٌ لِّلْمُطَفِّفِينَ</div>
+                    <div class="verse-transliteration">Waylul-lil-mutaffifin</div>
+                    <div class="verse-translation">Woe to those who give less [than due].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُطَفِّفِينَ</span><span class="trans">lil-mutaffifin</span><span class="meaning">To the defrauders</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Wayl" is one of the most severe words of warning in the Quran. Ibn Kathir explains that some scholars say "Wayl" is a valley in Hellfire where the pus and blood of the people of the Fire flow. Others say it simply means destruction and loss. "Mutaffifin" comes from "tatfif," which means to give something small, deficient, or less than what is due. As-Sa'di explains that this refers to those who cheat in weights and measures, taking full measure when they receive from others but giving less when they measure or weigh for others. The surah opens with the most severe warning for what might seem like a "small" sin, showing that dishonesty in dealings is no small matter with Allah.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">الَّذِينَ إِذَا اكْتَالُوا عَلَى النَّاسِ يَسْتَوْفُونَ</div>
+                    <div class="verse-transliteration">Alladhina idhak-talu 'alan-nasi yastawfun</div>
+                    <div class="verse-translation">Who, when they take a measure from people, take in full.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">اكْتَالُوا</span><span class="trans">iktalu</span><span class="meaning">They take a measure</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى النَّاسِ</span><span class="trans">'alan-nasi</span><span class="meaning">From people</span></div>
+                        <div class="word-chip"><span class="ar">يَسْتَوْفُونَ</span><span class="trans">yastawfun</span><span class="meaning">They take in full</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Iktalu" means to measure or weigh goods when receiving them. "Yastawfun" means they demand every last bit, they take their full right and more. Ibn Kathir explains that when these people are buying, they make sure they get every grain, every drop, every ounce owed to them. They are meticulous about their own rights. As-Sa'di points out the hypocrisy: they know the concept of full measure perfectly well when it benefits them. The problem is not ignorance; it is greed and selfishness. They apply one standard when receiving and another when giving.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَإِذَا كَالُوهُمْ أَو وَّزَنُوهُمْ يُخْسِرُونَ</div>
+                    <div class="verse-transliteration">Wa idha kaluhum aw wazanuhum yukhsirun</div>
+                    <div class="verse-translation">But if they give by measure or by weight to them, they cause loss.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">But when</span></div>
+                        <div class="word-chip"><span class="ar">كَالُوهُمْ</span><span class="trans">kaluhum</span><span class="meaning">They measure for them</span></div>
+                        <div class="word-chip"><span class="ar">أَو</span><span class="trans">aw</span><span class="meaning">Or</span></div>
+                        <div class="word-chip"><span class="ar">وَّزَنُوهُمْ</span><span class="trans">wazanuhum</span><span class="meaning">They weigh for them</span></div>
+                        <div class="word-chip"><span class="ar">يُخْسِرُونَ</span><span class="trans">yukhsirun</span><span class="meaning">They cause loss / give less</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>But when they are the ones measuring or weighing for others (selling), they deliberately give less. "Yukhsirun" comes from "khasara" meaning loss. They cause others to lose by giving them short measure. Ibn Kathir explains that this verse exposes the double standard: full rights for themselves, shortchanged rights for others. As-Sa'di broadens this principle beyond the marketplace. He says this applies to anyone who demands their full rights from others but fails to give others their due. This includes employers who demand full work but withhold fair wages, and even those who expect respect and kindness from others but fail to reciprocate.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">أَلَا يَظُنُّ أُولَـٰئِكَ أَنَّهُم مَّبْعُوثُونَ</div>
+                    <div class="verse-transliteration">Ala yazunnu ula'ika annahum mab'uthun</div>
+                    <div class="verse-translation">Do they not think that they will be resurrected?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">أَلَا</span><span class="trans">ala</span><span class="meaning">Do not</span></div>
+                        <div class="word-chip"><span class="ar">يَظُنُّ</span><span class="trans">yazunnu</span><span class="meaning">They think / expect</span></div>
+                        <div class="word-chip"><span class="ar">أُولَـٰئِكَ</span><span class="trans">ula'ika</span><span class="meaning">Those (people)</span></div>
+                        <div class="word-chip"><span class="ar">أَنَّهُم</span><span class="trans">annahum</span><span class="meaning">That they</span></div>
+                        <div class="word-chip"><span class="ar">مَّبْعُوثُونَ</span><span class="trans">mab'uthun</span><span class="meaning">Will be resurrected</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is a rhetorical question dripping with astonishment. "Do these cheaters not realize they will be raised from their graves?" Ibn Kathir explains that the root cause of their fraud is disbelief in the afterlife. If they truly believed they would stand before Allah and answer for every transaction, they would never dare cheat. As-Sa'di makes a powerful connection: fraud and dishonesty are symptoms of a deeper disease, the denial of accountability. When a person truly believes in the Day of Judgment, it transforms every dealing they have. This verse links economics directly to theology.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">لِيَوْمٍ عَظِيمٍ</div>
+                    <div class="verse-transliteration">Li-yawmin 'azim</div>
+                    <div class="verse-translation">For a tremendous Day.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِيَوْمٍ</span><span class="trans">li-yawmin</span><span class="meaning">For a Day</span></div>
+                        <div class="word-chip"><span class="ar">عَظِيمٍ</span><span class="trans">'azim</span><span class="meaning">Tremendous / great</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Azim" means great, mighty, and tremendous. This is no ordinary day. Ibn Kathir explains that calling it "azim" (tremendous) is meant to shake the listener. It is a Day so immense in its terror and magnitude that it dwarfs everything else. As-Sa'di notes that the use of the indefinite form "yawmin" (a day) rather than the definite "al-yawm" (the day) adds to the sense of awe. It is as if language itself cannot fully define or contain the magnitude of that Day. The cheaters thought they were being clever. But cleverness will not help when the scales of that tremendous Day are set up.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">يَوْمَ يَقُومُ النَّاسُ لِرَبِّ الْعَالَمِينَ</div>
+                    <div class="verse-transliteration">Yawma yaqumun-nasu li-rabbil-'alamin</div>
+                    <div class="verse-translation">The Day when mankind will stand before the Lord of the worlds.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَوْمَ</span><span class="trans">yawma</span><span class="meaning">The Day</span></div>
+                        <div class="word-chip"><span class="ar">يَقُومُ</span><span class="trans">yaqumu</span><span class="meaning">Will stand</span></div>
+                        <div class="word-chip"><span class="ar">النَّاسُ</span><span class="trans">an-nasu</span><span class="meaning">Mankind</span></div>
+                        <div class="word-chip"><span class="ar">لِرَبِّ</span><span class="trans">li-rabbi</span><span class="meaning">Before the Lord</span></div>
+                        <div class="word-chip"><span class="ar">الْعَالَمِينَ</span><span class="trans">al-'alamin</span><span class="meaning">Of the worlds</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>All of humanity will stand before Allah, the Lord of all worlds. Ibn Kathir cites a hadith from the Prophet (peace be upon him) reported in Sahih Bukhari and Muslim: "People will stand on the Day of Resurrection in their sweat up to the middle of their ears." This standing will last for 50,000 years. As-Sa'di explains that saying "Lord of the worlds" is significant. He is not just Lord of humans, but of everything that exists. The One before whom you will stand owns and controls every realm of existence. The same person who cheated for a few extra coins will stand barefoot and naked before the Master of the entire universe.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">كَلَّا إِنَّ كِتَابَ الْفُجَّارِ لَفِي سِجِّينٍ</div>
+                    <div class="verse-transliteration">Kalla inna kitabal-fujjari lafi sijjin</div>
+                    <div class="verse-translation">No! Indeed, the record of the wicked is in Sijjin.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Nay!</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">كِتَابَ</span><span class="trans">kitaba</span><span class="meaning">The record of</span></div>
+                        <div class="word-chip"><span class="ar">الْفُجَّارِ</span><span class="trans">al-fujjar</span><span class="meaning">The wicked</span></div>
+                        <div class="word-chip"><span class="ar">لَفِي</span><span class="trans">lafi</span><span class="meaning">Is surely in</span></div>
+                        <div class="word-chip"><span class="ar">سِجِّينٍ</span><span class="trans">sijjin</span><span class="meaning">Sijjin (a prison record)</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Kalla" is a strong word of rebuke, like saying "Absolutely not! Stop and pay attention!" Now the surah shifts to the records of deeds. "Fujjar" are the wicked, sinful people. Their record is in "Sijjin." Ibn Kathir explains that "Sijjin" comes from "sijn" meaning prison. It is the lowest, most confined, most constricting place. Some scholars say it is a register kept beneath the seventh earth, or the lowest level of the earth. As-Sa'di explains that the location of the record reflects the status of the person. The wicked person's record is thrown down to the lowest possible place, matching their low and debased choices in life.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا سِجِّينٌ</div>
+                    <div class="verse-transliteration">Wa ma adraka ma sijjin</div>
+                    <div class="verse-translation">And what can make you know what is Sijjin?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                        <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraka</span><span class="meaning">Can make you know</span></div>
+                        <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What is</span></div>
+                        <div class="word-chip"><span class="ar">سِجِّينٌ</span><span class="trans">sijjin</span><span class="meaning">Sijjin</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is a classic Quranic rhetorical device used to magnify something beyond human comprehension. "What can make you know what Sijjin is?" means it is so terrible that no human description can do it justice. Ibn Kathir explains that whenever the Quran uses this phrasing ("wa ma adraka"), it indicates something of immense magnitude that is beyond the listener's current knowledge. As-Sa'di notes that this builds suspense and dread. Before even explaining what Sijjin is, the Quran tells you that it is beyond your ability to fully grasp. This is meant to instill fear in the hearts of those who dare to cheat and sin.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">كِتَابٌ مَّرْقُومٌ</div>
+                    <div class="verse-transliteration">Kitabum-marqum</div>
+                    <div class="verse-translation">It is [their destination] a register inscribed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كِتَابٌ</span><span class="trans">kitabun</span><span class="meaning">A register / book</span></div>
+                        <div class="word-chip"><span class="ar">مَّرْقُومٌ</span><span class="trans">marqum</span><span class="meaning">Inscribed / written</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Marqum" means inscribed, written, and permanently recorded. Nothing can be erased or changed. Ibn Kathir explains that this is a comprehensive record that contains every deed, every word, and every intention of the wicked. It is inscribed in a way that is permanent and irrefutable. As-Sa'di explains that "marqum" also carries the meaning of being sealed and finalized. There is no editing, no revision, no appeal. Every act of fraud, every lie, every moment of arrogance is permanently inscribed in this register. The cheaters thought no one was watching. But every single transaction was being recorded.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَيْلٌ يَوْمَئِذٍ لِّلْمُكَذِّبِينَ</div>
+                    <div class="verse-transliteration">Wayluy-yawma'idhil-lil-mukadhdhibin</div>
+                    <div class="verse-translation">Woe, that Day, to the deniers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيْلٌ</span><span class="trans">waylun</span><span class="meaning">Woe / destruction</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْمُكَذِّبِينَ</span><span class="trans">lil-mukadhdhibin</span><span class="meaning">To the deniers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Wayl" returns again, this time specifically for "that Day." The "mukadhdhibin" are those who deny the truth, who call the Day of Judgment a lie. Ibn Kathir explains that the "wayl" that was general in verse 1 is now made specific to the Day of Judgment. On that Day, the destruction will actually arrive. In this world, "wayl" is a warning. On that Day, it becomes reality. As-Sa'di connects this back to the defrauders: the reason they cheated was because they denied this Day. Now that the Day has arrived, their denial cannot protect them. The very thing they said would never happen is happening, and there is no escape.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">الَّذِينَ يُكَذِّبُونَ بِيَوْمِ الدِّينِ</div>
+                    <div class="verse-transliteration">Alladhina yukadhdhibuna bi-yawmid-din</div>
+                    <div class="verse-translation">Who deny the Day of Recompense.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">يُكَذِّبُونَ</span><span class="trans">yukadhdhibun</span><span class="meaning">Deny / reject as lies</span></div>
+                        <div class="word-chip"><span class="ar">بِيَوْمِ</span><span class="trans">bi-yawmi</span><span class="meaning">The Day of</span></div>
+                        <div class="word-chip"><span class="ar">الدِّينِ</span><span class="trans">ad-din</span><span class="meaning">Recompense / Judgment</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Yawm ad-Din" is the Day of Recompense, the Day when every deed is repaid in full. "Din" here means recompense, repayment, and judgment. Ibn Kathir explains that these people actively deny this Day. It is not that they are unsure; they call it a lie. They mock the very idea that they will be held accountable. As-Sa'di notes the irony: the defrauders cheated in their measurements, and now they will face the ultimate measurement. Allah's scales are perfect. Not a single atom's weight of good or evil will be missed. The Day they denied is the Day that will settle all accounts.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">وَمَا يُكَذِّبُ بِهِ إِلَّا كُلُّ مُعْتَدٍ أَثِيمٍ</div>
+                    <div class="verse-transliteration">Wa ma yukadhdhibu bihi illa kullu mu'tadin athim</div>
+                    <div class="verse-translation">And none deny it except every sinful transgressor.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And none</span></div>
+                        <div class="word-chip"><span class="ar">يُكَذِّبُ</span><span class="trans">yukadhdhibu</span><span class="meaning">Denies</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">It</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">كُلُّ</span><span class="trans">kullu</span><span class="meaning">Every</span></div>
+                        <div class="word-chip"><span class="ar">مُعْتَدٍ</span><span class="trans">mu'tadin</span><span class="meaning">Transgressor</span></div>
+                        <div class="word-chip"><span class="ar">أَثِيمٍ</span><span class="trans">athim</span><span class="meaning">Sinful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Two devastating descriptions: "mu'tadin" (one who transgresses boundaries, who crosses every limit) and "athim" (deeply sinful, one who is immersed in sin). Ibn Kathir explains that only the most transgressive and sinful people deny the Day of Judgment. A reasonable, fair-minded person would accept the truth. But the transgressor's sins have become so heavy that accepting accountability would mean confronting their own wickedness, so they choose denial instead. As-Sa'di explains that sin leads to more sin: transgression leads to denial, and denial leads to more transgression. It is a vicious cycle where each sin makes the next one easier.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">إِذَا تُتْلَىٰ عَلَيْهِ آيَاتُنَا قَالَ أَسَاطِيرُ الْأَوَّلِينَ</div>
+                    <div class="verse-transliteration">Idha tutla 'alayhi ayatuna qala asatirul-awwalin</div>
+                    <div class="verse-translation">When Our verses are recited to him, he says, "Legends of the former peoples."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">تُتْلَىٰ</span><span class="trans">tutla</span><span class="meaning">Are recited</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِ</span><span class="trans">'alayhi</span><span class="meaning">To him</span></div>
+                        <div class="word-chip"><span class="ar">آيَاتُنَا</span><span class="trans">ayatuna</span><span class="meaning">Our verses</span></div>
+                        <div class="word-chip"><span class="ar">قَالَ</span><span class="trans">qala</span><span class="meaning">He says</span></div>
+                        <div class="word-chip"><span class="ar">أَسَاطِيرُ</span><span class="trans">asatir</span><span class="meaning">Legends / tales</span></div>
+                        <div class="word-chip"><span class="ar">الْأَوَّلِينَ</span><span class="trans">al-awwalin</span><span class="meaning">Of the former peoples</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Asatir al-Awwalin" means "tales of the ancients" or "legends of old." This was the standard dismissal used by the Quraysh when the Quran was recited to them. Instead of reflecting on its message, they waved it away as fairy tales. Ibn Kathir explains that this response shows the ultimate arrogance: when the Creator of the universe speaks to you through His revelation, you dismiss it as old stories. As-Sa'di notes that their response was not based on evidence or reasoning. They did not examine the Quran and find it false. They simply did not want to hear it because accepting it would mean changing their ways and giving up their sins.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">كَلَّا ۖ بَلْ ۜ رَانَ عَلَىٰ قُلُوبِهِم مَّا كَانُوا يَكْسِبُونَ</div>
+                    <div class="verse-transliteration">Kalla bal rana 'ala qulubihim ma kanu yaksibun</div>
+                    <div class="verse-translation">No! Rather, the stain has covered their hearts of that which they were earning.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Nay!</span></div>
+                        <div class="word-chip"><span class="ar">بَلْ</span><span class="trans">bal</span><span class="meaning">Rather</span></div>
+                        <div class="word-chip"><span class="ar">رَانَ</span><span class="trans">rana</span><span class="meaning">Has stained / covered</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">Upon</span></div>
+                        <div class="word-chip"><span class="ar">قُلُوبِهِم</span><span class="trans">qulubihim</span><span class="meaning">Their hearts</span></div>
+                        <div class="word-chip"><span class="ar">مَّا كَانُوا</span><span class="trans">ma kanu</span><span class="meaning">What they used to</span></div>
+                        <div class="word-chip"><span class="ar">يَكْسِبُونَ</span><span class="trans">yaksibun</span><span class="meaning">Earn / do</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is one of the most important verses about the spiritual heart. "Rana" means a stain, rust, or covering that accumulates. The Prophet (peace be upon him) explained this verse in a hadith reported by At-Tirmidhi and Ibn Majah: "When a servant commits a sin, a black dot is placed on his heart. If he repents and seeks forgiveness, his heart is polished. But if he sins again, another dot is added until the blackness covers the entire heart. That is the 'ran' (stain) that Allah mentioned." Ibn Kathir explains that their sins have accumulated so much that their hearts are completely sealed. They cannot see truth even when it is right in front of them. As-Sa'di warns that this is the greatest danger of persistent sin: it does not just damage your deeds, it damages your ability to perceive truth itself.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">كَلَّا إِنَّهُمْ عَن رَّبِّهِمْ يَوْمَئِذٍ لَّمَحْجُوبُونَ</div>
+                    <div class="verse-transliteration">Kalla innahum 'an rabbihim yawma'idhil-lamahjubun</div>
+                    <div class="verse-translation">No! Indeed, from their Lord, that Day, they will be partitioned.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Nay!</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّهُمْ</span><span class="trans">innahum</span><span class="meaning">Indeed they</span></div>
+                        <div class="word-chip"><span class="ar">عَن رَّبِّهِمْ</span><span class="trans">'an rabbihim</span><span class="meaning">From their Lord</span></div>
+                        <div class="word-chip"><span class="ar">يَوْمَئِذٍ</span><span class="trans">yawma'idhin</span><span class="meaning">That Day</span></div>
+                        <div class="word-chip"><span class="ar">لَّمَحْجُوبُونَ</span><span class="trans">la-mahjubun</span><span class="meaning">Will be veiled / partitioned</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is considered one of the most devastating punishments described in the Quran. "Mahjubun" means veiled, blocked, screened off. They will be prevented from seeing Allah. Imam Ash-Shafi'i said about this verse: "When He veiled these people (the wicked) out of His anger, this indicates that those people (the believers) will see Him out of His pleasure." Ibn Kathir explains that being denied the sight of Allah is the severest form of punishment, just as seeing Allah is the greatest reward in Paradise. As-Sa'di notes the perfect justice: they chose to be veiled from Allah in this life by ignoring His signs and commands, so they are veiled from Him on the Day of Judgment. Their punishment matches their crime exactly.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">ثُمَّ إِنَّهُمْ لَصَالُو الْجَحِيمِ</div>
+                    <div class="verse-transliteration">Thumma innahum lasalu al-jahim</div>
+                    <div class="verse-translation">Then indeed, they will [enter and] burn in Hellfire.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّهُمْ</span><span class="trans">innahum</span><span class="meaning">Indeed they</span></div>
+                        <div class="word-chip"><span class="ar">لَصَالُو</span><span class="trans">lasalu</span><span class="meaning">Will surely burn in</span></div>
+                        <div class="word-chip"><span class="ar">الْجَحِيمِ</span><span class="trans">al-jahim</span><span class="meaning">The Hellfire</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Thumma" (then) indicates sequence: first they are veiled from Allah's sight, then they are thrown into the Hellfire. "Al-Jahim" is one of the names of Hellfire, derived from "jahama" meaning a blazing, furious fire. Ibn Kathir explains that being veiled from Allah's mercy is the spiritual punishment, and the Hellfire is the physical punishment. They receive both. As-Sa'di notes that "lasalu" contains emphasis (the "la" is for emphasis), meaning they will certainly and inevitably enter it. There is no doubt, no negotiation, and no escape. The defrauders who thought they were getting away with a few extra coins will now pay a price that never ends.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">ثُمَّ يُقَالُ هَـٰذَا الَّذِي كُنتُم بِهِ تُكَذِّبُونَ</div>
+                    <div class="verse-transliteration">Thumma yuqalu hadhal-ladhi kuntum bihi tukadhdhibun</div>
+                    <div class="verse-translation">Then it will be said [to them], "This is what you used to deny."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ثُمَّ</span><span class="trans">thumma</span><span class="meaning">Then</span></div>
+                        <div class="word-chip"><span class="ar">يُقَالُ</span><span class="trans">yuqalu</span><span class="meaning">It will be said</span></div>
+                        <div class="word-chip"><span class="ar">هَـٰذَا</span><span class="trans">hadha</span><span class="meaning">This is</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">That which</span></div>
+                        <div class="word-chip"><span class="ar">كُنتُم</span><span class="trans">kuntum</span><span class="meaning">You used to</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">It</span></div>
+                        <div class="word-chip"><span class="ar">تُكَذِّبُونَ</span><span class="trans">tukadhdhibun</span><span class="meaning">Deny</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Adding insult to injury. After being veiled from Allah and thrown into the Fire, they are told: "This is what you used to deny." Every time they called the Day of Judgment a lie, every time they dismissed the Quran as fairy tales, every time they mocked the believers, it all comes back to this moment. Ibn Kathir explains that this statement is said to increase their humiliation and regret. As-Sa'di notes that the passive voice "yuqalu" (it will be said) without specifying who says it adds to the universality of the condemnation. The angels, the record, the very reality around them all testify against them. There is nowhere to hide from the truth they spent their lives running from.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">كَلَّا إِنَّ كِتَابَ الْأَبْرَارِ لَفِي عِلِّيِّينَ</div>
+                    <div class="verse-transliteration">Kalla inna kitabal-abrari lafi 'illiyyin</div>
+                    <div class="verse-translation">No! Indeed, the record of the righteous is in 'Illiyyun.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كَلَّا</span><span class="trans">kalla</span><span class="meaning">No! / Nay!</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">كِتَابَ</span><span class="trans">kitaba</span><span class="meaning">The record of</span></div>
+                        <div class="word-chip"><span class="ar">الْأَبْرَارِ</span><span class="trans">al-abrar</span><span class="meaning">The righteous</span></div>
+                        <div class="word-chip"><span class="ar">لَفِي</span><span class="trans">lafi</span><span class="meaning">Is surely in</span></div>
+                        <div class="word-chip"><span class="ar">عِلِّيِّينَ</span><span class="trans">'illiyyin</span><span class="meaning">'Illiyyun (the highest place)</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the surah shifts to the beautiful contrast. After describing the fate of the wicked (Sijjin), it introduces the record of the righteous: 'Illiyyun. "Abrar" means the righteous, the pious, those who are true to their word and their Lord. "'Illiyyun" comes from "'uluw" meaning height and elevation. Ibn Kathir explains it is the highest, most exalted place, some say it is in the seventh heaven, or beneath the Throne of Allah. As-Sa'di notes the stunning symmetry: the wicked are in Sijjin (the lowest prison) and the righteous are in 'Illiyyun (the highest elevation). Where your record is kept reflects where your soul belongs. Your deeds determine your rank.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">وَمَا أَدْرَاكَ مَا عِلِّيُّونَ</div>
+                    <div class="verse-transliteration">Wa ma adraka ma 'illiyyun</div>
+                    <div class="verse-translation">And what can make you know what is 'Illiyyun?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                        <div class="word-chip"><span class="ar">أَدْرَاكَ</span><span class="trans">adraka</span><span class="meaning">Can make you know</span></div>
+                        <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What is</span></div>
+                        <div class="word-chip"><span class="ar">عِلِّيُّونَ</span><span class="trans">'illiyyun</span><span class="meaning">'Illiyyun</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The same rhetorical device used for Sijjin (verse 8) is now used for 'Illiyyun, but this time to magnify honor rather than dread. "What can make you know what 'Illiyyun is?" Just as the horror of Sijjin was beyond description, so too is the glory of 'Illiyyun beyond description. Ibn Kathir explains that 'Illiyyun is so lofty and magnificent that human language fails to capture it. As-Sa'di notes the beautiful parallel structure: the Quran uses the same format to describe both, showing that the consequences of good and evil are both beyond our current comprehension. But one leads to unimaginable honor, and the other to unimaginable horror.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">كِتَابٌ مَّرْقُومٌ</div>
+                    <div class="verse-transliteration">Kitabum-marqum</div>
+                    <div class="verse-translation">It is [their destination] a register inscribed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">كِتَابٌ</span><span class="trans">kitabun</span><span class="meaning">A register / book</span></div>
+                        <div class="word-chip"><span class="ar">مَّرْقُومٌ</span><span class="trans">marqum</span><span class="meaning">Inscribed / written</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The same phrase used in verse 9 for the record of the wicked is used here for the righteous, but the location is entirely different. Both records are "marqum" (inscribed, permanent, unchangeable), but one is in the lowest depths and the other in the highest heights. Ibn Kathir explains that the record of the righteous is inscribed with every good deed, every act of charity, every prayer, every moment of patience. As-Sa'di highlights that the permanence of this record is good news for the believer: your good deeds are permanently recorded. They will never be lost, forgotten, or diminished. Every sacrifice you made for Allah's sake is safely preserved in the most honored place.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">يَشْهَدُهُ الْمُقَرَّبُونَ</div>
+                    <div class="verse-transliteration">Yash-haduhul-muqarrabun</div>
+                    <div class="verse-translation">Witnessed by those brought near [to Allah].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَشْهَدُهُ</span><span class="trans">yash-haduhu</span><span class="meaning">Witnessed by / attend it</span></div>
+                        <div class="word-chip"><span class="ar">الْمُقَرَّبُونَ</span><span class="trans">al-muqarrabun</span><span class="meaning">Those brought near (to Allah)</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-Muqarrabun" are those who are brought nearest to Allah. This refers to the highest-ranking angels. Ibn Kathir explains that the record of the righteous in 'Illiyyun is witnessed and attested to by the angels who are closest to Allah. This is an honor beyond comprehension: the most noble creation of Allah bears witness to your deeds. As-Sa'di explains that this witnessing serves as both a guarantee and an honor. It guarantees that the record is authentic and protected, and it honors the believer by having the most exalted beings as witnesses to their righteousness. While the wicked had their record thrown to the lowest place, the righteous have theirs honored by the highest company.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">إِنَّ الْأَبْرَارَ لَفِي نَعِيمٍ</div>
+                    <div class="verse-transliteration">Innal-abrara lafi na'im</div>
+                    <div class="verse-translation">Indeed, the righteous will be in pleasure.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">الْأَبْرَارَ</span><span class="trans">al-abrara</span><span class="meaning">The righteous</span></div>
+                        <div class="word-chip"><span class="ar">لَفِي</span><span class="trans">lafi</span><span class="meaning">Will surely be in</span></div>
+                        <div class="word-chip"><span class="ar">نَعِيمٍ</span><span class="trans">na'im</span><span class="meaning">Pleasure / bliss</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Na'im" means pleasure, delight, and bliss of every kind. It is the most comprehensive word for enjoyment. Ibn Kathir explains that this is the reward of those whose record is in 'Illiyyun. While the wicked burn in Hellfire, the righteous live in absolute pleasure. As-Sa'di elaborates that "na'im" in the Quran encompasses every form of pleasure: physical comfort, emotional joy, spiritual fulfillment, and the greatest pleasure of all, the pleasure of seeing Allah's face and knowing He is pleased with you. The "la" in "lafi" adds emphasis: they are certainly, absolutely, without any doubt in this bliss.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">عَلَى الْأَرَائِكِ يَنظُرُونَ</div>
+                    <div class="verse-transliteration">'Alal-ara'iki yanzurun</div>
+                    <div class="verse-translation">On adorned couches, observing.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَلَى</span><span class="trans">'ala</span><span class="meaning">On / upon</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرَائِكِ</span><span class="trans">al-ara'iki</span><span class="meaning">Adorned couches</span></div>
+                        <div class="word-chip"><span class="ar">يَنظُرُونَ</span><span class="trans">yanzurun</span><span class="meaning">Observing / looking</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Ara'ik" (singular: arikah) are luxurious couches adorned with canopies and decorations. They are the couches of royalty and honor. Ibn Kathir explains that the righteous will recline on these magnificent couches, looking at the blessings and beauty of Paradise all around them. "Yanzurun" (looking/observing) is left open-ended. Some scholars say they are looking at the beauty of Paradise, others say they are looking at the face of Allah (the greatest pleasure), and others connect it to verse 34 where they look at the disbelievers. As-Sa'di notes that the image of reclining on couches and observing conveys complete peace, security, and contentment. There is no fear, no anxiety, no rush. Just eternal relaxation and enjoyment.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">تَعْرِفُ فِي وُجُوهِهِمْ نَضْرَةَ النَّعِيمِ</div>
+                    <div class="verse-transliteration">Ta'rifu fi wujuhihim nadhratan-na'im</div>
+                    <div class="verse-translation">You will recognize in their faces the radiance of pleasure.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">تَعْرِفُ</span><span class="trans">ta'rifu</span><span class="meaning">You will recognize</span></div>
+                        <div class="word-chip"><span class="ar">فِي وُجُوهِهِمْ</span><span class="trans">fi wujuhihim</span><span class="meaning">In their faces</span></div>
+                        <div class="word-chip"><span class="ar">نَضْرَةَ</span><span class="trans">nadhrata</span><span class="meaning">The radiance / glow</span></div>
+                        <div class="word-chip"><span class="ar">النَّعِيمِ</span><span class="trans">an-na'im</span><span class="meaning">Of pleasure</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Nadhrah" means a radiant glow, a freshness, a beauty that shines from within. You can see their joy on their faces. Ibn Kathir explains that the bliss of Paradise will be so complete that it shows physically on their faces. Their faces will glow with beauty, light, and happiness. As-Sa'di explains that this is the opposite of what happens to the wicked (whose faces are covered in dust and darkness, as mentioned in other surahs). The inner state of a person is reflected outwardly. Just as sin darkens the face and heart, righteousness and joy illuminate them. The believers will be so thoroughly blessed that anyone who looks at them can instantly recognize the radiance of divine pleasure upon them.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">يُسْقَوْنَ مِن رَّحِيقٍ مَّخْتُومٍ</div>
+                    <div class="verse-transliteration">Yusqawna mir-rahiqim-makhtum</div>
+                    <div class="verse-translation">They will be given to drink [pure] wine, sealed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يُسْقَوْنَ</span><span class="trans">yusqawna</span><span class="meaning">They will be given to drink</span></div>
+                        <div class="word-chip"><span class="ar">مِن</span><span class="trans">min</span><span class="meaning">From</span></div>
+                        <div class="word-chip"><span class="ar">رَّحِيقٍ</span><span class="trans">rahiq</span><span class="meaning">Pure wine / nectar</span></div>
+                        <div class="word-chip"><span class="ar">مَّخْتُومٍ</span><span class="trans">makhtum</span><span class="meaning">Sealed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Rahiq" is the purest, finest wine. "Makhtum" means sealed, untouched, preserved. Ibn Kathir explains that this wine of Paradise is nothing like the wine of this world. It does not intoxicate, does not cause headaches, and does not lead to sin. It is pure pleasure and delight. It is sealed, meaning it has been preserved in perfection, never opened or contaminated. As-Sa'di explains that the sealing indicates exclusivity and honor. Just as the finest wines in this world are sealed and reserved for special occasions, the wine of Paradise has been sealed and reserved for the righteous since the beginning of creation. They abstained from the forbidden wine of this world, so they are rewarded with the purest nectar of Paradise.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">خِتَامُهُ مِسْكٌ ۚ وَفِي ذَٰلِكَ فَلْيَتَنَافَسِ الْمُتَنَافِسُونَ</div>
+                    <div class="verse-transliteration">Khitamuhu misk. Wa fi dhalika falyatanafasil-mutanafisun</div>
+                    <div class="verse-translation">The last of it is musk. So for this let the competitors compete.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">خِتَامُهُ</span><span class="trans">khitamuhu</span><span class="meaning">Its seal / last taste</span></div>
+                        <div class="word-chip"><span class="ar">مِسْكٌ</span><span class="trans">misk</span><span class="meaning">Musk (fragrance)</span></div>
+                        <div class="word-chip"><span class="ar">وَفِي ذَٰلِكَ</span><span class="trans">wa fi dhalika</span><span class="meaning">And for this</span></div>
+                        <div class="word-chip"><span class="ar">فَلْيَتَنَافَسِ</span><span class="trans">falyatanafasi</span><span class="meaning">Let compete</span></div>
+                        <div class="word-chip"><span class="ar">الْمُتَنَافِسُونَ</span><span class="trans">al-mutanafisun</span><span class="meaning">The competitors</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Khitamuhu misk" means the seal or the aftertaste of this wine is musk, the most exquisite fragrance. Even the last drop leaves the scent of musk. Then comes one of the most motivating phrases in the Quran: "Wa fi dhalika falyatanafasil-mutanafisun" - "For this let the competitors compete!" Ibn Kathir explains that this is a call to action: if you want to compete for something, compete for this! Not for worldly possessions that perish, but for the eternal pleasures of Paradise. As-Sa'di says this verse redirects human ambition. People compete for wealth, status, and worldly pleasures, but the true competition is for the rewards of the Hereafter. This is the race worth running, the prize worth fighting for.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">وَمِزَاجُهُ مِن تَسْنِيمٍ</div>
+                    <div class="verse-transliteration">Wa mizajuhu min tasnim</div>
+                    <div class="verse-translation">And its mixture is of Tasnim.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمِزَاجُهُ</span><span class="trans">wa mizajuhu</span><span class="meaning">And its mixture</span></div>
+                        <div class="word-chip"><span class="ar">مِن</span><span class="trans">min</span><span class="meaning">Is of / from</span></div>
+                        <div class="word-chip"><span class="ar">تَسْنِيمٍ</span><span class="trans">tasnim</span><span class="meaning">Tasnim (a spring)</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Mizaj" means mixture or blend. This sealed wine is mixed with water from Tasnim. "Tasnim" comes from "sanama" meaning to elevate or rise high. Ibn Kathir explains that Tasnim is the name of a spring in Paradise, the highest and most noble spring. It flows from above, from the highest point of Paradise. As-Sa'di explains that this wine is not ordinary but is blended with the water of the most elevated spring, making it the most exquisite drink imaginable. Its name alone (Tasnim, meaning elevation) tells you about its quality and status. The next verse will explain who drinks from this spring directly.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">عَيْنًا يَشْرَبُ بِهَا الْمُقَرَّبُونَ</div>
+                    <div class="verse-transliteration">'Aynay-yashrabu bihal-muqarrabun</div>
+                    <div class="verse-translation">A spring from which those near [to Allah] drink.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَيْنًا</span><span class="trans">'aynan</span><span class="meaning">A spring</span></div>
+                        <div class="word-chip"><span class="ar">يَشْرَبُ</span><span class="trans">yashrabu</span><span class="meaning">Drink</span></div>
+                        <div class="word-chip"><span class="ar">بِهَا</span><span class="trans">biha</span><span class="meaning">From it</span></div>
+                        <div class="word-chip"><span class="ar">الْمُقَرَّبُونَ</span><span class="trans">al-muqarrabun</span><span class="meaning">Those brought near (to Allah)</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-Muqarrabun" here refers to those closest to Allah among the believers, the highest rank of the people of Paradise. Ibn Kathir explains that while the general righteous (al-abrar) drink the wine mixed with Tasnim, the elite (al-muqarrabun) drink from Tasnim directly, pure and unmixed. As-Sa'di explains this reveals a hierarchy in Paradise. Even within Paradise, there are levels and degrees. The closer you were to Allah in this life through worship, sincerity, and sacrifice, the higher your rank and the more direct your access to Paradise's greatest blessings. This motivates the believer to strive for the highest level, not just entry into Paradise.</p></div>
+                </div>
+
+                <!-- Verse 29 -->
+                <div class="verse-card"><div class="verse-number">29</div>
+                    <div class="verse-arabic">إِنَّ الَّذِينَ أَجْرَمُوا كَانُوا مِنَ الَّذِينَ آمَنُوا يَضْحَكُونَ</div>
+                    <div class="verse-transliteration">Innal-ladhina ajramu kanu minal-ladhina amanu yadhakun</div>
+                    <div class="verse-translation">Indeed, those who committed crimes used to laugh at those who believed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">أَجْرَمُوا</span><span class="trans">ajramu</span><span class="meaning">Committed crimes</span></div>
+                        <div class="word-chip"><span class="ar">كَانُوا</span><span class="trans">kanu</span><span class="meaning">Used to</span></div>
+                        <div class="word-chip"><span class="ar">مِنَ الَّذِينَ</span><span class="trans">minal-ladhina</span><span class="meaning">At those who</span></div>
+                        <div class="word-chip"><span class="ar">آمَنُوا</span><span class="trans">amanu</span><span class="meaning">Believed</span></div>
+                        <div class="word-chip"><span class="ar">يَضْحَكُونَ</span><span class="trans">yadhakun</span><span class="meaning">Laugh</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the surah describes a scene from this worldly life. The criminals, the disbelievers, used to laugh at the believers. They mocked them for their faith, their prayers, their modesty, and their trust in the unseen. Ibn Kathir explains that this refers to the general pattern of the disbelievers of Makkah who ridiculed the early Muslims. They made fun of the believers for being poor, weak, and "foolish" enough to believe in the afterlife. As-Sa'di notes that this laughing was born from arrogance and delusion. They thought their worldly power and wealth proved them right and the believers wrong. But the last laugh belongs to someone else entirely, as the coming verses will show.</p></div>
+                </div>
+
+                <!-- Verse 30 -->
+                <div class="verse-card"><div class="verse-number">30</div>
+                    <div class="verse-arabic">وَإِذَا مَرُّوا بِهِمْ يَتَغَامَزُونَ</div>
+                    <div class="verse-transliteration">Wa idha marru bihim yataghamazun</div>
+                    <div class="verse-translation">And when they passed by them, they would exchange derisive glances.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">مَرُّوا</span><span class="trans">marru</span><span class="meaning">They passed</span></div>
+                        <div class="word-chip"><span class="ar">بِهِمْ</span><span class="trans">bihim</span><span class="meaning">By them</span></div>
+                        <div class="word-chip"><span class="ar">يَتَغَامَزُونَ</span><span class="trans">yataghamazun</span><span class="meaning">They would wink / exchange glances</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Yataghamazun" comes from "ghamz" meaning to wink, nudge, or signal with the eyes. When the disbelievers would walk past the believers, they would wink at each other, nudge each other, and exchange mocking glances. It is the behavior of bullies: making someone the target of inside jokes. Ibn Kathir explains that this was a specific behavior of the Quraysh. When they would see the poor Muslims like Bilal, Ammar, and Suhayb, they would signal to each other with contempt. As-Sa'di points out that this behavior reveals deep insecurity. Truly confident people do not need to mock others. The disbelievers' need to constantly ridicule the believers showed that the believers' faith bothered them deeply.</p></div>
+                </div>
+
+                <!-- Verse 31 -->
+                <div class="verse-card"><div class="verse-number">31</div>
+                    <div class="verse-arabic">وَإِذَا انقَلَبُوا إِلَىٰ أَهْلِهِمُ انقَلَبُوا فَكِهِينَ</div>
+                    <div class="verse-transliteration">Wa idhan-qalabu ila ahlihimun-qalabu fakihin</div>
+                    <div class="verse-translation">And when they returned to their people, they would return jesting.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">انقَلَبُوا</span><span class="trans">inqalabu</span><span class="meaning">They returned</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ أَهْلِهِمُ</span><span class="trans">ila ahlihimu</span><span class="meaning">To their people</span></div>
+                        <div class="word-chip"><span class="ar">انقَلَبُوا</span><span class="trans">inqalabu</span><span class="meaning">They returned</span></div>
+                        <div class="word-chip"><span class="ar">فَكِهِينَ</span><span class="trans">fakihin</span><span class="meaning">Jesting / amused</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Fakihin" means amusing themselves, entertained, finding it all very funny. When these mockers went home to their families, they would entertain them with stories about the believers, making jokes at their expense. Ibn Kathir explains that mocking the believers was their entertainment. They had nothing better to do with their gatherings than ridicule those who worshipped Allah. As-Sa'di notes the irony: they went home "fakihin" (amused), but true joy belongs to the believers. Their amusement was temporary and based on falsehood. Meanwhile, the believers they mocked had something these mockers could never have: inner peace and a connection with their Creator.</p></div>
+                </div>
+
+                <!-- Verse 32 -->
+                <div class="verse-card"><div class="verse-number">32</div>
+                    <div class="verse-arabic">وَإِذَا رَأَوْهُمْ قَالُوا إِنَّ هَـٰؤُلَاءِ لَضَالُّونَ</div>
+                    <div class="verse-transliteration">Wa idha ra-awhum qalu inna ha'ula'i ladallan</div>
+                    <div class="verse-translation">And when they saw them, they would say, "Indeed, those are truly lost."</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">رَأَوْهُمْ</span><span class="trans">ra-awhum</span><span class="meaning">They saw them</span></div>
+                        <div class="word-chip"><span class="ar">قَالُوا</span><span class="trans">qalu</span><span class="meaning">They said</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">هَـٰؤُلَاءِ</span><span class="trans">ha'ula'i</span><span class="meaning">These people</span></div>
+                        <div class="word-chip"><span class="ar">لَضَالُّونَ</span><span class="trans">ladallun</span><span class="meaning">Are truly lost / astray</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The ultimate projection: the ones who are actually lost call the guided ones "lost." "Dallun" means those who are astray, who have gone off the right path. The disbelievers looked at the believers and genuinely believed that faith, prayer, and obedience to Allah were signs of being misguided. Ibn Kathir explains that this is the way of every era's arrogant people: they see the truth-followers as foolish and themselves as wise. As-Sa'di makes a piercing observation: the disbelievers pronounced judgment on the believers without any authority. No one asked them. No one appointed them as judges. Yet they confidently declared the believers "lost" based on nothing but their own ignorance and arrogance. The next verse will address this directly.</p></div>
+                </div>
+
+                <!-- Verse 33 -->
+                <div class="verse-card"><div class="verse-number">33</div>
+                    <div class="verse-arabic">وَمَا أُرْسِلُوا عَلَيْهِمْ حَافِظِينَ</div>
+                    <div class="verse-transliteration">Wa ma ursilu 'alayhim hafizin</div>
+                    <div class="verse-translation">But they had not been sent as guardians over them.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">أُرْسِلُوا</span><span class="trans">ursilu</span><span class="meaning">Were they sent</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِمْ</span><span class="trans">'alayhim</span><span class="meaning">Over them</span></div>
+                        <div class="word-chip"><span class="ar">حَافِظِينَ</span><span class="trans">hafizin</span><span class="meaning">As guardians / watchers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A devastating rebuke. "Who appointed you as their guardians?" The disbelievers were never sent by Allah to watch over, judge, or guide the believers. They had no authority, no mandate, and no right to pass judgment on anyone's spiritual state. Ibn Kathir explains that this is Allah exposing the absurdity of their position: they took it upon themselves to declare others misguided when no one gave them that role. As-Sa'di adds that this verse is a universal principle. Those who spend their time judging and mocking others' faith should ask themselves: who gave you that authority? Mind your own deeds. You were not appointed as a guardian over anyone else's relationship with Allah.</p></div>
+                </div>
+
+                <!-- Verse 34 -->
+                <div class="verse-card"><div class="verse-number">34</div>
+                    <div class="verse-arabic">فَالْيَوْمَ الَّذِينَ آمَنُوا مِنَ الْكُفَّارِ يَضْحَكُونَ</div>
+                    <div class="verse-transliteration">Fal-yawmal-ladhina amanu minal-kuffari yadhakun</div>
+                    <div class="verse-translation">So Today those who believed are laughing at the disbelievers.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَالْيَوْمَ</span><span class="trans">fal-yawma</span><span class="meaning">So Today</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">آمَنُوا</span><span class="trans">amanu</span><span class="meaning">Believed</span></div>
+                        <div class="word-chip"><span class="ar">مِنَ الْكُفَّارِ</span><span class="trans">minal-kuffari</span><span class="meaning">At the disbelievers</span></div>
+                        <div class="word-chip"><span class="ar">يَضْحَكُونَ</span><span class="trans">yadhakun</span><span class="meaning">Are laughing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The ultimate reversal. The exact word "yadhakun" (laughing) used in verse 29 for the disbelievers is now used for the believers. In this world, the disbelievers laughed at the believers. On the Day of Judgment, it is the believers who laugh at the disbelievers. Ibn Kathir explains that this is perfect divine justice: every act of mockery is returned in kind, but in a way that is eternal. As-Sa'di notes the power of "fal-yawma" (so Today). The word "today" marks the turning point. All the ridicule, all the mockery, all the winking and nudging, it is all over. The tables have completely turned. The believers endured their laughter with patience, and now they are rewarded with the last laugh.</p></div>
+                </div>
+
+                <!-- Verse 35 -->
+                <div class="verse-card"><div class="verse-number">35</div>
+                    <div class="verse-arabic">عَلَى الْأَرَائِكِ يَنظُرُونَ</div>
+                    <div class="verse-transliteration">'Alal-ara'iki yanzurun</div>
+                    <div class="verse-translation">On adorned couches, observing.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَلَى</span><span class="trans">'ala</span><span class="meaning">On / upon</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرَائِكِ</span><span class="trans">al-ara'iki</span><span class="meaning">Adorned couches</span></div>
+                        <div class="word-chip"><span class="ar">يَنظُرُونَ</span><span class="trans">yanzurun</span><span class="meaning">Observing / looking</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse is identical to verse 23, but its meaning here is even more powerful because of the context. In verse 23, the believers are reclining on couches enjoying Paradise. Here in verse 35, they are on those same couches but now specifically watching the disbelievers face their punishment. Ibn Kathir explains that the repetition is deliberate: the same couches of luxury become the front-row seats to witness divine justice being served. As-Sa'di notes the complete scene: the believers are comfortable, at peace, reclining on the most luxurious couches, and observing the very people who used to mock them now receiving their just recompense. Every tear shed in this world from being ridiculed is now repaid with the sweetness of vindication.</p></div>
+                </div>
+
+                <!-- Verse 36 -->
+                <div class="verse-card"><div class="verse-number">36</div>
+                    <div class="verse-arabic">هَلْ ثُوِّبَ الْكُفَّارُ مَا كَانُوا يَفْعَلُونَ</div>
+                    <div class="verse-transliteration">Hal thuwwibal-kuffaru ma kanu yaf'alun</div>
+                    <div class="verse-translation">Have the disbelievers [not] been rewarded [this Day] for what they used to do?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">هَلْ</span><span class="trans">hal</span><span class="meaning">Have (they)</span></div>
+                        <div class="word-chip"><span class="ar">ثُوِّبَ</span><span class="trans">thuwwiba</span><span class="meaning">Been rewarded / repaid</span></div>
+                        <div class="word-chip"><span class="ar">الْكُفَّارُ</span><span class="trans">al-kuffaru</span><span class="meaning">The disbelievers</span></div>
+                        <div class="word-chip"><span class="ar">مَا كَانُوا</span><span class="trans">ma kanu</span><span class="meaning">For what they used to</span></div>
+                        <div class="word-chip"><span class="ar">يَفْعَلُونَ</span><span class="trans">yaf'alun</span><span class="meaning">Do</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah ends with a devastating rhetorical question. "Thuwwiba" normally means "rewarded," but here it is used with biting irony for punishment. "Have the disbelievers been repaid for what they used to do?" The answer is an emphatic yes. Every mockery, every wink, every arrogant dismissal, every act of fraud has been repaid in full. Ibn Kathir explains that this closing question is addressed to the believers, as if to say: "Look at this. Justice has been served, hasn't it?" As-Sa'di notes the perfect closure of the surah. It opened with "Woe to the defrauders" and closes by confirming that justice has been delivered. Those who cheated in their measures have now been measured by Allah's perfect scales. Those who laughed at the believers have become the ones laughed at. The circle of divine justice is complete.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>Honesty in dealings is a sign of faith.</strong> The surah opens by condemning cheaters and immediately asks: do they not believe in the Day of Judgment? Dishonesty in business, relationships, or any dealing is a symptom of weak faith in accountability before Allah.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Sin stains the heart and blinds it to truth.</strong> Verse 14 teaches that persistent sinning creates a "ran" (stain/rust) on the heart. Over time, the heart becomes so darkened that it cannot recognize truth even when it is clearly presented. This is why repentance and seeking forgiveness must be constant.</div></li>
+                    <li><span class="bullet">03</span><div><strong>Being veiled from Allah is the worst punishment.</strong> Verse 15 describes the wicked being blocked from seeing their Lord. Imam Ash-Shafi'i derived from this that the believers will see Allah, since the denial of sight is a punishment for the wicked. Seeing Allah is the greatest reward in Paradise.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Compete for the Hereafter, not the world.</strong> "For this let the competitors compete" (verse 26). Human ambition and competitive drive should be channeled toward earning Paradise, not accumulating worldly possessions that will all turn to dust.</div></li>
+                    <li><span class="bullet">05</span><div><strong>Mocking believers has consequences.</strong> Verses 29-34 describe the complete reversal: those who mocked the believers in this world will be the ones mocked on the Day of Judgment. Every believer who endures ridicule for their faith should find comfort in knowing that the final outcome is theirs.</div></li>
+                    <li><span class="bullet">06</span><div><strong>Divine justice is perfect and complete.</strong> The surah begins with injustice (cheating in measures) and ends with perfect justice (the disbelievers fully repaid). Nothing escapes Allah's accounting. Every atom of good and evil will be brought to light and repaid in full.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, At-Tirmidhi (hadith on the staining of the heart), Ibn Majah, Sahih Bukhari and Muslim (hadith on standing on the Day of Resurrection), An-Nasa'i (narration about the people of Madinah and short measure), Imam Ash-Shafi'i's deduction from verse 15 about seeing Allah. All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 83, totalVerses: 36 });
+    }
+    </script>
+</body>
+</html>

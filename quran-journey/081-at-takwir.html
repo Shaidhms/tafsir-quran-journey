@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah At-Takwir - The Overthrowing | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 81 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ التَّكْوِيرِ</div>
+        <h1>Surah At-Takwir</h1>
+        <p>The Overthrowing / The Folding Up - 29 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">81</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">29</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">104</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Overthrowing</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Judgment Day & Revelation</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah At-Takwir was revealed in Makkah and is one of the most powerful and vivid surahs in the entire Quran. The name "At-Takwir" means "the folding up" or "the overthrowing," referring to the sun being wrapped up and extinguished on the Day of Judgment. This surah delivers a <span class="highlight">rapid-fire sequence of twelve cosmic catastrophes</span> that will mark the end of the world, followed by a powerful affirmation of the Quran's divine origin.</p>
+                <p>The surah opens with an astonishing cascade of events: <span class="highlight">the sun folded up, stars falling, mountains set in motion, pregnant camels abandoned, wild beasts gathered, seas set ablaze</span>. Each image is more terrifying than the last, painting the total collapse of the natural order that humans take for granted.</p>
+                <div class="important">
+                    <p>The Prophet (peace be upon him) said: "Whoever would be pleased to look at the Day of Judgment as if he sees it with his own eyes, let him recite: 'When the sun is wrapped up' (Surah 81), 'When the sky breaks apart' (Surah 82), and 'When the sky has split open' (Surah 84)." This hadith is reported by At-Tirmidhi, Ahmad, and Al-Hakim, from the narration of Ibn Umar.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Introduction to Surah At-Takwir; At-Tirmidhi, Ahmad, Al-Hakim</p>
+                </div>
+                <p>Among the most striking verses is the mention of <span class="highlight">the buried infant girl being asked for what sin she was killed</span>. This refers to the pre-Islamic Arab practice of burying baby girls alive. On the Day of Judgment, these innocent victims will be given justice. The scrolls of deeds will be laid open, the sky stripped away, Hellfire set ablaze, and Paradise brought near.</p>
+                <p>The second half shifts to affirm the <span class="highlight">authenticity of the Quran and its noble carrier, Jibreel (Gabriel)</span>. The Quran is not the word of a madman or a poet. It is brought by a mighty, trusted angel to the Prophet Muhammad (peace be upon him). The surah closes with a profound question: "Where are you going?" This is nothing but a reminder for all of mankind, for whoever among you wills to take a straight path. But you cannot will except as Allah wills, the Lord of all the worlds.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">إِذَا الشَّمْسُ كُوِّرَتْ</div>
+                    <div class="verse-transliteration">Idhas-shamsu kuwwirat</div>
+                    <div class="verse-translation">When the sun is wrapped up [in darkness].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">الشَّمْسُ</span><span class="trans">ash-shamsu</span><span class="meaning">The sun</span></div>
+                        <div class="word-chip"><span class="ar">كُوِّرَتْ</span><span class="trans">kuwwirat</span><span class="meaning">Is wrapped up / folded</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah begins with a staggering cosmic event. "Kuwwirat" comes from "takwir" which means to wrap something up, like wrapping a turban around the head. The sun, this massive ball of fire that lights up the entire world, will be folded up and its light extinguished. Ibn Kathir explains that the sun will be thrown into darkness, losing all its light and heat. As-Sa'di notes that "idha" (when) establishes certainty. This is not a possibility but an inevitability. The very thing that all life depends on will be switched off by Allah's command.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وَإِذَا النُّجُومُ انكَدَرَتْ</div>
+                    <div class="verse-transliteration">Wa idhan-nujumu inkadarat</div>
+                    <div class="verse-translation">And when the stars fall, losing their lustre.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">النُّجُومُ</span><span class="trans">an-nujumu</span><span class="meaning">The stars</span></div>
+                        <div class="word-chip"><span class="ar">انكَدَرَتْ</span><span class="trans">inkadarat</span><span class="meaning">Fall / scatter / lose lustre</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Inkadarat" means to fall, scatter, and lose their brightness. The stars that have been fixed in the sky since creation will come crashing down. Ibn Kathir explains this means the stars will be thrown down and dispersed, falling from their orbits. As-Sa'di adds that the stars losing their lustre and falling signifies the complete collapse of the celestial order. Everything that humans looked up to as permanent and unchanging will be destroyed in an instant.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَإِذَا الْجِبَالُ سُيِّرَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-jibalu suyyirat</div>
+                    <div class="verse-translation">And when the mountains are set in motion.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْجِبَالُ</span><span class="trans">al-jibalu</span><span class="meaning">The mountains</span></div>
+                        <div class="word-chip"><span class="ar">سُيِّرَتْ</span><span class="trans">suyyirat</span><span class="meaning">Are set in motion / moved</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Suyyirat" means to be set in motion, to be moved from their places. The mountains, the most massive and stable structures on earth, will be uprooted and made to move like clouds. Ibn Kathir explains that the mountains will be removed from their foundations and blown away as dust. As-Sa'di notes that mountains are mentioned because they represent permanence and stability in the human mind. If even these immovable giants are set drifting, then nothing in this world is truly permanent.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">وَإِذَا الْعِشَارُ عُطِّلَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-'isharu 'uttilat</div>
+                    <div class="verse-translation">And when full-term pregnant she-camels are neglected.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْعِشَارُ</span><span class="trans">al-'isharu</span><span class="meaning">The pregnant she-camels</span></div>
+                        <div class="word-chip"><span class="ar">عُطِّلَتْ</span><span class="trans">'uttilat</span><span class="meaning">Are neglected / abandoned</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-'ishar" refers to she-camels that are ten months pregnant, about to give birth. In Arab society, this was the most prized and valuable possession a person could own. "Uttilat" means to be left unattended and neglected. Ibn Kathir explains that the terror of the Day of Judgment will be so overwhelming that people will abandon even their most precious possessions. As-Sa'di adds that the Arabs would never leave a pregnant she-camel unattended under normal circumstances. This image powerfully conveys the level of panic and terror that will grip humanity on that Day.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">وَإِذَا الْوُحُوشُ حُشِرَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-wuhushu hushirat</div>
+                    <div class="verse-translation">And when the wild beasts are gathered.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْوُحُوشُ</span><span class="trans">al-wuhushu</span><span class="meaning">The wild beasts</span></div>
+                        <div class="word-chip"><span class="ar">حُشِرَتْ</span><span class="trans">hushirat</span><span class="meaning">Are gathered together</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Hushirat" means to be gathered together, assembled. Wild animals that normally flee from each other and from humans will be gathered together in one place. Ibn Kathir explains that the wild beasts will be resurrected and gathered so that Allah may establish justice even among animals, then they will be turned to dust. As-Sa'di notes that if even animals are gathered for judgment, how much more so will human beings, who were given intelligence and free will, be held accountable?</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">وَإِذَا الْبِحَارُ سُجِّرَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-biharu sujjirat</div>
+                    <div class="verse-translation">And when the seas are set on fire.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْبِحَارُ</span><span class="trans">al-biharu</span><span class="meaning">The seas</span></div>
+                        <div class="word-chip"><span class="ar">سُجِّرَتْ</span><span class="trans">sujjirat</span><span class="meaning">Are set ablaze / overflowing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Sujjirat" has been interpreted in two ways by the scholars. Ibn Kathir mentions that it means the seas will be set on fire, blazing with flames. Ali ibn Abi Talib said it means they will be filled with fire. Other scholars, as As-Sa'di notes, say it means the seas will overflow, bursting their boundaries and merging together. Both interpretations convey the same message: the oceans, which cover most of the earth and are themselves a sign of Allah's power, will be completely transformed. Water turning to fire is the ultimate reversal of the natural order.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">وَإِذَا النُّفُوسُ زُوِّجَتْ</div>
+                    <div class="verse-transliteration">Wa idhan-nufusu zuwwijat</div>
+                    <div class="verse-translation">And when the souls are paired [with their bodies].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">النُّفُوسُ</span><span class="trans">an-nufusu</span><span class="meaning">The souls</span></div>
+                        <div class="word-chip"><span class="ar">زُوِّجَتْ</span><span class="trans">zuwwijat</span><span class="meaning">Are paired / joined</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Zuwwijat" means to be paired or coupled together. Ibn Kathir mentions several interpretations: (1) Souls will be reunited with their bodies for resurrection, (2) People will be grouped with those similar to them, as the righteous will be with the righteous and the wicked with the wicked, and (3) Each soul will be paired with its deeds. As-Sa'di favors the meaning that people of similar types will be gathered together. The good will be with the good, and the evil with the evil. On that Day, your companions will be determined by your deeds, not your social status.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وَإِذَا الْمَوْءُودَةُ سُئِلَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-maw'udatu su'ilat</div>
+                    <div class="verse-translation">And when the girl [who was] buried alive is asked.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْمَوْءُودَةُ</span><span class="trans">al-maw'udatu</span><span class="meaning">The girl buried alive</span></div>
+                        <div class="word-chip"><span class="ar">سُئِلَتْ</span><span class="trans">su'ilat</span><span class="meaning">Is asked</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-maw'udah" is the infant girl who was buried alive. This was a barbaric practice among some pre-Islamic Arabs who buried their daughters alive out of fear of poverty or shame. "Su'ilat" means she will be asked, questioned. But notice the profound justice: the victim is asked, not the murderer. Ibn Kathir explains that asking the victim is a more devastating indictment of the killer than questioning the killer himself. As-Sa'di notes that if even the innocent victim is questioned, imagine the terror of the one who committed the crime. This verse is a powerful declaration that Allah will bring justice for every oppressed soul.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">بِأَيِّ ذَنبٍ قُتِلَتْ</div>
+                    <div class="verse-transliteration">Bi-ayyi dhanbin qutilat</div>
+                    <div class="verse-translation">For what sin she was killed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بِأَيِّ</span><span class="trans">bi-ayyi</span><span class="meaning">For what / which</span></div>
+                        <div class="word-chip"><span class="ar">ذَنبٍ</span><span class="trans">dhanbin</span><span class="meaning">Sin / crime</span></div>
+                        <div class="word-chip"><span class="ar">قُتِلَتْ</span><span class="trans">qutilat</span><span class="meaning">She was killed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse completes the question: "For what sin was she killed?" The answer, of course, is that she had no sin at all. She was an innocent baby. The question is rhetorical and meant to condemn the perpetrators. Ibn Kathir explains that this is one of the most emotionally powerful verses in the Quran. The baby girl, who never committed any wrong, will testify on the Day of Judgment. As-Sa'di notes that this verse abolishes the entire concept of honor killing and infanticide. Islam came to declare the sanctity of every human life, especially the most vulnerable. The Quran gave baby girls a voice fourteen centuries ago.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَإِذَا الصُّحُفُ نُشِرَتْ</div>
+                    <div class="verse-transliteration">Wa idhas-suhufu nushirat</div>
+                    <div class="verse-translation">And when the pages [of deeds] are made public.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الصُّحُفُ</span><span class="trans">as-suhufu</span><span class="meaning">The pages / scrolls</span></div>
+                        <div class="word-chip"><span class="ar">نُشِرَتْ</span><span class="trans">nushirat</span><span class="meaning">Are spread open / made public</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"As-suhuf" refers to the scrolls or records of deeds. "Nushirat" means to be spread open, unfolded, and made public for all to see. Ibn Kathir explains that every person's record of deeds, which the angels have been writing throughout their life, will be opened and displayed. Nothing will be hidden. As-Sa'di notes that every action, every word, and every intention has been recorded. On that Day, the scrolls will be laid open, and each person will read their own record. Imagine reading every single thing you ever did, good and bad, with no chance to edit or delete anything.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">وَإِذَا السَّمَاءُ كُشِطَتْ</div>
+                    <div class="verse-transliteration">Wa idhas-sama'u kushitat</div>
+                    <div class="verse-translation">And when the sky is stripped away.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءُ</span><span class="trans">as-sama'u</span><span class="meaning">The sky</span></div>
+                        <div class="word-chip"><span class="ar">كُشِطَتْ</span><span class="trans">kushitat</span><span class="meaning">Is stripped away / peeled off</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Kushitat" means to peel away, strip off, or remove like skin from an animal. The sky will be peeled away and removed entirely. Ibn Kathir explains that the sky, which has served as a canopy over the earth, will be torn away and rolled up. As-Sa'di notes that "kashata" is a very strong word, implying a violent stripping away. The sky that we see as a beautiful, protective ceiling will be ripped off like a piece of cloth. This is yet another element of the total destruction of the familiar universe.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">وَإِذَا الْجَحِيمُ سُعِّرَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-jahimu su''irat</div>
+                    <div class="verse-translation">And when Hellfire is set ablaze.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْجَحِيمُ</span><span class="trans">al-jahimu</span><span class="meaning">The Hellfire</span></div>
+                        <div class="word-chip"><span class="ar">سُعِّرَتْ</span><span class="trans">su''irat</span><span class="meaning">Is set ablaze / intensified</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Su''irat" means to be set ablaze, kindled, and intensified. Hellfire, which already exists, will be further stoked and made even more ferocious on the Day of Judgment. Ibn Kathir explains that the Hellfire will be made to blaze with an intensity beyond anything it has ever experienced before, in preparation for receiving its inhabitants. As-Sa'di notes that the fire is being prepared just as Paradise is being prepared. Both destinations are real, and both are being readied. This should motivate every person to work toward Paradise and flee from the Fire.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">وَإِذَا الْجَنَّةُ أُزْلِفَتْ</div>
+                    <div class="verse-transliteration">Wa idhal-jannatu uzlifat</div>
+                    <div class="verse-translation">And when Paradise is brought near.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْجَنَّةُ</span><span class="trans">al-jannatu</span><span class="meaning">Paradise</span></div>
+                        <div class="word-chip"><span class="ar">أُزْلِفَتْ</span><span class="trans">uzlifat</span><span class="meaning">Is brought near</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Uzlifat" means to be brought close, drawn near. While Hellfire is set ablaze, Paradise is brought near for the believers. Ibn Kathir explains that Paradise will be brought close to the righteous so they can see its beauty and know their reward is near. As-Sa'di adds a beautiful contrast: Hellfire is intensified (punishment increased) while Paradise is brought near (reward made accessible). The two are mentioned side by side to show that every soul will go to one of these two destinations. This concludes the twelve "when" statements (verses 1-13) that describe the events of the Day of Judgment.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">عَلِمَتْ نَفْسٌ مَّا أَحْضَرَتْ</div>
+                    <div class="verse-transliteration">'Alimat nafsun ma ahdarat</div>
+                    <div class="verse-translation">A soul will [then] know what it has brought [with it].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">عَلِمَتْ</span><span class="trans">'alimat</span><span class="meaning">Will know</span></div>
+                        <div class="word-chip"><span class="ar">نَفْسٌ</span><span class="trans">nafsun</span><span class="meaning">A soul</span></div>
+                        <div class="word-chip"><span class="ar">مَّا</span><span class="trans">ma</span><span class="meaning">What</span></div>
+                        <div class="word-chip"><span class="ar">أَحْضَرَتْ</span><span class="trans">ahdarat</span><span class="meaning">It has brought / presented</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the answer to all twelve preceding "when" clauses. When all these catastrophic events occur, then every soul will know exactly what it has brought forward. "Ahdarat" means to present or bring forward. Your deeds are the only luggage you carry into the afterlife. Ibn Kathir explains that this is the moment of ultimate clarity. All the distractions of the world are gone, and every person sees with perfect vision what they have sent ahead. As-Sa'di notes that "nafsun" (a soul) is used in the indefinite form, meaning every single soul without exception. No one will be able to claim ignorance on that Day.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">فَلَا أُقْسِمُ بِالْخُنَّسِ</div>
+                    <div class="verse-transliteration">Fala uqsimu bil-khunnas</div>
+                    <div class="verse-translation">So I swear by the retreating stars.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَلَا</span><span class="trans">fala</span><span class="meaning">So indeed, I swear</span></div>
+                        <div class="word-chip"><span class="ar">أُقْسِمُ</span><span class="trans">uqsimu</span><span class="meaning">I swear</span></div>
+                        <div class="word-chip"><span class="ar">بِالْخُنَّسِ</span><span class="trans">bil-khunnas</span><span class="meaning">By the retreating stars</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah now shifts to a series of oaths. "La uqsimu" is an emphatic form of swearing, meaning "I do indeed swear." "Al-khunnas" refers to stars (or planets) that retreat, that move backward in their apparent motion across the sky. Ibn Kathir explains that "al-khunnas" refers to the planets (such as Jupiter, Saturn, Mars, Venus, and Mercury) which appear to move forward, then retreat backward in their orbits as seen from earth. This is known today as retrograde motion. As-Sa'di notes that Allah swears by His creation to draw attention to its magnificence and to emphasize the truth of what follows.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">الْجَوَارِ الْكُنَّسِ</div>
+                    <div class="verse-transliteration">Al-jawaril-kunnas</div>
+                    <div class="verse-translation">Those that run [their courses] and disappear.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">الْجَوَارِ</span><span class="trans">al-jawari</span><span class="meaning">Those that run / flow</span></div>
+                        <div class="word-chip"><span class="ar">الْكُنَّسِ</span><span class="trans">al-kunnas</span><span class="meaning">Those that hide / disappear</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Al-jawari" means those that flow, move, or run in their courses. "Al-kunnas" means those that hide, sweep away, or disappear. Ibn Kathir explains these are the same celestial bodies mentioned in the previous verse. They run across the sky and then disappear from view, either by setting below the horizon or by being hidden in the light of the sun during the day. As-Sa'di notes that these moving, disappearing celestial bodies are signs of Allah's power. He controls their precise movements, and they obey His command perfectly. The oath by these magnificent celestial phenomena prepares the listener for the important truth about to be stated.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">وَاللَّيْلِ إِذَا عَسْعَسَ</div>
+                    <div class="verse-transliteration">Wal-layli idha 'as'as</div>
+                    <div class="verse-translation">And by the night as it departs.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاللَّيْلِ</span><span class="trans">wal-layli</span><span class="meaning">And by the night</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">عَسْعَسَ</span><span class="trans">'as'as</span><span class="meaning">Departs / draws away</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"As'as" is a unique Arabic word that can mean both "when the night comes" and "when the night departs." Ibn Kathir mentions both interpretations but notes that the stronger opinion is that it refers to the night departing, drawing away at the end. As-Sa'di explains that the transition between night and day is one of Allah's great signs. The night that covers everything in darkness gradually lifts, and the first light of dawn appears. This daily miracle is so routine that we barely notice it, yet it is a sign of Allah's absolute control over creation.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">وَالصُّبْحِ إِذَا تَنَفَّسَ</div>
+                    <div class="verse-transliteration">Was-subhi idha tanaffas</div>
+                    <div class="verse-translation">And by the dawn when it breathes.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَالصُّبْحِ</span><span class="trans">was-subhi</span><span class="meaning">And by the morning</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">تَنَفَّسَ</span><span class="trans">tanaffas</span><span class="meaning">It breathes / appears</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Tanaffas" literally means "to breathe." The dawn is described as breathing, as if the morning light is the first breath of a new day. This is one of the most beautiful metaphors in the Quran. Ibn Kathir explains that "tanaffas" refers to the light of dawn spreading gradually, like a gentle breath spreading across the sky. As-Sa'di notes that the image of the dawn breathing conveys freshness, life, and renewal. After the darkness of night, the dawn brings light and hope. These oaths by the retreating stars, the departing night, and the breathing dawn are preparing the listener for a critical truth about the Quran.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">إِنَّهُ لَقَوْلُ رَسُولٍ كَرِيمٍ</div>
+                    <div class="verse-transliteration">Innahu laqawlu rasulin karim</div>
+                    <div class="verse-translation">Indeed, it [the Quran] is the word of a noble messenger.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّهُ</span><span class="trans">innahu</span><span class="meaning">Indeed, it</span></div>
+                        <div class="word-chip"><span class="ar">لَقَوْلُ</span><span class="trans">laqawlu</span><span class="meaning">Is surely the word of</span></div>
+                        <div class="word-chip"><span class="ar">رَسُولٍ</span><span class="trans">rasulin</span><span class="meaning">A messenger</span></div>
+                        <div class="word-chip"><span class="ar">كَرِيمٍ</span><span class="trans">karim</span><span class="meaning">Noble / generous</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the truth that all the previous oaths were building up to: the Quran is the word brought by a noble messenger. Ibn Kathir explains that this "noble messenger" is Jibreel (Gabriel), the angel who delivered the Quran from Allah to Prophet Muhammad (peace be upon him). The word "karim" means noble, honorable, and generous. Jibreel is described as noble because of his high rank among the angels and his trustworthiness. As-Sa'di notes that calling the Quran "the word of a messenger" means it is delivered by a messenger; the actual source is Allah. The messenger (Jibreel) is the carrier, not the author.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">ذِي قُوَّةٍ عِندَ ذِي الْعَرْشِ مَكِينٍ</div>
+                    <div class="verse-transliteration">Dhi quwwatin 'inda dhil-'arshi makin</div>
+                    <div class="verse-translation">[Who is] possessed of power and with the Owner of the Throne, secure [in position].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ذِي</span><span class="trans">dhi</span><span class="meaning">Possessor of</span></div>
+                        <div class="word-chip"><span class="ar">قُوَّةٍ</span><span class="trans">quwwatin</span><span class="meaning">Power / strength</span></div>
+                        <div class="word-chip"><span class="ar">عِندَ</span><span class="trans">'inda</span><span class="meaning">With / before</span></div>
+                        <div class="word-chip"><span class="ar">ذِي الْعَرْشِ</span><span class="trans">dhil-'arshi</span><span class="meaning">The Owner of the Throne</span></div>
+                        <div class="word-chip"><span class="ar">مَكِينٍ</span><span class="trans">makin</span><span class="meaning">Secure in position / established</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>More descriptions of Jibreel continue. He is "dhi quwwah" (possessor of great power) and "makin" (firmly established, secure in position) before the Owner of the Throne (Allah). Ibn Kathir explains that Jibreel possesses immense power. He is the mightiest of all angels. He destroyed entire nations with a single wing. Yet despite his power, he has a secure, honored position before Allah. As-Sa'di notes that these qualities of Jibreel serve to validate the Quran. The one who brought this message is not a weak or insignificant being, but the most powerful and most trusted of all angels.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">مُّطَاعٍ ثَمَّ أَمِينٍ</div>
+                    <div class="verse-transliteration">Muta'in thamma amin</div>
+                    <div class="verse-translation">Obeyed there [in the heavens] and trustworthy.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">مُّطَاعٍ</span><span class="trans">muta'in</span><span class="meaning">Obeyed</span></div>
+                        <div class="word-chip"><span class="ar">ثَمَّ</span><span class="trans">thamma</span><span class="meaning">There (in the heavens)</span></div>
+                        <div class="word-chip"><span class="ar">أَمِينٍ</span><span class="trans">amin</span><span class="meaning">Trustworthy</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Jibreel is "muta'" (obeyed) among the angels in the heavens and "amin" (trustworthy). Ibn Kathir explains that Jibreel commands the other angels and they obey him, because Allah has given him that authority. And he is "amin," the most trustworthy being in existence when it comes to delivering Allah's message. He never adds to it, never subtracts from it, and never changes it. As-Sa'di emphasizes that "amin" is the ultimate credential. The Quran was delivered by someone who is absolutely incapable of tampering with the message. This directly refutes anyone who claims the Quran has been altered or corrupted.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">وَمَا صَاحِبُكُم بِمَجْنُونٍ</div>
+                    <div class="verse-transliteration">Wa ma sahibukum bimajnun</div>
+                    <div class="verse-translation">And your companion [Muhammad] is not [at all] mad.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">صَاحِبُكُم</span><span class="trans">sahibukum</span><span class="meaning">Your companion</span></div>
+                        <div class="word-chip"><span class="ar">بِمَجْنُونٍ</span><span class="trans">bimajnun</span><span class="meaning">A madman</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the surah defends the Prophet Muhammad (peace be upon him). The Quraysh called him a madman, a poet, a sorcerer. Allah responds: "Your companion is not mad." The word "sahibukum" (your companion) is significant. Ibn Kathir explains that calling him "your companion" reminds the Quraysh that they know Muhammad personally. He lived among them for 40 years before prophethood. They knew his character, his honesty, his intelligence. How could they now call him mad? As-Sa'di notes that "sahib" implies intimacy and familiarity. You know this man. You have seen his behavior for decades. He is the most sane, rational, and truthful person among you.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">وَلَقَدْ رَآهُ بِالْأُفُقِ الْمُبِينِ</div>
+                    <div class="verse-transliteration">Wa laqad ra'ahu bil-ufuqil-mubin</div>
+                    <div class="verse-translation">And he has already seen him [Jibreel] on the clear horizon.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَلَقَدْ</span><span class="trans">wa laqad</span><span class="meaning">And certainly</span></div>
+                        <div class="word-chip"><span class="ar">رَآهُ</span><span class="trans">ra'ahu</span><span class="meaning">He saw him</span></div>
+                        <div class="word-chip"><span class="ar">بِالْأُفُقِ</span><span class="trans">bil-ufuqi</span><span class="meaning">On the horizon</span></div>
+                        <div class="word-chip"><span class="ar">الْمُبِينِ</span><span class="trans">al-mubin</span><span class="meaning">The clear / evident</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Prophet Muhammad (peace be upon him) saw Jibreel in his true angelic form on the clear horizon. Ibn Kathir explains that this refers to the occasion when the Prophet saw Jibreel in his original form, with 600 wings, filling the entire horizon from east to west. This happened twice: once at the beginning of revelation and once during the Night Journey (Isra and Mi'raj). As-Sa'di notes that this verse serves as proof. The Prophet did not just hear a voice; he saw the angel with his own eyes on the open, clear horizon. This was a real, visible experience, not a hallucination or a dream.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">وَمَا هُوَ عَلَى الْغَيْبِ بِضَنِينٍ</div>
+                    <div class="verse-transliteration">Wa ma huwa 'alal-ghaybi bidanin</div>
+                    <div class="verse-translation">And he [Muhammad] is not a withholder of [knowledge of] the unseen.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">هُوَ</span><span class="trans">huwa</span><span class="meaning">He</span></div>
+                        <div class="word-chip"><span class="ar">عَلَى الْغَيْبِ</span><span class="trans">'alal-ghaybi</span><span class="meaning">Regarding the unseen</span></div>
+                        <div class="word-chip"><span class="ar">بِضَنِينٍ</span><span class="trans">bidanin</span><span class="meaning">A withholder / stingy</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Danin" means stingy, withholding. The Prophet (peace be upon him) does not withhold any of the revelation he receives. He delivers everything faithfully. Ibn Kathir explains that some recitations read "zanin" (with a "z") meaning "suspicious" or "accused," and others read "danin" (with a "d") meaning "stingy." Both are authentic recitations. Under the first reading: he is not someone to be suspected regarding the unseen revelation. Under the second: he does not withhold any of it. As-Sa'di notes that both meanings affirm the Prophet's complete honesty and transparency. He delivered every single verse, even those that were personally difficult for him.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">وَمَا هُوَ بِقَوْلِ شَيْطَانٍ رَّجِيمٍ</div>
+                    <div class="verse-transliteration">Wa ma huwa biqawli shaytanir-rajim</div>
+                    <div class="verse-translation">And it [the Quran] is not the word of a devil, expelled [from the heavens].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">هُوَ</span><span class="trans">huwa</span><span class="meaning">It</span></div>
+                        <div class="word-chip"><span class="ar">بِقَوْلِ</span><span class="trans">biqawli</span><span class="meaning">The word of</span></div>
+                        <div class="word-chip"><span class="ar">شَيْطَانٍ</span><span class="trans">shaytanin</span><span class="meaning">A devil</span></div>
+                        <div class="word-chip"><span class="ar">رَّجِيمٍ</span><span class="trans">rajim</span><span class="meaning">Expelled / accursed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Quran is not the word of a devil. "Rajim" means expelled, pelted, or cursed. The devils are expelled from the heavens and pelted with shooting stars when they try to eavesdrop. Ibn Kathir explains that some of the Quraysh accused the Prophet of receiving his words from a devil or jinn. Allah refutes this completely. The Quran is brought by Jibreel, the noblest angel, not by a cursed devil. As-Sa'di adds that the devils have no access to this revelation. They are expelled from the heavens and cannot approach it. The chain of transmission is pure: from Allah to Jibreel to Muhammad (peace be upon him). There is no room for Shaytan anywhere in this chain.</p></div>
+                </div>
+
+                <!-- Verse 26 -->
+                <div class="verse-card"><div class="verse-number">26</div>
+                    <div class="verse-arabic">فَأَيْنَ تَذْهَبُونَ</div>
+                    <div class="verse-transliteration">Fa-ayna tadh'habun</div>
+                    <div class="verse-translation">So where are you going?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَأَيْنَ</span><span class="trans">fa-ayna</span><span class="meaning">So where</span></div>
+                        <div class="word-chip"><span class="ar">تَذْهَبُونَ</span><span class="trans">tadh'habun</span><span class="meaning">Are you going</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>One of the most powerful rhetorical questions in the entire Quran. "So where are you going?" After all these proofs, after the description of the Day of Judgment, after the credentials of the messenger and the authenticity of the message, where else could you possibly go? Ibn Kathir explains that this is a rebuke to those who turn away from the Quran. Where will you go? What other guidance will you follow? What other path will save you? As-Sa'di notes that this question is meant to shake the listener awake. You are running away from the truth, but where are you running to? There is no escape from Allah and no alternative to His guidance.</p></div>
+                </div>
+
+                <!-- Verse 27 -->
+                <div class="verse-card"><div class="verse-number">27</div>
+                    <div class="verse-arabic">إِنْ هُوَ إِلَّا ذِكْرٌ لِّلْعَالَمِينَ</div>
+                    <div class="verse-transliteration">In huwa illa dhikrul-lil-'alamin</div>
+                    <div class="verse-translation">It is nothing but a reminder for all of mankind.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنْ</span><span class="trans">in</span><span class="meaning">Not</span></div>
+                        <div class="word-chip"><span class="ar">هُوَ</span><span class="trans">huwa</span><span class="meaning">It</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except / but</span></div>
+                        <div class="word-chip"><span class="ar">ذِكْرٌ</span><span class="trans">dhikrun</span><span class="meaning">A reminder</span></div>
+                        <div class="word-chip"><span class="ar">لِّلْعَالَمِينَ</span><span class="trans">lil-'alamin</span><span class="meaning">For all the worlds / mankind</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Quran is described as a "dhikr" (reminder) for all of creation. "Lil-'alamin" means for all the worlds, all of humanity and jinn. Ibn Kathir explains that the Quran is not limited to the Arabs, nor to a specific time period. It is a universal reminder for every human being until the Day of Judgment. As-Sa'di notes that calling it a "reminder" implies that the truth is already within the human nature (fitrah). The Quran does not introduce something alien; it reminds you of what your soul already knows. You were created to worship Allah, and the Quran reminds you of this purpose.</p></div>
+                </div>
+
+                <!-- Verse 28 -->
+                <div class="verse-card"><div class="verse-number">28</div>
+                    <div class="verse-arabic">لِمَن شَاءَ مِنكُمْ أَن يَسْتَقِيمَ</div>
+                    <div class="verse-transliteration">Liman sha'a minkum an yastaqim</div>
+                    <div class="verse-translation">For whoever wills among you to take a straight course.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لِمَن</span><span class="trans">liman</span><span class="meaning">For whoever</span></div>
+                        <div class="word-chip"><span class="ar">شَاءَ</span><span class="trans">sha'a</span><span class="meaning">Wills / wishes</span></div>
+                        <div class="word-chip"><span class="ar">مِنكُمْ</span><span class="trans">minkum</span><span class="meaning">Among you</span></div>
+                        <div class="word-chip"><span class="ar">أَن يَسْتَقِيمَ</span><span class="trans">an yastaqim</span><span class="meaning">To take a straight course</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Yastaqim" means to be upright, to walk the straight path. The Quran is a reminder for those who want to walk straight. Ibn Kathir explains that this verse establishes human free will: "whoever wills among you." You have the choice to accept or reject guidance. As-Sa'di notes that "istiqamah" (uprightness) is the essence of Islam. It means to walk on the straight path of Allah's commands and prohibitions without deviating to the right or left. The Quran offers you this path, but the choice is yours. This verse emphasizes personal responsibility and agency.</p></div>
+                </div>
+
+                <!-- Verse 29 -->
+                <div class="verse-card"><div class="verse-number">29</div>
+                    <div class="verse-arabic">وَمَا تَشَاءُونَ إِلَّا أَن يَشَاءَ اللَّهُ رَبُّ الْعَالَمِينَ</div>
+                    <div class="verse-transliteration">Wa ma tasha'una illa an yasha'allahu rabbul-'alamin</div>
+                    <div class="verse-translation">And you do not will except that Allah wills, Lord of the worlds.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">تَشَاءُونَ</span><span class="trans">tasha'una</span><span class="meaning">You will / wish</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">أَن يَشَاءَ</span><span class="trans">an yasha'a</span><span class="meaning">That wills</span></div>
+                        <div class="word-chip"><span class="ar">اللَّهُ</span><span class="trans">Allahu</span><span class="meaning">Allah</span></div>
+                        <div class="word-chip"><span class="ar">رَبُّ</span><span class="trans">rabbu</span><span class="meaning">Lord of</span></div>
+                        <div class="word-chip"><span class="ar">الْعَالَمِينَ</span><span class="trans">al-'alamin</span><span class="meaning">The worlds</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah closes with the ultimate statement of Divine sovereignty. You have free will, but your will operates within Allah's will. "Rabbul-'alamin" (Lord of all the worlds) reminds us that Allah is the Master of everything. Ibn Kathir explains that when verse 28 was revealed affirming human choice, some people said "it is up to us then." So verse 29 was revealed to clarify: yes, you choose, but your choice itself is under Allah's permission. As-Sa'di explains this beautifully: Allah gave you the ability to choose, but He is the one who gave you that ability. Your free will is a gift from Allah, not independent of Him. This is the balanced Islamic understanding: humans have real choices and real responsibility, but nothing happens outside of Allah's ultimate will and knowledge. The surah ends reminding us that Allah is "Rabbul-'alamin," the Lord of all creation, whose authority is absolute and whose wisdom encompasses everything.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>Nothing in this world is permanent.</strong> The sun, stars, mountains, and seas will all be destroyed. If these colossal creations will end, how can we attach our hearts to anything in this temporary world? The only thing that lasts is your relationship with Allah and your deeds.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Allah will bring justice for every oppressed soul.</strong> The buried infant girl will be asked for what sin she was killed. No act of oppression will go unaccounted for. If you have been wronged, know that your Day of justice is coming. And if you have wronged others, repent before that Day arrives.</div></li>
+                    <li><span class="bullet">03</span><div><strong>Your deeds are your only luggage.</strong> "A soul will know what it has brought." On the Day of Judgment, you will not be asked about your wealth, status, or appearance. You will only be shown what you sent forward. Invest in deeds that will benefit you when everything else is gone.</div></li>
+                    <li><span class="bullet">04</span><div><strong>The Quran is a divine revelation, not human speech.</strong> It was delivered by the most powerful and trustworthy angel (Jibreel) to the most honest and noble human being (Muhammad, peace be upon him). The chain of transmission is impeccable and beyond any doubt.</div></li>
+                    <li><span class="bullet">05</span><div><strong>"Where are you going?" is a question for every generation.</strong> When you chase distractions, pleasures, and worldly ambitions while ignoring the Quran, ask yourself: where am I going? What is the destination of this path? The Quran offers the only path to a good ending.</div></li>
+                    <li><span class="bullet">06</span><div><strong>Free will and divine will are not contradictions.</strong> You have the ability to choose, and Allah holds ultimate authority over all things. This balance means you are responsible for your choices, but you should always ask Allah for guidance, because even the ability to choose good comes from Him.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, At-Tirmidhi (hadith about reciting Surahs 81, 82, 84), Ahmad, Al-Hakim (from the narration of Ibn Umar). All explanations are based on authentic scholarly interpretations from classical tafsir works. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 81, totalVerses: 29 });
+    }
+    </script>
+</body>
+</html>
