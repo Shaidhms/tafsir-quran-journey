@@ -384,7 +384,7 @@
 
     <script>
         function showView(view){const carousel=document.getElementById('carousel-view');const deepDive=document.getElementById('deep-dive-view');const buttons=document.querySelectorAll('.view-toggle button');if(view==='carousel'){carousel.classList.remove('hidden');deepDive.classList.remove('visible');buttons[0].classList.add('active');buttons[1].classList.remove('active');}else{carousel.classList.add('hidden');deepDive.classList.add('visible');buttons[1].classList.add('active');buttons[0].classList.remove('active');setTimeout(setupScrollReveal,100);}}
-        function setupScrollReveal(){const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1});document.querySelectorAll('.reveal, .glow-line').forEach(el=>observer.observe(el));}
+        function setupScrollReveal(){const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0,rootMargin:'0px 0px 100px 0px'});document.querySelectorAll('.reveal, .glow-line').forEach(el=>observer.observe(el));}
     </script>
 <script src="recitation.js"></script>
 </body>

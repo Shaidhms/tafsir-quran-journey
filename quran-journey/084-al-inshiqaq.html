@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Inshiqaq - The Splitting Open | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 84 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْانشِقَاقِ</div>
+        <h1>Surah Al-Inshiqaq</h1>
+        <p>The Splitting Open - 25 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">84</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">25</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">108</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Splitting Open</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Judgment Day & Accountability</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Inshiqaq was revealed in Makkah and belongs to a group of surahs that vividly describe the <span class="highlight">cosmic catastrophes of the Day of Judgment</span>. The name "Al-Inshiqaq" means "the splitting open," referring to the sky tearing apart on the Last Day. This surah paints a complete picture: from cosmic destruction, to human accountability, to the two contrasting fates of mankind.</p>
+                <p>The surah opens with a breathtaking scene of <span class="highlight">the sky splitting open and the earth being flattened</span>, both obeying their Lord's command. Then it delivers one of the most powerful verses in the entire Quran: "O mankind, indeed you are laboring toward your Lord with great exertion and will meet it." Every human being is on a journey toward Allah, whether they realize it or not.</p>
+                <div class="important">
+                    <p>Ibn Kathir narrates that this surah is one of the surahs that made the Prophet's companions weep. The Prophet (peace be upon him) said: "Whoever would be pleased to look at the Day of Judgment as if he sees it with his own eyes, let him recite: 'When the sun is wrapped up' (81), 'When the sky breaks apart' (82), and 'When the sky has split open' (84)." This hadith is reported by At-Tirmidhi, Ahmad, and Al-Hakim, from the narration of Ibn Umar.</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Tafsir Ibn Kathir, Introduction to Surah Al-Inshiqaq; At-Tirmidhi</p>
+                </div>
+                <p>The surah then divides humanity into two groups: <span class="highlight">those who receive their record in the right hand</span> (who will have an easy reckoning and return to their families in joy) and <span class="highlight">those who receive their record behind their back</span> (who will cry for destruction and enter the Blaze). The reason for the second group's doom? They lived happily among their people thinking they would never return to Allah.</p>
+                <p>The final section contains beautiful oaths by the twilight glow, the night, and the full moon, establishing that <span class="highlight">humans will pass through state after state</span>. Life is a series of transitions: from womb to world, from youth to age, from life to death, from death to resurrection. The surah closes by condemning those who still deny despite all the evidence, while promising the believers an uninterrupted reward.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">إِذَا السَّمَاءُ انشَقَّتْ</div>
+                    <div class="verse-transliteration">Idhas-sama'un-shaqqat</div>
+                    <div class="verse-translation">When the sky has split [open].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءُ</span><span class="trans">as-sama'u</span><span class="meaning">The sky</span></div>
+                        <div class="word-chip"><span class="ar">انشَقَّتْ</span><span class="trans">inshaqqat</span><span class="meaning">Has split open</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah opens with the cataclysmic scene of the sky splitting apart. "Inshaqqat" comes from "shaqq" meaning to tear, split, or crack open. The sky that we see as stable and unchanging will be ripped apart on the Day of Judgment. Ibn Kathir explains this is the beginning of the cosmic destruction that marks the end of the world as we know it. As-Sa'di notes that "idha" (when) is used here to indicate certainty, not doubt. It is not "if" the sky splits, but "when." This event is as certain as tomorrow's sunrise.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ</div>
+                    <div class="verse-transliteration">Wa adhinat li-rabbiha wa huqqat</div>
+                    <div class="verse-translation">And has listened to its Lord and was obligated [to do so].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَذِنَتْ</span><span class="trans">wa adhinat</span><span class="meaning">And it has listened / obeyed</span></div>
+                        <div class="word-chip"><span class="ar">لِرَبِّهَا</span><span class="trans">li-rabbiha</span><span class="meaning">To its Lord</span></div>
+                        <div class="word-chip"><span class="ar">وَحُقَّتْ</span><span class="trans">wa huqqat</span><span class="meaning">And it was obligated / right for it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The sky listens and obeys its Lord's command. "Adhinat" comes from "adhina" meaning to listen attentively and comply. "Huqqat" means it was the sky's duty, it was right and fitting that it obey. Ibn Kathir explains that the sky obeys Allah because it is His creation and has no choice but to submit to His will. As-Sa'di adds a profound point: if the mighty sky, vast as it is, submits completely to Allah's command, how can a tiny human being dare to rebel? The universe itself is Muslim (submitting to Allah), while some humans arrogantly refuse.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَإِذَا الْأَرْضُ مُدَّتْ</div>
+                    <div class="verse-transliteration">Wa idhal-ardu muddat</div>
+                    <div class="verse-translation">And when the earth has been extended.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">الْأَرْضُ</span><span class="trans">al-ardu</span><span class="meaning">The earth</span></div>
+                        <div class="word-chip"><span class="ar">مُدَّتْ</span><span class="trans">muddat</span><span class="meaning">Has been extended / stretched out</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The earth will be stretched and flattened out. "Muddat" means to extend, spread out, or level flat. Ibn Kathir explains that the mountains will be removed, the valleys will be filled, and the earth will become a flat, level plain with no hiding place and no shelter. As-Sa'di adds that this flattening serves the purpose of gathering. On the Day of Judgment, all of creation from the first to the last will be gathered on this vast, flat plain. There will be nowhere to run, nowhere to hide, and every person will be fully exposed before Allah.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">وَأَلْقَتْ مَا فِيهَا وَتَخَلَّتْ</div>
+                    <div class="verse-transliteration">Wa alqat ma fiha wa takhallat</div>
+                    <div class="verse-translation">And has cast out that within it and relinquished [it].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَلْقَتْ</span><span class="trans">wa alqat</span><span class="meaning">And it has cast out</span></div>
+                        <div class="word-chip"><span class="ar">مَا فِيهَا</span><span class="trans">ma fiha</span><span class="meaning">What is within it</span></div>
+                        <div class="word-chip"><span class="ar">وَتَخَلَّتْ</span><span class="trans">wa takhallat</span><span class="meaning">And relinquished / became empty</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The earth will throw out everything inside it. "Alqat" means to throw out or eject, and "takhallat" means to become completely empty, to let go of everything. Ibn Kathir explains this refers to the earth casting out the dead bodies and the treasures buried within it. The earth has been holding the dead, the minerals, and all hidden things. On that Day, it will vomit everything out. As-Sa'di notes that this is connected to the resurrection, as the earth releases all the bodies it has held so they can be raised for judgment. The earth itself becomes a witness.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ</div>
+                    <div class="verse-transliteration">Wa adhinat li-rabbiha wa huqqat</div>
+                    <div class="verse-translation">And has listened to its Lord and was obligated [to do so].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَذِنَتْ</span><span class="trans">wa adhinat</span><span class="meaning">And it has listened / obeyed</span></div>
+                        <div class="word-chip"><span class="ar">لِرَبِّهَا</span><span class="trans">li-rabbiha</span><span class="meaning">To its Lord</span></div>
+                        <div class="word-chip"><span class="ar">وَحُقَّتْ</span><span class="trans">wa huqqat</span><span class="meaning">And it was obligated / right for it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The same phrase used for the sky in verse 2 is now used for the earth. The earth also obeys its Lord completely. This repetition is deliberate. Both the sky above and the earth below, the two mightiest structures humans can see, are utterly submissive to Allah's command. Ibn Kathir notes that both the sky and earth obey without hesitation or delay. As-Sa'di explains that "huqqat" means it was entirely fitting and right that they obey, for they are Allah's creation. This reinforces the message: all of creation submits. Only some humans and jinn choose to rebel.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">يَا أَيُّهَا الْإِنسَانُ إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدْحًا فَمُلَاقِيهِ</div>
+                    <div class="verse-transliteration">Ya ayyuhal-insanu innaka kadihun ila rabbika kadhan famalaqih</div>
+                    <div class="verse-translation">O mankind, indeed you are laboring toward your Lord with [great] exertion and will meet it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">يَا أَيُّهَا</span><span class="trans">ya ayyuha</span><span class="meaning">O</span></div>
+                        <div class="word-chip"><span class="ar">الْإِنسَانُ</span><span class="trans">al-insanu</span><span class="meaning">Mankind / human being</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّكَ</span><span class="trans">innaka</span><span class="meaning">Indeed you</span></div>
+                        <div class="word-chip"><span class="ar">كَادِحٌ</span><span class="trans">kadihun</span><span class="meaning">Are laboring / striving</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ رَبِّكَ</span><span class="trans">ila rabbika</span><span class="meaning">Toward your Lord</span></div>
+                        <div class="word-chip"><span class="ar">كَدْحًا</span><span class="trans">kadhan</span><span class="meaning">With great exertion</span></div>
+                        <div class="word-chip"><span class="ar">فَمُلَاقِيهِ</span><span class="trans">famalaqih</span><span class="meaning">And will meet it</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is one of the most profound verses in the Quran. "Kadh" means to labor, toil, and exert oneself to the point of exhaustion. Every human being, believer or disbeliever, is laboring toward a meeting with their Lord. Every step you take, every breath you draw, every day that passes brings you closer to that meeting. Ibn Kathir explains that "famalaqih" means you will inevitably meet the result of your efforts, whether good or bad. As-Sa'di adds that this verse strips away all illusions. You are not just living. You are journeying toward Allah. The only question is: what will you bring with you when you arrive?</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">فَأَمَّا مَنْ أُوتِيَ كِتَابَهُ بِيَمِينِهِ</div>
+                    <div class="verse-transliteration">Fa-amma man utiya kitabahu bi-yaminih</div>
+                    <div class="verse-translation">Then as for he who is given his record in his right hand.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَأَمَّا</span><span class="trans">fa-amma</span><span class="meaning">Then as for</span></div>
+                        <div class="word-chip"><span class="ar">مَنْ</span><span class="trans">man</span><span class="meaning">He who</span></div>
+                        <div class="word-chip"><span class="ar">أُوتِيَ</span><span class="trans">utiya</span><span class="meaning">Is given</span></div>
+                        <div class="word-chip"><span class="ar">كِتَابَهُ</span><span class="trans">kitabahu</span><span class="meaning">His record / book</span></div>
+                        <div class="word-chip"><span class="ar">بِيَمِينِهِ</span><span class="trans">bi-yaminih</span><span class="meaning">In his right hand</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now the surah divides humanity into two groups. The first group is the blessed: those who receive their book of deeds in their right hand. In Islamic belief, on the Day of Judgment, every person will be given a record of everything they did in their life. Receiving it in the right hand is a sign of success and acceptance. Ibn Kathir explains that the right hand symbolizes honor and good tidings. As-Sa'di notes that this person's record will be full of good deeds, sincere faith, and righteous actions. The moment they see it in their right hand, they know they have been saved.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">فَسَوْفَ يُحَاسَبُ حِسَابًا يَسِيرًا</div>
+                    <div class="verse-transliteration">Fasawfa yuhasabu hisaban yasira</div>
+                    <div class="verse-translation">He will be judged with an easy account.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَسَوْفَ</span><span class="trans">fasawfa</span><span class="meaning">Then he will</span></div>
+                        <div class="word-chip"><span class="ar">يُحَاسَبُ</span><span class="trans">yuhasabu</span><span class="meaning">Be judged / accounted</span></div>
+                        <div class="word-chip"><span class="ar">حِسَابًا</span><span class="trans">hisaban</span><span class="meaning">An account</span></div>
+                        <div class="word-chip"><span class="ar">يَسِيرًا</span><span class="trans">yasira</span><span class="meaning">Easy / light</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The easy account. In a hadith in Sahih Bukhari and Muslim, Aisha (may Allah be pleased with her) asked the Prophet (peace be upon him) about this verse. He explained: "That is the presentation (al-'ard). A person's deeds are presented to Allah, and He overlooks them. But whoever is scrutinized in their accounting will be destroyed." So the "easy account" means Allah presents the record but does not interrogate or scrutinize. He covers the servant's sins with His mercy. This is a gift of Allah's generosity to the believers who sincerely sought His forgiveness in this life.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">وَيَنقَلِبُ إِلَىٰ أَهْلِهِ مَسْرُورًا</div>
+                    <div class="verse-transliteration">Wa yanqalibu ila ahlihi masrura</div>
+                    <div class="verse-translation">And return to his people in happiness.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيَنقَلِبُ</span><span class="trans">wa yanqalibu</span><span class="meaning">And he will return</span></div>
+                        <div class="word-chip"><span class="ar">إِلَىٰ</span><span class="trans">ila</span><span class="meaning">To</span></div>
+                        <div class="word-chip"><span class="ar">أَهْلِهِ</span><span class="trans">ahlihi</span><span class="meaning">His people / family</span></div>
+                        <div class="word-chip"><span class="ar">مَسْرُورًا</span><span class="trans">masrura</span><span class="meaning">In happiness / delighted</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After the easy account, this person returns to his family in pure happiness. "Masrura" comes from "surur" meaning deep, heartfelt joy. Ibn Kathir explains that "his people" refers to his family and loved ones in Paradise. As-Sa'di adds that this is the ultimate homecoming. Imagine the relief: after the terror of the Day of Judgment, after standing before Allah, you pass the test, your sins are forgiven, and you go to your family in Paradise. All the hardships of the world, all the patience, all the sacrifice, it all paid off. This is the reward that makes every trial worth enduring.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">وَأَمَّا مَنْ أُوتِيَ كِتَابَهُ وَرَاءَ ظَهْرِهِ</div>
+                    <div class="verse-transliteration">Wa amma man utiya kitabahu wara'a zahrih</div>
+                    <div class="verse-translation">But as for he who is given his record behind his back.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَأَمَّا</span><span class="trans">wa amma</span><span class="meaning">But as for</span></div>
+                        <div class="word-chip"><span class="ar">مَنْ</span><span class="trans">man</span><span class="meaning">He who</span></div>
+                        <div class="word-chip"><span class="ar">أُوتِيَ</span><span class="trans">utiya</span><span class="meaning">Is given</span></div>
+                        <div class="word-chip"><span class="ar">كِتَابَهُ</span><span class="trans">kitabahu</span><span class="meaning">His record / book</span></div>
+                        <div class="word-chip"><span class="ar">وَرَاءَ ظَهْرِهِ</span><span class="trans">wara'a zahrih</span><span class="meaning">Behind his back</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The second group: those who receive their record behind their back. In Surah Al-Haqqah (69:25), it says "in his left hand," and here "behind his back." Ibn Kathir reconciles this by explaining that the person's left hand will be twisted behind their back and the record placed in it from behind. This is the most humiliating way to receive something. While the believer receives their record openly in their right hand with pride, the disbeliever's record is handed to them in the most shameful manner possible, behind their back, as if even the record itself is ashamed of what it contains.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">فَسَوْفَ يَدْعُو ثُبُورًا</div>
+                    <div class="verse-transliteration">Fasawfa yad'u thubura</div>
+                    <div class="verse-translation">He will cry out for destruction.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَسَوْفَ</span><span class="trans">fasawfa</span><span class="meaning">Then he will</span></div>
+                        <div class="word-chip"><span class="ar">يَدْعُو</span><span class="trans">yad'u</span><span class="meaning">Call out / cry</span></div>
+                        <div class="word-chip"><span class="ar">ثُبُورًا</span><span class="trans">thubura</span><span class="meaning">Destruction / ruin</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>When this person sees their record, they will cry "thubura," calling for their own destruction. They would rather be annihilated than face what is coming. Ibn Kathir explains that "thubura" means loss, ruin, and destruction. The person will call out: "Ya thubura!" (O my destruction!), wishing they could simply cease to exist. As-Sa'di notes the contrast: the first group returns to their family in happiness, while this group screams for annihilation. One person's judgment day is a celebration; the other's is the worst moment of their existence.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">وَيَصْلَىٰ سَعِيرًا</div>
+                    <div class="verse-transliteration">Wa yasla sa'ira</div>
+                    <div class="verse-translation">And [enter to] burn in a Blaze.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَيَصْلَىٰ</span><span class="trans">wa yasla</span><span class="meaning">And he will burn in / enter</span></div>
+                        <div class="word-chip"><span class="ar">سَعِيرًا</span><span class="trans">sa'ira</span><span class="meaning">A blazing fire</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Sa'ir" is one of the names of Hellfire, meaning a raging, blazing inferno. "Yasla" means to enter it and be burned by it. Ibn Kathir explains that this person is thrown into the Hellfire where they will burn. Their wish for destruction will not be granted; instead, they will endure the torment. As-Sa'di notes that the fire is described as "sa'ir" (blazing, intense) to emphasize its severity. The same person who lived comfortably in the world, ignoring the truth and enjoying themselves, will now face a reality they can never escape.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">إِنَّهُ كَانَ فِي أَهْلِهِ مَسْرُورًا</div>
+                    <div class="verse-transliteration">Innahu kana fi ahlihi masrura</div>
+                    <div class="verse-translation">Indeed, he had been among his people in happiness.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّهُ</span><span class="trans">innahu</span><span class="meaning">Indeed he</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Had been / used to be</span></div>
+                        <div class="word-chip"><span class="ar">فِي أَهْلِهِ</span><span class="trans">fi ahlihi</span><span class="meaning">Among his people / family</span></div>
+                        <div class="word-chip"><span class="ar">مَسْرُورًا</span><span class="trans">masrura</span><span class="meaning">In happiness / delighted</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Notice the painful irony. The same word "masrura" (happy) is used here as in verse 9. But while the believer will be "masrur" (happy) in the Hereafter, this person was "masrur" only in this world. He enjoyed himself among his family and friends, living without care, without thought of accountability. Ibn Kathir explains that his happiness in the world was built on heedlessness and sin. As-Sa'di adds that this worldly happiness was temporary and deceptive. It distracted him from preparing for the eternal life ahead. His happiness was his undoing.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">إِنَّهُ ظَنَّ أَن لَّن يَحُورَ</div>
+                    <div class="verse-transliteration">Innahu zanna an lan yahur</div>
+                    <div class="verse-translation">Indeed, he had thought he would never return [to Allah].</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّهُ</span><span class="trans">innahu</span><span class="meaning">Indeed he</span></div>
+                        <div class="word-chip"><span class="ar">ظَنَّ</span><span class="trans">zanna</span><span class="meaning">Thought / assumed</span></div>
+                        <div class="word-chip"><span class="ar">أَن لَّن</span><span class="trans">an lan</span><span class="meaning">That never</span></div>
+                        <div class="word-chip"><span class="ar">يَحُورَ</span><span class="trans">yahura</span><span class="meaning">He would return</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The root cause of his downfall: he thought he would never return to Allah. "Yahur" comes from "hawra" meaning to return. He assumed this life was all there was. No accountability, no afterlife, no standing before his Creator. Ibn Kathir explains that this is the fundamental error that leads to all other sins. When you believe there is no accountability, nothing restrains you. As-Sa'di notes that this "assumption" (zann) was baseless. He had no evidence that there would be no return. He simply chose to believe it because it was convenient. He wanted to live without limits, so he denied the One who set them.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">بَلَىٰ إِنَّ رَبَّهُ كَانَ بِهِ بَصِيرًا</div>
+                    <div class="verse-transliteration">Bala inna rabbahu kana bihi basira</div>
+                    <div class="verse-translation">But yes! Indeed, his Lord was ever of him, Seeing.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بَلَىٰ</span><span class="trans">bala</span><span class="meaning">But yes! / Certainly!</span></div>
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">رَبَّهُ</span><span class="trans">rabbahu</span><span class="meaning">His Lord</span></div>
+                        <div class="word-chip"><span class="ar">كَانَ</span><span class="trans">kana</span><span class="meaning">Was ever / has always been</span></div>
+                        <div class="word-chip"><span class="ar">بِهِ</span><span class="trans">bihi</span><span class="meaning">Of him</span></div>
+                        <div class="word-chip"><span class="ar">بَصِيرًا</span><span class="trans">basira</span><span class="meaning">Seeing / All-Seeing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Bala!" This is the Quran's powerful rebuttal. "Oh yes, he WILL return!" His assumption was dead wrong. And then Allah adds the devastating truth: "His Lord was ALWAYS watching him." "Basira" means seeing with full knowledge and awareness. Every sin he committed thinking no one was watching, Allah saw. Every moment of heedlessness, every choice to ignore the truth, every act of arrogance, Allah was seeing it all. Ibn Kathir explains that "kana bihi basira" means Allah's sight of him was continuous and comprehensive. There was never a moment when Allah was not fully aware of him. This verse shatters the illusion of privacy from Allah.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">فَلَا أُقْسِمُ بِالشَّفَقِ</div>
+                    <div class="verse-transliteration">Fala uqsimu bish-shafaq</div>
+                    <div class="verse-translation">So I swear by the twilight glow.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَلَا</span><span class="trans">fala</span><span class="meaning">So I do (indeed)</span></div>
+                        <div class="word-chip"><span class="ar">أُقْسِمُ</span><span class="trans">uqsimu</span><span class="meaning">Swear</span></div>
+                        <div class="word-chip"><span class="ar">بِالشَّفَقِ</span><span class="trans">bish-shafaq</span><span class="meaning">By the twilight glow</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A new section begins with beautiful oaths. "Ash-shafaq" is the red glow that appears in the sky after sunset, the twilight. Ibn Kathir explains that this is the redness that remains in the sky between Maghrib and Isha prayers. As-Sa'di notes that the twilight is a transitional moment, neither day nor night. It is a sign of change and transformation. Allah swears by this in-between state because the entire surah is about transitions: from life to death, from this world to the next, from one state to another. The beauty of twilight also demonstrates Allah's artistry in creation.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">وَاللَّيْلِ وَمَا وَسَقَ</div>
+                    <div class="verse-transliteration">Wal-layli wa ma wasaq</div>
+                    <div class="verse-translation">And [by] the night and what it envelops.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاللَّيْلِ</span><span class="trans">wal-layli</span><span class="meaning">And the night</span></div>
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And what</span></div>
+                        <div class="word-chip"><span class="ar">وَسَقَ</span><span class="trans">wasaq</span><span class="meaning">It envelops / gathers</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Wasaq" means to gather, collect, or drive together. The night gathers and envelops everything in darkness. Ibn Kathir explains that when night falls, it gathers all creatures into their resting places. Animals return to their dens, birds to their nests, people to their homes. The night collects and covers everything. As-Sa'di adds that this is another sign of transition and Allah's control over creation. Just as the night gathers everything into stillness, death gathers all souls, and the Day of Judgment gathers all of creation for the final accounting.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">وَالْقَمَرِ إِذَا اتَّسَقَ</div>
+                    <div class="verse-transliteration">Wal-qamari idhat-tasaq</div>
+                    <div class="verse-translation">And [by] the moon when it becomes full.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَالْقَمَرِ</span><span class="trans">wal-qamari</span><span class="meaning">And the moon</span></div>
+                        <div class="word-chip"><span class="ar">إِذَا</span><span class="trans">idha</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">اتَّسَقَ</span><span class="trans">ittasaq</span><span class="meaning">It becomes full / complete</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Ittasaq" means to become full, complete, and perfectly round. The moon goes through phases: a thin crescent, a half moon, and then a full moon. Ibn Kathir explains that swearing by the full moon highlights its beauty and the perfection of Allah's design. As-Sa'di connects this to the surah's theme: the moon itself demonstrates the principle of "state after state" (tabaqan 'an tabaq). It starts as nothing (new moon), grows gradually, reaches fullness, then wanes and disappears, only to begin the cycle again. This mirrors human life: birth, growth, peak, decline, death, and then resurrection.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">لَتَرْكَبُنَّ طَبَقًا عَن طَبَقٍ</div>
+                    <div class="verse-transliteration">Latarkabunna tabaqan 'an tabaq</div>
+                    <div class="verse-translation">You will surely experience state after state.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">لَتَرْكَبُنَّ</span><span class="trans">latarkabunna</span><span class="meaning">You will surely ride / experience</span></div>
+                        <div class="word-chip"><span class="ar">طَبَقًا</span><span class="trans">tabaqan</span><span class="meaning">A state / stage</span></div>
+                        <div class="word-chip"><span class="ar">عَن</span><span class="trans">'an</span><span class="meaning">After</span></div>
+                        <div class="word-chip"><span class="ar">طَبَقٍ</span><span class="trans">tabaq</span><span class="meaning">A state / stage</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This is the answer to the oaths. "Tabaq" means a stage, level, or state. You will move from one state to another, one phase to the next. Ibn Kathir narrates from Ibn Abbas that this means "state after state: from ease to hardship, from hardship to ease, from wealth to poverty, from health to sickness, from life to death." As-Sa'di explains it more broadly: you go from being a drop of fluid, to a clot, to a fetus, to a baby, to a child, to an adult, to old age, to death, to the grave, to resurrection. Life is not static. You are always moving through stages, always transitioning, always heading toward the final stage: standing before Allah.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">فَمَا لَهُمْ لَا يُؤْمِنُونَ</div>
+                    <div class="verse-transliteration">Fama lahum la yu'minun</div>
+                    <div class="verse-translation">So what is [the matter] with them [that] they do not believe?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَمَا</span><span class="trans">fama</span><span class="meaning">So what</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">Is with them</span></div>
+                        <div class="word-chip"><span class="ar">لَا يُؤْمِنُونَ</span><span class="trans">la yu'minun</span><span class="meaning">They do not believe</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>A rhetorical question expressing astonishment. After all these signs, after the twilight, the night, the moon, after seeing life transition from stage to stage, what is wrong with them that they still refuse to believe? Ibn Kathir explains this as a rebuke: the evidence is overwhelming, the signs are everywhere, the Quran has been recited to them, yet they persist in disbelief. As-Sa'di adds that this question is designed to make the disbeliever reflect. There is no rational reason for denial. The only explanation is stubbornness, pride, and willful blindness.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">وَإِذَا قُرِئَ عَلَيْهِمُ الْقُرْآنُ لَا يَسْجُدُونَ</div>
+                    <div class="verse-transliteration">Wa idha quri'a 'alayhimul-qur'anu la yasjudun</div>
+                    <div class="verse-translation">And when the Quran is recited to them, they do not prostrate [to Allah]?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَإِذَا</span><span class="trans">wa idha</span><span class="meaning">And when</span></div>
+                        <div class="word-chip"><span class="ar">قُرِئَ</span><span class="trans">quri'a</span><span class="meaning">Is recited</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهِمُ</span><span class="trans">'alayhimu</span><span class="meaning">Upon them / to them</span></div>
+                        <div class="word-chip"><span class="ar">الْقُرْآنُ</span><span class="trans">al-qur'anu</span><span class="meaning">The Quran</span></div>
+                        <div class="word-chip"><span class="ar">لَا يَسْجُدُونَ</span><span class="trans">la yasjudun</span><span class="meaning">They do not prostrate</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>When the Quran, the word of Allah Himself, is recited to them, they do not even prostrate in respect. "La yasjudun" means they do not humble themselves, do not submit, do not bow. Ibn Kathir explains that the natural response to hearing the words of the Creator should be awe, submission, and prostration. But their hearts are so hardened that even the most powerful words in existence fail to move them. This is also one of the positions of sujud at-tilawah (prostration of recitation) in the Quran. Many scholars recommend performing a prostration when reading or hearing this verse.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">بَلِ الَّذِينَ كَفَرُوا يُكَذِّبُونَ</div>
+                    <div class="verse-transliteration">Balil-ladhina kafaru yukadhdhibun</div>
+                    <div class="verse-translation">But those who have disbelieved deny.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بَلِ</span><span class="trans">bal</span><span class="meaning">But / Rather</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">كَفَرُوا</span><span class="trans">kafaru</span><span class="meaning">Disbelieved</span></div>
+                        <div class="word-chip"><span class="ar">يُكَذِّبُونَ</span><span class="trans">yukadhdhibun</span><span class="meaning">Deny / call it lies</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Rather, the disbelievers are actively denying and calling the truth lies. "Yukadhdhibun" is an intensified form meaning they don't just doubt; they actively declare it to be false. Ibn Kathir explains that their problem is not lack of evidence but active rejection of evidence. As-Sa'di notes that "bal" (rather) introduces a correction: it's not that the evidence is insufficient. The evidence is overwhelming. Rather, they choose to call it lies. This is a deliberate, conscious choice to reject truth despite recognizing it, and that is what makes their crime unforgivable if they persist.</p></div>
+                </div>
+
+                <!-- Verse 23 -->
+                <div class="verse-card"><div class="verse-number">23</div>
+                    <div class="verse-arabic">وَاللَّهُ أَعْلَمُ بِمَا يُوعُونَ</div>
+                    <div class="verse-transliteration">Wallahu a'lamu bima yu'un</div>
+                    <div class="verse-translation">And Allah is most knowing of what they keep within themselves.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاللَّهُ</span><span class="trans">wallahu</span><span class="meaning">And Allah</span></div>
+                        <div class="word-chip"><span class="ar">أَعْلَمُ</span><span class="trans">a'lamu</span><span class="meaning">Is most knowing</span></div>
+                        <div class="word-chip"><span class="ar">بِمَا</span><span class="trans">bima</span><span class="meaning">Of what</span></div>
+                        <div class="word-chip"><span class="ar">يُوعُونَ</span><span class="trans">yu'un</span><span class="meaning">They keep within / harbor</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah knows best what they harbor inside themselves. "Yu'un" comes from "wa'a" meaning to contain, gather, or keep inside. It refers to what they conceal in their hearts: the malice, the arrogance, the hatred of truth, the jealousy, and the stubbornness that drives their denial. Ibn Kathir explains that nothing is hidden from Allah, not even the thoughts and feelings they hide from other people. As-Sa'di adds that this is a warning: they may fool people with their outward behavior, but Allah sees their inner reality. And on the Day when secrets are exposed, everything they harbored will be laid bare.</p></div>
+                </div>
+
+                <!-- Verse 24 -->
+                <div class="verse-card"><div class="verse-number">24</div>
+                    <div class="verse-arabic">فَبَشِّرْهُم بِعَذَابٍ أَلِيمٍ</div>
+                    <div class="verse-transliteration">Fabashshirhum bi-'adhabin alim</div>
+                    <div class="verse-translation">So give them tidings of a painful punishment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَبَشِّرْهُم</span><span class="trans">fabashshirhum</span><span class="meaning">So give them tidings</span></div>
+                        <div class="word-chip"><span class="ar">بِعَذَابٍ</span><span class="trans">bi-'adhabin</span><span class="meaning">Of a punishment</span></div>
+                        <div class="word-chip"><span class="ar">أَلِيمٍ</span><span class="trans">alim</span><span class="meaning">Painful</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The word "bashshir" normally means to give glad tidings, good news. But here it is used sarcastically for the worst possible news: painful punishment. This is a devastating rhetorical device. Ibn Kathir explains that using the word for "good news" to deliver news of punishment adds an extra layer of humiliation. It mocks their expectations: while they expected a life of ease and no accountability, their "good news" is torment. As-Sa'di notes that "'adhab alim" means a punishment that is intensely painful, not just physical but reaching into their very souls.</p></div>
+                </div>
+
+                <!-- Verse 25 -->
+                <div class="verse-card"><div class="verse-number">25</div>
+                    <div class="verse-arabic">إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ لَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍ</div>
+                    <div class="verse-transliteration">Illal-ladhina amanu wa 'amilus-salihati lahum ajrun ghayru mamnun</div>
+                    <div class="verse-translation">Except for those who believe and do righteous deeds. For them is a reward uninterrupted.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">آمَنُوا</span><span class="trans">amanu</span><span class="meaning">Believed</span></div>
+                        <div class="word-chip"><span class="ar">وَعَمِلُوا</span><span class="trans">wa 'amilu</span><span class="meaning">And did</span></div>
+                        <div class="word-chip"><span class="ar">الصَّالِحَاتِ</span><span class="trans">as-salihati</span><span class="meaning">Righteous deeds</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">For them</span></div>
+                        <div class="word-chip"><span class="ar">أَجْرٌ</span><span class="trans">ajrun</span><span class="meaning">A reward</span></div>
+                        <div class="word-chip"><span class="ar">غَيْرُ</span><span class="trans">ghayru</span><span class="meaning">Without / never</span></div>
+                        <div class="word-chip"><span class="ar">مَمْنُونٍ</span><span class="trans">mamnun</span><span class="meaning">Interrupted / cut off</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The surah ends on hope. The exception: those who believe and do righteous deeds. Their reward is "ghayru mamnun," never interrupted, never cut off, never ending. Ibn Kathir explains that "mamnun" can mean both "cut off" and "reminded of as a favor." So their reward will never end AND they will never be made to feel indebted for it. It is pure generosity from Allah. As-Sa'di adds that this verse pairs belief with action. Faith alone is not enough; it must be accompanied by righteous deeds. And when both are present, the reward is eternal. While the worldly happiness of the disbeliever was temporary (verse 13), the reward of the believer is forever.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>All of creation submits to Allah.</strong> The sky and earth obey Allah's command without hesitation. This puts human disobedience in perspective. The mightiest structures in the universe submit willingly, yet some human beings, the weakest of creatures, dare to rebel.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Every person is journeying toward Allah.</strong> Verse 6 is a wake-up call. You are not just "living." You are traveling toward a meeting with your Lord. Every day brings you one step closer. The only question is: will you arrive prepared or empty-handed?</div></li>
+                    <li><span class="bullet">03</span><div><strong>The easy account is a mercy, not a right.</strong> On the Day of Judgment, the believer's sins will be presented but not scrutinized. This is Allah's mercy for those who sought forgiveness sincerely. No human being could survive a thorough examination of their deeds.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Denying the afterlife is the root of all sin.</strong> The person who receives their record behind their back had one fundamental problem: they assumed they would never return to Allah. When you remove accountability, you remove all restraint. This is why belief in the Last Day is a pillar of faith.</div></li>
+                    <li><span class="bullet">05</span><div><strong>Life is a series of stages, not a destination.</strong> "State after state" means every phase of life is temporary. Hardship will pass, ease will pass, youth will pass, old age will pass. Only your deeds and your relationship with Allah will remain when every stage is over.</div></li>
+                    <li><span class="bullet">06</span><div><strong>The believer's reward is eternal and uninterrupted.</strong> Unlike worldly pleasures which end and leave emptiness, the reward of Paradise never stops, never fades, and never diminishes. This is the promise of Allah, and Allah never breaks His promise.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih Bukhari (The easy account - narrated by Aisha), Sahih Muslim, At-Tirmidhi (hadith about reciting Surahs 81, 82, 84 to see the Day of Judgment), Ahmad, Al-Hakim. All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 84, totalVerses: 25 });
+    }
+    </script>
+</body>
+</html>

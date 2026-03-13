@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surah Al-Buruj - The Great Stars | Quran Journey</title>
+    <link rel="stylesheet" href="recitation.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-top: 60px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header .arabic-title { font-family: 'Amiri', serif; font-size: 2.5em; color: #fff; direction: rtl; }
+        .header h1 { font-family: 'Caveat', cursive; font-size: 2.2em; color: #c9a84c; margin-bottom: 4px; }
+        .header p { color: #888; font-size: 0.85em; }
+        .nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(13,13,13,0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid #222; }
+        .nav-bar .logo { color: #c9a84c; font-family: 'Caveat', cursive; font-size: 1.4em; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s; }
+        .nav-bar .logo:hover { opacity: 0.8; }
+        .nav-bar .logo .home-icon { width: 20px; height: 20px; opacity: 0.7; }
+        .nav-bar .progress { color: #666; font-size: 0.85em; }
+        .view-toggle { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .view-toggle button { background: none; border: none; color: #888; font-family: 'Inter', sans-serif; font-size: 1.1em; padding: 8px 0; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .view-toggle button:hover { color: #c9a84c; }
+        .view-toggle button.active { color: #c9a84c; border-bottom-color: #c9a84c; }
+        .carousel-section { display: block; } .carousel-section.hidden { display: none; }
+        .deep-dive-section { display: none; } .deep-dive-section.visible { display: block; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .section { margin: 40px 0; padding: 35px; background: #111; border-radius: 16px; border: 1px solid #222; }
+        .section-title { font-size: 1.5em; color: #c9a84c; margin-bottom: 20px; font-weight: 600; }
+        .story p { margin-bottom: 16px; font-size: 1.05em; color: #ccc; line-height: 1.9; }
+        .story .highlight { color: #8ab4f8; font-weight: 500; }
+        .story .important { background: rgba(201,168,76,0.1); border-left: 3px solid #c9a84c; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .fact-card { background: #1a1a1a; padding: 18px; border-radius: 12px; text-align: center; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+        .fact-card:hover { transform: translateY(-3px); border-color: #c9a84c; }
+        .fact-card .label { font-size: 0.85em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .fact-card .value { font-size: 1.3em; color: #c9a84c; font-weight: 600; margin-top: 5px; }
+        .verse-card { background: #1a1a1a; border-radius: 16px; padding: 30px; margin: 25px 0; border: 1px solid #2a2a2a; transition: border-color 0.3s, transform 0.3s; }
+        .verse-card:hover { border-color: #c9a84c; transform: translateY(-4px); }
+        .verse-number { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #c9a84c; color: #000; border-radius: 50%; font-weight: 700; font-size: 0.9em; margin-bottom: 15px; }
+        .verse-arabic { font-family: 'Amiri', serif; font-size: 2.4em; color: #fff; direction: rtl; text-align: right; line-height: 1.8; margin-bottom: 15px; padding: 10px 0; }
+        .verse-transliteration { font-size: 1.1em; color: #8ab4f8; font-style: italic; margin-bottom: 10px; }
+        .verse-translation { font-size: 1.1em; color: #ccc; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #2a2a2a; }
+        .word-breakdown { margin-top: 15px; }
+        .word-breakdown h4 { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .words-grid { display: flex; flex-wrap: wrap; gap: 10px; direction: rtl; justify-content: center; }
+        .word-chip { background: #222; border: 1px solid #333; border-radius: 12px; padding: 12px 16px; text-align: center; min-width: 90px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .word-chip:hover { background: #2a2a2a; border-color: #c9a84c; transform: translateY(-4px) scale(1.05); }
+        .word-chip .ar { font-family: 'Amiri', serif; font-size: 1.6em; color: #fff; display: block; margin-bottom: 4px; }
+        .word-chip .trans { font-size: 0.75em; color: #8ab4f8; display: block; font-style: italic; }
+        .word-chip .meaning { font-size: 0.8em; color: #c9a84c; display: block; margin-top: 4px; font-weight: 500; }
+        .friendly-explanation { background: rgba(138,180,248,0.05); border: 1px solid rgba(138,180,248,0.15); border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .friendly-explanation p { color: #aac8f0; font-size: 0.95em; line-height: 1.7; }
+        .friendly-explanation .label { font-size: 0.8em; color: #8ab4f8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+        .lesson-list { list-style: none; padding: 0; }
+        .lesson-list li { padding: 12px 0; border-bottom: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: flex-start; }
+        .lesson-list li:last-child { border-bottom: none; }
+        .lesson-list .bullet { color: #c9a84c; font-size: 1.2em; margin-top: 2px; }
+        .source-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; padding: 20px; margin-top: 40px; font-size: 0.9em; color: #999; }
+        .source-note strong { color: #c9a84c; }
+        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.85em; border-top: 1px solid #1a1a1a; margin-top: 60px; width: 100%; max-width: 900px; }
+        footer a { color: #c9a84c; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .glow-line { width: 80px; height: 2px; margin: 15px auto 25px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); opacity: 0; transform: scaleX(0); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .glow-line.visible { opacity: 1; transform: scaleX(1); }
+        @media (max-width: 600px) { .header h1 { font-size: 1.6em; } .header .arabic-title { font-size: 1.8em; } .section { padding: 20px 16px; } .verse-arabic { font-size: 1.8em; } .verse-card { padding: 20px 16px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <a href="index.html" class="logo" style="text-decoration:none;"><svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Tafsir - Quran Journey</a>
+        <div class="progress">Surah 85 of 114</div>
+    </nav>
+    <div class="header">
+        <div class="arabic-title">سُورَةُ الْبُرُوجِ</div>
+        <h1>Surah Al-Buruj</h1>
+        <p>The Great Stars - 22 Verses - Makkan</p>
+    </div>
+    <div class="view-toggle">
+        <button class="active" onclick="showView('carousel')">Visual Story</button>
+        <button onclick="showView('deep-dive')">Deep Dive</button>
+    </div>
+
+    <div class="carousel-section" id="carousel-view">
+        <div style="text-align:center; padding: 80px 20px;">
+            <div style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;">&#x1F3A8;</div>
+            <h2 style="font-family: 'Caveat', cursive; font-size: 2em; color: #c9a84c; margin-bottom: 10px;">Visual Story Coming Soon</h2>
+            <p style="color: #666; max-width: 400px; margin: 0 auto;">The animated doodle illustrations for this surah are being crafted. Switch to Deep Dive to explore the full tafsir.</p>
+        </div>
+    </div>
+
+    <div class="deep-dive-section" id="deep-dive-view">
+        <div class="container">
+            <section class="section reveal">
+                <div class="section-title">Quick Facts</div><div class="glow-line reveal"></div>
+                <div class="facts-grid">
+                    <div class="fact-card"><div class="label">Surah Number</div><div class="value">85</div></div>
+                    <div class="fact-card"><div class="label">Total Verses</div><div class="value">22</div></div>
+                    <div class="fact-card"><div class="label">Total Words</div><div class="value">109</div></div>
+                    <div class="fact-card"><div class="label">Revealed In</div><div class="value">Makkah</div></div>
+                    <div class="fact-card"><div class="label">Meaning</div><div class="value" style="font-size:0.9em">The Great Stars</div></div>
+                    <div class="fact-card"><div class="label">Theme</div><div class="value" style="font-size:0.9em">Faith, Persecution & Divine Justice</div></div>
+                </div>
+            </section>
+
+            <section class="section story reveal">
+                <div class="section-title">The Story Behind This Surah</div><div class="glow-line reveal"></div>
+                <p>Surah Al-Buruj was revealed in Makkah during a period when the early Muslims were facing severe persecution from the Quraysh. The surah tells the story of <span class="highlight">the People of the Ditch (Ashab al-Ukhdud)</span>, believers from a previous nation who were burned alive in trenches of fire simply because they believed in Allah. This story served as a powerful source of comfort and strength for the persecuted Muslims in Makkah.</p>
+                <p>The name "Al-Buruj" means <span class="highlight">"the great stars"</span> or "the constellations." Allah opens the surah by swearing by the sky full of constellations, the promised Day of Judgment, and the witness and the witnessed. These grand oaths set the stage for a story of ultimate sacrifice and divine justice.</p>
+                <div class="important">
+                    <p>The Prophet (peace be upon him) narrated the full story in a famous hadith recorded in Sahih Muslim. A king had a sorcerer who, when he grew old, asked the king for a boy to train. The boy instead learned from a monk and became a believer in Allah. When the king discovered this, he tried to kill the boy multiple times but failed. Finally, the boy told the king: "You will not be able to kill me until you gather the people, tie me to a trunk, take an arrow from my quiver, and say 'In the name of Allah, the Lord of the boy.' Then shoot me." The king did exactly that, and the boy died. But the people all declared: "We believe in the Lord of the boy!" The furious king then ordered trenches to be dug, filled with fire, and threw the believers in. A woman with her baby hesitated at the edge, and the baby spoke: "O mother, be patient, for you are upon the truth."</p>
+                    <p style="font-size: 0.85em; color: #888; margin-top: 8px;">Source: Sahih Muslim, Hadith 3005 (Kitab az-Zuhd)</p>
+                </div>
+                <p>The surah's message is clear: <span class="highlight">persecution of believers is a recurring pattern throughout history</span>, but Allah's justice is certain. Those who torture believers and do not repent will face the punishment of the Burning Fire, while the believers who remained steadfast will have Gardens beneath which rivers flow. The surah then shifts to describe Allah's magnificent attributes, His absolute power, and ends by affirming the Quran's place in the Preserved Tablet (Lawh al-Mahfuz).</p>
+                <p>For the early Muslims being tortured in Makkah, hearing about believers who <span class="highlight">chose death over disbelief</span> was both a consolation and an inspiration. It taught them that their suffering was not meaningless, that Allah was watching, and that ultimate victory belongs to the believers.</p>
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Verse by Verse - With Word-by-Word Arabic</div><div class="glow-line reveal"></div>
+                <p style="color: #888; margin-bottom: 25px;">Each verse is broken down word by word. Learn the Arabic gradually by connecting each word to its meaning.</p>
+
+                <!-- Verse 1 -->
+                <div class="verse-card"><div class="verse-number">1</div>
+                    <div class="verse-arabic">وَالسَّمَاءِ ذَاتِ الْبُرُوجِ</div>
+                    <div class="verse-transliteration">Was-sama'i dhatil-buruj</div>
+                    <div class="verse-translation">By the sky containing great stars.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">By (oath)</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاءِ</span><span class="trans">as-sama'i</span><span class="meaning">The sky</span></div>
+                        <div class="word-chip"><span class="ar">ذَاتِ</span><span class="trans">dhati</span><span class="meaning">Possessor of</span></div>
+                        <div class="word-chip"><span class="ar">الْبُرُوجِ</span><span class="trans">al-buruj</span><span class="meaning">The great stars / constellations</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah opens with a grand oath by the sky that contains "al-buruj." Ibn Kathir explains that "buruj" refers to the great stars and constellations that adorn the night sky. The word comes from "baraja" meaning to appear prominently or tower above. These constellations are like grand towers in the sky. As-Sa'di adds that this oath draws attention to Allah's magnificent creation, the vastness of the universe, and the precision with which the stars are placed. The grandeur of this oath sets the tone for the serious subject that follows.</p></div>
+                </div>
+
+                <!-- Verse 2 -->
+                <div class="verse-card"><div class="verse-number">2</div>
+                    <div class="verse-arabic">وَالْيَوْمِ الْمَوْعُودِ</div>
+                    <div class="verse-transliteration">Wal-yawmil-maw'ud</div>
+                    <div class="verse-translation">And [by] the promised Day.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">الْيَوْمِ</span><span class="trans">al-yawmi</span><span class="meaning">The Day</span></div>
+                        <div class="word-chip"><span class="ar">الْمَوْعُودِ</span><span class="trans">al-maw'ud</span><span class="meaning">The promised</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The second oath is by "the promised Day," which is the Day of Judgment. Ibn Kathir states that this is the Day that Allah has promised all of creation, when every soul will be brought to account. As-Sa'di explains that calling it "the promised Day" emphasizes its certainty. It is not a possibility or a maybe. It is a promise from Allah, and Allah never breaks His promise. This oath reminds both the oppressors and the oppressed that a Day of perfect justice is coming.</p></div>
+                </div>
+
+                <!-- Verse 3 -->
+                <div class="verse-card"><div class="verse-number">3</div>
+                    <div class="verse-arabic">وَشَاهِدٍ وَمَشْهُودٍ</div>
+                    <div class="verse-transliteration">Wa shahidin wa mashhud</div>
+                    <div class="verse-translation">And [by] the witness and what is witnessed.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And (oath)</span></div>
+                        <div class="word-chip"><span class="ar">شَاهِدٍ</span><span class="trans">shahidin</span><span class="meaning">A witness</span></div>
+                        <div class="word-chip"><span class="ar">وَ</span><span class="trans">wa</span><span class="meaning">And</span></div>
+                        <div class="word-chip"><span class="ar">مَشْهُودٍ</span><span class="trans">mashhud</span><span class="meaning">What is witnessed</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Scholars have offered several interpretations. Ibn Kathir narrates from Abu Hurayrah that the Prophet (peace be upon him) said: "The witnessed day is the Day of Arafah, and the witness day is Friday" (reported by At-Tirmidhi and Ahmad). Other scholars say the "witness" refers to the Day of Judgment itself (when all of creation gathers to witness the reckoning), or that Allah is the witness over all things, or that the Prophet (peace be upon him) is the witness over his Ummah. The beauty of the Quranic language is that it can encompass all these meanings simultaneously.</p></div>
+                </div>
+
+                <!-- Verse 4 -->
+                <div class="verse-card"><div class="verse-number">4</div>
+                    <div class="verse-arabic">قُتِلَ أَصْحَابُ الْأُخْدُودِ</div>
+                    <div class="verse-transliteration">Qutila ashabul-ukhdud</div>
+                    <div class="verse-translation">Cursed were the companions of the trench.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">قُتِلَ</span><span class="trans">qutila</span><span class="meaning">Cursed / destroyed</span></div>
+                        <div class="word-chip"><span class="ar">أَصْحَابُ</span><span class="trans">ashabu</span><span class="meaning">The companions / people of</span></div>
+                        <div class="word-chip"><span class="ar">الْأُخْدُودِ</span><span class="trans">al-ukhdud</span><span class="meaning">The trench / ditch</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now comes the answer to the oaths. "Qutila" here is used as a curse or condemnation, meaning "may they be destroyed" or "cursed were they." The "Ashab al-Ukhdud" are the people of the trench or ditch. Ibn Kathir explains that these were tyrants who dug deep trenches, filled them with fire, and threw believers in. The word "ukhdud" means a long trench dug in the ground. This refers to the historical event narrated by the Prophet in Sahih Muslim about a tyrannical king who persecuted believers for their faith.</p></div>
+                </div>
+
+                <!-- Verse 5 -->
+                <div class="verse-card"><div class="verse-number">5</div>
+                    <div class="verse-arabic">النَّارِ ذَاتِ الْوَقُودِ</div>
+                    <div class="verse-transliteration">An-nari dhatil-waqud</div>
+                    <div class="verse-translation">[Containing] the fire full of fuel.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">النَّارِ</span><span class="trans">an-nari</span><span class="meaning">The fire</span></div>
+                        <div class="word-chip"><span class="ar">ذَاتِ</span><span class="trans">dhati</span><span class="meaning">Possessor of / full of</span></div>
+                        <div class="word-chip"><span class="ar">الْوَقُودِ</span><span class="trans">al-waqud</span><span class="meaning">The fuel</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The trench was filled with "an-nar dhat al-waqud," a fire full of fuel, meaning it was a massive, intensely burning blaze. The tyrants did not just light a small fire. They fueled it until it was an inferno, specifically designed to torture and kill the believers. As-Sa'di notes that mentioning the abundance of fuel emphasizes the horrific nature of this crime and the extremity of the persecution. The scene described is one of pure evil: a burning pit prepared for innocent people whose only "crime" was belief in Allah.</p></div>
+                </div>
+
+                <!-- Verse 6 -->
+                <div class="verse-card"><div class="verse-number">6</div>
+                    <div class="verse-arabic">إِذْ هُمْ عَلَيْهَا قُعُودٌ</div>
+                    <div class="verse-transliteration">Idh hum 'alayha qu'ud</div>
+                    <div class="verse-translation">When they were sitting near it.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِذْ</span><span class="trans">idh</span><span class="meaning">When</span></div>
+                        <div class="word-chip"><span class="ar">هُمْ</span><span class="trans">hum</span><span class="meaning">They</span></div>
+                        <div class="word-chip"><span class="ar">عَلَيْهَا</span><span class="trans">'alayha</span><span class="meaning">Near it / beside it</span></div>
+                        <div class="word-chip"><span class="ar">قُعُودٌ</span><span class="trans">qu'ud</span><span class="meaning">Sitting</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The tyrants were sitting around the edge of the trench, watching. They sat comfortably while believers burned. Ibn Kathir points out the chilling detail: they were not forced to be there, they were not in a hurry. They sat and watched, as if this were entertainment. This describes a level of cruelty and dehumanization that is hard to fathom. They had so thoroughly dehumanized the believers that watching them burn alive was something they could sit through calmly. This detail amplifies the horror of their crime and the certainty of their punishment.</p></div>
+                </div>
+
+                <!-- Verse 7 -->
+                <div class="verse-card"><div class="verse-number">7</div>
+                    <div class="verse-arabic">وَهُمْ عَلَىٰ مَا يَفْعَلُونَ بِالْمُؤْمِنِينَ شُهُودٌ</div>
+                    <div class="verse-transliteration">Wa hum 'ala ma yaf'aluna bil-mu'minina shuhud</div>
+                    <div class="verse-translation">And they, to what they were doing against the believers, were witnesses.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَهُمْ</span><span class="trans">wa hum</span><span class="meaning">And they</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ</span><span class="trans">'ala</span><span class="meaning">Over / upon</span></div>
+                        <div class="word-chip"><span class="ar">مَا</span><span class="trans">ma</span><span class="meaning">What</span></div>
+                        <div class="word-chip"><span class="ar">يَفْعَلُونَ</span><span class="trans">yaf'aluna</span><span class="meaning">They were doing</span></div>
+                        <div class="word-chip"><span class="ar">بِالْمُؤْمِنِينَ</span><span class="trans">bil-mu'minina</span><span class="meaning">Against the believers</span></div>
+                        <div class="word-chip"><span class="ar">شُهُودٌ</span><span class="trans">shuhud</span><span class="meaning">Witnesses</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>They were witnesses to their own crime. This verse emphasizes that they knew exactly what they were doing. There was no ignorance, no confusion, no accident. They deliberately, knowingly, and willingly tortured believers. As-Sa'di explains that their own witnessing of their crime will be used as evidence against them on the Day of Judgment. They cannot deny it because they themselves watched it happen. The word "shuhud" (witnesses) connects back to verse 3, where Allah swears by "the witness and the witnessed." They will be witnesses against themselves.</p></div>
+                </div>
+
+                <!-- Verse 8 -->
+                <div class="verse-card"><div class="verse-number">8</div>
+                    <div class="verse-arabic">وَمَا نَقَمُوا مِنْهُمْ إِلَّا أَن يُؤْمِنُوا بِاللَّهِ الْعَزِيزِ الْحَمِيدِ</div>
+                    <div class="verse-transliteration">Wa ma naqamu minhum illa an yu'minu billahil-'azizil-hamid</div>
+                    <div class="verse-translation">And they resented them not except because they believed in Allah, the Exalted in Might, the Praiseworthy.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَمَا</span><span class="trans">wa ma</span><span class="meaning">And not</span></div>
+                        <div class="word-chip"><span class="ar">نَقَمُوا</span><span class="trans">naqamu</span><span class="meaning">They resented / held against</span></div>
+                        <div class="word-chip"><span class="ar">مِنْهُمْ</span><span class="trans">minhum</span><span class="meaning">From them</span></div>
+                        <div class="word-chip"><span class="ar">إِلَّا</span><span class="trans">illa</span><span class="meaning">Except</span></div>
+                        <div class="word-chip"><span class="ar">أَن يُؤْمِنُوا</span><span class="trans">an yu'minu</span><span class="meaning">That they believed</span></div>
+                        <div class="word-chip"><span class="ar">بِاللَّهِ</span><span class="trans">billahi</span><span class="meaning">In Allah</span></div>
+                        <div class="word-chip"><span class="ar">الْعَزِيزِ</span><span class="trans">al-'aziz</span><span class="meaning">The Exalted in Might</span></div>
+                        <div class="word-chip"><span class="ar">الْحَمِيدِ</span><span class="trans">al-hamid</span><span class="meaning">The Praiseworthy</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>This verse reveals the "crime" of the believers: they believed in Allah. That was it. They committed no crime, no offense, no injustice. Their only "fault" was faith. Ibn Kathir notes how Allah describes Himself here as "Al-Aziz" (the Mighty, who will avenge His servants) and "Al-Hamid" (the Praiseworthy, who deserves to be worshipped). This is a powerful rhetorical point: believing in the Mighty, Praiseworthy God is the most noble thing a person can do, yet the tyrants treated it as the worst crime. This pattern repeats throughout history whenever truth confronts power.</p></div>
+                </div>
+
+                <!-- Verse 9 -->
+                <div class="verse-card"><div class="verse-number">9</div>
+                    <div class="verse-arabic">الَّذِي لَهُ مُلْكُ السَّمَاوَاتِ وَالْأَرْضِ ۚ وَاللَّهُ عَلَىٰ كُلِّ شَيْءٍ شَهِيدٌ</div>
+                    <div class="verse-transliteration">Alladhi lahu mulkus-samawati wal-ard wallahu 'ala kulli shay'in shahid</div>
+                    <div class="verse-translation">To whom belongs the dominion of the heavens and the earth. And Allah, over all things, is Witness.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">الَّذِي</span><span class="trans">alladhi</span><span class="meaning">The One Who</span></div>
+                        <div class="word-chip"><span class="ar">لَهُ</span><span class="trans">lahu</span><span class="meaning">To Him belongs</span></div>
+                        <div class="word-chip"><span class="ar">مُلْكُ</span><span class="trans">mulku</span><span class="meaning">The dominion / sovereignty</span></div>
+                        <div class="word-chip"><span class="ar">السَّمَاوَاتِ</span><span class="trans">as-samawati</span><span class="meaning">The heavens</span></div>
+                        <div class="word-chip"><span class="ar">وَالْأَرْضِ</span><span class="trans">wal-ard</span><span class="meaning">And the earth</span></div>
+                        <div class="word-chip"><span class="ar">وَاللَّهُ</span><span class="trans">wallahu</span><span class="meaning">And Allah</span></div>
+                        <div class="word-chip"><span class="ar">عَلَىٰ كُلِّ شَيْءٍ</span><span class="trans">'ala kulli shay'in</span><span class="meaning">Over all things</span></div>
+                        <div class="word-chip"><span class="ar">شَهِيدٌ</span><span class="trans">shahid</span><span class="meaning">Witness</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah owns everything in the heavens and the earth. The tyrant king thought he had power, but his "kingdom" was nothing compared to the dominion of Allah. And Allah is "Shahid" over all things. He witnessed every scream, every flame, every act of cruelty. Nothing escaped His knowledge. As-Sa'di explains that this verse is both a consolation to the oppressed (Allah saw everything and will bring justice) and a warning to the oppressors (you cannot escape the One who witnesses all things and owns all things). The word "shahid" beautifully connects back to the oath in verse 3.</p></div>
+                </div>
+
+                <!-- Verse 10 -->
+                <div class="verse-card"><div class="verse-number">10</div>
+                    <div class="verse-arabic">إِنَّ الَّذِينَ فَتَنُوا الْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ ثُمَّ لَمْ يَتُوبُوا فَلَهُمْ عَذَابُ جَهَنَّمَ وَلَهُمْ عَذَابُ الْحَرِيقِ</div>
+                    <div class="verse-transliteration">Innal-ladhina fatanul-mu'minina wal-mu'minati thumma lam yatubu falahum 'adhabu jahannama wa lahum 'adhabul-hariq</div>
+                    <div class="verse-translation">Indeed, those who have tortured the believing men and believing women and then have not repented will have the punishment of Hell, and they will have the punishment of the Burning Fire.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ الَّذِينَ</span><span class="trans">innal-ladhina</span><span class="meaning">Indeed those who</span></div>
+                        <div class="word-chip"><span class="ar">فَتَنُوا</span><span class="trans">fatanu</span><span class="meaning">Tortured / persecuted</span></div>
+                        <div class="word-chip"><span class="ar">الْمُؤْمِنِينَ</span><span class="trans">al-mu'minina</span><span class="meaning">The believing men</span></div>
+                        <div class="word-chip"><span class="ar">وَالْمُؤْمِنَاتِ</span><span class="trans">wal-mu'minati</span><span class="meaning">And the believing women</span></div>
+                        <div class="word-chip"><span class="ar">ثُمَّ لَمْ يَتُوبُوا</span><span class="trans">thumma lam yatubu</span><span class="meaning">Then did not repent</span></div>
+                        <div class="word-chip"><span class="ar">فَلَهُمْ</span><span class="trans">falahum</span><span class="meaning">Then for them</span></div>
+                        <div class="word-chip"><span class="ar">عَذَابُ جَهَنَّمَ</span><span class="trans">'adhabu jahannam</span><span class="meaning">Punishment of Hell</span></div>
+                        <div class="word-chip"><span class="ar">عَذَابُ الْحَرِيقِ</span><span class="trans">'adhabul-hariq</span><span class="meaning">Punishment of burning</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The divine verdict. Those who tortured believers and did not repent will face two punishments: Hell and the Burning Fire. Ibn Kathir notes a profound subtlety: Allah says "thumma lam yatubu" (then did not repent), leaving the door of repentance open even for those who committed this horrific crime. Al-Hasan al-Basri remarked: "Look at the generosity and mercy of Allah! They killed His close friends and allies, yet He still offers them the chance to repent." The word "fatanu" means to put through a trial by fire, the same fire they used against the believers will be used against them, but infinitely worse.</p></div>
+                </div>
+
+                <!-- Verse 11 -->
+                <div class="verse-card"><div class="verse-number">11</div>
+                    <div class="verse-arabic">إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ لَهُمْ جَنَّاتٌ تَجْرِي مِن تَحْتِهَا الْأَنْهَارُ ۚ ذَٰلِكَ الْفَوْزُ الْكَبِيرُ</div>
+                    <div class="verse-transliteration">Innal-ladhina amanu wa 'amilus-salihati lahum jannatun tajri min tahtihal-anhar dhalikal-fawzul-kabir</div>
+                    <div class="verse-translation">Indeed, those who have believed and done righteous deeds will have gardens beneath which rivers flow. That is the great attainment.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ الَّذِينَ</span><span class="trans">innal-ladhina</span><span class="meaning">Indeed those who</span></div>
+                        <div class="word-chip"><span class="ar">آمَنُوا</span><span class="trans">amanu</span><span class="meaning">Believed</span></div>
+                        <div class="word-chip"><span class="ar">وَعَمِلُوا</span><span class="trans">wa 'amilu</span><span class="meaning">And did</span></div>
+                        <div class="word-chip"><span class="ar">الصَّالِحَاتِ</span><span class="trans">as-salihati</span><span class="meaning">Righteous deeds</span></div>
+                        <div class="word-chip"><span class="ar">لَهُمْ</span><span class="trans">lahum</span><span class="meaning">For them</span></div>
+                        <div class="word-chip"><span class="ar">جَنَّاتٌ</span><span class="trans">jannatun</span><span class="meaning">Gardens</span></div>
+                        <div class="word-chip"><span class="ar">تَجْرِي مِن تَحْتِهَا</span><span class="trans">tajri min tahtiha</span><span class="meaning">Flow beneath them</span></div>
+                        <div class="word-chip"><span class="ar">الْأَنْهَارُ</span><span class="trans">al-anhar</span><span class="meaning">The rivers</span></div>
+                        <div class="word-chip"><span class="ar">ذَٰلِكَ</span><span class="trans">dhalika</span><span class="meaning">That is</span></div>
+                        <div class="word-chip"><span class="ar">الْفَوْزُ الْكَبِيرُ</span><span class="trans">al-fawzul-kabir</span><span class="meaning">The great attainment</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After describing the punishment of the oppressors, Allah immediately describes the reward of the believers. They were thrown into trenches of fire in this world, but in the next world they will have Gardens with rivers flowing beneath them. As-Sa'di explains that "al-fawz al-kabir" (the great attainment) is the ultimate success. The believers who were burned alive "lost" in the eyes of the world, but in reality they won the greatest victory. This is a complete reversal of worldly perception. The ones who appeared defeated were actually the victors, and the ones who appeared powerful were actually the losers.</p></div>
+                </div>
+
+                <!-- Verse 12 -->
+                <div class="verse-card"><div class="verse-number">12</div>
+                    <div class="verse-arabic">إِنَّ بَطْشَ رَبِّكَ لَشَدِيدٌ</div>
+                    <div class="verse-transliteration">Inna batsha rabbika lashadid</div>
+                    <div class="verse-translation">Indeed, the assault of your Lord is severe.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّ</span><span class="trans">inna</span><span class="meaning">Indeed</span></div>
+                        <div class="word-chip"><span class="ar">بَطْشَ</span><span class="trans">batsha</span><span class="meaning">The assault / seizing</span></div>
+                        <div class="word-chip"><span class="ar">رَبِّكَ</span><span class="trans">rabbika</span><span class="meaning">Of your Lord</span></div>
+                        <div class="word-chip"><span class="ar">لَشَدِيدٌ</span><span class="trans">lashadid</span><span class="meaning">Certainly severe</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Now Allah shifts to describing His own power. "Al-batsh" means to seize with overwhelming force. When Allah seizes a tyrant or a wrongdoer, His grip is devastating and inescapable. Ibn Kathir cites the hadith in Sahih Bukhari where the Prophet (peace be upon him) said: "Indeed, Allah gives respite to the wrongdoer, but when He seizes him, He does not let him escape." Then he recited this verse. The "la" in "lashadid" is for emphasis: certainly, absolutely, undeniably severe. This is a warning to every oppressor throughout history.</p></div>
+                </div>
+
+                <!-- Verse 13 -->
+                <div class="verse-card"><div class="verse-number">13</div>
+                    <div class="verse-arabic">إِنَّهُ هُوَ يُبْدِئُ وَيُعِيدُ</div>
+                    <div class="verse-transliteration">Innahu huwa yubdi'u wa yu'id</div>
+                    <div class="verse-translation">Indeed, it is He who originates [creation] and repeats.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">إِنَّهُ</span><span class="trans">innahu</span><span class="meaning">Indeed He</span></div>
+                        <div class="word-chip"><span class="ar">هُوَ</span><span class="trans">huwa</span><span class="meaning">He (emphasis)</span></div>
+                        <div class="word-chip"><span class="ar">يُبْدِئُ</span><span class="trans">yubdi'u</span><span class="meaning">Originates / begins</span></div>
+                        <div class="word-chip"><span class="ar">وَيُعِيدُ</span><span class="trans">wa yu'id</span><span class="meaning">And repeats / brings back</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah originates creation from nothing, and He repeats it (resurrection). Ibn Kathir explains that "yubdi'u" refers to the first creation, bringing everything into existence from nothing, and "yu'id" refers to bringing creation back on the Day of Judgment. As-Sa'di adds that this verse establishes Allah's absolute power. The One who created everything from nothing can certainly recreate it. This also connects to the story of the believers who were killed. Their death is not the end. Allah will bring them back and reward them for their sacrifice.</p></div>
+                </div>
+
+                <!-- Verse 14 -->
+                <div class="verse-card"><div class="verse-number">14</div>
+                    <div class="verse-arabic">وَهُوَ الْغَفُورُ الْوَدُودُ</div>
+                    <div class="verse-transliteration">Wa huwal-ghafurul-wadud</div>
+                    <div class="verse-translation">And He is the Forgiving, the Affectionate.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَهُوَ</span><span class="trans">wa huwa</span><span class="meaning">And He is</span></div>
+                        <div class="word-chip"><span class="ar">الْغَفُورُ</span><span class="trans">al-ghafur</span><span class="meaning">The Forgiving</span></div>
+                        <div class="word-chip"><span class="ar">الْوَدُودُ</span><span class="trans">al-wadud</span><span class="meaning">The Affectionate / Loving</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>After mentioning His severe punishment, Allah immediately mentions His forgiveness and love. He is "Al-Ghafur" (the One who covers sins and forgives abundantly) and "Al-Wadud" (the Loving, the Affectionate). Ibn Kathir explains that "Al-Wadud" means the One who loves His righteous servants and is loved by them. As-Sa'di notes the beautiful pairing: even after describing the horrific crime of the trench, Allah mentions that He forgives those who repent. And "Al-Wadud" means He does not just tolerate the repentant person, He actually loves them. This is extraordinary mercy.</p></div>
+                </div>
+
+                <!-- Verse 15 -->
+                <div class="verse-card"><div class="verse-number">15</div>
+                    <div class="verse-arabic">ذُو الْعَرْشِ الْمَجِيدُ</div>
+                    <div class="verse-transliteration">Dhul-'arshil-majid</div>
+                    <div class="verse-translation">Honorable Owner of the Throne.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">ذُو</span><span class="trans">dhu</span><span class="meaning">Owner / Possessor of</span></div>
+                        <div class="word-chip"><span class="ar">الْعَرْشِ</span><span class="trans">al-'arshi</span><span class="meaning">The Throne</span></div>
+                        <div class="word-chip"><span class="ar">الْمَجِيدُ</span><span class="trans">al-majid</span><span class="meaning">The Glorious / Honorable</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah is the Owner of the Throne, the greatest of all created things. The Throne (Al-Arsh) encompasses the heavens and the earth and everything in between. "Al-Majid" means full of glory, honor, and greatness. Ibn Kathir explains that this describes Allah's supreme authority and sovereignty. The tyrant king who threw believers into fire thought he was powerful, but his "throne" was nothing compared to the Throne of Allah, which encompasses all of creation. True kingship belongs to Allah alone.</p></div>
+                </div>
+
+                <!-- Verse 16 -->
+                <div class="verse-card"><div class="verse-number">16</div>
+                    <div class="verse-arabic">فَعَّالٌ لِّمَا يُرِيدُ</div>
+                    <div class="verse-transliteration">Fa''alul-lima yurid</div>
+                    <div class="verse-translation">Effecter of what He intends.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فَعَّالٌ</span><span class="trans">fa''al</span><span class="meaning">Effecter / Doer (intensified)</span></div>
+                        <div class="word-chip"><span class="ar">لِّمَا</span><span class="trans">lima</span><span class="meaning">Of what</span></div>
+                        <div class="word-chip"><span class="ar">يُرِيدُ</span><span class="trans">yurid</span><span class="meaning">He intends / wills</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>"Fa''al" is an intensified form. He does not merely do things. He does whatever He wills, whenever He wills, however He wills, with absolute power and no resistance. As-Sa'di explains that nothing can stand between Allah and what He intends. When He decides something, it happens. No army, no king, no power can prevent it. This is a source of both awe and comfort: awe because His will is unstoppable, and comfort because He has willed good for the believers and justice for the oppressed. The tyrant king tried to prevent the boy from spreading faith, but Allah's will prevailed.</p></div>
+                </div>
+
+                <!-- Verse 17 -->
+                <div class="verse-card"><div class="verse-number">17</div>
+                    <div class="verse-arabic">هَلْ أَتَاكَ حَدِيثُ الْجُنُودِ</div>
+                    <div class="verse-transliteration">Hal ataka hadithul-junud</div>
+                    <div class="verse-translation">Has there reached you the story of the soldiers?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">هَلْ</span><span class="trans">hal</span><span class="meaning">Has (question)</span></div>
+                        <div class="word-chip"><span class="ar">أَتَاكَ</span><span class="trans">ataka</span><span class="meaning">Reached you / come to you</span></div>
+                        <div class="word-chip"><span class="ar">حَدِيثُ</span><span class="trans">hadithu</span><span class="meaning">The story / news</span></div>
+                        <div class="word-chip"><span class="ar">الْجُنُودِ</span><span class="trans">al-junud</span><span class="meaning">The soldiers / armies</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Allah now turns to historical examples, addressing the Prophet (peace be upon him) and through him all of humanity. "Has the story of the soldiers reached you?" This rhetorical question builds anticipation. "Al-junud" refers to the armies of previous nations who opposed Allah's messengers and were destroyed. Ibn Kathir explains that these are presented as warnings: other powerful armies defied Allah and were wiped out. What happened to them will happen to anyone who follows their path. The Quraysh who were persecuting the Muslims should take heed.</p></div>
+                </div>
+
+                <!-- Verse 18 -->
+                <div class="verse-card"><div class="verse-number">18</div>
+                    <div class="verse-arabic">فِرْعَوْنَ وَثَمُودَ</div>
+                    <div class="verse-transliteration">Fir'awna wa Thamud</div>
+                    <div class="verse-translation">[Those of] Pharaoh and Thamud?</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فِرْعَوْنَ</span><span class="trans">fir'awna</span><span class="meaning">Pharaoh</span></div>
+                        <div class="word-chip"><span class="ar">وَثَمُودَ</span><span class="trans">wa Thamud</span><span class="meaning">And Thamud</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Two examples are named: Pharaoh and Thamud. Pharaoh, the most powerful ruler of his time, who persecuted the Children of Israel and defied Musa (Moses), was drowned in the sea. Thamud, the people of Prophet Salih, who carved magnificent homes from mountains but rejected their prophet and killed the miraculous she-camel, were destroyed by a devastating blast. Ibn Kathir explains that both represent the ultimate fate of those who oppose Allah. Their power, wealth, and armies could not save them. This is a direct message to the Quraysh: you are not more powerful than Pharaoh or Thamud.</p></div>
+                </div>
+
+                <!-- Verse 19 -->
+                <div class="verse-card"><div class="verse-number">19</div>
+                    <div class="verse-arabic">بَلِ الَّذِينَ كَفَرُوا فِي تَكْذِيبٍ</div>
+                    <div class="verse-transliteration">Balil-ladhina kafaru fi takdhib</div>
+                    <div class="verse-translation">But they who disbelieve are in [persistent] denial.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بَلِ</span><span class="trans">bal</span><span class="meaning">But / Rather</span></div>
+                        <div class="word-chip"><span class="ar">الَّذِينَ</span><span class="trans">alladhina</span><span class="meaning">Those who</span></div>
+                        <div class="word-chip"><span class="ar">كَفَرُوا</span><span class="trans">kafaru</span><span class="meaning">Disbelieved</span></div>
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                        <div class="word-chip"><span class="ar">تَكْذِيبٍ</span><span class="trans">takdhib</span><span class="meaning">Denial / rejection</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Despite all these warnings and historical examples, the disbelievers remain in persistent denial. "Fi takdhib" means they are immersed in denial, surrounded by it, living inside it. As-Sa'di explains that "bal" (but/rather) introduces a correction: despite all the evidence, signs, and warnings, they still deny. They have seen what happened to previous nations, they have heard the Quran, they have witnessed its miracles, yet they choose to remain in denial. This is not ignorance. It is willful stubbornness and arrogance.</p></div>
+                </div>
+
+                <!-- Verse 20 -->
+                <div class="verse-card"><div class="verse-number">20</div>
+                    <div class="verse-arabic">وَاللَّهُ مِن وَرَائِهِم مُّحِيطٌ</div>
+                    <div class="verse-transliteration">Wallahu min wara'ihim muhit</div>
+                    <div class="verse-translation">While Allah encompasses them from behind.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">وَاللَّهُ</span><span class="trans">wallahu</span><span class="meaning">And Allah</span></div>
+                        <div class="word-chip"><span class="ar">مِن وَرَائِهِم</span><span class="trans">min wara'ihim</span><span class="meaning">From behind them / all around them</span></div>
+                        <div class="word-chip"><span class="ar">مُّحِيطٌ</span><span class="trans">muhit</span><span class="meaning">Encompassing</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>While they think they are in control, Allah surrounds them completely. "Muhit" means encompassing from all sides. There is no escape, no hiding place, no direction they can turn where Allah is not. Ibn Kathir explains that His knowledge, power, and authority encompass them entirely. They may deny Him, but they cannot escape Him. They are within His grasp at every moment. As-Sa'di adds that this is like a warning to someone who is cornered but does not realize it. They think they are free, but they are already surrounded.</p></div>
+                </div>
+
+                <!-- Verse 21 -->
+                <div class="verse-card"><div class="verse-number">21</div>
+                    <div class="verse-arabic">بَلْ هُوَ قُرْآنٌ مَّجِيدٌ</div>
+                    <div class="verse-transliteration">Bal huwa qur'anun majid</div>
+                    <div class="verse-translation">But this is an honored Quran.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">بَلْ</span><span class="trans">bal</span><span class="meaning">But / Rather</span></div>
+                        <div class="word-chip"><span class="ar">هُوَ</span><span class="trans">huwa</span><span class="meaning">It is</span></div>
+                        <div class="word-chip"><span class="ar">قُرْآنٌ</span><span class="trans">qur'anun</span><span class="meaning">A Quran / recitation</span></div>
+                        <div class="word-chip"><span class="ar">مَّجِيدٌ</span><span class="trans">majid</span><span class="meaning">Glorious / honored</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>Despite their denial, this Quran remains "majid" (glorious, honored, noble). Their rejection does not diminish its status in the slightest. Ibn Kathir explains that "majid" means noble in its content, truthful in its information, just in its commands, and beautiful in its language. As-Sa'di adds that the Quran is "majid" because it leads to honor and glory for those who follow it. The disbelievers may deny it, but it remains the most honored book in existence. Their denial only harms themselves.</p></div>
+                </div>
+
+                <!-- Verse 22 -->
+                <div class="verse-card"><div class="verse-number">22</div>
+                    <div class="verse-arabic">فِي لَوْحٍ مَّحْفُوظٍ</div>
+                    <div class="verse-transliteration">Fi lawhin mahfuz</div>
+                    <div class="verse-translation">[Inscribed] in a Preserved Tablet.</div>
+                    <div class="word-breakdown"><h4>Word by Word</h4><div class="words-grid">
+                        <div class="word-chip"><span class="ar">فِي</span><span class="trans">fi</span><span class="meaning">In</span></div>
+                        <div class="word-chip"><span class="ar">لَوْحٍ</span><span class="trans">lawhin</span><span class="meaning">A Tablet</span></div>
+                        <div class="word-chip"><span class="ar">مَّحْفُوظٍ</span><span class="trans">mahfuz</span><span class="meaning">Preserved / guarded</span></div>
+                    </div></div>
+                    <div class="friendly-explanation"><div class="label">Simple Explanation</div><p>The Quran is inscribed in "Al-Lawh al-Mahfuz," the Preserved Tablet. Ibn Kathir explains that this is a tablet with Allah, in which He has written everything that will happen until the Day of Judgment, including the Quran. "Mahfuz" means guarded, protected from any alteration, corruption, or addition. As-Sa'di explains that the Quran being in the Preserved Tablet means it is eternally protected. No one can change it, corrupt it, or destroy it. This is the final point of the surah: the truth is preserved, the record is kept, and justice will come. The believers' sacrifice was not in vain, the oppressors' crime is recorded, and the Quran that tells their story is preserved forever.</p></div>
+                </div>
+
+            </section>
+
+            <section class="section reveal">
+                <div class="section-title">Key Lessons</div><div class="glow-line reveal"></div>
+                <ul class="lesson-list">
+                    <li><span class="bullet">01</span><div><strong>Faith may cost everything, but it is worth everything.</strong> The believers of the trench gave their lives rather than deny Allah. Their sacrifice was not a loss but "the great attainment" (al-fawz al-kabir). True victory is measured by where you stand with Allah, not by worldly outcomes.</div></li>
+                    <li><span class="bullet">02</span><div><strong>Persecution of believers is a pattern throughout history.</strong> From the People of the Ditch to Pharaoh to Thamud, tyrants have always tried to crush faith. But every single one of them was destroyed while faith endured. The Quraysh's persecution of the early Muslims was nothing new, and their fate would be no different.</div></li>
+                    <li><span class="bullet">03</span><div><strong>Allah's door of repentance remains open even for the worst criminals.</strong> Even those who burned believers alive are offered the chance to repent (verse 10). This shows the immensity of Allah's mercy. No sin is too great for His forgiveness, as long as repentance is sincere.</div></li>
+                    <li><span class="bullet">04</span><div><strong>Allah is both Al-Ghafur and Al-Wadud.</strong> He does not just forgive; He loves. His relationship with His servants is not cold justice but warm affection. This combination of forgiveness and love is unique to Allah's description of Himself.</div></li>
+                    <li><span class="bullet">05</span><div><strong>No power can resist Allah's will.</strong> He is "Fa''al lima yurid" (Effecter of what He intends). The king tried to kill the boy multiple times but failed until Allah willed it. When Allah intends something, no force in the universe can prevent it.</div></li>
+                    <li><span class="bullet">06</span><div><strong>The Quran is eternally preserved.</strong> Written in the Preserved Tablet, it cannot be altered, corrupted, or destroyed. This is Allah's guarantee that the truth will always be accessible to humanity.</div></li>
+                </ul>
+            </section>
+
+            <div class="source-note">
+                <strong>Sources:</strong> Tafsir Ibn Kathir, Tafsir As-Sa'di, Sahih Muslim (Hadith 3005, Kitab az-Zuhd - Story of the Boy and the King), Sahih Bukhari (Allah gives respite to the wrongdoer). All explanations are based on authentic scholarly interpretations. For deeper study, readers are encouraged to consult the full tafsir works and verify with qualified scholars.
+            </div>
+
+            <section class="section reveal">
+                <div class="section-title">Listen to Recitation</div><div class="glow-line reveal"></div>
+                <div id="recitationPlayer"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>Quran Journey - Learning the Quran, one surah at a time.</p>
+        <p><a href="index.html">Back to Home</a></p>
+    </footer>
+
+    <script>
+    function showView(v) {
+        document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+        if (v === 'carousel') {
+            document.getElementById('carousel-view').classList.remove('hidden');
+            document.getElementById('deep-dive-view').classList.remove('visible');
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('carousel-view').classList.add('hidden');
+            document.getElementById('deep-dive-view').classList.add('visible');
+            event.target.classList.add('active');
+            setTimeout(setupScrollReveal, 100);
+        }
+    }
+    function setupScrollReveal(){
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+        }, { threshold: 0, rootMargin: '0px 0px 100px 0px' });
+        document.querySelectorAll('.reveal, .glow-line').forEach(el => obs.observe(el));
+    }
+    </script>
+    <script src="recitation.js"></script>
+    <script>
+    if (typeof initRecitationPlayer === 'function') {
+        initRecitationPlayer({ surahNumber: 85, totalVerses: 22 });
+    }
+    </script>
+</body>
+</html>
